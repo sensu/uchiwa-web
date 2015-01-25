@@ -1,0 +1,16 @@
+*~
+.DS_Store
+.DS_Store?
+pids
+logs
+results
+node_modules
+config.js
+config.json
+public/
+.sass-cache
+npm-debug.log
+build
+.idea/
+coverage.out
+*.swp

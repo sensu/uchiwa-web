@@ -1,0 +1,67 @@
+<div class="container-fluid clients">
+  <ng-include src="partialsPath + '/page-header.html'"></ng-include>
+  <div class="row-fluid">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+
+        <! --panel-heading-->
+        <div class="panel-heading">
+          <div class="row">
+            <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
+            <div class="col-md-4">
+              <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
+              <div class="nav-filter pull-right">
+
+                <! --actions-->
+                <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents"></panel-actions>
+
+                <! --hide-->
+                <ng-include src="partialsPath + '/panel/hide.html'"></ng-include>
+
+                <! --limit-->
+                <panel-limit data="events" filters="filters" permalink="permalink"></panel-limit>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <! --panel-body-->
+        <div class="panel-body">
+          <table class="table table-hover table-condensed" style="table-layout: fixed;">
+            <thead>
+              <tr>
+                <th class="col-min">
+                  <input type="checkbox" ng-model="selectModel.selected" ng-change="selectEvents(selectModel)"></input>
+                </th>
+                <th class="col-min" ng-click="predicate = '-check.status'; reverse=!reverse"><i class="fa fa-sort"></i></th>
+                <th class="col-sm-2" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
+                <th class="col-sm-2" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
+                <th class="col-sm-4" ng-click="predicate = 'check.output'; reverse=!reverse">Output <i class="fa fa-sort"></i></th>
+                <th class="col-sm-1" ng-click="predicate = 'occurrences'; reverse=!reverse"><i class="fa fa-slack" tooltip-placement="top" tooltip="Occurrences"></i> <i class="fa fa-sort"></i></th>
+                <th class="col-dc" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
+                <th class="col-date" ng-click="predicate = 'check.issued'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip="Issued"></i> <i class="fa fa-sort"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="event in events | orderBy:predicate:reverse | filter:filters.q | filter:{dc:filters.dc} | hideSilenced:filters.silenced | hideOccurrences:filters.occurrences | limitTo:filters.limit | buildEvents track by event._id" ng-click="go('/client/'+event.dc+'/'+event.client.name+'?check='+event.check.name)">
+                <td class="well-{{ event.check.status | getStatusClass }}" ng-click="$event.stopPropagation()">
+                  <input type="checkbox" ng-model="event.selected"></input>
+                </td>
+                <td ng-click="stash($event, event)">
+                  <i class="fa {{ event.acknowledged | getAckClass }}"></i>
+                </td>
+                <td class="dropdown-toggle" >{{ event.sourceName }}</td>
+                <td class="main check-name">{{ event.check.name }}</td>
+                <td class="output" ng-bind-html="event.check.output | linky" ng-click="helpers.openLink($event)"></td>
+                <td>{{ event.occurrences }}</td>
+                <td>{{ event.dc }}</td>
+                <td>{{ event.check.issued | getTimestamp }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+<select class="form-control" ng-init="limit=50" ng-model="filters.limit" ng-change="permalink($event, 'limit', filters.limit)">
+  <option value="50">Show 50</option>
+  <option value="100">Show 100</option>
+  <option value="200">Show 200</option>
+  <option value="{{data.length}}">Show All</option>
+</select>

@@ -1,0 +1,27 @@
+<div class="dropdown">
+  <span dropdown-toggle>
+    Hide <i class="fa fa-caret-down"></i>
+  </span>
+  <div class="dropdown-menu">
+    <div class="dropdown-menu-item" ng-click="filters.silenced = !filters.silenced">
+      <div class="row">
+        <div class="col-xs-1">
+          <i class="fa fa-check" ng-show="filters.silenced"></i>
+        </div>
+        <div class="col-xs-10">
+          Silenced Checks
+        </div>
+      </div>
+    </div>
+    <div class="dropdown-menu-item" ng-click="filters.occurrences = !filters.occurrences">
+      <div class="row">
+        <div class="col-xs-1">
+          <i class="fa fa-check" ng-show="filters.occurrences"></i>
+        </div>
+        <div class="col-xs-10">
+          Occurrence Threshold
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

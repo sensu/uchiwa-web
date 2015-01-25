@@ -1,0 +1,11 @@
+@import "variables";
+
+.form-control {
+  width: auto;
+  height: auto;
+  display: inline;
+}
+
+.form-control.subscriptions {
+  width: 140px;
+}
