@@ -229,6 +229,7 @@ describe('filters', function () {
       expect(imageyFilter('https://foo.bar')).toBe('https://foo.bar');
       expect(imageyFilter('http://foo.bar/qux.gif')).toBe('<img src="http://foo.bar/qux.gif">');
       expect(imageyFilter('https://foo.bar/qux.gif')).toBe('<img src="https://foo.bar/qux.gif">');
+      expect(imageyFilter('https://foo.bar:443/qux.gif')).toBe('<img src="https://foo.bar:443/qux.gif">');
     }));
 
   });
