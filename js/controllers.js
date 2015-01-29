@@ -389,6 +389,71 @@ controllerModule.controller('sidebar', ['$location', '$scope', 'userService',
 ]);
 
 /**
+* Aggregates
+*/
+controllerModule.controller('aggregates', ['$scope', '$routeParams', 'routingService', 'titleFactory',
+  function ($scope, $routeParams, routingService, titleFactory) {
+    $scope.pageHeaderText = 'Aggregates';
+    titleFactory.set($scope.pageHeaderText);
+
+    $scope.predicate = 'check';
+
+    // Routing
+    $scope.filters = {};
+    routingService.initFilters($routeParams, $scope.filters, ['dc', 'limit', 'q']);
+    $scope.$on('$locationChangeSuccess', function(){
+      routingService.updateFilters($routeParams, $scope.filters);
+    });
+
+    // Services
+    $scope.go = routingService.go;
+    $scope.permalink = routingService.permalink;
+  }
+]);
+
+/**
+* Aggregates for Check
+*/
+controllerModule.controller('check_aggregates', ['$scope', '$routeParams', 'routingService', 'titleFactory',
+  function ($scope, $routeParams, routingService, titleFactory) {
+    $scope.pageHeaderText = 'Aggregates';
+    titleFactory.set($scope.pageHeaderText);
+
+    // Services
+    $scope.go = routingService.go;
+    $scope.permalink = routingService.permalink;
+
+    $scope.check = decodeURI($routeParams.check);
+  }
+]);
+
+/**
+* Aggregates for Issue within Check
+*/
+controllerModule.controller('check_issue_aggregates', ['$scope', '$http', '$routeParams', 'routingService', 'titleFactory',
+  function ($scope, $http, $routeParams, routingService, titleFactory) {
+    $scope.pageHeaderText = 'Aggregates';
+    titleFactory.set($scope.pageHeaderText);
+
+    // Services
+    $scope.go = routingService.go;
+    $scope.permalink = routingService.permalink;
+
+    $scope.check = decodeURI($routeParams.check);
+    $scope.issued = decodeURI($routeParams.issued);
+    $scope.dc = decodeURI($routeParams.dc);
+
+    $http.get('get_aggregate_by_issued?check=' + $scope.check + '&issued=' + $scope.issued + '&dc=' + $scope.dc)
+    .success(function(data) {
+      $scope.aggregate = data;
+    })
+    .error(function(error) {
+      console.log('Error: ' + JSON.stringify(error));
+    });
+  }
+]);
+
+/**
 * Stashes
 */
 controllerModule.controller('stashes', ['$scope', '$routeParams', 'routingService', 'stashesService', 'titleFactory',
