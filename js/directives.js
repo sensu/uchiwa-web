@@ -37,10 +37,7 @@ directiveModule.directive('siteTheme', ['conf', '$cookieStore', function (conf, 
         },
         {
           name: 'uchiwa-dark'
-        },
-        {
-          name: 'sensu-enterprise'
-        },
+        }
       ];
       var lookupTheme = function (themeName) {
         return scope.themes[scope.themes.map(function (t) {
