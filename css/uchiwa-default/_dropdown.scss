@@ -1,7 +1,10 @@
 @import "variables";
 
-.dropdown {
+.panel-heading .dropdown {
   display: inline;
+}
+
+.dropdown {
   cursor: pointer;
 }
 
