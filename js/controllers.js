@@ -11,7 +11,6 @@ controllerModule.controller('init', ['backendService', 'conf', '$interval', 'not
     $rootScope.skipRefresh = false;
     $rootScope.alerts = [];
     $rootScope.events = [];
-    $rootScope.navbar = {};
 
     $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
 

@@ -148,6 +148,9 @@ serviceModule.service('navbarServices', ['$rootScope', function ($rootScope) {
   // Badges count
   this.countStatuses = function (item, getStatusCode) {
     var collection = $rootScope[item];
+    if (!_.isObject($rootScope.navbar)) {
+      $rootScope.navbar = {};
+    }
     $rootScope.navbar[item] = { critical: 0, warning: 0, unknown: 0, style: '' };
 
     $rootScope.navbar[item].critical += collection.filter(function (item) {
