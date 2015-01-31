@@ -5,25 +5,7 @@
   <div class="row-fluid">
     <div class="col-lg-12">
       <div class="row-fluid">
-        <div class="col-lg-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              Uchiwa
-            </div>
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="title center">Version</div>
-                  <div class="number center">{{uchiwa.version}}</div>
-                  <hr>
-                  <div class="title center">Config</div>
-                  <div ng-bind-html="uchiwa.config | richOutput"></div>
-                </div>
-              </div>
-            </div>
-        </div>
-      </div>
-      <div class="col-lg-8">
+      <div class="col-lg-12">
         <div class="panel panel-default" ng-repeat="datacenter in dc | orderBy:'name'">
           <div class="panel-heading">
             {{datacenter.name}}
@@ -41,6 +23,22 @@
               <div class="col-md-4">
                 <div class="title center">Connected to redis</div>
                 <div class="number center">{{datacenter.redis}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Uchiwa
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="title center">Version</div>
+                <div class="number center">{{uchiwa.version}}</div>
+                <hr>
+                <div class="title center">Config</div>
+                <div ng-bind-html="uchiwa.config | richOutput"></div>
               </div>
             </div>
           </div>
