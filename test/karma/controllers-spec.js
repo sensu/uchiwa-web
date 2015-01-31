@@ -153,7 +153,7 @@ describe('Controller', function () {
 
     it('should count events and client status on sensu', function () {
       createController(controllerName);
-      var expectedClients = [
+      var clients = [
         {
           status: 2
         },
@@ -173,10 +173,9 @@ describe('Controller', function () {
       var expectedCriticalClients = 2;
       var expectedWarningClients = 2;
       var expectedUnknownClients = 1;
-      var expectedTotalClients = 5;
       var expectedClientsStyle = 'critical';
 
-      var expectedEvents = [
+      var events = [
         {
           check: {
             status: 2
@@ -206,74 +205,21 @@ describe('Controller', function () {
       var expectedCriticalEvents = 2;
       var expectedWarningEvents = 2;
       var expectedUnknownEvents = 1;
-      var expectedTotalEvents = 5;
       var expectedEventsStyle = 'critical';
 
       //var payload = {Events: expectedEvents, Clients: expectedClients};
-      $rootScope.events = expectedEvents;
-      $rootScope.clients = expectedClients;
+      $rootScope.events = events;
+      $rootScope.clients = clients;
       $rootScope.$broadcast('sensu');
 
-      expect($scope.clients.critical).toEqual(expectedCriticalClients);
-      expect($scope.clients.warning).toEqual(expectedWarningClients);
-      expect($scope.clients.unknown).toEqual(expectedUnknownClients);
-      expect($scope.clients.total).toEqual(expectedTotalClients);
-      expect($scope.events.critical).toEqual(expectedCriticalEvents);
-      expect($scope.events.warning).toEqual(expectedWarningEvents);
-      expect($scope.events.unknown).toEqual(expectedUnknownEvents);
-      expect($scope.events.total).toEqual(expectedTotalEvents);
-      expect($scope.clients.style).toEqual(expectedClientsStyle);
-      expect($scope.events.style).toEqual(expectedEventsStyle);
-    });
-
-    it('should count unknown events and clients status on sensu', function () {
-      createController(controllerName);
-      var expectedClients = [
-        {
-          status: 3
-        },
-        {
-          status: 3
-        }
-      ];
-      var expectedCriticalClients = 0;
-      var expectedWarningClients = 0;
-      var expectedUnknownClients = 2;
-      var expectedTotalClients = 2;
-      var expectedClientsStyle = 'unknown';
-
-      var expectedEvents = [
-        {
-          check: {
-            status: 3
-          }
-        },
-        {
-          check: {
-            status: 3
-          }
-        }
-      ];
-      var expectedCriticalEvents = 0;
-      var expectedWarningEvents = 0;
-      var expectedUnknownEvents = 2;
-      var expectedTotalEvents = 2;
-      var expectedEventsStyle = 'unknown';
-
-      $rootScope.events = expectedEvents;
-      $rootScope.clients = expectedClients;
-      $rootScope.$broadcast('sensu');
-
-      expect($scope.clients.critical).toEqual(expectedCriticalClients);
-      expect($scope.clients.warning).toEqual(expectedWarningClients);
-      expect($scope.clients.unknown).toEqual(expectedUnknownClients);
-      expect($scope.clients.total).toEqual(expectedTotalClients);
-      expect($scope.events.critical).toEqual(expectedCriticalEvents);
-      expect($scope.events.warning).toEqual(expectedWarningEvents);
-      expect($scope.events.unknown).toEqual(expectedUnknownEvents);
-      expect($scope.events.total).toEqual(expectedTotalEvents);
-      expect($scope.clients.style).toEqual(expectedClientsStyle);
-      expect($scope.events.style).toEqual(expectedEventsStyle);
+      expect($rootScope.navbar.clients.critical).toEqual(expectedCriticalClients);
+      expect($rootScope.navbar.clients.warning).toEqual(expectedWarningClients);
+      expect($rootScope.navbar.clients.unknown).toEqual(expectedUnknownClients);
+      expect($rootScope.navbar.events.critical).toEqual(expectedCriticalEvents);
+      expect($rootScope.navbar.events.warning).toEqual(expectedWarningEvents);
+      expect($rootScope.navbar.events.unknown).toEqual(expectedUnknownEvents);
+      expect($rootScope.navbar.clients.style).toEqual(expectedClientsStyle);
+      expect($rootScope.navbar.events.style).toEqual(expectedEventsStyle);
     });
   });
 

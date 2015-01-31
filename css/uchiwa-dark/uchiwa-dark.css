@@ -263,8 +263,10 @@ pre.hljs .hljs-string {
 /* Tables */
 /* Timestamp */
 /* Wells */
+.panel-heading .dropdown {
+  display: inline; }
+
 .dropdown {
-  display: inline;
   cursor: pointer; }
 
 .dropdown-menu {

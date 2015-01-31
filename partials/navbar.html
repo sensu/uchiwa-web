@@ -7,16 +7,16 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
       <ul class="nav navbar-nav navbar-right">
-        <li class="show-on-hover" ng-if="alerts.length">
+        <li class="show-on-hover" ng-if="alerts | arrayLength">
           <a>
-            <i class="fa fa-exclamation-triangle" class="dropdown-toggle" data-toggle="dropdown"></i><span class="badge badge-critical">{{alerts.length}}</span>
+            <i class="fa fa-exclamation-triangle" class="dropdown-toggle" data-toggle="dropdown"></i><span class="badge badge-critical">{{alerts | arrayLength}}</span>
           </a>
           <div class="dropdown-menu" role="menu">
             <div class="row">
               <div class="col-md-12">
                 <div class="panel panel-body panel-top panel-critical">
-                  <span class="total">{{alerts.length}}</span>
-                  <span class="category"><ng-pluralize count="alerts.length" when="{'0': 'alert', '1': 'alert', 'other': 'alerts'}"></ng-pluralize></span>
+                  <span class="total">{{alerts | arrayLength}}</span>
+                  <span class="category"><ng-pluralize count="alerts | arrayLength" when="{'0': 'alert', '1': 'alert', 'other': 'alerts'}"></ng-pluralize></span>
                 </div>
                 <div class="panel panel-body panel-default" ng-repeat="alert in alerts">
                   <span> <i class="fa fa-cloud"></i> <span ng-bind-html="alert"></span></span>
@@ -27,21 +27,21 @@
         </li>
         <li class="show-on-hover">
           <a ng-click="go('/events')">
-            <i class="fa fa-bullhorn" class="dropdown-toggle" data-toggle="dropdown"></i><span class="badge badge-{{events.style}}">{{events.total}}</span>
+            <i class="fa fa-bullhorn" class="dropdown-toggle" data-toggle="dropdown"></i><span class="badge badge-{{navbar.events.style}}">{{events | arrayLength}}</span>
           </a>
           <div class="dropdown-menu" role="menu">
             <div class="row">
               <div class="col-md-12">
-                <div class="panel panel-body panel-top panel-{{events.style}}">
-                  <span class="total">{{events.total}}</span>
-                  <span class="category"><ng-pluralize count="events.total" when="{'0': 'event', '1': 'event', 'other': 'events'}"></ng-pluralize></span>
+                <div class="panel panel-body panel-top panel-{{navbar.events.style}}">
+                  <span class="total">{{events | arrayLength}}</span>
+                  <span class="category"><ng-pluralize count="events | arrayLength" when="{'0': 'event', '1': 'event', 'other': 'events'}"></ng-pluralize></span>
                 </div>
                 <div class="panel panel-body panel-bottom panel-default">
-                  <i class="fa fa-fw fa-bomb text-danger"></i> Critical <span class="pull-right count">{{events.critical}}</span>
+                  <i class="fa fa-fw fa-bomb text-danger"></i> Critical <span class="pull-right count">{{navbar.events.critical}}</span>
                   <hr>
-                  <i class="fa fa-fw fa-exclamation-triangle text-warning"></i> Warning <span class="pull-right count">{{events.warning}}</span>
+                  <i class="fa fa-fw fa-exclamation-triangle text-warning"></i> Warning <span class="pull-right count">{{navbar.events.warning}}</span>
                   <hr>
-                  <i class="fa fa-fw fa-question-circle text-muted"></i> Unknown <span class="pull-right count">{{events.unknown}}</span>
+                  <i class="fa fa-fw fa-question-circle text-muted"></i> Unknown <span class="pull-right count">{{navbar.events.unknown}}</span>
                 </div>
               </div>
             </div>
@@ -49,21 +49,21 @@
         </li>
         <li class="show-on-hover">
           <a ng-click="go('/clients')">
-            <i class="fa fa-hdd-o" class="dropdown-toggle" data-toggle="dropdown" ></i><span class="badge badge-{{clients.style}}">{{clients.total}}</span>
+            <i class="fa fa-hdd-o" class="dropdown-toggle" data-toggle="dropdown" ></i><span class="badge badge-{{navbar.clients.style}}">{{clients | arrayLength}}</span>
           </a>
           <div class="dropdown-menu" role="menu">
             <div class="row">
               <div class="col-md-12">
-                <div class="panel panel-body panel-top panel-{{clients.style}}">
-                  <span class="total">{{clients.total}}</span>
-                  <span class="category"><ng-pluralize count="clients.total" when="{'0': 'client', '1': 'client', 'other': 'clients'}"></ng-pluralize></span>
+                <div class="panel panel-body panel-top panel-{{navbar.clients.style}}">
+                  <span class="total">{{clients | arrayLength}}</span>
+                  <span class="category"><ng-pluralize count="clients | arrayLength" when="{'0': 'client', '1': 'client', 'other': 'clients'}"></ng-pluralize></span>
                 </div>
                 <div class="panel panel-body panel-bottom panel-default">
-                  <i class="fa fa-fw fa-bomb text-danger"></i> Critical <span class="pull-right count">{{clients.critical}}</span>
+                  <i class="fa fa-fw fa-bomb text-danger"></i> Critical <span class="pull-right count">{{navbar.clients.critical}}</span>
                   <hr>
-                  <i class="fa fa-fw fa-exclamation-triangle text-warning"></i> Warning <span class="pull-right count">{{clients.warning}}</span>
+                  <i class="fa fa-fw fa-exclamation-triangle text-warning"></i> Warning <span class="pull-right count">{{navbar.clients.warning}}</span>
                   <hr>
-                  <i class="fa fa-fw fa-question-circle text-muted"></i> Unknown <span class="pull-right count">{{clients.unknown}}</span>
+                  <i class="fa fa-fw fa-question-circle text-muted"></i> Unknown <span class="pull-right count">{{navbar.clients.unknown}}</span>
                 </div>
               </div>
             </div>
@@ -115,7 +115,7 @@
                         </div>
                       </div>
                     </div>
-                    <hr ng-if="dc.length != ($index + 1)">
+                    <hr ng-if="(dc | arrayLength) != ($index + 1)">
                   </div>
                 </div>
               </div>

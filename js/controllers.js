@@ -5,22 +5,22 @@ var controllerModule = angular.module('uchiwa.controllers', []);
 /**
 * Init
 */
-controllerModule.controller('init', ['backendService', '$interval', 'notification', 'titleFactory', '$rootScope', '$scope',
-  function (backendService, $interval, notification, titleFactory, $rootScope, $scope) {
+controllerModule.controller('init', ['backendService', 'conf', '$interval', 'notification', '$rootScope', '$scope', 'titleFactory',
+  function (backendService, conf, $interval, notification, $rootScope, $scope,  titleFactory) {
     $scope.titleFactory = titleFactory;
     $rootScope.skipRefresh = false;
     $rootScope.alerts = [];
     $rootScope.events = [];
 
     $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
-    $rootScope.update = backendService.update();
 
     backendService.getConfig()
       .success(function (data) {
-        $interval(backendService.update, data.Uchiwa.Refresh * 1000);
+        conf.refresh = data.Uchiwa.Refresh * 1000;
+        $interval(backendService.update, conf.refresh);
       })
       .error(function () {
-        $interval(backendService.update, 10000);
+        $interval(backendService.update, conf.refresh);
       });
 
     $scope.$on('$routeChangeSuccess', function () {
@@ -64,8 +64,8 @@ controllerModule.controller('checks', ['titleFactory', '$routeParams', 'routingS
 /**
 * Client
 */
-controllerModule.controller('client', ['backendService', 'clientsService', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope','stashesService',
-  function (backendService, clientsService, notification, titleFactory, $routeParams, routingService, $scope, stashesService) {
+controllerModule.controller('client', ['backendService', 'clientsService', 'conf', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope','stashesService',
+  function (backendService, clientsService, conf, notification, titleFactory, $routeParams, routingService, $scope, stashesService) {
 
     $scope.predicate = '-last_status';
     $scope.missingClient = false;
@@ -87,7 +87,7 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'noti
     };
 
     $scope.pull();
-    var timer = setInterval($scope.pull, 10000);
+    var timer = setInterval($scope.pull, conf.refresh);
 
     $scope.$on('client', function (event, data) {
       $scope.client = data;
@@ -334,16 +334,14 @@ controllerModule.controller('info', ['backendService', 'notification', '$scope',
 */
 controllerModule.controller('navbar', ['$rootScope', '$scope', 'navbarServices', 'routingService',
   function ($rootScope, $scope, navbarServices, routingService) {
-
     // Services
     $scope.go = routingService.go;
-
     $scope.$on('sensu', function () {
       // Update badges
-      navbarServices.countStatuses($rootScope.clients, function (item) {
+      navbarServices.countStatuses('clients', function (item) {
         return item.status;
       });
-      navbarServices.countStatuses($rootScope.events, function (item) {
+      navbarServices.countStatuses('events', function (item) {
         return item.check.status;
       });
 
