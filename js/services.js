@@ -5,8 +5,8 @@ var serviceModule = angular.module('uchiwa.services', []);
 /**
 * Uchiwa
 */
-serviceModule.service('backendService', ['$http', 'notification', '$rootScope',
-  function($http, notification, $rootScope){
+serviceModule.service('backendService', ['$http', 'notification', '$rootScope', '$timeout',
+  function($http, notification, $rootScope, $timeout){
     var self = this;
     this.createStash = function (payload) {
       return $http.post('post_stash', payload);
@@ -70,7 +70,11 @@ serviceModule.service('backendService', ['$http', 'notification', '$rootScope',
 
         $rootScope.stashes = data.Stashes;
         $rootScope.subscriptions = data.Subscriptions;
-        $rootScope.$broadcast('sensu');
+
+        $timeout(function() {
+          $rootScope.$broadcast('sensu');
+        });
+
       })
       .error(function (error) {
         notification('error', 'Could not fetch Sensu data. Is Uchiwa running?');

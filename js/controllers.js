@@ -334,7 +334,6 @@ controllerModule.controller('info', ['backendService', 'notification', '$scope',
 */
 controllerModule.controller('navbar', ['$rootScope', '$scope', 'navbarServices', 'routingService',
   function ($rootScope, $scope, navbarServices, routingService) {
-
     // Services
     $scope.go = routingService.go;
 
