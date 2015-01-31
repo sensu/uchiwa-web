@@ -5,6 +5,7 @@ constantModule.value('conf', {
   enterprise: false,
   hideSilenced: false,
   hideOccurrences: false,
+  refresh: 10000,
   theme: 'uchiwa-default'
 });
 

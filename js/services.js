@@ -48,6 +48,7 @@ serviceModule.service('backendService', ['$http', 'notification', '$rootScope', 
             data[key] = [];
           }
         });
+
         $rootScope.checks = data.Checks;
         $rootScope.dc = data.Dc;
 
@@ -73,7 +74,7 @@ serviceModule.service('backendService', ['$http', 'notification', '$rootScope', 
 
         $timeout(function() {
           $rootScope.$broadcast('sensu');
-        });
+        }, 100);
 
       })
       .error(function (error) {
@@ -145,28 +146,21 @@ serviceModule.service('clientsService', ['$location', '$rootScope', 'notificatio
 */
 serviceModule.service('navbarServices', ['$rootScope', function ($rootScope) {
   // Badges count
-  this.countStatuses = function (collection, getStatusCode) {
-    var criticals = 0;
-    var warnings = 0;
-    var unknowns = 0;
-    var total = collection.length;
+  this.countStatuses = function (item, getStatusCode) {
+    var collection = $rootScope[item];
+    $rootScope.navbar[item] = { critical: 0, warning: 0, unknown: 0, style: '' };
 
-    criticals += collection.filter(function (item) {
+    $rootScope.navbar[item].critical += collection.filter(function (item) {
       return getStatusCode(item) === 2;
     }).length;
-    warnings += collection.filter(function (item) {
+    $rootScope.navbar[item].warning += collection.filter(function (item) {
       return getStatusCode(item) === 1;
     }).length;
-    unknowns += collection.filter(function (item) {
+    $rootScope.navbar[item].unknown += collection.filter(function (item) {
       return getStatusCode(item) > 2;
     }).length;
 
-    collection.warning = warnings;
-    collection.critical = criticals;
-    collection.total = criticals + warnings;
-    collection.unknown = unknowns;
-    collection.total = total;
-    collection.style = collection.critical > 0 ? 'critical' : collection.warning > 0 ? 'warning' : collection.unknown > 0 ? 'unknown' : 'success';
+    $rootScope.navbar[item].style = $rootScope.navbar[item].critical > 0 ? 'critical' : $rootScope.navbar[item].warning > 0 ? 'warning' : $rootScope.navbar[item].unknown > 0 ? 'unknown' : 'success';
   };
   this.health = function () {
     var alerts = [];
