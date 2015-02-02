@@ -1,0 +1,14 @@
+<div class="login" ng-controller="login">
+  <div class="login-container">
+    <div class="login-logo">
+      <img src="bower_components/uchiwa-web/img/uchiwa.png">
+    </div>
+    <div class="login-form">
+      <form ng-submit="submit()">
+        <input ng-model="login.user" name="user" type="text" placeholder="username">
+        <input ng-model="login.pass" name="pass" type="password" placeholder="password">
+        <button class="btn btn-default btn-block login" type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+</div>

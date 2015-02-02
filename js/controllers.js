@@ -5,23 +5,23 @@ var controllerModule = angular.module('uchiwa.controllers', []);
 /**
 * Init
 */
-controllerModule.controller('init', ['backendService', 'conf', '$interval', 'notification', '$rootScope', '$scope', 'titleFactory',
-  function (backendService, conf, $interval, notification, $rootScope, $scope,  titleFactory) {
+controllerModule.controller('init', ['backendService', 'conf', '$cookieStore', '$interval', '$location', 'notification', '$rootScope', '$scope', 'titleFactory',
+  function (backendService, conf, $cookieStore, $interval, $location, notification, $rootScope, $scope,  titleFactory) {
     $scope.titleFactory = titleFactory;
     $rootScope.skipRefresh = false;
     $rootScope.alerts = [];
     $rootScope.events = [];
-
     $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
+    $rootScope.token = $cookieStore.get('uchiwa_token') || false;
 
     backendService.getConfig()
-      .success(function (data) {
-        conf.refresh = data.Uchiwa.Refresh * 1000;
-        $interval(backendService.update, conf.refresh);
-      })
-      .error(function () {
-        $interval(backendService.update, conf.refresh);
-      });
+    .success(function (data) {
+      conf.refresh = data.Uchiwa.Refresh * 1000;
+      $interval(backendService.update, conf.refresh);
+    })
+    .error(function () {
+      $interval(backendService.update, conf.refresh);
+    });
 
     $scope.$on('$routeChangeSuccess', function () {
       backendService.update();
@@ -315,7 +315,6 @@ controllerModule.controller('info', ['backendService', 'notification', '$scope',
 
     $scope.uchiwa = {};
 
-
     $scope.uchiwa.version = version.uchiwa;
 
     backendService.getConfig()
@@ -327,6 +326,35 @@ controllerModule.controller('info', ['backendService', 'notification', '$scope',
         console.error('Error: '+ JSON.stringify(error));
       });
   }
+]);
+
+/**
+* Login
+*/
+controllerModule.controller('login', [ 'backendService', '$cookieStore', 'notification', '$scope', '$window',
+function (backendService, $cookieStore, notification, $scope, $window) {
+
+  $scope.login = {user: '', pass: ''};
+
+  // Redirect if authentication is disabled
+  backendService.auth()
+    .error(function () {
+      $window.location.href = $window.location.protocol +'//'+$window.location.host +'/#/';
+      $window.location.reload();
+    });
+
+  $scope.submit = function () {
+    backendService.login($scope.login)
+    .success(function (data) {
+      $cookieStore.put('uchiwa_token', data.token);
+      $window.location.href = $window.location.protocol +'//'+$window.location.host +'/#/';
+      $window.location.reload();
+    })
+    .error(function () {
+      notification('error', 'There was an error with your username/password combination. Please try again.');
+    });
+  };
+}
 ]);
 
 /**
@@ -368,14 +396,18 @@ controllerModule.controller('settings', ['$cookies', '$scope', 'titleFactory',
 /**
 * Sidebar
 */
-controllerModule.controller('sidebar', ['$scope', '$location',
-  function ($scope, $location) {
+controllerModule.controller('sidebar', ['$cookieStore', '$location', '$scope',
+  function ($cookieStore, $location, $scope) {
     $scope.getClass = function(path) {
       if ($location.path().substr(0, path.length) === path) {
         return 'selected';
       } else {
         return '';
       }
+    };
+    $scope.logout = function () {
+      $cookieStore.remove('uchiwa_token');
+      $location.path('login');
     };
   }
 ]);

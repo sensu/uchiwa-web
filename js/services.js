@@ -5,9 +5,12 @@ var serviceModule = angular.module('uchiwa.services', []);
 /**
 * Uchiwa
 */
-serviceModule.service('backendService', ['$http', 'notification', '$rootScope', '$timeout',
-  function($http, notification, $rootScope, $timeout){
+serviceModule.service('backendService', ['$http', '$location', 'notification', '$rootScope', '$timeout',
+  function($http, $location, notification, $rootScope, $timeout){
     var self = this;
+    this.auth = function () {
+      return $http.get('auth');
+    };
     this.createStash = function (payload) {
       return $http.post('post_stash', payload);
     };
@@ -29,10 +32,16 @@ serviceModule.service('backendService', ['$http', 'notification', '$rootScope', 
     this.getSensu = function () {
       return $http.get('get_sensu');
     };
+    this.login = function (payload) {
+      return $http.post('login', payload);
+    };
     this.resolveEvent = function (payload) {
       return $http.post('post_event', payload);
     };
     this.update = function () {
+      if ($location.path() === '/login') {
+        return;
+      }
       if ($rootScope.skipRefresh) {
         $rootScope.skipRefresh = false;
         return;

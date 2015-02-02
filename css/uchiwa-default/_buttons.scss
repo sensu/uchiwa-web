@@ -4,6 +4,16 @@
   font-family: 'Roboto', sans-serif;
 }
 
+.btn-default {
+  color: #ffffff;
+  background-color: $button-default-background-color;
+}
+
+.btn-default:hover {
+  color: #ffffff;
+  background-color: $button-default-hover-background-color;
+}
+
 .circle {
   width: 10px;
   height: 10px;
