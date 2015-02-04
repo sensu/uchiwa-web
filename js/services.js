@@ -5,8 +5,8 @@ var serviceModule = angular.module('uchiwa.services', []);
 /**
 * Uchiwa
 */
-serviceModule.service('backendService', ['$http', '$location', 'notification', '$rootScope', '$timeout',
-  function($http, $location, notification, $rootScope, $timeout){
+serviceModule.service('backendService', ['conf', '$http', '$interval', '$location', 'notification', '$rootScope', '$timeout',
+  function(conf, $http, $interval, $location, notification, $rootScope, $timeout){
     var self = this;
     this.auth = function () {
       return $http.get('auth');
@@ -24,7 +24,16 @@ serviceModule.service('backendService', ['$http', '$location', 'notification', '
       return $http.get('get_client?id=' + client + '&dc=' + dc );
     };
     this.getConfig = function () {
-      return $http.get('get_config');
+      //return $http.get('get_config');
+      $http.get('get_config')
+        .success(function (data) {
+          $rootScope.config = data;
+          conf.refresh = data.Uchiwa.Refresh * 1000;
+          $interval(self.update, conf.refresh);
+        })
+        .error(function () {
+          $interval(self.update, conf.refresh);
+        });
     };
     this.getHealth = function () {
       return $http.get('health/sensu');

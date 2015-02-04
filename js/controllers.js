@@ -5,26 +5,19 @@ var controllerModule = angular.module('uchiwa.controllers', []);
 /**
 * Init
 */
-controllerModule.controller('init', ['backendService', 'conf', '$cookieStore', '$interval', '$location', 'notification', '$rootScope', '$scope', 'titleFactory',
-  function (backendService, conf, $cookieStore, $interval, $location, notification, $rootScope, $scope,  titleFactory) {
+controllerModule.controller('init', ['backendService', '$cookieStore', 'notification', '$rootScope', '$scope', 'titleFactory',
+  function (backendService, $cookieStore, notification, $rootScope, $scope,  titleFactory) {
     $scope.titleFactory = titleFactory;
     $rootScope.skipRefresh = false;
     $rootScope.alerts = [];
     $rootScope.events = [];
     $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
-    $rootScope.token = $cookieStore.get('uchiwa_token') || false;
 
-    backendService.getConfig()
-    .success(function (data) {
-      conf.refresh = data.Uchiwa.Refresh * 1000;
-      $interval(backendService.update, conf.refresh);
-    })
-    .error(function () {
-      $interval(backendService.update, conf.refresh);
-    });
+    backendService.getConfig();
 
     $scope.$on('$routeChangeSuccess', function () {
       backendService.update();
+      $rootScope.auth = $cookieStore.get('uchiwa_auth') || false;
     });
 
     $scope.$on('notification', function (type, message) {
@@ -313,47 +306,33 @@ controllerModule.controller('info', ['backendService', 'notification', '$scope',
     $scope.pageHeaderText = 'Info';
     titleFactory.set($scope.pageHeaderText);
 
-    $scope.uchiwa = {};
-
-    $scope.uchiwa.version = version.uchiwa;
-
-    backendService.getConfig()
-      .success(function (data) {
-        $scope.uchiwa.config = data;
-      })
-      .error(function (error) {
-        notification('error', 'Could not fetch Uchiwa config. Is Uchiwa running?');
-        console.error('Error: '+ JSON.stringify(error));
-      });
+    $scope.uchiwa = { version: version.uchiwa };
   }
 ]);
 
 /**
 * Login
 */
-controllerModule.controller('login', [ 'backendService', '$cookieStore', 'notification', '$scope', '$window',
-function (backendService, $cookieStore, notification, $scope, $window) {
+controllerModule.controller('login', [ 'backendService', '$cookieStore', '$location', 'notification', '$rootScope', '$scope',
+function (backendService, $cookieStore, $location, notification, $rootScope, $scope) {
 
   $scope.login = {user: '', pass: ''};
-
-  // Redirect if authentication is disabled
-  backendService.auth()
-    .error(function () {
-      $window.location.href = $window.location.protocol +'//'+$window.location.host +'/#/';
-      $window.location.reload();
-    });
 
   $scope.submit = function () {
     backendService.login($scope.login)
     .success(function (data) {
-      $cookieStore.put('uchiwa_token', data.token);
-      $window.location.href = $window.location.protocol +'//'+$window.location.host +'/#/';
-      $window.location.reload();
+      $cookieStore.put('uchiwa_auth', { token: data.token });
+      $location.path('/');
     })
     .error(function () {
       notification('error', 'There was an error with your username/password combination. Please try again.');
     });
   };
+
+  if (angular.isObject($rootScope.auth)) {
+    $location.path('/');
+  }
+
 }
 ]);
 
@@ -396,8 +375,8 @@ controllerModule.controller('settings', ['$cookies', '$scope', 'titleFactory',
 /**
 * Sidebar
 */
-controllerModule.controller('sidebar', ['$cookieStore', '$location', '$scope',
-  function ($cookieStore, $location, $scope) {
+controllerModule.controller('sidebar', ['$cookieStore', '$location', '$rootScope', '$scope',
+  function ($cookieStore, $location, $rootScope, $scope) {
     $scope.getClass = function(path) {
       if ($location.path().substr(0, path.length) === path) {
         return 'selected';
@@ -406,7 +385,8 @@ controllerModule.controller('sidebar', ['$cookieStore', '$location', '$scope',
       }
     };
     $scope.logout = function () {
-      $cookieStore.remove('uchiwa_token');
+      $cookieStore.remove('uchiwa_auth');
+      $rootScope.auth = false;
       $location.path('login');
     };
   }

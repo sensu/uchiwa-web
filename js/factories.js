@@ -2,12 +2,16 @@
 
 var factoryModule = angular.module('uchiwa.factories', []);
 
-factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, $window) {
+factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location) {
   return {
     request: function (config) {
       config.headers = config.headers || {};
-      var token = $cookieStore.get('uchiwa_token');
-      if (angular.isDefined(token)) {
+      var auth = $cookieStore.get('uchiwa_auth');
+      var token = null;
+      if (angular.isDefined(auth)) {
+        token = auth.token || null;
+      }
+      if (token) {
         config.headers.Authorization = 'Bearer ' + token;
       }
       return config;
@@ -16,8 +20,7 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, 
       if (rejection.status === 401 || rejection.status === 403) {
         // handle the case where the user is not authenticated
         if ($location.path() !== '/login') {
-          $window.location.href = $window.location.protocol +'//'+$window.location.host +'/#/login';
-          $window.location.reload();
+          $location.path('login');
         }
       }
       return $q.reject(rejection);
