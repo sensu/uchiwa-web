@@ -375,8 +375,8 @@ controllerModule.controller('settings', ['$cookies', '$scope', 'titleFactory',
 /**
 * Sidebar
 */
-controllerModule.controller('sidebar', ['$cookieStore', '$location', '$rootScope', '$scope',
-  function ($cookieStore, $location, $rootScope, $scope) {
+controllerModule.controller('sidebar', ['$location', '$scope', 'userService',
+  function ($location, $scope, userService) {
     $scope.getClass = function(path) {
       if ($location.path().substr(0, path.length) === path) {
         return 'selected';
@@ -384,11 +384,7 @@ controllerModule.controller('sidebar', ['$cookieStore', '$location', '$rootScope
         return '';
       }
     };
-    $scope.logout = function () {
-      $cookieStore.remove('uchiwa_auth');
-      $rootScope.auth = false;
-      $location.path('login');
-    };
+    $scope.logout = userService.logout;
   }
 ]);
 

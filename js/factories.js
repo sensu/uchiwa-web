@@ -2,7 +2,7 @@
 
 var factoryModule = angular.module('uchiwa.factories', []);
 
-factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location) {
+factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, userService) {
   return {
     request: function (config) {
       config.headers = config.headers || {};
@@ -20,6 +20,7 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location) 
       if (rejection.status === 401 || rejection.status === 403) {
         // handle the case where the user is not authenticated
         if ($location.path() !== '/login') {
+          userService.logout();
           $location.path('login');
         }
       }

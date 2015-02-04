@@ -398,3 +398,15 @@ serviceModule.service('helperService', function() {
     });
   };
 });
+
+/**
+* User service
+*/
+serviceModule.service('userService', ['$cookieStore', '$location', '$rootScope',
+function ($cookieStore, $location, $rootScope) {
+  this.logout = function() {
+    $cookieStore.remove('uchiwa_auth');
+    $rootScope.auth = false;
+    $location.path('login');
+  };
+}]);
