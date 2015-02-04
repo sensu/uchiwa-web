@@ -2,6 +2,33 @@
 
 var factoryModule = angular.module('uchiwa.factories', []);
 
+factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, userService) {
+  return {
+    request: function (config) {
+      config.headers = config.headers || {};
+      var auth = $cookieStore.get('uchiwa_auth');
+      var token = null;
+      if (angular.isDefined(auth)) {
+        token = auth.token || null;
+      }
+      if (token) {
+        config.headers.Authorization = 'Bearer ' + token;
+      }
+      return config;
+    },
+    responseError: function (rejection) {
+      if (rejection.status === 401 || rejection.status === 403) {
+        // handle the case where the user is not authenticated
+        if ($location.path() !== '/login') {
+          userService.logout();
+          $location.path('login');
+        }
+      }
+      return $q.reject(rejection);
+    }
+  };
+});
+
 /**
 * Page title
 */

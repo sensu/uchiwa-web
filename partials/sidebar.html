@@ -45,6 +45,13 @@
               </span>
           </a>
         </li>
+        <li ng-if="auth" id="logout" >
+          <a ng-click="logout()" >
+            <span class="small-nav" tooltip-placement="right" tooltip="Logout">
+              <i class="fa fa-sign-out"></i>
+            </span>
+          </a>
+        </li>
       </ul>
     </div>
     <!--/.nav-collapse -->

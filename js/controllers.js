@@ -5,26 +5,19 @@ var controllerModule = angular.module('uchiwa.controllers', []);
 /**
 * Init
 */
-controllerModule.controller('init', ['backendService', 'conf', '$interval', 'notification', '$rootScope', '$scope', 'titleFactory',
-  function (backendService, conf, $interval, notification, $rootScope, $scope,  titleFactory) {
+controllerModule.controller('init', ['backendService', '$cookieStore', 'notification', '$rootScope', '$scope', 'titleFactory',
+  function (backendService, $cookieStore, notification, $rootScope, $scope,  titleFactory) {
     $scope.titleFactory = titleFactory;
     $rootScope.skipRefresh = false;
     $rootScope.alerts = [];
     $rootScope.events = [];
-
     $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
 
-    backendService.getConfig()
-      .success(function (data) {
-        conf.refresh = data.Uchiwa.Refresh * 1000;
-        $interval(backendService.update, conf.refresh);
-      })
-      .error(function () {
-        $interval(backendService.update, conf.refresh);
-      });
+    backendService.getConfig();
 
     $scope.$on('$routeChangeSuccess', function () {
       backendService.update();
+      $rootScope.auth = $cookieStore.get('uchiwa_auth') || false;
     });
 
     $scope.$on('notification', function (type, message) {
@@ -313,20 +306,34 @@ controllerModule.controller('info', ['backendService', 'notification', '$scope',
     $scope.pageHeaderText = 'Info';
     titleFactory.set($scope.pageHeaderText);
 
-    $scope.uchiwa = {};
-
-
-    $scope.uchiwa.version = version.uchiwa;
-
-    backendService.getConfig()
-      .success(function (data) {
-        $scope.uchiwa.config = data;
-      })
-      .error(function (error) {
-        notification('error', 'Could not fetch Uchiwa config. Is Uchiwa running?');
-        console.error('Error: '+ JSON.stringify(error));
-      });
+    $scope.uchiwa = { version: version.uchiwa };
   }
+]);
+
+/**
+* Login
+*/
+controllerModule.controller('login', [ 'backendService', '$cookieStore', '$location', 'notification', '$rootScope', '$scope',
+function (backendService, $cookieStore, $location, notification, $rootScope, $scope) {
+
+  $scope.login = {user: '', pass: ''};
+
+  $scope.submit = function () {
+    backendService.login($scope.login)
+    .success(function (data) {
+      $cookieStore.put('uchiwa_auth', { token: data.token });
+      $location.path('/');
+    })
+    .error(function () {
+      notification('error', 'There was an error with your username/password combination. Please try again.');
+    });
+  };
+
+  if (angular.isObject($rootScope.auth)) {
+    $location.path('/');
+  }
+
+}
 ]);
 
 /**
@@ -368,8 +375,8 @@ controllerModule.controller('settings', ['$cookies', '$scope', 'titleFactory',
 /**
 * Sidebar
 */
-controllerModule.controller('sidebar', ['$scope', '$location',
-  function ($scope, $location) {
+controllerModule.controller('sidebar', ['$location', '$scope', 'userService',
+  function ($location, $scope, userService) {
     $scope.getClass = function(path) {
       if ($location.path().substr(0, path.length) === path) {
         return 'selected';
@@ -377,6 +384,7 @@ controllerModule.controller('sidebar', ['$scope', '$location',
         return '';
       }
     };
+    $scope.logout = userService.logout;
   }
 ]);
 

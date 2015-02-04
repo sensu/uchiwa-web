@@ -17,10 +17,15 @@ angular.module('uchiwa', [
   'ui.bootstrap'
 ]);
 
-angular.module('uchiwa').config(['$routeProvider', '$tooltipProvider',
-  function ($routeProvider, $tooltipProvider) {
+angular.module('uchiwa').config(['$httpProvider', '$routeProvider', '$tooltipProvider',
+  function ($httpProvider, $routeProvider, $tooltipProvider) {
+    // Token injection
+    $httpProvider.interceptors.push('authInterceptor');
+
+    // Routing
     $routeProvider
       .when('/', {redirectTo: function () { return '/events'; }})
+      .when('/login', {templateUrl: 'bower_components/uchiwa-web/partials/login/index.html', controller: 'login'})
       .when('/events', {templateUrl: 'bower_components/uchiwa-web/partials/views/events.html', reloadOnSearch: false, controller: 'events'})
       .when('/client/:dcId/:clientId', {templateUrl: 'bower_components/uchiwa-web/partials/client/index.html', reloadOnSearch: false, controller: 'client'})
       .when('/clients', {templateUrl: 'bower_components/uchiwa-web/partials/views/clients.html', reloadOnSearch: false, controller: 'clients'})
