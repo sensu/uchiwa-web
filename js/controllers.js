@@ -414,8 +414,8 @@ controllerModule.controller('aggregates', ['$scope', '$routeParams', 'routingSer
 /**
 * Aggregates for Check
 */
-controllerModule.controller('check_aggregates', ['$scope', '$routeParams', 'routingService', 'titleFactory',
-  function ($scope, $routeParams, routingService, titleFactory) {
+controllerModule.controller('check_aggregates', ['$rootScope', '$scope', '$routeParams', 'routingService', 'titleFactory',
+  function ($rootScope, $scope, $routeParams, routingService, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
 
@@ -424,6 +424,12 @@ controllerModule.controller('check_aggregates', ['$scope', '$routeParams', 'rout
     $scope.permalink = routingService.permalink;
 
     $scope.check = decodeURI($routeParams.check);
+
+    $scope.$on('sensu', function() {
+      $scope.check_aggregates = _.find($rootScope.aggregates, function(aggregate) {
+        return $scope.check == aggregate.check && decodeURI($routeParams.dc) == aggregate.dc;
+      });
+    });
   }
 ]);
 

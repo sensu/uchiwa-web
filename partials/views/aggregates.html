@@ -1,30 +1,20 @@
+<ng-include src="partialsPath + '/navbar.html'"></ng-include>
+<ng-include src="partialsPath + '/sidebar.html'"></ng-include>
 <div class="container-fluid aggregates">
-  <div ng-include="'partials/page-header.html'"></div>
+  <ng-include src="partialsPath + '/page-header.html'"></ng-include>
   <div class="row-fluid">
     <div class="col-lg-12">
       <div class="panel panel-default">
         <div class="panel-heading">
           <div class="row">
-            <div class="col-md-10">
-              <ul class="nav nav-pills nav-dc">
-                <li><a ng-class="{active: filters.dc == ''}" ng-click="permalink($event, 'dc', '')">All datacenters</a></li>
-                <li ng-repeat="datacenter in dc | orderBy:'name'">
-                  <a ng-class="{active: filters.dc == datacenter.name}" ng-click="permalink($event, 'dc', datacenter.name)">{{ datacenter.name }}</a>
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-2">
-              <div class="input-group input-group-sm">
-                <input type="text" class="form-control" placeholder="Search" ng-model="filters.q" ng-change="permalink($event, 'q', filters.q)">
-                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-              </div>
-              <div class="nav-filter pull-right dropdown">
-                <select class="form-control" ng-init="limit=50" ng-model="filters.limit" ng-change="permalink($event, 'limit', filters.limit)">
-                  <option value="50">Show 50</option>
-                  <option value="100">Show 100</option>
-                  <option value="200">Show 200</option>
-                  <option value="{{aggregates.length}}">Show All</option>
-                </select>
+            <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
+            <div class="col-md-4">
+              <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
+              <div class="nav-filter pull-right">
+
+                <! --limit-->
+                <panel-limit data="aggregates" filters="filters" permalink="permalink"></panel-limit>
+
               </div>
             </div>
           </div>
@@ -40,7 +30,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="aggregate in aggregates | filter:filters.q | filter:{dc:filters.dc} | limitTo:filters.limit | orderBy:predicate:reverse" ng-click="go('/aggregates/'+aggregate.check)">
+              <tr ng-repeat="aggregate in aggregates | filter:filters.q | filter:{dc:filters.dc} | limitTo:filters.limit | orderBy:predicate:reverse" ng-click="go('/aggregates/'+aggregate.check+'?dc='+aggregate.dc)">
                 <td class="main">{{ aggregate.check }}</td>
                 <td>{{ aggregate.issued[0] | getTimestamp }}</td>
                 <td>{{ aggregate.dc }}</td>
