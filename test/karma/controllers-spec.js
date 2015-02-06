@@ -34,7 +34,7 @@ describe('Controller', function () {
     });
   });
 
-  beforeEach(inject(function ($controller, _$rootScope_) {
+  beforeEach(inject(function ($controller, $httpBackend, _$rootScope_) {
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
     createController = function (controllerName, properties) {
@@ -42,6 +42,7 @@ describe('Controller', function () {
         '$scope': $scope
       }, properties));
     };
+    $httpBackend.whenGET('get_config').respond([]);
   }));
 
   describe('checks', function () {

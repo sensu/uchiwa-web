@@ -17,14 +17,17 @@ angular.module('uchiwa', [
   'ui.bootstrap'
 ]);
 
-angular.module('uchiwa').config(['$httpProvider', '$routeProvider', '$tooltipProvider',
+angular.module('uchiwa')
+.config(['$httpProvider', '$routeProvider', '$tooltipProvider',
   function ($httpProvider, $routeProvider, $tooltipProvider) {
     // Token injection
     $httpProvider.interceptors.push('authInterceptor');
 
     // Routing
     $routeProvider
-      .when('/', {redirectTo: function () { return '/events'; }})
+      .when('/', {redirectTo: function () {
+        return '/events';
+      }})
       .when('/login', {templateUrl: 'bower_components/uchiwa-web/partials/login/index.html', controller: 'login'})
       .when('/events', {templateUrl: 'bower_components/uchiwa-web/partials/views/events.html', reloadOnSearch: false, controller: 'events'})
       .when('/client/:dcId/:clientId', {templateUrl: 'bower_components/uchiwa-web/partials/client/index.html', reloadOnSearch: false, controller: 'client'})
@@ -35,4 +38,30 @@ angular.module('uchiwa').config(['$httpProvider', '$routeProvider', '$tooltipPro
       .when('/settings', {templateUrl: 'bower_components/uchiwa-web/partials/views/settings.html', controller: 'settings'})
       .otherwise('/');
     $tooltipProvider.options({'placement': 'bottom'});
-  }]);
+  }
+])
+.run(function (backendService, $cookieStore, $location, notification, $rootScope, titleFactory) {
+  $rootScope.alerts = [];
+  $rootScope.events = [];
+  $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
+  $rootScope.skipRefresh = false;
+
+  $rootScope.titleFactory = titleFactory;
+
+  backendService.getConfig();
+
+  // fetch the sensu data on every page change
+  $rootScope.$on('$routeChangeSuccess', function () {
+    backendService.update();
+    $rootScope.auth = $cookieStore.get('uchiwa_auth') || false;
+  });
+
+  $rootScope.$on('notification', function (event, type, message) {
+    if ($location.path() !== '/login') {
+      notification(type, message);
+      if (type === 'error') {
+        console.error(type + ': '+ JSON.stringify(message));
+      }
+    }
+  });
+});

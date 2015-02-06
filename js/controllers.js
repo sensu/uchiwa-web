@@ -3,30 +3,6 @@
 var controllerModule = angular.module('uchiwa.controllers', []);
 
 /**
-* Init
-*/
-controllerModule.controller('init', ['backendService', '$cookieStore', 'notification', '$rootScope', '$scope', 'titleFactory',
-  function (backendService, $cookieStore, notification, $rootScope, $scope,  titleFactory) {
-    $scope.titleFactory = titleFactory;
-    $rootScope.skipRefresh = false;
-    $rootScope.alerts = [];
-    $rootScope.events = [];
-    $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
-
-    backendService.getConfig();
-
-    $scope.$on('$routeChangeSuccess', function () {
-      backendService.update();
-      $rootScope.auth = $cookieStore.get('uchiwa_auth') || false;
-    });
-
-    $scope.$on('notification', function (type, message) {
-      notification(type, message);
-    });
-  }
-]);
-
-/**
 * Checks
 */
 controllerModule.controller('checks', ['titleFactory', '$routeParams', 'routingService', '$scope',
@@ -301,8 +277,8 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
 /**
 * Info
 */
-controllerModule.controller('info', ['backendService', 'notification', '$scope', 'titleFactory', 'version',
-  function (backendService, notification, $scope, titleFactory, version) {
+controllerModule.controller('info', ['backendService', '$scope', 'titleFactory', 'version',
+  function (backendService, $scope, titleFactory, version) {
     $scope.pageHeaderText = 'Info';
     titleFactory.set($scope.pageHeaderText);
 
@@ -416,7 +392,7 @@ controllerModule.controller('stashes', ['$scope', '$routeParams', 'routingServic
 * Stash Modal
 */
 controllerModule.controller('StashModalCtrl', ['conf', '$filter', 'items', '$modalInstance', 'notification', '$scope', 'stashesService',
-  function (conf, $filter, items, $modalInstance,notification, $scope, stashesService) {
+  function (conf, $filter, items, $modalInstance, notification, $scope, stashesService) {
     $scope.items = items;
     $scope.acknowledged = $filter('filter')(items, {acknowledged: true}).length;
     $scope.itemType = items[0].hasOwnProperty('client') ? 'check' : 'client';
