@@ -78,6 +78,9 @@ serviceModule.service('backendService', ['conf', '$http', '$interval', '$locatio
         });
 
         $rootScope.events = _.map(data.Events, function(event) {
+          if (event.client.name === null && event.check.name === null) {
+            return false;
+          }
           event._id = event.dc + '/' + event.client.name + '/' + event.check.name;
           var existingEvent = _.findWhere($rootScope.events, {_id: event._id});
           if (existingEvent !== undefined) {
