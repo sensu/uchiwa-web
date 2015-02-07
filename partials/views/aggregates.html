@@ -30,7 +30,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="aggregate in aggregates | filter:filters.q | filter:{dc:filters.dc} | limitTo:filters.limit | orderBy:predicate:reverse" ng-click="go('/aggregates/'+aggregate.check+'?dc='+aggregate.dc)">
+              <tr ng-repeat="aggregate in aggregates | filter:filters.q | filter:{dc:filters.dc} | limitTo:filters.limit | orderBy:predicate:reverse" ng-click="go('/aggregates/'+aggregate.dc+'/'+aggregate.check)">
                 <td class="main">{{ aggregate.check }}</td>
                 <td>{{ aggregate.issued[0] | getTimestamp }}</td>
                 <td>{{ aggregate.dc }}</td>

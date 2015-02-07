@@ -423,11 +423,12 @@ controllerModule.controller('check_aggregates', ['$rootScope', '$scope', '$route
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
 
-    $scope.check = decodeURI($routeParams.check);
+    $scope.dcId = decodeURI($routeParams.dcId);
+    $scope.checkId = decodeURI($routeParams.checkId);
 
     $scope.$on('sensu', function() {
       $scope.check_aggregates = _.find($rootScope.aggregates, function(aggregate) {
-        return $scope.check == aggregate.check && decodeURI($routeParams.dc) == aggregate.dc;
+        return $scope.checkId == aggregate.check && $scope.dcId == aggregate.dc;
       });
     });
   }
@@ -445,11 +446,11 @@ controllerModule.controller('check_issue_aggregates', ['$scope', '$http', '$rout
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
 
-    $scope.check = decodeURI($routeParams.check);
-    $scope.issued = decodeURI($routeParams.issued);
-    $scope.dc = decodeURI($routeParams.dc);
+    $scope.dcId = decodeURI($routeParams.dcId);
+    $scope.checkId = decodeURI($routeParams.checkId);
+    $scope.issuedId = decodeURI($routeParams.issuedId);
 
-    $http.get('get_aggregate_by_issued?check=' + $scope.check + '&issued=' + $scope.issued + '&dc=' + $scope.dc)
+    $http.get('get_aggregate_by_issued?check=' + $scope.checkId + '&issued=' + $scope.issuedId + '&dc=' + $scope.dcId)
     .success(function(data) {
       $scope.aggregate = data;
     })
