@@ -46,7 +46,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="client in clients | orderBy:predicate:reverse | filter:filters.q | filter:{dc:filters.dc} | filterSubscriptions:filters.subscription | limitTo:filters.limit track by client.name" ng-click="go('/client/'+client.dc+'/'+client.name)">
+              <tr ng-repeat="client in clients | orderBy:predicate:reverse | filter:filters.q | filter:{dc:filters.dc} | filterSubscriptions:filters.subscription | limitTo:filters.limit track by $index" ng-click="go('/client/'+client.dc+'/'+client.name)">
                 <td class="well-{{ client.status | getStatusClass }}" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="client.selected"></input>
                 </td>
