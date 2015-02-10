@@ -36,6 +36,9 @@ angular.module('uchiwa')
       .when('/info', {templateUrl: 'bower_components/uchiwa-web/partials/views/info.html', controller: 'info'})
       .when('/stashes', {templateUrl: 'bower_components/uchiwa-web/partials/views/stashes.html', reloadOnSearch: false, controller: 'stashes'})
       .when('/settings', {templateUrl: 'bower_components/uchiwa-web/partials/views/settings.html', controller: 'settings'})
+      .when('/aggregates', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregates.html', reloadOnSearch: false, controller: 'aggregates'})
+      .when('/aggregates/:dcId/:checkId', {templateUrl: 'bower_components/uchiwa-web/partials/views/check_aggregates.html', reloadOnSearch: false, controller: 'check_aggregates'})
+      .when('/aggregates/:dcId/:checkId/:issuedId', {templateUrl: 'bower_components/uchiwa-web/partials/views/check_issue_aggregates.html', reloadOnSearch: false, controller: 'check_issue_aggregates'})
       .otherwise('/');
     $tooltipProvider.options({'placement': 'bottom'});
   }

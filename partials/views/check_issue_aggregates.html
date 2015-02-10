@@ -1,0 +1,91 @@
+<ng-include src="partialsPath + '/navbar.html'"></ng-include>
+<ng-include src="partialsPath + '/sidebar.html'"></ng-include>
+<div class="container-fluid client">
+  <ng-include src="partialsPath + '/page-header.html'"></ng-include>
+  <div class="row-fluid">
+    <div class="col-lg-12">
+      <ol class="breadcrumb">
+        <li><a href="#/aggregates">Aggregates</a></li>
+        <li>
+          <a ng-href="#/aggregates/{{dcId | encodeURIComponent}}/{{checkId | encodeURIComponent}}">
+            {{checkId}}
+          </a>
+        </li>
+        <li class="active">{{issuedId | getTimestamp}}</li>
+      </ol>
+    </div>
+    <div class="col-lg-12">
+      <div class="panel panel-default client-info">
+        <div class="panel-heading">
+          <div class="title">
+            <div class="pull-right">
+              <i class="fa fa-cloud"></i>
+              {{dcId}}
+            </div>
+            <i class="fa fa-check-square"></i>
+            {{checkId}}&nbsp;
+            <i class="fa fa-clock-o"></i>
+            {{issuedId | getTimestamp}}
+          </div>
+        </div>
+        <div class="panel-body client-checks">
+          <p ng-if="!aggregate">
+            Aggregates collected for <strong>{{checkId}}</strong> check
+            at <strong>{{issuedId | getTimestamp}}</strong>
+            in data center <strong>{{dcId}}</strong> no longer exist.
+          </p>
+          <table class="table table-hover table-condensed" style="table-layout: fixed;" ng-if="aggregate">
+            <thead>
+              <tr>
+                <th class="col-sm-2">Name</th>
+                <th class="col-sm-2">Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Total</td>
+                <td>
+                  <span class="label label-primary">
+                    {{aggregate.total}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td>OK</td>
+                <td>
+                  <span class="label label-success">
+                    {{aggregate.ok}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td>Critical</td>
+                <td>
+                  <span class="label label-danger">
+                    {{aggregate.critical}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td>Unknown</td>
+                <td>
+                  <span class="label label-default">
+                    {{aggregate.unknown}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td>Warning</td>
+                <td>
+                  <span class="label label-warning">
+                    {{aggregate.warning}}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

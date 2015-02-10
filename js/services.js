@@ -68,6 +68,7 @@ serviceModule.service('backendService', ['conf', '$http', '$interval', '$locatio
 
         $rootScope.checks = data.Checks;
         $rootScope.dc = data.Dc;
+        $rootScope.aggregates = data.Aggregates;
 
         $rootScope.clients = _.map(data.Clients, function(client) {
           var existingClient = _.findWhere($rootScope.clients, {name: client.name, dc: client.dc});
