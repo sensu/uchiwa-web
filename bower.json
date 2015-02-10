@@ -1,6 +1,6 @@
 {
   "name": "uchiwa-web",
-  "version": "0.4.1",
+  "version": "0.5.0.beta",
   "private": true,
   "main": "*",
   "ignore": [
