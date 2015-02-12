@@ -4,6 +4,7 @@ constantModule.value('conf', {
   date: 'YYYY-MM-DD HH:mm:ss',
   enterprise: false,
   hideSilenced: false,
+  hideClientSilenced: false,
   hideOccurrences: false,
   refresh: 10000,
   theme: 'uchiwa-default'
