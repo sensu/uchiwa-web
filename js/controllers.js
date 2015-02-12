@@ -211,9 +211,9 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
     });
 
     // Hide events from silenced clients
-    $scope.filters.silenced = $cookieStore.get('hideClientSilenced') || conf.hideSilenced;
+    $scope.filters.clientSilenced = $cookieStore.get('hideClientSilenced') || conf.hideClientSilenced;
     $scope.$watch('filters.clientSilenced', function () {
-      $cookieStore.put('hideClientSilenced', $scope.filters.silenced);
+      $cookieStore.put('hideClientSilenced', $scope.filters.clientSilenced);
     });
 
     // Hide occurrences
