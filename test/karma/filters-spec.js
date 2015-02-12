@@ -189,6 +189,23 @@ describe('filters', function () {
 
   });
 
+  describe('hideClientSilenced', function () {
+
+    it('should only hide events from silenced clients when hideClientSilenced is true', inject(function (hideClientSilencedFilter) {
+      var events = [
+        {id: 'foo', client: {acknowledged: true}},
+        {id: 'bar', client: {acknowledged: false}}
+      ];
+      var expectedEvents = [
+        {id: 'bar', client: {acknowledged: false}}
+      ];
+      expect(hideClientSilencedFilter(events, false)).toEqual(events);
+      expect(hideClientSilencedFilter(events, true)).toEqual(expectedEvents);
+    }));
+
+  });
+
+
   describe('hideOccurrences', function () {
 
     it('should only hide events when the number occurrences are less than the check occurrences parameter and hideOccurrences is true', inject(function (hideOccurrencesFilter) {
