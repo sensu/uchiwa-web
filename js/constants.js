@@ -11,5 +11,5 @@ constantModule.value('conf', {
 
 // Version
 constantModule.constant('version', {
-  uchiwa: '0.5.0.beta'
+  uchiwa: '0.5.0'
 });
