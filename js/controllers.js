@@ -298,6 +298,7 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
     backendService.login($scope.login)
     .success(function (data) {
       $cookieStore.put('uchiwa_auth', { token: data.token });
+      backendService.getConfig();
       $location.path('/');
     })
     .error(function () {
@@ -305,10 +306,9 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
     });
   };
 
-  if (angular.isObject($rootScope.auth)) {
+  if (angular.isObject($rootScope.auth) || angular.isObject($rootScope.config)) {
     $location.path('/');
   }
-
 }
 ]);
 

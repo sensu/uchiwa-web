@@ -407,6 +407,7 @@ function ($cookieStore, $location, $rootScope) {
   this.logout = function() {
     $cookieStore.remove('uchiwa_auth');
     $rootScope.auth = false;
+    $rootScope.config = false;
     $location.path('login');
   };
 }]);

@@ -18,7 +18,7 @@
     "async": "~0.9.0",
     "bootstrap": "3.1.1",
     "bootstrap-sass-official": "3.1.1",
-    "fontawesome": "4.1.0",
+    "fontawesome": "4.3.0",
     "highlightjs": "~8.3.0",
     "moment": "~2.8.3",
     "toastr": "~2.0.3",
