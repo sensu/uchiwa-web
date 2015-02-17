@@ -6,10 +6,10 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, 
   return {
     request: function (config) {
       config.headers = config.headers || {};
-      var auth = $cookieStore.get('uchiwa_auth');
+      var user = $cookieStore.get('uchiwa_auth');
       var token = null;
-      if (angular.isDefined(auth)) {
-        token = auth.token || null;
+      if (angular.isDefined(user)) {
+        token = user.Token || null;
       }
       if (token) {
         config.headers.Authorization = 'Bearer ' + token;
