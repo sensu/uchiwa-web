@@ -10,8 +10,6 @@ See [uchiwa](https://github.com/sensu/uchiwa) for Go backend.
 
 ## Getting Started
 
-## Getting Started
-
 See [Uchiwa Docs](http://docs.uchiwa.io/en/latest/getting-started/)
 
 ## Configuration
