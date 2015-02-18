@@ -299,7 +299,6 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
   $scope.submit = function () {
     backendService.login($scope.login)
     .success(function (data) {
-      console.log(data);
       $cookieStore.put('uchiwa_auth', data);
       backendService.getConfig();
       $location.path('/');
@@ -363,7 +362,7 @@ controllerModule.controller('sidebar', ['$location', '$scope', 'userService',
         return '';
       }
     };
-    
+
     $scope.logout = userService.logout;
     $scope.user = userService;
   }
