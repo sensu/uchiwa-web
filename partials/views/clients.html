@@ -15,7 +15,7 @@
               <div class="nav-filter pull-right">
 
                 <! --actions-->
-                <panel-actions data="clients" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients"  ng-if="user.canPost()"></panel-actions>
+                <panel-actions data="clients" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients" ng-if="user.canPost()"></panel-actions>
 
                 <! --subscriptions-->
                 <ng-include src="partialsPath + '/panel/subscriptions.html'"></ng-include>

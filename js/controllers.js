@@ -33,8 +33,8 @@ controllerModule.controller('checks', ['titleFactory', '$routeParams', 'routingS
 /**
 * Client
 */
-controllerModule.controller('client', ['backendService', 'clientsService', 'conf', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope','stashesService',
-  function (backendService, clientsService, conf, notification, titleFactory, $routeParams, routingService, $scope, stashesService) {
+controllerModule.controller('client', ['backendService', 'clientsService', 'conf', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope','stashesService', 'userService',
+  function (backendService, clientsService, conf, notification, titleFactory, $routeParams, routingService, $scope, stashesService, userService) {
 
     $scope.predicate = '-last_status';
     $scope.missingClient = false;
@@ -109,6 +109,7 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
     $scope.resolveEvent = clientsService.resolveEvent;
     $scope.permalink = routingService.permalink;
     $scope.stash = stashesService.stash;
+    $scope.user = userService;
     var getCheck = clientsService.getCheck;
     var getEvent = clientsService.getEvent;
   }
