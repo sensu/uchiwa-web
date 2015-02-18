@@ -407,8 +407,8 @@ controllerModule.controller('check_aggregates', ['$rootScope', '$scope', '$route
     $scope.checkId = decodeURI($routeParams.checkId);
 
     $scope.$on('sensu', function() {
-      $scope.check_aggregates = _.find($rootScope.aggregates, function(aggregate) {
-        return $scope.checkId == aggregate.check && $scope.dcId == aggregate.dc;
+      $scope.check_aggregates = _.find($rootScope.aggregates, function(aggregate) { // jshint ignore:line
+        return $scope.checkId === aggregate.check && $scope.dcId === aggregate.dc;
       });
     });
   }
