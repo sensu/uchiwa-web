@@ -45,6 +45,13 @@
               </span>
           </a>
         </li>
+        <li ng-if="enterprise && config.Uchiwa.Auth === 'sql' && user.isAdmin()" ng-class="getClass('/users')" >
+          <a ng-href="#users">
+            <span class="small-nav" tooltip-placement="right" tooltip="Users">
+              <i class="fa fa-users"></i>
+            </span>
+          </a>
+        </li>
         <li id="settings" ng-class="getClass('/settings')">
           <a ng-href="#settings" >
               <span class="small-nav" tooltip-placement="right" tooltip="Settings">

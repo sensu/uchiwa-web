@@ -43,11 +43,12 @@ angular.module('uchiwa')
     $tooltipProvider.options({'placement': 'bottom'});
   }
 ])
-.run(function (backendService, $cookieStore, $location, notification, $rootScope, titleFactory) {
+.run(function (backendService, conf, $cookieStore, $location, notification, $rootScope, titleFactory) {
   $rootScope.alerts = [];
   $rootScope.events = [];
   $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
   $rootScope.skipRefresh = false;
+  $rootScope.enterprise = conf.enterprise;
 
   $rootScope.titleFactory = titleFactory;
 

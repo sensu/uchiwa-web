@@ -15,7 +15,7 @@
               <div class="nav-filter pull-right">
 
                 <! --actions-->
-                <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents"></panel-actions>
+                <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents" ng-if="user.canPost()"></panel-actions>
 
                 <! --hide-->
                 <ng-include src="partialsPath + '/panel/hide.html'"></ng-include>
@@ -34,9 +34,9 @@
             <thead>
               <tr>
                 <th class="col-min">
-                  <input type="checkbox" ng-model="selectModel.selected" ng-change="selectEvents(selectModel)"></input>
+                  <input type="checkbox" ng-model="selectModel.selected" ng-change="selectEvents(selectModel)" ng-if="user.canPost()"></input>
                 </th>
-                <th class="col-min" ng-click="predicate = '-check.status'; reverse=!reverse"><i class="fa fa-sort"></i></th>
+                <th class="col-min" ng-click="predicate = '-check.status'; reverse=!reverse" ng-if="user.canPost()"><i class="fa fa-sort"></i></th>
                 <th class="col-sm-2" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
                 <th class="col-sm-2" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
                 <th class="col-sm-4" ng-click="predicate = 'check.output'; reverse=!reverse">Output <i class="fa fa-sort"></i></th>
@@ -48,9 +48,9 @@
             <tbody>
               <tr ng-repeat="event in events | orderBy:predicate:reverse | filter:filters.q | filter:{dc:filters.dc} | hideSilenced:filters.silenced | hideOccurrences:filters.occurrences | limitTo:filters.limit | buildEvents track by event._id" ng-click="go('/client/'+event.dc+'/'+event.client.name+'?check='+event.check.name)">
                 <td class="well-{{ event.check.status | getStatusClass }}" ng-click="$event.stopPropagation()">
-                  <input type="checkbox" ng-model="event.selected"></input>
+                  <input type="checkbox" ng-model="event.selected" ng-if="user.canPost()"></input>
                 </td>
-                <td ng-click="stash($event, event)">
+                <td ng-click="stash($event, event)" ng-if="user.canPost()">
                   <i class="fa {{ event.acknowledged | getAckClass }}"></i>
                 </td>
                 <td class="dropdown-toggle" >{{ event.sourceName }}</td>

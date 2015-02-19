@@ -33,8 +33,8 @@ controllerModule.controller('checks', ['titleFactory', '$routeParams', 'routingS
 /**
 * Client
 */
-controllerModule.controller('client', ['backendService', 'clientsService', 'conf', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope','stashesService',
-  function (backendService, clientsService, conf, notification, titleFactory, $routeParams, routingService, $scope, stashesService) {
+controllerModule.controller('client', ['backendService', 'clientsService', 'conf', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope','stashesService', 'userService',
+  function (backendService, clientsService, conf, notification, titleFactory, $routeParams, routingService, $scope, stashesService, userService) {
 
     $scope.predicate = '-last_status';
     $scope.missingClient = false;
@@ -109,6 +109,7 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
     $scope.resolveEvent = clientsService.resolveEvent;
     $scope.permalink = routingService.permalink;
     $scope.stash = stashesService.stash;
+    $scope.user = userService;
     var getCheck = clientsService.getCheck;
     var getEvent = clientsService.getEvent;
   }
@@ -117,8 +118,8 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
 /**
 * Clients
 */
-controllerModule.controller('clients', ['clientsService', '$filter', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'stashesService', 'titleFactory',
-  function (clientsService, $filter, helperService, $rootScope, $routeParams, routingService, $scope, stashesService, titleFactory) {
+controllerModule.controller('clients', ['clientsService', '$filter', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
+  function (clientsService, $filter, helperService, $rootScope, $routeParams, routingService, $scope, stashesService, titleFactory, userService) {
     $scope.pageHeaderText = 'Clients';
     titleFactory.set($scope.pageHeaderText);
 
@@ -136,6 +137,7 @@ controllerModule.controller('clients', ['clientsService', '$filter', 'helperServ
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
     $scope.stash = stashesService.stash;
+    $scope.user = userService;
 
     $scope.selectClients = function(selectModel) {
       var filteredClients = $filter('filter')($rootScope.clients, $scope.filters.q);
@@ -184,8 +186,8 @@ controllerModule.controller('clients', ['clientsService', '$filter', 'helperServ
 /**
 * Events
 */
-controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore', '$filter', 'helperService', '$rootScope', '$routeParams','routingService', '$scope', 'stashesService', 'titleFactory',
-  function (clientsService, conf, $cookieStore, $filter, helperService, $rootScope, $routeParams, routingService, $scope, stashesService, titleFactory) {
+controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore', '$filter', 'helperService', '$rootScope', '$routeParams','routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
+  function (clientsService, conf, $cookieStore, $filter, helperService, $rootScope, $routeParams, routingService, $scope, stashesService, titleFactory, userService) {
     $scope.pageHeaderText = 'Events';
     titleFactory.set($scope.pageHeaderText);
 
@@ -203,6 +205,7 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
     $scope.permalink = routingService.permalink;
     $scope.resolveEvent = clientsService.resolveEvent;
     $scope.stash = stashesService.stash;
+    $scope.user = userService;
 
     // Hide silenced
     $scope.filters.silenced = $cookieStore.get('hideSilenced') || conf.hideSilenced;
@@ -297,7 +300,8 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
   $scope.submit = function () {
     backendService.login($scope.login)
     .success(function (data) {
-      $cookieStore.put('uchiwa_auth', { token: data.token });
+      $cookieStore.put('uchiwa_auth', data);
+      backendService.getConfig();
       $location.path('/');
     })
     .error(function () {
@@ -305,10 +309,9 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
     });
   };
 
-  if (angular.isObject($rootScope.auth)) {
+  if (angular.isObject($rootScope.auth) || angular.isObject($rootScope.config)) {
     $location.path('/');
   }
-
 }
 ]);
 
@@ -360,7 +363,9 @@ controllerModule.controller('sidebar', ['$location', '$scope', 'userService',
         return '';
       }
     };
+
     $scope.logout = userService.logout;
+    $scope.user = userService;
   }
 ]);
 
@@ -403,8 +408,8 @@ controllerModule.controller('check_aggregates', ['$rootScope', '$scope', '$route
     $scope.checkId = decodeURI($routeParams.checkId);
 
     $scope.$on('sensu', function() {
-      $scope.check_aggregates = _.find($rootScope.aggregates, function(aggregate) {
-        return $scope.checkId == aggregate.check && $scope.dcId == aggregate.dc;
+      $scope.check_aggregates = _.find($rootScope.aggregates, function(aggregate) { // jshint ignore:line
+        return $scope.checkId === aggregate.check && $scope.dcId === aggregate.dc;
       });
     });
   }
@@ -439,8 +444,8 @@ controllerModule.controller('check_issue_aggregates', ['$scope', '$http', '$rout
 /**
 * Stashes
 */
-controllerModule.controller('stashes', ['$scope', '$routeParams', 'routingService', 'stashesService', 'titleFactory',
-  function ($scope, $routeParams, routingService, stashesService, titleFactory) {
+controllerModule.controller('stashes', ['$scope', '$routeParams', 'routingService', 'stashesService', 'titleFactory', 'userService',
+  function ($scope, $routeParams, routingService, stashesService, titleFactory, userService) {
     $scope.pageHeaderText = 'Stashes';
     titleFactory.set($scope.pageHeaderText);
 
@@ -456,7 +461,7 @@ controllerModule.controller('stashes', ['$scope', '$routeParams', 'routingServic
 
     // Services
     $scope.permalink = routingService.permalink;
-
+    $scope.user = userService;
   }
 ]);
 
