@@ -308,12 +308,33 @@ pre.hljs .hljs-string {
 /* Timestamp */
 /* Wells */
 .form-control {
-  width: auto;
   height: auto;
   display: inline; }
 
+.form-control.limit {
+  width: auto; }
+
 .form-control.subscriptions {
   width: 140px; }
+
+/* Colors */
+/* Body, Sections and Headers */
+/* Breadcrumb */
+/* Buttons */
+/* Code */
+/* Dropdown */
+/* Modal */
+/* Nav */
+/* Navbar */
+/* Sidebar */
+/* Panels */
+/* Tables */
+/* Timestamp */
+/* Wells */
+.gravatar {
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px; }
 
 /* Colors */
 /* Body, Sections and Headers */
@@ -784,6 +805,9 @@ pre.hljs .hljs-string {
 
 .table th.col-min {
   width: 3%; }
+
+.table th.col-gravatar {
+  width: 5%; }
 
 .table th.col-dc {
   width: 8%; }

@@ -10,13 +10,13 @@ See [uchiwa](https://github.com/sensu/uchiwa) for Go backend.
 
 ## Getting Started
 
-See [Uchiwa Docs](https://uchiwa.io/#/docs/getting-started)
+See [Uchiwa Docs](http://docs.uchiwa.io/en/latest/getting-started/)
 
 ## Configuration
-See [Uchiwa Docs](https://uchiwa.io/#/docs/config)
+See [Uchiwa Docs](http://docs.uchiwa.io/en/latest/configuration/examples/)
 
 ## Contributing
-See [Uchiwa Docs](https://uchiwa.io/#/docs/contributing)
+See [Uchiwa Docs](http://docs.uchiwa.io/en/latest/contributing/)
 
 ## Screenshots
 

@@ -15,7 +15,7 @@
               <div class="nav-filter pull-right">
 
                 <! --actions-->
-                <panel-actions data="clients" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients"></panel-actions>
+                <panel-actions data="clients" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients" ng-if="user.canPost()"></panel-actions>
 
                 <! --subscriptions-->
                 <ng-include src="partialsPath + '/panel/subscriptions.html'"></ng-include>
@@ -34,9 +34,9 @@
             <thead>
               <tr>
                 <th class="col-min">
-                  <input type="checkbox" ng-model="selectModel.selected" ng-change="selectClients(selectModel)"></input>
+                  <input type="checkbox" ng-model="selectModel.selected" ng-change="selectClients(selectModel)"  ng-if="user.canPost()"></input>
                 </th>
-                <th class="col-min" ng-click="predicate = '-status'; reverse=!reverse"><i class="fa fa-sort"></i></th>
+                <th class="col-min" ng-click="predicate = '-status'; reverse=!reverse" ng-if="user.canPost()"><i class="fa fa-sort"></i></th>
                 <th class="col-sm-2" ng-click="predicate = 'name'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
                 <th class="col-sm-2" ng-click="predicate = 'address'; reverse=!reverse">IP <i class="fa fa-sort"></i></th>
                 <th class="col-sm-5" ng-click="predicate = 'output'; reverse=!reverse">Events <i class="fa fa-sort"></i></th>
@@ -48,9 +48,9 @@
             <tbody>
               <tr ng-repeat="client in clients | orderBy:predicate:reverse | filter:filters.q | filter:{dc:filters.dc} | filterSubscriptions:filters.subscription | limitTo:filters.limit track by $index" ng-click="go('/client/'+client.dc+'/'+client.name)">
                 <td class="well-{{ client.status | getStatusClass }}" ng-click="$event.stopPropagation()">
-                  <input type="checkbox" ng-model="client.selected"></input>
+                  <input type="checkbox" ng-model="client.selected" = ng-if="user.canPost()"></input>
                 </td>
-                <td ng-click="stash($event, client)">
+                <td ng-click="stash($event, client)" ng-if="user.canPost()">
                   <i class="fa {{ client.acknowledged | getAckClass }}"></i>
                 </td>
                 <td class="main">{{ client.name }}</td>

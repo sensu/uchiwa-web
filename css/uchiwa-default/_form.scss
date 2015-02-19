@@ -1,9 +1,12 @@
 @import "variables";
 
 .form-control {
-  width: auto;
   height: auto;
   display: inline;
+}
+
+.form-control.limit {
+  width: auto;
 }
 
 .form-control.subscriptions {
