@@ -37,9 +37,8 @@
                   <input type="checkbox" ng-model="selectModel.selected" ng-change="selectEvents(selectModel)"></input>
                 </th>
                 <th class="col-min" ng-click="predicate = '-check.status'; reverse=!reverse"><i class="fa fa-sort"></i></th>
-                <th class="col-sm-2" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
-                <th class='col-min'></th>
-                <th class="col-sm-2" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
+                <th class="col-sm-3" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
+                <th class="col-sm-3" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
                 <th class="col-sm-4" ng-click="predicate = 'check.output'; reverse=!reverse">Output <i class="fa fa-sort"></i></th>
                 <th class="col-sm-1" ng-click="predicate = 'occurrences'; reverse=!reverse"><i class="fa fa-slack" tooltip-placement="top" tooltip="Occurrences"></i> <i class="fa fa-sort"></i></th>
                 <th class="col-dc" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
@@ -51,14 +50,19 @@
                 <td class="well-{{ event.check.status | getStatusClass }}" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="event.selected"></input>
                 </td>
-                <td ng-click="event.client['dc'] = event.dc; stash($event, event.client)">
-                  <i class="fa {{ event.client.acknowledged | getAckClass }}"></i>
+                <td></td>
+                <td>
+                  <span ng-click="event.client['dc'] = event.dc; stash($event, event.client)">
+                    <i class="fa fa-fw {{ event.client.acknowledged | getAckClass }}"></i>
+                  </span>
+                  <span class="dropdown-toggle" >{{ event.sourceName }}</span>
                 </td>
-                <td class="dropdown-toggle" >{{ event.sourceName }}</td>
-                <td ng-click="stash($event, event)">
-                  <i class="fa {{ event.acknowledged | getAckClass }}"></i>
+                <td>
+                  <span ng-click="stash($event, event)">
+                    <i class="fa fa-fw {{ event.acknowledged | getAckClass }}"></i>
+                  </span>
+                  <span class="main check-name">{{ event.check.name }}</span>
                 </td>
-                <td class="main check-name">{{ event.check.name }}</td>
                 <td class="output" ng-bind-html="event.check.output | linky" ng-click="helpers.openLink($event)"></td>
                 <td>{{ event.occurrences }}</td>
                 <td>{{ event.dc }}</td>
