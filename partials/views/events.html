@@ -36,7 +36,6 @@
                 <th class="col-min">
                   <input type="checkbox" ng-model="selectModel.selected" ng-change="selectEvents(selectModel)" ng-if="user.canPost()"></input>
                 </th>
-                <th class="col-min" ng-click="predicate = '-check.status'; reverse=!reverse" ng-if="user.canPost()"><i class="fa fa-sort"></i></th>
                 <th class="col-sm-3" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
                 <th class="col-sm-3" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
                 <th class="col-sm-4" ng-click="predicate = 'check.output'; reverse=!reverse">Output <i class="fa fa-sort"></i></th>
@@ -50,7 +49,6 @@
                 <td class="well-{{ event.check.status | getStatusClass }}" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="event.selected" ng-if="user.canPost()"></input>
                 </td>
-                <td></td>
                 <td>
                   <span ng-click="event.client['dc'] = event.dc; stash($event, event.client)" ng-if="user.canPost()">
                     <i class="fa fa-fw {{ event.client.acknowledged | getAckClass }}"></i>
