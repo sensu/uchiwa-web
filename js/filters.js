@@ -139,6 +139,20 @@ filterModule.filter('hideSilenced', function() {
   };
 });
 
+filterModule.filter('hideClientSilenced', function() {
+  return function(events, hideClientSilenced) {
+    if (Object.prototype.toString.call(events) !== '[object Array]') {
+      return events;
+    }
+    if (events && hideClientSilenced) {
+      return events.filter(function (item) {
+        return item.client.acknowledged === false;
+      });
+    }
+    return events;
+  };
+});
+
 filterModule.filter('hideOccurrences', function() {
   return function(events, hideOccurrences) {
     if (Object.prototype.toString.call(events) !== '[object Array]') {

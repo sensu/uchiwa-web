@@ -36,7 +36,7 @@
                 <th class="col-min">
                   <input type="checkbox" ng-model="selectModel.selected" ng-change="selectClients(selectModel)"  ng-if="user.canPost()"></input>
                 </th>
-                <th class="col-min" ng-click="predicate = '-status'; reverse=!reverse" ng-if="user.canPost()"><i class="fa fa-sort"></i></th>
+                <th class="col-min" ng-if="user.canPost()"></th>
                 <th class="col-sm-2" ng-click="predicate = 'name'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
                 <th class="col-sm-2" ng-click="predicate = 'address'; reverse=!reverse">IP <i class="fa fa-sort"></i></th>
                 <th class="col-sm-5" ng-click="predicate = 'output'; reverse=!reverse">Events <i class="fa fa-sort"></i></th>
