@@ -775,9 +775,9 @@ pre.hljs .hljs-string {
   border-left: 3px solid #5F97FB; }
 
 .sidebar .sidebar-nav > .selected > a {
-  color: #2C2C39;
+  color: #FFFFFF;
   background-color: #22222D;
-  border-left: 3px solid #2C2C39; }
+  border-left: 3px solid #FFFFFF; }
 
 .sidebar .sidebar-nav > li > a > span {
   display: block;

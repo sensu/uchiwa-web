@@ -61,6 +61,9 @@ $sidebar-background-color: $secondary-color !default;
 $sidebar-nav-text-color: $body-text-color !default;
 $sidebar-nav-hover-text-color: $body-text-color !default;
 
+$sidebar-nav-selected-text-color: $quaternary-color !default;
+$sidebar-nav-selected-border-left: 3px solid $quaternary-color !default;
+
 /* Wells */
 $well-background-color: $secondary-color !default;
 $well-hover-background-color: $tertiary-color !default;
