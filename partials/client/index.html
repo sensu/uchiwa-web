@@ -33,7 +33,7 @@
               <span class="dropdown" ng-click="stash($event, client)" dropdown-toggle>
                 <i class="fa {{client.acknowledged | getAckClass }}"></i>
               </span>
-              <i class="fa fa-times" tooltip-placement="top" tooltip="Delete" ng-click="deleteClient(client.dc, client.name)"></i>
+              <i class="fa fa-times" tooltip-placement="top" tooltip-trigger tooltip="Delete" ng-click="deleteClient(client.dc, client.name)"></i>
             </span>
           </div>
           <div class="title">
@@ -83,7 +83,7 @@
               <th class="col-sm-2" ng-click="predicate = 'check'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
               <th class="col-sm-4" ng-click="predicate = 'output'; reverse=!reverse">Output <i class="fa fa-sort"></i></th>
               <th class="col-sm-2" ng-click="predicate = 'last_execution'; reverse=!reverse">
-                <i class='fa fa-clock-o' tooltip-placement="top" tooltip="Last Check"></i> <i class="fa fa-sort"></i>
+                <i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger tooltip="Last Check"></i> <i class="fa fa-sort"></i>
               </th>
               <th class="col-min"></th>
             </tr>
@@ -96,7 +96,7 @@
               <td class="main" >{{ check.check }}</td>
               <td class="check-output" ng-bind-html="check.output | linky" ng-click="helpers.openLink($event)"></td>
               <td>{{ check.last_execution | getTimestamp }}</td>
-              <td><i class="fa fa-check" tooltip-placement="top" tooltip="Resolve" ng-click="resolveEvent(client.dc, client, check)" ng-if="check.event"></i></td>
+              <td><i class="fa fa-check" tooltip-placement="top" tooltip-trigger tooltip="Resolve" ng-click="resolveEvent(client.dc, client, check)" ng-if="check.event"></i></td>
             </tr>
           </tbody>
         </table>
@@ -110,7 +110,7 @@
               <span class="dropdown" ng-click="stash($event, selectedCheck)">
                 <i class="fa {{selectedCheck.acknowledged | getAckClass }}"></i>
               </span>
-              <i class="fa fa-check" tooltip-placement="top" tooltip="Resolve" ng-click="resolveEvent(client.dc, client, selectedCheck)" ng-if="selectedEvent"></i>
+              <i class="fa fa-check" tooltip-placement="top" tooltip-trigger tooltip="Resolve" ng-click="resolveEvent(client.dc, client, selectedCheck)" ng-if="selectedEvent"></i>
             </span>
           </div>
           <div>

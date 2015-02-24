@@ -30,13 +30,13 @@
                 <th ng-click="predicate = 'name'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'command'; reverse=!reverse">Command <i class="fa fa-sort"></i></th>
                 <th>Subscribers</th>
-                <th ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
-                 <th ng-click="predicate = 'standalone'; reverse=!reverse"><i class='fa fa-child' tooltip-placement="top" tooltip="Standalone"></i> <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'interval'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip="Interval"></i> <i class="fa fa-sort"></i></th>
+                <th ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
+                 <th ng-click="predicate = 'standalone'; reverse=!reverse"><i class='fa fa-child' tooltip-placement="top" tooltip-trigger tooltip="Standalone"></i> <i class="fa fa-sort"></i></th>
+                <th ng-click="predicate = 'interval'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger tooltip="Interval"></i> <i class="fa fa-sort"></i></th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="check in checks | orderBy:predicate:reverse | filter:{dc:filters.dc} |  filter:filters.q | limitTo:filters.limit">
+              <tr ng-repeat="check in checks | orderBy:predicate:reverse | collection:'checks' | filter:{dc:filters.dc} |  filter:filters.q | limitTo:filters.limit">
                 <td class="main">{{ check.name }}</td>
                 <td>{{ check.command }}</td>
                 <td>{{ check.subscribers | arrayToString }}</td>

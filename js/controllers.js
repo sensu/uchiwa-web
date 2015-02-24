@@ -334,6 +334,7 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
 */
 controllerModule.controller('navbar', ['$rootScope', '$scope', 'navbarServices', 'routingService',
   function ($rootScope, $scope, navbarServices, routingService) {
+
     // Services
     $scope.go = routingService.go;
     $scope.$on('sensu', function () {
@@ -348,6 +349,7 @@ controllerModule.controller('navbar', ['$rootScope', '$scope', 'navbarServices',
       // Update alert badge
       navbarServices.health();
     });
+
   }
 ]);
 

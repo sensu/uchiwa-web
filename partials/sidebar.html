@@ -5,63 +5,63 @@
         <li class="logo"></li>
         <li id="dashboard" ng-class="getClass('/events')">
           <a ng-href="#events">
-              <span class="small-nav" tooltip-placement="right" tooltip="Events">
+              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Events">
                 <i class="fa fa-bullhorn"></i>
               </span>
           </a>
         </li>
         <li id="clients" ng-class="getClass('/clients')">
           <a ng-href="#clients">
-              <span class="small-nav" tooltip-placement="right" tooltip="Clients">
+              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Clients">
                 <i class="fa fa-hdd-o"></i>
               </span>
           </a>
         </li>
         <li id="checks" ng-class="getClass('/checks')">
           <a ng-href="#checks">
-              <span class="small-nav" tooltip-placement="right" tooltip="Checks">
+              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Checks">
                 <i class="fa fa-check-square"></i>
               </span>
           </a>
         </li>
         <li id="stashes" ng-class="getClass('/stashes')">
           <a ng-href="#stashes">
-              <span class="small-nav" tooltip-placement="right" tooltip="Stashes">
+              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Stashes">
                 <i class="fa fa-briefcase"></i>
               </span>
           </a>
         </li>
         <li id="settings" ng-class="getClass('/aggregates')">
           <a ng-href="#aggregates" >
-              <span class="small-nav" tooltip-placement="right" tooltip="Aggregates">
+              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Aggregates">
                 <i class="fa fa-folder"></i>
               </span>
           </a>
         </li>
         <li id="info" ng-class="getClass('/info')">
           <a ng-href="#info">
-              <span class="small-nav" tooltip-placement="right" tooltip="Info">
+              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Info">
                 <i class="fa fa-info-circle"></i>
               </span>
           </a>
         </li>
         <li ng-if="enterprise && config.Uchiwa.Auth === 'sql' && user.isAdmin()" ng-class="getClass('/users')" >
           <a ng-href="#users">
-            <span class="small-nav" tooltip-placement="right" tooltip="Users">
+            <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Users">
               <i class="fa fa-users"></i>
             </span>
           </a>
         </li>
         <li id="settings" ng-class="getClass('/settings')">
           <a ng-href="#settings" >
-              <span class="small-nav" tooltip-placement="right" tooltip="Settings">
+              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Settings">
                 <i class="fa fa-gear"></i>
               </span>
           </a>
         </li>
         <li ng-if="auth" id="logout" >
           <a ng-click="logout()" >
-            <span class="small-nav" tooltip-placement="right" tooltip="Logout">
+            <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Logout">
               <i class="fa fa-sign-out"></i>
             </span>
           </a>
