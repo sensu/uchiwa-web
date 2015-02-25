@@ -203,7 +203,8 @@ pre.hljs .hljs-string {
 
 .btn-collection, .btn-collection:hover, .btn-collection:focus, .btn-collection:visited {
   color: #ffffff;
-  background-color: #5F97FB; }
+  background-color: #5F97FB;
+  border: 0px; }
 
 /* Colors */
 /* Body, Sections and Headers */
@@ -720,9 +721,10 @@ pre.hljs .hljs-string {
   color: white;
   border-radius: 0;
   border-width: 0;
+  box-shadow: none;
   border: 0px;
   padding: 8px 0;
-  font-size: 24px; }
+  font-size: 22px; }
 
 .navbar .uchiwa-search .form-control::-webkit-input-placeholder {
   color: white; }
@@ -735,7 +737,7 @@ pre.hljs .hljs-string {
   font-size: 20px; }
 
 .navbar .uchiwa-search .input-group-btn .btn:hover {
-  border: 1px solid transparent; }
+  border: 0; }
 
 /* Colors */
 /* Body, Sections and Headers */

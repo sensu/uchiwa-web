@@ -55,7 +55,7 @@ filterModule.filter('buildStashes', function() {
 filterModule.filter('collection', function () {
   return function(items) {
     return items;
-  }
+  };
 });
 
 filterModule.filter('displayObject', function() {
