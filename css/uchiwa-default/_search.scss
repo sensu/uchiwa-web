@@ -20,8 +20,10 @@
   font-size: 22px;
 }
 
-.navbar .uchiwa-search .form-control::-webkit-input-placeholder {
-  color: $search-text-color;
+.navbar .uchiwa-search .form-control {
+  @include placeholder {
+    color: $search-text-color;
+  }
 }
 
 .navbar .uchiwa-search .input-group {
