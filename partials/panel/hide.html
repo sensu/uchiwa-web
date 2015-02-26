@@ -2,36 +2,24 @@
   <span dropdown-toggle>
     Hide <i class="fa fa-caret-down"></i>
   </span>
-  <div class="dropdown-menu">
-    <div class="dropdown-menu-item" ng-click="filters.silenced = !filters.silenced">
-      <div class="row">
-        <div class="col-xs-1">
-          <i class="fa fa-check" ng-show="filters.silenced"></i>
-        </div>
-        <div class="col-xs-10">
-          Silenced Checks
-        </div>
-      </div>
-    </div>
-    <div class="dropdown-menu-item" ng-click="filters.clientSilenced = !filters.clientSilenced">
-      <div class="row">
-        <div class="col-xs-1">
-          <i class="fa fa-check" ng-show="filters.clientSilenced"></i>
-        </div>
-        <div class="col-xs-10">
-          Silenced Clients
-        </div>
-      </div>
-    </div>
-    <div class="dropdown-menu-item" ng-click="filters.occurrences = !filters.occurrences">
-      <div class="row">
-        <div class="col-xs-1">
-          <i class="fa fa-check" ng-show="filters.occurrences"></i>
-        </div>
-        <div class="col-xs-10">
-          Occurrence Threshold
-        </div>
-      </div>
-    </div>
-  </div>
+  <ul class="dropdown-menu">
+    <li ng-class="{selected: filters.silenced}">
+      <a href="" ng-click="filters.silenced = !filters.silenced">
+        <i class="fa fa-check-square"></i>
+        Silenced Checks
+      </a>
+    </li>
+    <li ng-class="{selected: filters.clientSilenced}">
+      <a href="" ng-click="filters.clientSilenced = !filters.clientSilenced">
+        <i class="fa fa-hdd-o"></i>
+        Silenced Clients
+      </a>
+    </li>
+    <li ng-class="{selected: filters.occurrences}">
+      <a href="" ng-click="filters.occurrences = !filters.occurrences">
+        <i class="fa fa-slack"></i>
+        Below Occurrence Threshold
+      </a>
+    </li>
+  </ul>
 </div>

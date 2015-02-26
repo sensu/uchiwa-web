@@ -9,21 +9,19 @@
         <! --panel-heading-->
         <div class="panel-heading">
           <div class="row">
-            <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
-            <div class="col-md-4">
+            <div class="col-md-6 nav-filter">
+              <! --dc-->
+              <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
+              <! --actions-->
+              <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents" ng-if="user.canPost()"></panel-actions>
+              <! --hide-->
+              <ng-include src="partialsPath + '/panel/hide.html'"></ng-include>
+              <! --limit-->
+              <panel-limit data="events" filters="filters" permalink="permalink"></panel-limit>
+            </div>
+            <div class="col-md-6">
+              <! --search-->
               <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
-              <div class="nav-filter pull-right">
-
-                <! --actions-->
-                <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents" ng-if="user.canPost()"></panel-actions>
-
-                <! --hide-->
-                <ng-include src="partialsPath + '/panel/hide.html'"></ng-include>
-
-                <! --limit-->
-                <panel-limit data="events" filters="filters" permalink="permalink"></panel-limit>
-
-              </div>
             </div>
           </div>
         </div>
