@@ -1,6 +1,32 @@
-<select class="form-control limit" ng-init="limit=50" ng-model="filters.limit" ng-change="permalink($event, 'limit', filters.limit)">
-  <option value="50">Show 50</option>
-  <option value="100">Show 100</option>
-  <option value="200">Show 200</option>
-  <option value="{{data.length}}">Show All</option>
-</select>
+<div class="dropdown">
+  <span dropdown-toggle ng-if="filters.limit < data.length">
+    {{filters.limit}} of {{data.length}}
+    <i class="fa fa-caret-down"></i>
+  </span>
+  <span dropdown-toggle ng-if="filters.limit >= data.length">
+    {{data.length}} of {{data.length}}
+    <i class="fa fa-caret-down"></i>
+  </span>
+  <ul class="dropdown-menu">
+    <li ng-class="{selected: filters.limit == 50}">
+      <a href="" ng-click="permalink($event, 'limit', '50')">
+        Show 50 items
+      </a>
+    </li>
+    <li ng-class="{selected: filters.limit == 100}">
+      <a href="" ng-click="permalink($event, 'limit', '100')">
+        Show 100 items
+      </a>
+    </li>
+    <li ng-class="{selected: filters.limit == 200}">
+      <a href="" ng-click="permalink($event, 'limit', '200')">
+        Show 200 items
+      </a>
+    </li>
+    <li ng-class="{selected: filters.limit == data.length}">
+      <a href="" ng-click="permalink($event, 'limit', data.length)">
+        Show all items
+      </a>
+    </li>
+  </ul>
+</div>

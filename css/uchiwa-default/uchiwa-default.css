@@ -284,7 +284,9 @@ pre.hljs .hljs-string {
 
 .dropdown-menu {
   background-color: #FFFFFF;
-  color: #4D4D4D; }
+  color: #4D4D4D;
+  top: 150%;
+  min-width: 200px; }
 
 .dropdown-menu-item {
   padding: 8px 0 8px 8px;
@@ -292,23 +294,20 @@ pre.hljs .hljs-string {
 
 .dropdown-menu > li > a {
   color: #4D4D4D;
-  padding: 7px 20px; }
+  padding: 7px 20px;
+  border-left: 5px solid transparent; }
+
+.dropdown-menu > .selected > a {
+  border-left: 5px solid #5F97FB; }
 
 .dropdown-menu > li > a > i.fa {
   padding-right: 7px; }
 
 .dropdown-menu.left {
-  left: -275%; }
+  left: -135%; }
 
 .show-on-hover:hover > div.dropdown-menu {
   display: block; }
-
-.navbar .dropdown-menu {
-  top: 85%;
-  min-width: 250px; }
-
-.navbar .dropdown-menu .heading {
-  padding: 40px; }
 
 /* Colors */
 /* Body, Sections and Headers */
@@ -546,7 +545,7 @@ pre.hljs .hljs-string {
   background-color: #EEEEEE; }
 
 .nav-filter {
-  padding-top: 15px; }
+  padding-top: 7px; }
 
 .nav-filter .text {
   padding-right: 5px; }
@@ -649,6 +648,13 @@ pre.hljs .hljs-string {
 .navbar .panel .count {
   font-weight: 700; }
 
+.navbar .dropdown-menu {
+  top: 85%;
+  min-width: 250px; }
+
+.navbar .dropdown-menu .heading {
+  padding: 40px; }
+
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */
@@ -681,6 +687,11 @@ pre.hljs .hljs-string {
 
 .panel-body {
   padding-bottom: 10px; }
+
+.panel-body .tooltip-inner {
+  max-width: 300px;
+  white-space: pre-wrap;
+  font-style: none; }
 
 .panel-default {
   background-color: #FFFFFF;

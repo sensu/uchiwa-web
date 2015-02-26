@@ -1,8 +1,22 @@
-<div class="col-md-8">
-  <ul class="nav nav-pills nav-dc">
-    <li><a ng-class="{active: filters.dc == ''}" ng-click="permalink($event, 'dc', '')">All datacenters</a></li>
-    <li ng-repeat="datacenter in dc | orderBy:'name'">
-      <a ng-class="{active: filters.dc == datacenter.name}" ng-click="permalink($event, 'dc', datacenter.name)">{{ datacenter.name }}</a>
+<div class="dropdown">
+  <span dropdown-toggle ng-if="filters.dc == ''">
+    All Datacenters <i class="fa fa-caret-down"></i>
+  </span>
+  <span dropdown-toggle ng-if="filters.dc != ''">
+    {{filters.dc}} <i class="fa fa-caret-down"></i>
+  </span>
+  <ul class="dropdown-menu">
+    <li ng-class="{selected: filters.dc == ''}">
+      <a href="" ng-click="permalink($event, 'dc', '')">
+        <i class="fa fa-cloud"></i>
+        All Datacenters
+      </a>
+    </li>
+    <li ng-repeat="datacenter in dc | orderBy:'name'" ng-class="{selected: filters.dc == datacenter.name}">
+      <a href="" ng-click="permalink($event, 'dc', datacenter.name)">
+        <i class="fa fa-cloud"></i>
+        {{datacenter.name}}
+      </a>
     </li>
   </ul>
 </div>

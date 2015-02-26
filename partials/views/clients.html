@@ -9,21 +9,19 @@
         <! --panel-heading-->
         <div class="panel-heading">
           <div class="row">
-            <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
-            <div class="col-md-4">
+            <div class="col-md-6 nav-filter">
+              <! --dc-->
+              <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
+              <! --actions-->
+              <panel-actions data="clients" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients" ng-if="user.canPost()"></panel-actions>
+              <! --subscriptions-->
+              <ng-include src="partialsPath + '/panel/subscriptions.html'"></ng-include>
+              <! --limit-->
+              <panel-limit data="clients" filters="filters" permalink="permalink"></panel-limit>
+            </div>
+            <div class="col-md-6">
+              <! --search-->
               <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
-              <div class="nav-filter pull-right">
-
-                <! --actions-->
-                <panel-actions data="clients" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients" ng-if="user.canPost()"></panel-actions>
-
-                <! --subscriptions-->
-                <ng-include src="partialsPath + '/panel/subscriptions.html'"></ng-include>
-
-                <! --limit-->
-                <panel-limit data="clients" filters="filters" permalink="permalink"></panel-limit>
-
-              </div>
             </div>
           </div>
         </div>
@@ -53,7 +51,7 @@
                 <td ng-click="stash($event, client)" ng-if="user.canPost()">
                   <i class="fa {{ client.acknowledged | getAckClass }}"></i>
                 </td>
-                <td class="main">{{ client.name }}</td>
+                <td class="main"><span tooltip-placement="top" tooltip-trigger tooltip-html-unsafe="Subscriptions<br /><small>{{client.subscriptions|arrayToString}}</small>">{{ client.name }}</span></td>
                 <td>{{ client.address }}</td>
                 <td class="output" ng-bind-html="client.output | linky" ng-click="helpers.openLink($event)"></td>
                 <td>{{ client.dc }}</td>

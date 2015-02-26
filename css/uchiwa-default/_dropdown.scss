@@ -11,6 +11,8 @@
 .dropdown-menu {
   background-color: $dropdown-background-color;
   color: $dropdown-text-color;
+  top: 150%;
+  min-width: 200px;
 }
 
 .dropdown-menu-item {
@@ -21,6 +23,11 @@
 .dropdown-menu > li > a {
   color: $dropdown-text-color;
   padding: 7px 20px;
+  border-left: 5px solid transparent;
+}
+
+.dropdown-menu > .selected > a {
+  border-left: 5px solid $quinary-color;
 }
 
 .dropdown-menu > li > a > i.fa {
@@ -28,18 +35,9 @@
 }
 
 .dropdown-menu.left {
-  left: -275%;
+  left: -135%;
 }
 
 .show-on-hover:hover > div.dropdown-menu {
     display: block;
-}
-
-.navbar .dropdown-menu {
-  top: 85%;
-  min-width: 250px;
-}
-
-.navbar .dropdown-menu .heading {
-  padding: 40px;
 }
