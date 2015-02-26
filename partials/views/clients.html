@@ -51,7 +51,7 @@
                 <td ng-click="stash($event, client)" ng-if="user.canPost()">
                   <i class="fa {{ client.acknowledged | getAckClass }}"></i>
                 </td>
-                <td class="main">{{ client.name }}</td>
+                <td class="main"><span tooltip-placement="top" tooltip-trigger tooltip-html-unsafe="Subscriptions<br /><small>{{client.subscriptions|arrayToString}}</small>">{{ client.name }}</span></td>
                 <td>{{ client.address }}</td>
                 <td class="output" ng-bind-html="client.output | linky" ng-click="helpers.openLink($event)"></td>
                 <td>{{ client.dc }}</td>

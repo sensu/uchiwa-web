@@ -53,11 +53,11 @@
                   </span>
                   <span class="dropdown-toggle" >{{ event.sourceName }}</span>
                 </td>
-                <td>
+                <td class="main">
                   <span ng-click="stash($event, event)" ng-if="user.canPost()">
                     <i class="fa fa-fw {{ event.acknowledged | getAckClass }}"></i>
                   </span>
-                  <span class="main check-name">{{ event.check.name }}</span>
+                  <span class="main check-name" tooltip-placement="top" tooltip-trigger tooltip-html-unsafe="Subscriptions<br /><small>{{event.check.subscribers|arrayToString}}</small>">{{ event.check.name }}</span>
                 </td>
                 <td class="output" ng-bind-html="event.check.output | linky" ng-click="helpers.openLink($event)"></td>
                 <td>{{ event.occurrences }}</td>

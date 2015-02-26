@@ -688,6 +688,11 @@ pre.hljs .hljs-string {
 .panel-body {
   padding-bottom: 10px; }
 
+.panel-body .tooltip-inner {
+  max-width: 300px;
+  white-space: pre-wrap;
+  font-style: none; }
+
 .panel-default {
   background-color: #FFFFFF;
   color: #4D4D4D;
