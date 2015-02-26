@@ -25,3 +25,9 @@
   display: inline-block;
   @include context-colors;
 }
+
+.btn-collection, .btn-collection:hover, .btn-collection:focus, .btn-collection:visited {
+  color: #ffffff;
+  background-color: $quinary-color;
+  border: 0px;
+}

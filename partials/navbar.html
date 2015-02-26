@@ -1,4 +1,4 @@
-<nav class="navbar" role="navigation" ng-controller="navbar">
+<nav class="navbar" ng-style="navbarStyle" role="navigation" ng-controller="navbar">
   <div class="container-fluid">
     <div class="navbar-header">
       <span class="navbar-brand" href="#"><img src="bower_components/uchiwa-web/img/uchiwa.png"></span>
@@ -156,4 +156,5 @@
 
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
+  <ng-include src="'partials/collection-search.html'" ng-if="enterprise"></ng-include>
 </nav>

@@ -8,6 +8,7 @@
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -102,6 +103,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -135,6 +137,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -161,6 +164,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -197,6 +201,11 @@ pre.hljs .hljs-string {
   .circle-default, .circle-blue {
     background-color: #2C394A; }
 
+.btn-collection, .btn-collection:hover, .btn-collection:focus, .btn-collection:visited {
+  color: #ffffff;
+  background-color: #5F97FB;
+  border: 0px; }
+
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */
@@ -207,6 +216,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -260,6 +270,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -309,6 +320,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -334,6 +346,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -354,6 +367,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -382,6 +396,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -401,6 +416,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -475,6 +491,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -500,6 +517,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -557,6 +575,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -583,6 +602,12 @@ pre.hljs .hljs-string {
 
 .navbar .nav > li > a:hover, .navbar .nav > li > a:focus {
   background-color: #ffffff; }
+
+.navbar .nav > li > .fa-search {
+  font-size: 24px;
+  padding-top: 12px;
+  padding-left: 12px;
+  padding-right: 12px; }
 
 .navbar hr {
   margin-top: 10px;
@@ -634,6 +659,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -676,6 +702,54 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
+/* Sidebar */
+/* Panels */
+/* Tables */
+/* Timestamp */
+/* Wells */
+.navbar .uchiwa-search {
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  z-index: 100;
+  background-color: #5F97FB; }
+
+.navbar .uchiwa-search .form-control {
+  background-color: #5F97FB;
+  color: white;
+  border-radius: 0;
+  border-width: 0;
+  box-shadow: none;
+  border: 0px;
+  padding: 8px 0;
+  font-size: 22px; }
+
+.navbar .uchiwa-search .form-control::-webkit-input-placeholder {
+  color: white; }
+
+.navbar .uchiwa-search .input-group {
+  margin-bottom: 0px; }
+
+.navbar .uchiwa-search .input-group-btn .btn {
+  margin-left: 0px;
+  font-size: 20px; }
+
+.navbar .uchiwa-search .input-group-btn .btn:hover {
+  border: 0; }
+
+/* Colors */
+/* Body, Sections and Headers */
+/* Breadcrumb */
+/* Buttons */
+/* Code */
+/* Dropdown */
+/* Login */
+/* Modal */
+/* Nav */
+/* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -793,6 +867,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -854,6 +929,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */
@@ -902,6 +978,7 @@ pre.hljs .hljs-string {
 /* Modal */
 /* Nav */
 /* Navbar */
+/* Search */
 /* Sidebar */
 /* Panels */
 /* Tables */

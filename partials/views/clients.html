@@ -40,13 +40,13 @@
                 <th class="col-sm-2" ng-click="predicate = 'name'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
                 <th class="col-sm-2" ng-click="predicate = 'address'; reverse=!reverse">IP <i class="fa fa-sort"></i></th>
                 <th class="col-sm-5" ng-click="predicate = 'output'; reverse=!reverse">Events <i class="fa fa-sort"></i></th>
-                <th class="col-dc" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
-                <th class="col-dc" ng-click="predicate = 'version'; reverse=!reverse"><i class="fa fa-upload" tooltip-placement="top" tooltip="Sensu Version"></i> <i class="fa fa-sort"></i></th>
-                <th class="col-date" ng-click="predicate = 'timestamp'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip="Issued"></i> <i class="fa fa-sort"></i></th>
+                <th class="col-dc" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
+                <th class="col-dc" ng-click="predicate = 'version'; reverse=!reverse"><i class="fa fa-upload" tooltip-placement="top" tooltip-trigger tooltip="Sensu Version"></i> <i class="fa fa-sort"></i></th>
+                <th class="col-date" ng-click="predicate = 'timestamp'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger tooltip="Issued"></i> <i class="fa fa-sort"></i></th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="client in clients | orderBy:predicate:reverse | filter:filters.q | filter:{dc:filters.dc} | filterSubscriptions:filters.subscription | limitTo:filters.limit track by $index" ng-click="go('/client/'+client.dc+'/'+client.name)">
+              <tr ng-repeat="client in clients | orderBy:predicate:reverse | collection:'clients' | filter:filters.q | filter:{dc:filters.dc} | filterSubscriptions:filters.subscription | limitTo:filters.limit track by $index" ng-click="go('/client/'+client.dc+'/'+client.name)">
                 <td class="well-{{ client.status | getStatusClass }}" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="client.selected" = ng-if="user.canPost()"></input>
                 </td>
