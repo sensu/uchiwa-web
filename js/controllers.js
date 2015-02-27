@@ -236,16 +236,24 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
       });
     };
 
+    $scope.unselectEvents = function(events) {
+      _.each(events, function (event) {
+        event.selected = false;
+      });
+    }
+
     $scope.resolveEvents = function(events) {
       var selectedEvents = helperService.selectedItems(events);
       _.each(selectedEvents, function(event) {
         $scope.resolveEvent(event.dc, event.client, event.check);
       });
+      $scope.unselectEvents(selectedEvents);
     };
 
     $scope.silenceEvents = function($event, events) {
       var selectedEvents = helperService.selectedItems(events);
       $scope.stash($event, selectedEvents);
+      $scope.unselectEvents(selectedEvents);
     };
 
     $scope.$watch('filters.q', function(newVal) {
