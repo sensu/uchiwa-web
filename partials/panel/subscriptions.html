@@ -1,4 +1,18 @@
-<select class="form-control subscriptions" ng-model="filters.subscription" ng-change="permalink($event, 'subscription', filters.subscription)">
-  <option value="">Subscriptions</option>
-  <option ng-repeat="subscription in subscriptions | orderBy:'toString()'" value="{{subscription}}" ng-selected="filters.subscription == subscription">{{subscription}}</option>
-</select>
+<div class="dropdown">
+  <span dropdown-toggle>
+    Subscriptions
+    <i class="fa fa-caret-down"></i>
+  </span>
+  <ul class="dropdown-menu">
+    <li ng-class="{selected: filters.subscription == ''}">
+      <a href="" ng-click="permalink($event, 'subscription', '')">
+        None
+      </a>
+    </li>
+    <li ng-repeat="subscription in subscriptions | orderBy:'toString()'" ng-class="{selected: filters.subscription == subscription}">
+      <a href="" ng-click="permalink($event, 'subscription', subscription)">
+        {{subscription}}
+      </a>
+    </li>
+  </ul>
+</div>
