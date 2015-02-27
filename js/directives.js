@@ -27,20 +27,12 @@ directiveModule.directive('panelLimit', ['$rootScope', function ($rootScope) {
   };
 }]);
 
-directiveModule.directive('siteTheme', ['conf', '$cookieStore', function (conf, $cookieStore) {
+directiveModule.directive('siteTheme', ['conf', '$cookieStore', '$rootScope', function (conf, $cookieStore, $rootScope) {
   return {
     restrict: 'EA',
     link: function (scope, element) {
-      scope.themes = [
-        {
-          name: 'uchiwa-default'
-        },
-        {
-          name: 'uchiwa-dark'
-        }
-      ];
       var lookupTheme = function (themeName) {
-        return scope.themes[scope.themes.map(function (t) {
+        return $rootScope.themes[$rootScope.themes.map(function (t) {
           return t.name;
         }).indexOf(themeName)];
       };
@@ -48,10 +40,11 @@ directiveModule.directive('siteTheme', ['conf', '$cookieStore', function (conf, 
         var themeName = angular.isDefined(theme) ? theme : conf.theme;
         scope.currentTheme = lookupTheme(themeName);
         var name = scope.currentTheme.name;
+        var enterprise = scope.currentTheme.enterprise || false;
 
         $cookieStore.put('uchiwa_theme', name);
 
-        var path = name === 'sensu-enterprise' ? 'css/' : 'bower_components/uchiwa-web/css/';
+        var path = enterprise ? 'css/' : 'bower_components/uchiwa-web/css/';
         element.attr('href', path + name + '/' + name + '.css');
       };
       scope.$on('theme:changed', function (event, theme) {
