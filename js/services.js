@@ -397,6 +397,13 @@ serviceModule.service('helperService', function() {
       return item.selected === true;
     });
   };
+  this.unselectItems = function(items) {
+    _.each(items, function(item) {
+      if (item.selected === true) {
+        item.selected = false;
+      }
+    });
+  };
 });
 
 /**
