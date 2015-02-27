@@ -752,6 +752,12 @@ pre.hljs .hljs-string {
 
 .navbar .uchiwa-search .form-control::-webkit-input-placeholder {
   color: white; }
+.navbar .uchiwa-search .form-control:-moz-placeholder {
+  color: white; }
+.navbar .uchiwa-search .form-control::-moz-placeholder {
+  color: white; }
+.navbar .uchiwa-search .form-control:-ms-input-placeholder {
+  color: white; }
 
 .navbar .uchiwa-search .input-group {
   margin-bottom: 0px; }

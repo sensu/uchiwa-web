@@ -5,3 +5,10 @@
   &-unknown { #{$property}: $unknown-color; }
   &-default, &-blue { #{$property}: $secondary-color; }
 }
+
+@mixin placeholder {
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder {@content}
+  &::-moz-placeholder {@content}
+  &:-ms-input-placeholder {@content}
+}
