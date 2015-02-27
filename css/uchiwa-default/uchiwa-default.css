@@ -544,11 +544,8 @@ pre.hljs .hljs-string {
 .nav > li > a:hover, .nav > li > a:focus {
   background-color: #EEEEEE; }
 
-.nav-filter {
-  padding-top: 7px; }
-
-.nav-filter .text {
-  padding-right: 5px; }
+.nav-filter .dropdown {
+  line-height: 30px; }
 
 .nav-filter span {
   padding-right: 15px;
