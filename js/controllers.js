@@ -241,11 +241,13 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
       _.each(selectedEvents, function(event) {
         $scope.resolveEvent(event.dc, event.client, event.check);
       });
+      helperService.unselectItems(selectedEvents);
     };
 
     $scope.silenceEvents = function($event, events) {
       var selectedEvents = helperService.selectedItems(events);
       $scope.stash($event, selectedEvents);
+      helperService.unselectItems(selectedEvents);
     };
 
     $scope.$watch('filters.q', function(newVal) {
