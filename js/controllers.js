@@ -409,10 +409,10 @@ controllerModule.controller('aggregates', ['$scope', '$routeParams', 'routingSer
 ]);
 
 /**
-* Aggregates for Check
+* Aggregate
 */
-controllerModule.controller('check_aggregates', ['$rootScope', '$scope', '$routeParams', 'routingService', 'titleFactory',
-  function ($rootScope, $scope, $routeParams, routingService, titleFactory) {
+controllerModule.controller('aggregate', ['$http', '$rootScope', '$scope', '$routeParams', 'routingService', 'titleFactory',
+  function ($http, $rootScope, $scope, $routeParams, routingService, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
 
@@ -422,37 +422,34 @@ controllerModule.controller('check_aggregates', ['$rootScope', '$scope', '$route
 
     $scope.dcId = decodeURI($routeParams.dcId);
     $scope.checkId = decodeURI($routeParams.checkId);
+    $scope.aggregate = null;
 
     $scope.$on('sensu', function() {
       $scope.check_aggregates = _.find($rootScope.aggregates, function(aggregate) { // jshint ignore:line
         return $scope.checkId === aggregate.check && $scope.dcId === aggregate.dc;
       });
     });
-  }
-]);
 
-/**
-* Aggregates for Issue within Check
-*/
-controllerModule.controller('check_issue_aggregates', ['$scope', '$http', '$routeParams', 'routingService', 'titleFactory',
-  function ($scope, $http, $routeParams, routingService, titleFactory) {
-    $scope.pageHeaderText = 'Aggregates';
-    titleFactory.set($scope.pageHeaderText);
+    var getAggregate = function () {
+      if (isNaN($scope.issued)) {
+        return;
+      }
 
-    // Services
-    $scope.go = routingService.go;
-    $scope.permalink = routingService.permalink;
+      $http.get('get_aggregate_by_issued?check=' + $scope.checkId + '&issued=' + $scope.issued + '&dc=' + $scope.dcId)
+      .success(function(data) {
+        $scope.aggregate = data;
+      })
+      .error(function(error) {
+        console.log('Error: ' + JSON.stringify(error));
+      });
+    };
 
-    $scope.dcId = decodeURI($routeParams.dcId);
-    $scope.checkId = decodeURI($routeParams.checkId);
-    $scope.issuedId = decodeURI($routeParams.issuedId);
-
-    $http.get('get_aggregate_by_issued?check=' + $scope.checkId + '&issued=' + $scope.issuedId + '&dc=' + $scope.dcId)
-    .success(function(data) {
-      $scope.aggregate = data;
-    })
-    .error(function(error) {
-      console.log('Error: ' + JSON.stringify(error));
+    // do we have a issued parameter? if so, display the aggregate result
+    $scope.issued = decodeURI($routeParams.issued);
+    getAggregate();
+    $scope.$on('$routeUpdate', function(){
+      $scope.issued = decodeURI($routeParams.issued);
+      getAggregate();
     });
   }
 ]);

@@ -28,19 +28,6 @@
   background-color: $nav-non-default-state;
 }
 
-.nav-filter .dropdown {
-  line-height: 30px;
-}
-
-.nav-filter span {
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-.nav-dc {
-  text-transform: uppercase;
-}
-
 .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus, li > a.active {
   color: $nav-text-color;
   background-color: inherit;

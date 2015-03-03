@@ -1,8 +1,8 @@
 <div class="dropdown">
-  <span dropdown-toggle ng-if="filters.dc == ''">
+  <span dropdown-toggle class="action" ng-if="filters.dc == ''">
     All Datacenters <i class="fa fa-caret-down"></i>
   </span>
-  <span dropdown-toggle ng-if="filters.dc != ''">
+  <span dropdown-toggle class="action" ng-if="filters.dc != ''">
     {{filters.dc}} <i class="fa fa-caret-down"></i>
   </span>
   <ul class="dropdown-menu">

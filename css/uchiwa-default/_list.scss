@@ -1,0 +1,14 @@
+@import "variables";
+
+li.timestamp {
+  margin-top: 7px;
+}
+
+li.timestamp a {
+  text-decoration: none;
+  color: inherit;
+}
+
+li.timestamp .relative-timestamp {
+  padding-left: 15px;
+}
