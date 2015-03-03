@@ -69,6 +69,11 @@ a {
   color: $critical-color;
 }
 
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
 pre.hljs {
   border: 0;
   font-size: 13px;

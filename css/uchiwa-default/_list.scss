@@ -1,0 +1,20 @@
+@import "variables";
+
+li.timestamp {
+  margin-top: 7px;
+}
+
+li.timestamp a {
+  text-decoration: none;
+  color: $secondary-color;
+  font-weight: 700;
+}
+
+li.timestamp a:hover {
+  color: $quinary-color;
+}
+
+li.timestamp .relative-timestamp {
+  color: $body-text-color;
+  font-weight: 400;
+}

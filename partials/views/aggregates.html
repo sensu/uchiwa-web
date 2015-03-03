@@ -1,7 +1,6 @@
 <ng-include src="partialsPath + '/navbar.html'"></ng-include>
 <ng-include src="partialsPath + '/sidebar.html'"></ng-include>
 <div class="container-fluid aggregates">
-  <ng-include src="partialsPath + '/page-header.html'"></ng-include>
   <div class="row-fluid">
     <div class="col-lg-12">
       <div class="panel panel-default">
@@ -9,7 +8,11 @@
         <! --panel-heading-->
         <div class="panel-heading">
           <div class="row">
-            <div class="col-xs-12 nav-filter">
+            <div class="col-xs-12">
+              <! --title-->
+              <ng-include src="partialsPath + '/panel/breadcrumb.html'"></ng-include>
+            </div>
+            <div class="col-xs-12 nopadding">
               <! --dc-->
               <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
               <! --limit-->
@@ -30,7 +33,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="aggregate in aggregates | filter:filters.q | filter:{dc:filters.dc} | limitTo:filters.limit | orderBy:predicate:reverse" ng-click="go('/aggregates/'+aggregate.dc+'/'+aggregate.check)">
+              <tr ng-repeat="aggregate in aggregates | filter:filters.q | filter:{dc:filters.dc} | limitTo:filters.limit | orderBy:predicate:reverse" ng-click="go('/aggregate/'+aggregate.dc+'/'+aggregate.check)">
                 <td class="main">{{ aggregate.check }}</td>
                 <td>{{ aggregate.issued[0] | getTimestamp }}</td>
                 <td>{{ aggregate.dc }}</td>

@@ -30,15 +30,14 @@ angular.module('uchiwa')
       }})
       .when('/login', {templateUrl: 'bower_components/uchiwa-web/partials/login/index.html', controller: 'login'})
       .when('/events', {templateUrl: 'bower_components/uchiwa-web/partials/views/events.html', reloadOnSearch: false, controller: 'events'})
-      .when('/client/:dcId/:clientId', {templateUrl: 'bower_components/uchiwa-web/partials/client/index.html', reloadOnSearch: false, controller: 'client'})
+      .when('/client/:dcId/:clientId', {templateUrl: 'bower_components/uchiwa-web/partials/views/client.html', reloadOnSearch: false, controller: 'client'})
       .when('/clients', {templateUrl: 'bower_components/uchiwa-web/partials/views/clients.html', reloadOnSearch: false, controller: 'clients'})
       .when('/checks', {templateUrl: 'bower_components/uchiwa-web/partials/views/checks.html', reloadOnSearch: false, controller: 'checks'})
       .when('/info', {templateUrl: 'bower_components/uchiwa-web/partials/views/info.html', controller: 'info'})
       .when('/stashes', {templateUrl: 'bower_components/uchiwa-web/partials/views/stashes.html', reloadOnSearch: false, controller: 'stashes'})
       .when('/settings', {templateUrl: 'bower_components/uchiwa-web/partials/views/settings.html', controller: 'settings'})
       .when('/aggregates', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregates.html', reloadOnSearch: false, controller: 'aggregates'})
-      .when('/aggregates/:dcId/:checkId', {templateUrl: 'bower_components/uchiwa-web/partials/views/check_aggregates.html', reloadOnSearch: false, controller: 'check_aggregates'})
-      .when('/aggregates/:dcId/:checkId/:issuedId', {templateUrl: 'bower_components/uchiwa-web/partials/views/check_issue_aggregates.html', reloadOnSearch: false, controller: 'check_issue_aggregates'})
+      .when('/aggregate/:dcId/:checkId', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregate.html', reloadOnSearch: false, controller: 'aggregate'})
       .otherwise('/');
     $tooltipProvider.options({animation: false, 'placement': 'bottom'});
   }

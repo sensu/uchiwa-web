@@ -1,9 +1,9 @@
 <div class="dropdown">
-  <span dropdown-toggle ng-if="filters.limit < data.length">
+  <span dropdown-toggle class="action" ng-if="filters.limit < data.length">
     {{filters.limit}} of {{data.length}}
     <i class="fa fa-caret-down"></i>
   </span>
-  <span dropdown-toggle ng-if="filters.limit >= data.length">
+  <span dropdown-toggle class="action" ng-if="filters.limit >= data.length">
     {{data.length}} of {{data.length}}
     <i class="fa fa-caret-down"></i>
   </span>

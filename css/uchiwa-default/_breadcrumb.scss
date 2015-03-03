@@ -1,14 +1,26 @@
 @import "variables";
 
 .breadcrumb {
-  background-color: $breadcrumb-background-color;
-  border-color: $breadcrumb-border-color;
   font-size: 11px;
-  font-weight: 400;
-  margin-top: 10px;
-  margin-bottom: 0px;
+  font-weight: 700;
+  margin-bottom: 0;
+  padding-left: 0;
+  border: none;
+  background-color: transparent;
+  letter-spacing: 0.02em;
 }
 
 .breadcrumb > .active {
   color: $breadcrumb-text-color;
+}
+
+.breadcrumb > li + li:before {
+  content: "\f105";
+  font-weight: bold;
+  font-family: FontAwesome;
+  padding: 0 5px;
+}
+
+.breadcrumb p {
+  margin-bottom: 0;
 }
