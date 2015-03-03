@@ -430,10 +430,15 @@ li.timestamp {
 
 li.timestamp a {
   text-decoration: none;
-  color: inherit; }
+  color: #2C394A;
+  font-weight: 700; }
+
+li.timestamp a:hover {
+  color: #5F97FB; }
 
 li.timestamp .relative-timestamp {
-  padding-left: 15px; }
+  color: #4D4D4D;
+  font-weight: 400; }
 
 /* Colors */
 /* Body, Sections and Headers */

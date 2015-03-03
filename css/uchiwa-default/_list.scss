@@ -6,9 +6,15 @@ li.timestamp {
 
 li.timestamp a {
   text-decoration: none;
-  color: inherit;
+  color: $secondary-color;
+  font-weight: 700;
+}
+
+li.timestamp a:hover {
+  color: $quinary-color;
 }
 
 li.timestamp .relative-timestamp {
-  padding-left: 15px;
+  color: $body-text-color;
+  font-weight: 400;
 }

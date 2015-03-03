@@ -37,7 +37,7 @@
             <li class= "timestamp" ng-repeat="issued in check_aggregates.issued">
               <a href="" ng-click="permalink($event,'issued', issued)">
                 {{ issued | getTimestamp }}
-                <span class="small"> - {{ issued | relativeTimestamp }}</span>
+                <span class="small relative-timestamp"> - {{ issued | relativeTimestamp }}</span>
               </a>
             </li>
           </ul>
