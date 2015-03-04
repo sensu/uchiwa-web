@@ -47,6 +47,19 @@
         <div class="panel panel-default">
           <div class="panel-body">
 
+            <div class="row mb15" ng-show="enterprise">
+              <div class="col-xs-6">
+                <div class="panel-title">Sensu Enterprise Dashboard</div>
+              </div>
+            </div>
+
+            <div class="row" ng-show="enterprise">
+              <div class="col-md-12">
+                <div class="title center">Version</div>
+                <div class="number center">{{enterpriseConstants.version}}</div>
+              </div>
+            </div>
+
             <div class="row mb15">
               <div class="col-xs-6">
                 <div class="panel-title">Uchiwa</div>
