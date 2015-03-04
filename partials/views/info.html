@@ -47,29 +47,33 @@
         <div class="panel panel-default">
           <div class="panel-body">
 
-            <div class="row mb15" ng-show="enterprise">
+            <div class="row mb15">
               <div class="col-xs-6">
-                <div class="panel-title">Sensu Enterprise Dashboard</div>
+                <div class="panel-title" ng-show="enterprise">Sensu Enterprise Dashboard</div>
+                <div class="panel-title" ng-hide="enterprise">Uchiwa</div>
               </div>
             </div>
 
             <div class="row" ng-show="enterprise">
-              <div class="col-md-12">
-                <div class="title center">Version</div>
+              <div class="col-md-6">
+                <div class="title center">Dashboard Version</div>
                 <div class="number center">{{enterpriseConstants.version}}</div>
+              </div>
+              <div class="col-md-6">
+                <div class="title center">Uchiwa Version</div>
+                <div class="number center">{{uchiwa.version}}</div>
               </div>
             </div>
 
-            <div class="row mb15">
-              <div class="col-xs-6">
-                <div class="panel-title">Uchiwa</div>
+            <div class="row" ng-hide="enterprise">
+              <div class="col-md-12">
+                <div class="title center">Version</div>
+                <div class="number center">{{uchiwa.version}}</div>
               </div>
             </div>
 
             <div class="row">
               <div class="col-md-12">
-                <div class="title center">Version</div>
-                <div class="number center">{{uchiwa.version}}</div>
                 <hr>
                 <div class="title center">Config</div>
                 <div ng-bind-html="config | richOutput"></div>
