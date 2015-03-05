@@ -101,7 +101,7 @@ filterModule.filter('getExpireTimestamp', ['conf', function (conf) {
     if (stash.expire === -1) {
       return 'Never';
     }
-    var expiration = (stash.content.timestamp + stash.expire) * 1000;
+    var expiration = (moment().unix() + stash.expire) * 1000;
     return moment(expiration).format(conf.date);
   };
 }]);
