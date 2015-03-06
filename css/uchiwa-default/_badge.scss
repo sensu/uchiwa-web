@@ -1,11 +1,16 @@
 @import "variables";
 
 .badge {
-  position: relative;
-  top: -16px;
-  right: 10px;
+  position: absolute;
+  top: 8px;
+  right: 9px;
   color: #FFFFFF;
   font-weight: 700;
   padding: 2px 5px;
   @include context-colors;
+}
+
+.badge-ok {
+  color: $primary-color;
+  background-color: $info-color;
 }

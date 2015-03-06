@@ -3,66 +3,151 @@
     <div class="">
       <ul class="nav sidebar-nav">
         <li class="logo"></li>
-        <li id="dashboard" ng-class="getClass('/events')">
-          <a ng-href="#events">
-              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Events">
-                <i class="fa fa-bullhorn"></i>
-              </span>
+        <li id="dashboard" class="show-on-hover" ng-class="getClass('/events')">
+          <a ng-href="#events" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="small-nav">
+              <i class="fa fa-bullhorn"></i>
+              <span class="badge badge-{{navbar.events.style}}">{{events | arrayLength}}</span>
+            </span>
           </a>
+          <div class="dropdown-menu popover-menu" role="menu">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel-body panel-popover panel-{{navbar.events.style}}">
+                  <div class="panel-title">events</div>
+
+                  <div class="row counts">
+                    <div class="col-sm-4">
+                      <span class="total">{{ navbar.events.critical }}</span>
+                      <p class="category">critical</p>
+                    </div>
+                    <div class="col-sm-4">
+                      <span class="total">{{ navbar.events.warning }}</span>
+                      <p class="category">warning</p>
+                    </div>
+                    <div class="col-sm-4">
+                      <span class="total">{{ navbar.events.unknown }}</span>
+                      <p class="category">unknown</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
         </li>
-        <li id="clients" ng-class="getClass('/clients')">
-          <a ng-href="#clients">
-              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Clients">
-                <i class="fa fa-hdd-o"></i>
-              </span>
+        <li id="clients" class="show-on-hover" ng-class="getClass('/clients')">
+          <a ng-href="#clients" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="small-nav">
+              <i class="fa fa-hdd-o"></i>
+              <span class="badge badge-{{navbar.clients.style}}">{{clients | arrayLength}}</span>
+            </span>
           </a>
+          <div class="dropdown-menu popover-menu" role="menu">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel-body panel-popover panel-{{navbar.clients.style}}">
+                  <div class="panel-title">clients</div>
+
+                  <div class="row counts">
+                    <div class="col-sm-4">
+                      <span class="total">{{ navbar.clients.critical }}</span>
+                      <p class="category">critical</p>
+                    </div>
+                    <div class="col-sm-4">
+                      <span class="total">{{ navbar.clients.warning }}</span>
+                      <p class="category">warning</p>
+                    </div>
+                    <div class="col-sm-4">
+                      <span class="total">{{ navbar.clients.unknown }}</span>
+                      <p class="category">unknown</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
         </li>
-        <li id="checks" ng-class="getClass('/checks')">
-          <a ng-href="#checks">
-              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Checks">
-                <i class="fa fa-check-square"></i>
-              </span>
+        <li id="checks" class="show-on-hover" ng-class="getClass('/checks')">
+          <a ng-href="#checks" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="small-nav">
+              <i class="fa fa-check-square"></i>
+              <span class="badge badge-ok">{{checks | arrayLength}}</span>
+            </span>
           </a>
+          <div class="dropdown-menu popover-menu" role="menu">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel-body panel-popover panel-ok">
+                  <div class="panel-title"><ng-pluralize count="checks | arrayLength" when="{'0': 'checks', '1': 'check', 'other': 'checks'}"></ng-pluralize></div>
+
+                  <div class="row counts">
+                    <div class="col-sm-4">
+                      <span class="total">{{checks | arrayLength}}</span>
+                      <p class="category">total</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
         </li>
-        <li id="stashes" ng-class="getClass('/stashes')">
-          <a ng-href="#stashes">
-              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Stashes">
-                <i class="fa fa-briefcase"></i>
-              </span>
+        <li id="stashes" class="show-on-hover" ng-class="getClass('/stashes')">
+          <a ng-href="#stashes" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="small-nav">
+              <i class="fa fa-briefcase"></i>
+              <span class="badge badge-ok">{{stashes | arrayLength}}</span>
+            </span>
           </a>
+          <div class="dropdown-menu popover-menu" role="menu">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel-body panel-popover panel-ok">
+                  <div class="panel-title"><ng-pluralize count="stashes | arrayLength" when="{'0': 'stashes', '1': 'stash', 'other': 'stashes'}"></ng-pluralize></div>
+
+                  <div class="row counts">
+                    <div class="col-sm-4">
+                      <span class="total">{{stashes | arrayLength}}</span>
+                      <p class="category">total</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
         </li>
-        <li id="settings" ng-class="getClass('/aggregates')">
-          <a ng-href="#aggregates" >
-              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Aggregates">
-                <i class="fa fa-folder"></i>
-              </span>
+        <li id="aggregates" class="show-on-hover" ng-class="getClass('/aggregates')">
+          <a ng-href="#aggregates" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="small-nav">
+              <i class="fa fa-folder"></i>
+              <span class="badge badge-ok">{{aggregates | arrayLength}}</span>
+            </span>
           </a>
-        </li>
-        <li id="info" ng-class="getClass('/info')">
-          <a ng-href="#info">
-              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Info">
-                <i class="fa fa-info-circle"></i>
-              </span>
-          </a>
+          <div class="dropdown-menu popover-menu" role="menu">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel-body panel-popover panel-ok">
+                  <div class="panel-title"><ng-pluralize count="aggregates | arrayLength" when="{'0': 'aggregates', '1': 'aggregate', 'other': 'aggregates'}"></ng-pluralize></div>
+
+                  <div class="row counts">
+                    <div class="col-sm-4">
+                      <span class="total">{{aggregates | arrayLength}}</span>
+                      <p class="category">total</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
         </li>
         <li ng-if="enterprise && config.Uchiwa.Auth === 'sql' && user.isAdmin()" ng-class="getClass('/users')" >
           <a ng-href="#users">
             <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Users">
               <i class="fa fa-users"></i>
-            </span>
-          </a>
-        </li>
-        <li id="settings" ng-class="getClass('/settings')">
-          <a ng-href="#settings" >
-              <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Settings">
-                <i class="fa fa-gear"></i>
-              </span>
-          </a>
-        </li>
-        <li ng-if="auth" id="logout" >
-          <a ng-click="logout()" >
-            <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Logout">
-              <i class="fa fa-sign-out"></i>
             </span>
           </a>
         </li>

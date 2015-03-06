@@ -334,24 +334,22 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
 /**
 * Navbar
 */
-controllerModule.controller('navbar', ['$rootScope', '$scope', 'navbarServices', 'routingService',
-  function ($rootScope, $scope, navbarServices, routingService) {
+controllerModule.controller('navbar', ['$location', '$rootScope', '$scope', 'navbarServices', 'routingService', 'userService',
+  function ($location, $rootScope, $scope, navbarServices, routingService, userService) {
+
+    // Helpers
+    $scope.getClass = function(path) {
+      if ($location.path().substr(0, path.length) === path) {
+        return 'selected';
+      } else {
+        return '';
+      }
+    };
 
     // Services
     $scope.go = routingService.go;
-    $scope.$on('sensu', function () {
-      // Update badges
-      navbarServices.countStatuses('clients', function (item) {
-        return item.status;
-      });
-      navbarServices.countStatuses('events', function (item) {
-        return item.check.status;
-      });
-
-      // Update alert badge
-      navbarServices.health();
-    });
-
+    $scope.logout = userService.logout;
+    $scope.user = userService;
   }
 ]);
 
@@ -372,8 +370,12 @@ controllerModule.controller('settings', ['$cookies', '$scope', 'titleFactory',
 /**
 * Sidebar
 */
-controllerModule.controller('sidebar', ['$location', '$scope', 'userService',
-  function ($location, $scope, userService) {
+controllerModule.controller('sidebar', ['$location', 'navbarServices', '$scope', 'userService',
+  function ($location, navbarServices, $scope, userService) {
+
+    $scope.user = userService;
+
+    // Get CSS class for sidebar elements
     $scope.getClass = function(path) {
       if ($location.path().substr(0, path.length) === path) {
         return 'selected';
@@ -382,8 +384,18 @@ controllerModule.controller('sidebar', ['$location', '$scope', 'userService',
       }
     };
 
-    $scope.logout = userService.logout;
-    $scope.user = userService;
+    $scope.$on('sensu', function () {
+      // Update badges
+      navbarServices.countStatuses('clients', function (item) {
+        return item.status;
+      });
+      navbarServices.countStatuses('events', function (item) {
+        return item.check.status;
+      });
+
+      // Update alert badge
+      navbarServices.health();
+    });
   }
 ]);
 
