@@ -1,0 +1,58 @@
+.popover-menu hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.popover-menu .panel {
+  font-size: 13px;
+  font-weight: 400;
+  border: 0px;
+  margin-bottom: 0px;
+}
+
+.popover-menu .panel-body {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.popover-menu .panel.panel-top {
+  color: $panel-top-text-color;
+  text-align: center;
+  font-weight: 700;
+}
+
+.popover-menu .panel.panel-bottom {
+  text-transform: uppercase;
+}
+
+.popover-menu .panel .total {
+  font-size: 38px;
+}
+
+.popover-menu .panel .category {
+  text-transform: uppercase;
+  font-size: 15px;
+}
+
+.popover-menu .panel .small-category {
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.popover-menu .panel .dc-title {
+  font-size: 15px;
+  text-align: center;
+}
+
+.popover-menu .panel .count {
+  font-weight: 700;
+}
+
+.popover-menu .dropdown-menu {
+  top: 85%;
+  min-width: 250px;
+}
+
+.popover-menu .dropdown-menu .heading {
+  padding: 40px;
+}
