@@ -370,8 +370,20 @@ controllerModule.controller('settings', ['$cookies', '$scope', 'titleFactory',
 /**
 * Sidebar
 */
-controllerModule.controller('sidebar', ['$scope', 'userService', 'navbarServices',
-  function ($scope, userService, navbarServices) {
+controllerModule.controller('sidebar', ['$location', 'navbarServices', '$scope', 'userService',
+  function ($location, navbarServices, $scope, userService) {
+
+    $scope.user = userService;
+
+    // Get CSS class for sidebar elements
+    $scope.getClass = function(path) {
+      if ($location.path().substr(0, path.length) === path) {
+        return 'selected';
+      } else {
+        return '';
+      }
+    };
+
     $scope.$on('sensu', function () {
       // Update badges
       navbarServices.countStatuses('clients', function (item) {

@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
       <ul class="nav navbar-nav navbar-right">
-        <li id="info" ng-class="getClass('/info')">
+        <li id="info">
           <a href="#info">
             <span tooltip-placement="bottom" tooltip-trigger tooltip="Info">
               <i class="fa fa-info-circle"></i>
@@ -15,7 +15,7 @@
           </a>
         </li>
 
-        <li id="settings" ng-class="getClass('/settings')">
+        <li id="settings">
           <a href="#settings">
             <span tooltip-placement="bottom" tooltip-trigger tooltip="Settings">
               <i class="fa fa-gear"></i>
@@ -23,15 +23,7 @@
           </a>
         </li>
 
-        <li id="logout" ng-if="enterprise && config.Uchiwa.Auth === 'sql' && user.isAdmin()" ng-class="getClass('/users')">
-          <a href="#" ng-click="logout()">
-            <span tooltip-placement="bottom" tooltip-trigger tooltip="Logout">
-              <i class="fa fa-sign-out"></i>
-            </span>
-          </a>
-        </li>
-
-        <li id="logout" ng-class="getClass('/users')" ng-if="auth">
+        <li id="logout" ng-if="enterprise && config.Uchiwa.Auth === 'sql' && user.isAdmin()">
           <a href="#" ng-click="logout()">
             <span tooltip-placement="bottom" tooltip-trigger tooltip="Logout">
               <i class="fa fa-sign-out"></i>
