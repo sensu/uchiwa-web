@@ -123,7 +123,7 @@ controllerModule.controller('clients', ['clientsService', '$filter', 'helperServ
     $scope.pageHeaderText = 'Clients';
     titleFactory.set($scope.pageHeaderText);
 
-    $scope.predicate = '-status';
+    $scope.predicate = ['-status', 'name'];
 
     // Routing
     $scope.filters = {};
