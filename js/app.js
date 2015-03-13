@@ -13,6 +13,7 @@ angular.module('uchiwa', [
   'ngRoute',
   'ngSanitize',
   // 3rd party dependencies
+  'angularMoment',
   'toastr',
   'ui.bootstrap'
 ]);
