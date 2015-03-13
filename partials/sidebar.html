@@ -144,6 +144,55 @@
             </div>
           </div>
         </li>
+        <li id="datacenters" class="show-on-hover">
+          <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="small-nav">
+              <i class="fa fa-cloud"></i>
+              <span class="badge badge-ok">{{dc  | arrayLength}}</span>
+            </span>
+          </a>
+          <div class="dropdown-menu popover-menu" role="menu">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel-body panel-popover panel-ok">
+                  <div class="panel-title"><ng-pluralize count="dc | arrayLength" when="{'0': 'datacenter', '1': 'datacenter', 'other': 'datacenters'}"></ng-pluralize></div>
+
+                  <div class="row counts">
+                    <div class="col-sm-4">
+                      <span class="total">{{dc | arrayLength}}</span>
+                      <p class="category">total</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="alerts" class="show-on-hover" ng-if="alerts | arrayLength">
+          <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="small-nav">
+              <i class="fa fa-exclamation-triangle"></i>
+              <span class="badge badge-critical">{{alerts  | arrayLength}}</span>
+            </span>
+          </a>
+          <div class="dropdown-menu popover-menu" role="menu">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel-body panel-popover panel-critical">
+                  <div class="panel-title"><ng-pluralize count="alerts | arrayLength" when="{'0': 'alert', '1': 'alert', 'other': 'alerts'}"></ng-pluralize></div>
+
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <p class="" ng-repeat="alert in alerts"><span ng-bind-html="alert"></span</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
         <li ng-if="enterprise && config.Uchiwa.Auth === 'sql' && user.isAdmin()" ng-class="getClass('/users')" >
           <a ng-href="#users">
             <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Users">
