@@ -10,6 +10,7 @@
     "angular": "~1.3.13",
     "angular-bootstrap": "0.11.0",
     "angular-cookies": "~1.3.13",
+    "angular-moment": "~0.9.0",
     "angular-route": "~1.3.13",
     "angular-sanitize": "~1.3.13",
     "angular-toastr": "0.5.2",
