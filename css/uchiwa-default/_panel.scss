@@ -78,6 +78,11 @@
   font-weight: 700;
 }
 
+.panel .subtitle {
+  display: block;
+  line-height: 1.2;
+}
+
 .panel-ok {
   color: $primary-color;
   background-color: $info-color;

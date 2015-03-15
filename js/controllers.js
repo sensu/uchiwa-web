@@ -3,6 +3,75 @@
 var controllerModule = angular.module('uchiwa.controllers', []);
 
 /**
+* Aggregate
+*/
+controllerModule.controller('aggregate', ['$http', '$rootScope', '$scope', '$routeParams', 'routingService', 'titleFactory',
+  function ($http, $rootScope, $scope, $routeParams, routingService, titleFactory) {
+    $scope.pageHeaderText = 'Aggregates';
+    titleFactory.set($scope.pageHeaderText);
+
+    // Services
+    $scope.go = routingService.go;
+    $scope.permalink = routingService.permalink;
+
+    $scope.dcId = decodeURI($routeParams.dcId);
+    $scope.checkId = decodeURI($routeParams.checkId);
+    $scope.aggregate = null;
+
+    $scope.$on('sensu', function() {
+      $scope.check_aggregates = _.find($rootScope.aggregates, function(aggregate) { // jshint ignore:line
+        return $scope.checkId === aggregate.check && $scope.dcId === aggregate.dc;
+      });
+    });
+
+    var getAggregate = function () {
+      if (isNaN($scope.issued)) {
+        return;
+      }
+
+      $http.get('get_aggregate_by_issued?check=' + $scope.checkId + '&issued=' + $scope.issued + '&dc=' + $scope.dcId)
+      .success(function(data) {
+        $scope.aggregate = data;
+      })
+      .error(function(error) {
+        console.log('Error: ' + JSON.stringify(error));
+      });
+    };
+
+    // do we have a issued parameter? if so, display the aggregate result
+    $scope.issued = decodeURI($routeParams.issued);
+    getAggregate();
+    $scope.$on('$routeUpdate', function(){
+      $scope.issued = decodeURI($routeParams.issued);
+      getAggregate();
+    });
+  }
+]);
+
+/**
+* Aggregates
+*/
+controllerModule.controller('aggregates', ['$scope', '$routeParams', 'routingService', 'titleFactory',
+  function ($scope, $routeParams, routingService, titleFactory) {
+    $scope.pageHeaderText = 'Aggregates';
+    titleFactory.set($scope.pageHeaderText);
+
+    $scope.predicate = 'check';
+
+    // Routing
+    $scope.filters = {};
+    routingService.initFilters($routeParams, $scope.filters, ['dc', 'limit', 'q']);
+    $scope.$on('$locationChangeSuccess', function(){
+      routingService.updateFilters($routeParams, $scope.filters);
+    });
+
+    // Services
+    $scope.go = routingService.go;
+    $scope.permalink = routingService.permalink;
+  }
+]);
+
+/**
 * Checks
 */
 controllerModule.controller('checks', ['titleFactory', '$routeParams', 'routingService', '$scope',
@@ -180,6 +249,16 @@ controllerModule.controller('clients', ['clientsService', '$filter', 'helperServ
         match.selected = false;
       });
     });
+  }
+]);
+
+/**
+* Datacenters
+*/
+controllerModule.controller('datacenters', ['$scope', 'titleFactory',
+  function ($scope, titleFactory) {
+    $scope.pageHeaderText = 'Datacenters';
+    titleFactory.set($scope.pageHeaderText);
   }
 ]);
 
@@ -395,75 +474,6 @@ controllerModule.controller('sidebar', ['$location', 'navbarServices', '$scope',
 
       // Update alert badge
       navbarServices.health();
-    });
-  }
-]);
-
-/**
-* Aggregates
-*/
-controllerModule.controller('aggregates', ['$scope', '$routeParams', 'routingService', 'titleFactory',
-  function ($scope, $routeParams, routingService, titleFactory) {
-    $scope.pageHeaderText = 'Aggregates';
-    titleFactory.set($scope.pageHeaderText);
-
-    $scope.predicate = 'check';
-
-    // Routing
-    $scope.filters = {};
-    routingService.initFilters($routeParams, $scope.filters, ['dc', 'limit', 'q']);
-    $scope.$on('$locationChangeSuccess', function(){
-      routingService.updateFilters($routeParams, $scope.filters);
-    });
-
-    // Services
-    $scope.go = routingService.go;
-    $scope.permalink = routingService.permalink;
-  }
-]);
-
-/**
-* Aggregate
-*/
-controllerModule.controller('aggregate', ['$http', '$rootScope', '$scope', '$routeParams', 'routingService', 'titleFactory',
-  function ($http, $rootScope, $scope, $routeParams, routingService, titleFactory) {
-    $scope.pageHeaderText = 'Aggregates';
-    titleFactory.set($scope.pageHeaderText);
-
-    // Services
-    $scope.go = routingService.go;
-    $scope.permalink = routingService.permalink;
-
-    $scope.dcId = decodeURI($routeParams.dcId);
-    $scope.checkId = decodeURI($routeParams.checkId);
-    $scope.aggregate = null;
-
-    $scope.$on('sensu', function() {
-      $scope.check_aggregates = _.find($rootScope.aggregates, function(aggregate) { // jshint ignore:line
-        return $scope.checkId === aggregate.check && $scope.dcId === aggregate.dc;
-      });
-    });
-
-    var getAggregate = function () {
-      if (isNaN($scope.issued)) {
-        return;
-      }
-
-      $http.get('get_aggregate_by_issued?check=' + $scope.checkId + '&issued=' + $scope.issued + '&dc=' + $scope.dcId)
-      .success(function(data) {
-        $scope.aggregate = data;
-      })
-      .error(function(error) {
-        console.log('Error: ' + JSON.stringify(error));
-      });
-    };
-
-    // do we have a issued parameter? if so, display the aggregate result
-    $scope.issued = decodeURI($routeParams.issued);
-    getAggregate();
-    $scope.$on('$routeUpdate', function(){
-      $scope.issued = decodeURI($routeParams.issued);
-      getAggregate();
     });
   }
 ]);

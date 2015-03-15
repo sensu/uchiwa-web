@@ -144,8 +144,8 @@
             </div>
           </div>
         </li>
-        <li id="datacenters" class="show-on-hover">
-          <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">
+        <li id="datacenters" class="show-on-hover" ng-class="getClass('/datacenter')">
+          <a ng-href="#datacenters" class="dropdown-toggle" data-toggle="dropdown">
             <span class="small-nav">
               <i class="fa fa-cloud"></i>
               <span class="badge badge-ok">{{dc  | arrayLength}}</span>

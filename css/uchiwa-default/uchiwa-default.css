@@ -387,6 +387,9 @@ pre.hljs .hljs-string {
   font-weight: 700;
   font-size: 28px; }
 
+.info .number a {
+  color: inherit; }
+
 .info .title {
   font-weight: 700;
   font-size: 12px;
@@ -721,6 +724,10 @@ li.timestamp .relative-timestamp {
   font-size: 13px;
   text-transform: uppercase;
   font-weight: 700; }
+
+.panel .subtitle {
+  display: block;
+  line-height: 1.2; }
 
 .panel-ok {
   color: #ffffff;
