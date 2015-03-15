@@ -152,6 +152,31 @@ describe('Controller', function () {
   describe('navbar', function () {
     var controllerName = 'navbar';
 
+
+  });
+
+  describe('sidebar', function () {
+    var controllerName = 'sidebar';
+
+    it('should have a getClass method', function () {
+      createController(controllerName);
+      expect($scope.getClass).toBeDefined();
+    });
+
+    describe('getClass()', function () {
+      it('should return selected if path matches location', function () {
+        createController(controllerName, {
+          '$location': {
+            path: function () {
+              return 'events#some-anchor';
+            }
+          }
+        });
+        expect($scope.getClass('events')).toBe('selected');
+        expect($scope.getClass('clients')).toBe('');
+      });
+    });
+
     it('should count events and client status on sensu', function () {
       createController(controllerName);
       var clients = [
@@ -221,31 +246,6 @@ describe('Controller', function () {
       expect($rootScope.navbar.events.unknown).toEqual(expectedUnknownEvents);
       expect($rootScope.navbar.clients.style).toEqual(expectedClientsStyle);
       expect($rootScope.navbar.events.style).toEqual(expectedEventsStyle);
-    });
-  });
-
-  describe('sidebar', function () {
-    var controllerName = 'sidebar';
-
-    it('should have a getClass method', function () {
-      createController(controllerName);
-      expect($scope.getClass).toBeDefined();
-    });
-
-    describe('getClass()', function () {
-
-      it('should return selected if path matches location', function () {
-        createController(controllerName, {
-          '$location': {
-            path: function () {
-              return 'events#some-anchor';
-            }
-          }
-        });
-        expect($scope.getClass('events')).toBe('selected');
-        expect($scope.getClass('clients')).toBe('');
-      });
-
     });
 
   });
