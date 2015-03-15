@@ -23,7 +23,7 @@
           </a>
         </li>
 
-        <li id="logout" ng-if="enterprise && config.Uchiwa.Auth === 'sql' && user.isAdmin()">
+        <li id="logout" ng-if="auth">
           <a href="#" ng-click="logout()">
             <span tooltip-placement="bottom" tooltip-trigger tooltip="Logout">
               <i class="fa fa-sign-out"></i>
