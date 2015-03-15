@@ -1,13 +1,15 @@
 'use strict';
 
 describe('directives', function () {
-  var scope;
   var element;
+  var $rootScope;
+  var scope;
 
   beforeEach(module('uchiwa'));
-  beforeEach(inject(function () {
-    scope = jasmine.createSpyObj('scope', ['$on', '$watch']);
+  beforeEach(inject(function (_$rootScope_) {
     element = jasmine.createSpyObj('element', ['tooltip', 'attr', 'removeAttr', 'addClass']);
+    $rootScope = _$rootScope_;
+    scope = jasmine.createSpyObj('scope', ['$on', '$watch']);
   }));
 
   describe('siteTheme', function () {
@@ -22,8 +24,8 @@ describe('directives', function () {
 
     it('should define themes', inject(function (siteThemeDirective) {
       siteThemeDirective[0].link(scope, element);
-      expect(scope.themes).toBeDefined();
-      expect(scope.themes.length).toBeGreaterThan(0);
+      expect(scope.currentTheme).toBeDefined();
+      expect($rootScope.themes.length).toBeGreaterThan(0);
     }));
 
     it('should listen for theme:changed event', inject(function (siteThemeDirective) {
