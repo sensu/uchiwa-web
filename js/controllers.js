@@ -191,7 +191,7 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
     $scope.pageHeaderText = 'Events';
     titleFactory.set($scope.pageHeaderText);
 
-    $scope.predicate = '-check.status';
+    $scope.predicate = ['-check.status', '-check.issued'];
     $scope.filters = {};
 
     // Routing
