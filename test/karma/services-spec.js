@@ -11,9 +11,7 @@ describe('services', function () {
   }));
 
   describe('clientsService', function () {
-
     describe('resolveEvent', function () {
-
       it('should return false when neither client & check are undefined or not objects', inject(function (clientsService) {
         expect(clientsService.resolveEvent('foo', null, null)).toEqual(false);
         expect(clientsService.resolveEvent('foo', undefined)).toEqual(false);
@@ -25,41 +23,32 @@ describe('services', function () {
         clientsService.resolveEvent('foo', {name: 'bar'}, {check: 'qux'});
         expect(backendService.resolveEvent).toHaveBeenCalledWith(expectedPayload);
       }));
-
     });
-
   });
 
-  describe('stashesService', function () {
-
-    it('should have a deleteStash method', inject(function (stashesService) {
-      expect(stashesService.deleteStash).toBeDefined();
-    }));
-
-    describe('submit', function () {
-
-      it('should emit HTTP POST to /createStash for a client', inject(function (stashesService, backendService) {
-        spyOn(backendService, 'createStash').and.callThrough();
-        var timestamp = Math.floor(new Date()/1000);
-        var expectedPayload = {dc: 'foo', payload: {path: 'silence/bar', content: {reason: '', source: 'uchiwa', timestamp: timestamp}}};
-        stashesService.submit({name: 'bar', acknowledged: false, dc: 'foo'}, {path: ['bar', '']});
-        expect(backendService.createStash).toHaveBeenCalledWith(expectedPayload);
+  describe('navbarServices', function () {
+    describe('health method', function (navbarServices) {
+      it('returns no alert when all datacenters are ok', inject(function (navbarServices) {
+        $rootScope.health = { foo: { output: "ok" }, bar: { output: "ok" } };
+        navbarServices.health();
+        expect($rootScope.alerts).toEqual([]);
       }));
 
-      it('should emit HTTP POST to /createStash for a check', inject(function (stashesService, backendService) {
-        spyOn(backendService, 'createStash').and.callThrough();
-        var timestamp = Math.floor(new Date()/1000);
-        var expectedPayload = {dc: 'foo', payload: {path: 'silence/bar/qux', content: {reason: '', source: 'uchiwa', timestamp: timestamp}}};
-        stashesService.submit({client: {name: 'bar'}, check: {name: 'qux'}, acknowledged: false, dc: 'foo'}, {path: ['bar', 'qux']});
-        expect(backendService.createStash).toHaveBeenCalledWith(expectedPayload);
+      it('returns a single alert when one datacenters is not ok', inject(function (navbarServices) {
+        $rootScope.health = { foo: { output: "ok" }, bar: { output: "critical" } };
+        navbarServices.health();
+        expect($rootScope.alerts).toEqual([ 'Datacenter <strong>bar</strong> returned: <em>critical</em>' ]);
       }));
 
+      it('does not return an alert when the /health API enpoint does not respond', inject(function (navbarServices) {
+        $rootScope.health = "foobar";
+        navbarServices.health();
+        expect($rootScope.alerts).toEqual([]);
+      }));
     });
-
   });
 
   describe('routingService', function () {
-
     it('should have a go method', inject(function (routingService) {
       expect(routingService.go).toBeDefined();
     }));
@@ -80,7 +69,6 @@ describe('services', function () {
     }));
 
     describe('go()', function() {
-
       it('should call $location.url', inject(function (routingService, $location) {
         var uri = '/testing';
         spyOn($location, 'url');
@@ -95,17 +83,36 @@ describe('services', function () {
         expect($location.url).not.toHaveBeenCalledWith(uri);
         expect($location.url).toHaveBeenCalledWith(encodeURI(uri));
       }));
-
     });
+  });
 
+  describe('stashesService', function () {
+    it('should have a deleteStash method', inject(function (stashesService) {
+      expect(stashesService.deleteStash).toBeDefined();
+    }));
+
+    describe('submit', function () {
+      it('should emit HTTP POST to /createStash for a client', inject(function (stashesService, backendService) {
+        spyOn(backendService, 'createStash').and.callThrough();
+        var timestamp = Math.floor(new Date()/1000);
+        var expectedPayload = {dc: 'foo', payload: {path: 'silence/bar', content: {reason: '', source: 'uchiwa', timestamp: timestamp}}};
+        stashesService.submit({name: 'bar', acknowledged: false, dc: 'foo'}, {path: ['bar', '']});
+        expect(backendService.createStash).toHaveBeenCalledWith(expectedPayload);
+      }));
+
+      it('should emit HTTP POST to /createStash for a check', inject(function (stashesService, backendService) {
+        spyOn(backendService, 'createStash').and.callThrough();
+        var timestamp = Math.floor(new Date()/1000);
+        var expectedPayload = {dc: 'foo', payload: {path: 'silence/bar/qux', content: {reason: '', source: 'uchiwa', timestamp: timestamp}}};
+        stashesService.submit({client: {name: 'bar'}, check: {name: 'qux'}, acknowledged: false, dc: 'foo'}, {path: ['bar', 'qux']});
+        expect(backendService.createStash).toHaveBeenCalledWith(expectedPayload);
+      }));
+    });
   });
 
   describe('underscore', function () {
-
     it('should define _', inject(function (underscore) {
       expect(underscore).toBe(window._);
     }));
-
   });
-
 });
