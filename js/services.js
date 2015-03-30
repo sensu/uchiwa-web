@@ -188,11 +188,13 @@ serviceModule.service('navbarServices', ['$rootScope', function ($rootScope) {
   };
   this.health = function () {
     var alerts = [];
-    angular.forEach($rootScope.health, function(value, key) {
-      if (value.output !== 'ok') {
-        alerts.push('Datacenter <strong>' + key + '</strong> returned: <em>' + value.output + '</em>');
-      }
-    });
+    if (angular.isObject($rootScope.health)) {
+      angular.forEach($rootScope.health, function(value, key) {
+        if (value.output !== 'ok') {
+          alerts.push('Datacenter <strong>' + key + '</strong> returned: <em>' + value.output + '</em>');
+        }
+      });
+    }
     $rootScope.alerts = alerts;
   };
 }]);
