@@ -4,8 +4,8 @@
 
   <div class="row-fluid">
     <div class="col-lg-12">
+      <div class="panel panel-default">
 
-      <div class="panel panel-default panel-breadcrump">
         <! --panel-heading-->
         <div class="panel-heading">
           <div class="row">
@@ -15,55 +15,41 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div ng-repeat="datacenter in dc | orderBy:'name'">
-    <div ng-class-pair="'row'">
-      <div class="col-xs-6">
-        <div class="panel panel-default">
-          <div class="panel-body">
-
-            <div class="row mb15">
-              <div class="col-xs-6">
-                <div class="panel-title"><i class="fa fa-cloud"></i> {{ datacenter.name }}</div>
-                <p>
-                  <small><span class="subtitle">Sensu Version: <strong>{{ datacenter.version }}</strong><span></small>
-                    <small>
-                      <span class="subtitle" ng-if="datacenter.transport">Connected to Transport</span>
-                      <span class="subtitle" ng-if="!datacenter.transport"><strong>Connection error with Transport</strong></span>
-                    </small>
-                    <small>
-                      <span class="subtitle" ng-if="datacenter.redis">Connected to Redis</span>
-                      <span class="subtitle" ng-if="!datacenter.redis"><strong>Connection error with Redis</strong></span>
-                    </small>
-                  </p>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-xs-3">
-                  <div class="title center">Events</div>
-                  <div class="number center"><a ng-href="#/events/?dc={{datacenter.name | encodeURIComponent}}">{{datacenter.events}}</a></div>
-                </div>
-                <div class="col-xs-3">
-                  <div class="title center">Clients</div>
-                  <div class="number center"><a ng-href="#/clients/?dc={{datacenter.name | encodeURIComponent}}">{{datacenter.clients}}</a></div>
-                </div>
-                <div class="col-xs-3">
-                  <div class="title center">Checks</div>
-                  <div class="number center"><a ng-href="#/checks/?dc={{datacenter.name | encodeURIComponent}}">{{datacenter.checks}}</a></div>
-                </div>
-                <div class="col-xs-3">
-                  <div class="title center">Stashes</div>
-                  <div class="number center"><a ng-href="#/stashes/?dc={{datacenter.name | encodeURIComponent}}">{{datacenter.stashes}}</a></div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <! --panel-body-->
+        <div class="panel-body">
+          <table class="table table-hover table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th><i class="fa fa-upload" tooltip-placement="top" tooltip-trigger tooltip="Sensu Version"></i></th>
+                <th>Redis</th>
+                <th>Transport</th>
+                <th><i class="fa fa-bullhorn" tooltip-placement="top" tooltip-trigger tooltip="Events"></i></th>
+                <th><i class="fa fa-hdd-o" tooltip-placement="top" tooltip-trigger tooltip="Clients"></i></th>
+                <th><i class="fa fa-check-square" tooltip-placement="top" tooltip-trigger tooltip="Checks"></i></th>
+                <th><i class="fa fa-briefcase" tooltip-placement="top" tooltip-trigger tooltip="Stashes"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="datacenter in dc | orderBy:'name'">
+                <td class="main">{{ datacenter.name }}</td>
+                <td>{{ datacenter.version }}</td>
+                <td>
+                  <span ng-if="!datacenter.transport">Not</span> Connected
+                </td>
+                <td>
+                  <span ng-if="!datacenter.redis">Not</span> Connected
+                </td>
+                <td>{{ datacenter.events }}</td>
+                <td>{{ datacenter.clients }}</td>
+                <td>{{ datacenter.checks }}</td>
+                <td>{{ datacenter.stashes }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
-
   </div>
+</div>
