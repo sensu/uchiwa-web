@@ -1,6 +1,5 @@
 @charset "UTF-8";
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
-@import url("//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700");
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -265,7 +264,7 @@ html {
   -webkit-tap-highlight-color: transparent; }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 15px;
   line-height: 1.42857;
   color: #222222;
@@ -337,7 +336,7 @@ hr {
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 500;
   line-height: 1.1;
   color: inherit; }
@@ -627,7 +626,7 @@ code,
 kbd,
 pre,
 samp {
-  font-family: "Open Sans", monospace; }
+  font-family: "Roboto", sans-serif; }
 
 code {
   padding: 2px 4px;
