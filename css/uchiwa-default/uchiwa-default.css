@@ -980,6 +980,11 @@ li.timestamp .relative-timestamp {
   overflow: hidden;
   white-space: nowrap; }
 
+.table td.source {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; }
+
 .table td.output {
   text-overflow: ellipsis;
   overflow: hidden;
