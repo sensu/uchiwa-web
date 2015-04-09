@@ -57,7 +57,11 @@
                 <td class="output" ng-bind-html="client.output | linky" ng-click="helpers.openLink($event)"></td>
                 <td>{{ client.dc }}</td>
                 <td>{{ client.version }}</td>
-                <td>{{ client.timestamp | getTimestamp }}</td>
+                <td>
+                  <span tooltip-placement="top" tooltip-trigger tooltip-html-unsafe="Local Time<br /><small>{{ client.timestamp | getTimestamp }}</small>">
+                    <span am-time-ago="client.timestamp" am-preprocess="unix"></span>
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>

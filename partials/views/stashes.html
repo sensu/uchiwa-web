@@ -48,8 +48,21 @@
                 <td>{{ stash.content.source }}</td>
                 <td ng-bind-html="stash.content.reason | linky"></td>
                 <td>{{ stash.dc }}</td>
-                <td>{{ stash.content.timestamp | getTimestamp }}</td>
-                <td>{{ stash | getExpireTimestamp }}</td>
+                <td>
+                  <span tooltip-placement="top" tooltip-trigger tooltip-html-unsafe="Local Time<br /><small>{{ stash.content.timestamp | getTimestamp }}</small>">
+                    <span am-time-ago="stash.content.timestamp" am-preprocess="unix"></span>
+                  </span>
+                </td>
+                <td>
+                  <span tooltip-placement="top" tooltip-trigger tooltip-html-unsafe="Local Time<br /><small>{{ stash | getExpireTimestamp }}</small>">
+                    <span ng-if="(stash | getExpireTimestamp) != 'Never'">
+                      <span am-time-ago="stash" am-preprocess="unix"></span>
+                    </span>
+                    <span ng-if="(stash | getExpireTimestamp) == 'Never'">
+                      {{ stash | getExpireTimestamp }}
+                    </span>
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
