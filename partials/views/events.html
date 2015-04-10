@@ -48,7 +48,7 @@
                 <td class="well-{{ event.check.status | getStatusClass }}" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="event.selected" ng-if="user.canPost()"></input>
                 </td>
-                <td>
+                <td class="source">
                   <span ng-click="event.client['dc'] = event.dc; stash($event, event.client)" ng-if="user.canPost()">
                     <i class="fa fa-fw {{ event.client.acknowledged | getAckClass }}"></i>
                   </span>
