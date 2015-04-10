@@ -58,9 +58,7 @@
                 <td>{{ client.dc }}</td>
                 <td>{{ client.version }}</td>
                 <td>
-                  <span tooltip-placement="top" tooltip-trigger tooltip-html-unsafe="Local Time<br /><small>{{ client.timestamp | getTimestamp }}</small>">
-                    <span am-time-ago="client.timestamp" am-preprocess="unix"></span>
-                  </span>
+                 <relative-time timestamp="client.timestamp"></relative-time>
                 </td>
               </tr>
             </tbody>

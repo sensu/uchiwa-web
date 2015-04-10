@@ -27,6 +27,19 @@ directiveModule.directive('panelLimit', ['$rootScope', function ($rootScope) {
   };
 }]);
 
+directiveModule.directive('relativeTime', ['$filter', '$rootScope', function ($filter, $rootScope) {
+  return {
+    restrict: 'E',
+    scope: {
+      timestamp: '='
+    },
+    templateUrl: $rootScope.partialsPath + '/directives/relative-time.html',
+    link: function (scope) {
+      scope.date = $filter('getTimestamp')(scope.timestamp);
+    }
+  };
+}]);
+
 directiveModule.directive('siteTheme', ['conf', '$cookieStore', '$rootScope', function (conf, $cookieStore, $rootScope) {
   return {
     restrict: 'EA',

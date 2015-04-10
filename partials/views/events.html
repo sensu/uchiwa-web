@@ -63,8 +63,8 @@
                 <td class="output" ng-bind-html="event.check.output | linky" ng-click="helpers.openLink($event)"></td>
                 <td>{{ event.occurrences }}</td>
                 <td>{{ event.dc }}</td>
-                <td tooltip-placement="top" tooltip-trigger tooltip-html-unsafe="Local Time<br /><small>{{ event.check.issued | getTimestamp }}</small>">
-                  <span am-time-ago="event.check.issued" am-preprocess="unix"></span>
+                <td>
+                  <relative-time timestamp="event.check.issued"></relative-time>
                 </td>
               </tr>
             </tbody>
