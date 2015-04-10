@@ -48,7 +48,9 @@
                 <td>{{ stash.content.source }}</td>
                 <td ng-bind-html="stash.content.reason | linky"></td>
                 <td>{{ stash.dc }}</td>
-                <td>{{ stash.content.timestamp | getTimestamp }}</td>
+                <td>
+                  <relative-time timestamp="stash.content.timestamp"></relative-time>
+                </td>
                 <td>{{ stash | getExpireTimestamp }}</td>
               </tr>
             </tbody>

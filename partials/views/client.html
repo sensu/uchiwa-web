@@ -52,7 +52,7 @@
                 <i ng-if="client.status" status-glyph="{{ client.status }}"></i> {{ client.name }}
               </div>
               <p>
-                <small><i class="fa fa-clock-o"></i> {{client.timestamp | getTimestamp }}</small> <br />
+                <small><i class="fa fa-clock-o"></i> <relative-time timestamp="client.timestamp"></relative-time></small> <br />
                 <small><i class="fa fa-cloud"></i> {{ dcId }}</small>
               </p>
             </div>
@@ -109,7 +109,7 @@
               </td>
               <td class="main" >{{ check.check }}</td>
               <td class="check-output" ng-bind-html="check.output | linky" ng-click="helpers.openLink($event)"></td>
-              <td>{{ check.last_execution | getTimestamp }}</td>
+              <td><relative-time timestamp="check.last_execution"></relative-time></td>
             </tr>
           </tbody>
         </table>
