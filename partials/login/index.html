@@ -9,6 +9,10 @@
         <input ng-model="login.pass" name="pass" type="password" placeholder="password">
         <button class="btn btn-default btn-block login" type="submit">Login</button>
       </form>
+      <form action="/login/oauth" ng-if="configAuth === 'github'">
+        <hr>
+        <button class="btn btn-default btn-block login" type="submit"><i class="fa fa-github"></i> Login with GitHub</button>
+      </form>
     </div>
   </div>
 </div>
