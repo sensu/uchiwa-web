@@ -72,7 +72,10 @@ serviceModule.service('backendService', ['conf', '$http', '$interval', '$locatio
 
         $rootScope.clients = _.map(data.Clients, function(client) {
           var existingClient = _.findWhere($rootScope.clients, {name: client.name, dc: client.dc});
-          if (existingClient !== undefined) {
+          if (angular.isDefined(existingClient)) {
+            if (angular.isUndefined(client.output) && angular.isDefined(existingClient.output)) {
+              client.output = '';
+            }
             client = angular.extend(existingClient, client);
           }
           return existingClient || client;
