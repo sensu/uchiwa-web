@@ -24,7 +24,7 @@ serviceModule.service('backendService', ['conf', '$http', '$interval', '$locatio
       return $http.get('get_client?id=' + client + '&dc=' + dc );
     };
     this.getConfig = function () {
-      if ($location.path().substring(0, 6) == "/login") {
+      if ($location.path().substring(0, 6) === '/login') {
         return;
       }
       $http.get('get_config')
@@ -53,7 +53,7 @@ serviceModule.service('backendService', ['conf', '$http', '$interval', '$locatio
       return $http.post('post_event', payload);
     };
     this.update = function () {
-      if ($location.path().substring(0, 6) == "/login") {
+      if ($location.path().substring(0, 6) === '/login') {
         return;
       }
       if ($rootScope.skipRefresh) {
