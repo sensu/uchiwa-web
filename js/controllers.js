@@ -392,6 +392,15 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
 
   $scope.login = {user: '', pass: ''};
 
+  // get the authentication mode
+  backendService.getConfigAuth()
+    .success(function (data) {
+      $scope.configAuth = data;
+    })
+    .error(function () {
+      $scope.configAuth = 'simple';
+    });
+
   $scope.submit = function () {
     backendService.login($scope.login)
     .success(function (data) {
