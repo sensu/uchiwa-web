@@ -179,8 +179,8 @@ serviceModule.service('filterService', function () {
     if (angular.isUndefined(expected) || expected === '') {
       return true;
     }
-    return angular.equals(actual, expected)
-  }
+    return angular.equals(actual, expected);
+  };
 });
 
 /**
