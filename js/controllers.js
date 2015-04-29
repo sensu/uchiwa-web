@@ -51,8 +51,8 @@ controllerModule.controller('aggregate', ['$http', '$rootScope', '$scope', '$rou
 /**
 * Aggregates
 */
-controllerModule.controller('aggregates', ['$scope', '$routeParams', 'routingService', 'titleFactory',
-  function ($scope, $routeParams, routingService, titleFactory) {
+controllerModule.controller('aggregates', ['filterService', '$routeParams', 'routingService', '$scope', 'titleFactory',
+  function (filterService, $routeParams, routingService, $scope, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
 
@@ -66,6 +66,7 @@ controllerModule.controller('aggregates', ['$scope', '$routeParams', 'routingSer
     });
 
     // Services
+    $scope.filterComparator = filterService.comparator;
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
   }
@@ -74,8 +75,8 @@ controllerModule.controller('aggregates', ['$scope', '$routeParams', 'routingSer
 /**
 * Checks
 */
-controllerModule.controller('checks', ['titleFactory', '$routeParams', 'routingService', '$scope',
-  function (titleFactory, $routeParams, routingService, $scope) {
+controllerModule.controller('checks', ['filterService', '$routeParams', 'routingService', '$scope', 'titleFactory',
+  function (filterService, $routeParams, routingService, $scope, titleFactory) {
     $scope.pageHeaderText = 'Checks';
     titleFactory.set($scope.pageHeaderText);
 
@@ -94,6 +95,7 @@ controllerModule.controller('checks', ['titleFactory', '$routeParams', 'routingS
     });
 
     // Services
+    $scope.filterComparator = filterService.comparator;
     $scope.permalink = routingService.permalink;
 
   }
@@ -187,8 +189,8 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
 /**
 * Clients
 */
-controllerModule.controller('clients', ['clientsService', '$filter', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
-  function (clientsService, $filter, helperService, $rootScope, $routeParams, routingService, $scope, stashesService, titleFactory, userService) {
+controllerModule.controller('clients', ['clientsService', '$filter', 'filterService', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
+  function (clientsService, $filter, filterService, helperService, $rootScope, $routeParams, routingService, $scope, stashesService, titleFactory, userService) {
     $scope.pageHeaderText = 'Clients';
     titleFactory.set($scope.pageHeaderText);
 
@@ -203,6 +205,7 @@ controllerModule.controller('clients', ['clientsService', '$filter', 'helperServ
 
     // Services
     $scope.deleteClient = clientsService.deleteClient;
+    $scope.filterComparator = filterService.comparator;
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
     $scope.stash = stashesService.stash;
@@ -265,8 +268,8 @@ controllerModule.controller('datacenters', ['$scope', 'titleFactory',
 /**
 * Events
 */
-controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore', '$filter', 'helperService', '$rootScope', '$routeParams','routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
-  function (clientsService, conf, $cookieStore, $filter, helperService, $rootScope, $routeParams, routingService, $scope, stashesService, titleFactory, userService) {
+controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore', '$filter', 'filterService', 'helperService', '$rootScope', '$routeParams','routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
+  function (clientsService, conf, $cookieStore, $filter, filterService, helperService, $rootScope, $routeParams, routingService, $scope, stashesService, titleFactory, userService) {
     $scope.pageHeaderText = 'Events';
     titleFactory.set($scope.pageHeaderText);
 
@@ -280,6 +283,7 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
     });
 
     // Services
+    $scope.filterComparator = filterService.comparator;
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
     $scope.resolveEvent = clientsService.resolveEvent;
@@ -490,8 +494,8 @@ controllerModule.controller('sidebar', ['$location', 'navbarServices', '$scope',
 /**
 * Stashes
 */
-controllerModule.controller('stashes', ['$scope', '$routeParams', 'routingService', 'stashesService', 'titleFactory', 'userService',
-  function ($scope, $routeParams, routingService, stashesService, titleFactory, userService) {
+controllerModule.controller('stashes', ['filterService', '$routeParams', 'routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
+  function (filterService, $routeParams, routingService, $scope, stashesService, titleFactory, userService) {
     $scope.pageHeaderText = 'Stashes';
     titleFactory.set($scope.pageHeaderText);
 
@@ -506,6 +510,7 @@ controllerModule.controller('stashes', ['$scope', '$routeParams', 'routingServic
     });
 
     // Services
+    $scope.filterComparator = filterService.comparator;
     $scope.permalink = routingService.permalink;
     $scope.user = userService;
   }

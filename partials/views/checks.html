@@ -36,7 +36,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="check in checks | orderBy:predicate:reverse | collection:'checks' | filter:{dc:filters.dc} |  filter:filters.q | limitTo:filters.limit">
+              <tr ng-repeat="check in checks | orderBy:predicate:reverse | collection:'checks' | filter:{dc:filters.dc}:filterComparator |  filter:filters.q | limitTo:filters.limit">
                 <td class="main">{{ check.name }}</td>
                 <td>{{ check.command }}</td>
                 <td>{{ check.subscribers | arrayToString }}</td>

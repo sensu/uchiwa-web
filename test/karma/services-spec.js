@@ -26,6 +26,23 @@ describe('services', function () {
     });
   });
 
+  describe('filterService', function () {
+    describe('comparator', function () {
+      it('returns true when the expected variable is an empty string', inject(function (filterService) {
+        expect(filterService.comparator('foo', '')).toEqual(true);
+      }));
+
+      it('returns true when the actual & expected variable are strictly similar', inject(function (filterService) {
+        expect(filterService.comparator('foo', 'foo')).toEqual(true);
+      }));
+
+      it('returns false when the actual & expected variable are not strictly similar', inject(function (filterService) {
+        expect(filterService.comparator('foo', 'foobar')).toEqual(false);
+      }));
+    });
+  });
+
+
   describe('navbarServices', function () {
     describe('health method', function (navbarServices) {
       it('returns no alert when all datacenters are ok', inject(function (navbarServices) {
