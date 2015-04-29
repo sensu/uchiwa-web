@@ -172,6 +172,18 @@ serviceModule.service('clientsService', ['$location', '$rootScope', 'backendServ
 
 
 /**
+* Filter
+*/
+serviceModule.service('filterService', function () {
+  this.comparator = function(actual, expected) {
+    if (angular.isUndefined(expected) || expected === '') {
+      return true;
+    }
+    return angular.equals(actual, expected)
+  }
+});
+
+/**
 * Navbar
 */
 serviceModule.service('navbarServices', ['$rootScope', function ($rootScope) {

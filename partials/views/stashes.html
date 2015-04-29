@@ -40,7 +40,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="stash in stashes | filter:filters.q | filter:{dc:filters.dc} | limitTo:filters.limit | buildStashes | orderBy:predicate:reverse">
+              <tr ng-repeat="stash in stashes | filter:filters.q | filter:{dc:filters.dc}:filterComparator | limitTo:filters.limit | buildStashes | orderBy:predicate:reverse">
                 <td ng-if="user.canPost()"><i class="fa fa-times" ng-click="deleteStash(stash);"></i></td>
                 <td class="main">{{ stash.client }}</td>
                 <td>{{ stash.check }}</td>
