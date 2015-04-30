@@ -56,7 +56,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="item in items | filter:{acknowledged: true}" ng-init="itemStash = stashForItem(stashes, item)">
+          <tr ng-repeat="item in items | filter:{acknowledged: true}" ng-init="itemStash = findStash(stashes, item)">
             <td>{{item.dc}}</td>
             <td>{{item.name || item.client.name}}</td>
             <td ng-if="itemType == 'check'">{{item.check.name}}</td>
@@ -110,7 +110,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="item in items | filter:{acknowledged: true}" ng-init="itemStash = stashForItem(stashes, item)">
+        <tr ng-repeat="item in items | filter:{acknowledged: true}" ng-init="itemStash = findStash(stashes, item)">
           <td>{{item.dc}}</td>
           <td>{{item.name || item.client.name || item.client}}</td>
           <td ng-if="itemType == 'check'">{{item.check.name || item.check}}</td>

@@ -95,7 +95,7 @@ filterModule.filter('getAckClass', function() {
 
 filterModule.filter('getExpireTimestamp', ['conf', function (conf) {
   return function(stash) {
-    if (isNaN(stash.expire)) {
+    if (angular.isUndefined(stash) || isNaN(stash.expire)) {
       return 'Unknown';
     }
     if (stash.expire === -1) {
