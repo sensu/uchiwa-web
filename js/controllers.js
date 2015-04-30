@@ -536,38 +536,14 @@ controllerModule.controller('StashModalCtrl', ['conf', '$filter', 'items', '$mod
     $scope.stash.expiration = 900;
     $scope.stash.content.from = moment().format(conf.date);
 
-    function calculateToFrom() {
-      if ($scope.stash.content && ($scope.stash.content.to && $scope.stash.content.from)) {
-        $scope.stash.content.timestamp = new Date($scope.stash.content.from).getTime() / 1000;
-        $scope.stash.expiration = (new Date($scope.stash.content.to).getTime() -
-        new Date($scope.stash.content.from).getTime()) / 1000;
-        $scope.stash.content.to = null;
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-
-    $scope.stashForItem = function(stashes, item) {
-      var path = 'silence/';
-
-      if ($scope.itemType === 'client') {
-        path = path + item.name;
-      } else if ($scope.itemType === 'check') {
-        path = path + item.client.name + '/' + item.check.name;
-      }
-
-      return _.findWhere(stashes, {
-        dc: item.dc,
-        path: path
-      });
-    };
 
     $scope.ok = function () {
-      if ($scope.stash.expiration === 'custom' && !calculateToFrom()) {
-        notification('error', 'Please enter both from and to values.');
-        return false;
+      if ($scope.stash.expiration === 'custom') {
+        if (angular.isUndefined($scope.stash.content.from) || angular.isUndefined($scope.stash.content.to)) {
+          notification('error', 'Please enter both from and to values.');
+          return false;
+        }
+        $scope.stash = stashesService.getExpirationFromDateRange($scope.stash);
       }
       _.each(items, function(item) {
         stashesService.submit(item, $scope.stash);
@@ -577,5 +553,9 @@ controllerModule.controller('StashModalCtrl', ['conf', '$filter', 'items', '$mod
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
+
+    // Services
+    $scope.findStash = stashesService.find;
+    $scope.getPath = stashesService.getPath;
   }
 ]);

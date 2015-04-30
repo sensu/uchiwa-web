@@ -108,21 +108,89 @@ describe('services', function () {
       expect(stashesService.deleteStash).toBeDefined();
     }));
 
-    describe('submit', function () {
-      it('should emit HTTP POST to /createStash for a client', inject(function (stashesService, backendService) {
-        spyOn(backendService, 'createStash').and.callThrough();
-        var timestamp = Math.floor(new Date()/1000);
-        var expectedPayload = {dc: 'foo', payload: {path: 'silence/bar', content: {reason: '', source: 'uchiwa', timestamp: timestamp}}};
-        stashesService.submit({name: 'bar', acknowledged: false, dc: 'foo'}, {path: ['bar', '']});
-        expect(backendService.createStash).toHaveBeenCalledWith(expectedPayload);
+    describe('find', function () {
+      it('returns the proper stash from an unknown object', inject(function (stashesService){
+        var stashes = [
+          { dc: 'east', path: 'silence/foo/bar' },
+          { dc: 'west', path: 'silence/qux' }
+        ];
+        var object = {
+          check: 'bar',
+          client: 'foo',
+          dc: 'east'
+        }
+        var stash = stashesService.find(stashes, object);
+        expect(stash).toEqual({dc: 'east', path: 'silence/foo/bar' });
+
+        object = {
+          name: 'qux',
+          dc: 'west'
+        }
+        stash = stashesService.find(stashes, object);
+        expect(stash).toEqual({dc: 'west', path: 'silence/qux' });
+      }));
+    });
+
+    describe('getExpirationFromDateRange', function () {
+      it('returns the proper expiration & timestamp attributes', inject(function (stashesService){
+        var stash = {content: { from: '2015-01-01 00:00:01', to: '2015-02-01 00:00:01'}}
+        stash = stashesService.getExpirationFromDateRange(stash);
+        expect(stash.expiration).toEqual(2678400);
+        expect(stash.content.timestamp).toEqual(1420088401);
+
+        stash.content.to = '2015-01-02 00:00:01'
+        stash = stashesService.getExpirationFromDateRange(stash);
+        expect(stash.expiration).toEqual(86400);
+        expect(stash.content.timestamp).toEqual(1420088401);
+      }));
+    });
+
+    describe('getPath', function () {
+      it('returns a stash path from a check object', inject(function (stashesService){
+        var check = {
+          check: {
+            name: 'bar'
+          },
+          client: {
+            name: 'foo'
+          }
+        }
+        var path = stashesService.getPath(check);
+        expect(path).toEqual('silence/foo/bar');
       }));
 
-      it('should emit HTTP POST to /createStash for a check', inject(function (stashesService, backendService) {
-        spyOn(backendService, 'createStash').and.callThrough();
+      it('returns a stash path from a check output object', inject(function (stashesService){
+        var check = {
+          check: 'bar',
+          client: 'foo'
+        }
+        var path = stashesService.getPath(check);
+        expect(path).toEqual('silence/foo/bar');
+      }));
+
+      it('returns a stash path from a client object', inject(function (stashesService){
+        var client = {
+          name: 'foo'
+        }
+        var path = stashesService.getPath(client);
+        expect(path).toEqual('silence/foo');
+      }));
+          });
+
+    describe('submit', function () {
+      it('calls backendService.postStash with the proper payload', inject(function (stashesService, backendService) {
+        spyOn(backendService, 'postStash').and.callThrough();
         var timestamp = Math.floor(new Date()/1000);
-        var expectedPayload = {dc: 'foo', payload: {path: 'silence/bar/qux', content: {reason: '', source: 'uchiwa', timestamp: timestamp}}};
+
+        // silence/client
+        var expectedPayload = {content: {reason: '', source: 'uchiwa', timestamp: timestamp}, dc: 'foo', path: 'silence/bar'};
+        stashesService.submit({name: 'bar', acknowledged: false, dc: 'foo'}, {path: ['bar', '']});
+        expect(backendService.postStash).toHaveBeenCalledWith(expectedPayload);
+
+        // silence/client/check
+        expectedPayload = {content: {reason: '', source: 'uchiwa', timestamp: timestamp}, dc: 'foo', path: 'silence/bar/qux'};
         stashesService.submit({client: {name: 'bar'}, check: {name: 'qux'}, acknowledged: false, dc: 'foo'}, {path: ['bar', 'qux']});
-        expect(backendService.createStash).toHaveBeenCalledWith(expectedPayload);
+        expect(backendService.postStash).toHaveBeenCalledWith(expectedPayload);
       }));
     });
   });

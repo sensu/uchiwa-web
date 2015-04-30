@@ -11,14 +11,14 @@ serviceModule.service('backendService', ['conf', '$http', '$interval', '$locatio
     this.auth = function () {
       return $http.get('auth');
     };
-    this.createStash = function (payload) {
-      return $http.post('post_stash', payload);
+    this.postStash = function (payload) {
+      return $http.post('stashes', payload);
     };
     this.deleteClient = function (client, dc) {
       return $http.get('delete_client?id=' + client + '&dc=' + dc );
     };
     this.deleteStash = function (payload) {
-      return $http.post('delete_stash', payload);
+      return $http.post('stashes/delete', payload);
     };
     this.getClient = function (client, dc) {
       return $http.get('get_client?id=' + client + '&dc=' + dc );
@@ -272,137 +272,156 @@ serviceModule.service('routingService', ['$location', function ($location) {
 /**
 * Stashes
 */
-serviceModule.service('stashesService', ['$rootScope', '$modal', 'backendService', function ($rootScope, $modal, backendService) {
-  this.construct = function(item) {
-    var check;
-    var client;
-    var path = [];
-
-    if (angular.isObject(item) && angular.isDefined(item.client) && angular.isDefined(item.check)) { // event
-      if (!angular.isObject(item.check)) {
-        check = item.check;
-      }
-      else {
-        check = {check: item.check};
-      }
-      if (angular.isObject(item.check)) {
-        client = item.client;
-      }
-      else {
-        client = {name: item.client};
-      }
-    }
-    else if (angular.isObject(item) && angular.isDefined(item.name)) { // client
-      client = item;
-      check = null;
-    }
-    else { // unknown
-      $rootScope.$emit('notification', 'error', 'Cannot handle this stash. Try to refresh the page.');
-      return false;
-    }
-
-    path.push(client.name);
-
-    var checkName = '';
-    if (check) {
-      if (angular.isObject(check.check)) {
-        checkName = check.check.name;
-      } else {
-        checkName = check;
-      }
-    }
-    path.push(checkName);
-
-    return path;
-  };
-  this.stash = function (e, i) {
-    var items = _.isArray(i) ? i : new Array(i);
-    var event = e || window.event;
-    event.stopPropagation();
-
-    if (items.length === 0) {
-      $rootScope.$emit('notification', 'error', 'No items selected');
-    } else {
-      var modalInstance = $modal.open({ // jshint ignore:line
-        templateUrl: $rootScope.partialsPath + '/stash-modal.html',
-        controller: 'StashModalCtrl',
-        resolve: {
-          items: function () {
-            return items;
-          }
-        }
-      });
-    }
-  };
-  this.submit = function (element, item) {
-    var isAcknowledged = element.acknowledged;
-    var path = this.construct(element);
-    if (path[1] !== '') {
-      path[1] = '/' + path[1];
-    }
-    if (angular.isUndefined(item.reason)) {
-      item.reason = '';
-    }
-    path = 'silence/' + path[0] + path[1];
-    var data = {dc: element.dc, payload: {}};
-
-    $rootScope.skipRefresh = true;
-    if (isAcknowledged) {
-      data.payload = {path: path};
-      backendService.deleteStash(data)
+serviceModule.service('stashesService', ['backendService', '$filter', '$modal', '$rootScope',
+  function (backendService, $filter, $modal, $rootScope) {
+    this.deleteStash = function (stash) {
+      $rootScope.skipRefresh = true;
+      var payload = {dc: stash.dc, path: stash.path};
+      backendService.deleteStash(payload)
         .success(function () {
           $rootScope.$emit('notification', 'success', 'The stash has been deleted.');
-          element.acknowledged = !element.acknowledged;
+          for (var i=0; $rootScope.stashes; i++) {
+            if ($rootScope.stashes[i].path === stash.path) {
+              $rootScope.stashes.splice(i, 1);
+              break;
+            }
+          }
           return true;
         })
         .error(function (error) {
           $rootScope.$emit('notification', 'error', 'The stash was not created. ' + error);
           return false;
         });
-    }
-    else {
-      data.payload = {path: path, content: {'reason': item.reason, 'source': 'uchiwa'}};
-      if (item.expiration && item.expiration !== -1){
-        data.payload.expire = item.expiration;
+    };
+    this.find = function(stashes, item) {
+      var path = this.getPath(item);
+      return _.findWhere(stashes, {
+        dc: item.dc,
+        path: path
+      });
+    };
+    this.getExpirationFromDateRange = function(stash) {
+      if (angular.isUndefined(stash) || !angular.isObject(stash) || angular.isUndefined(stash.content) || !angular.isObject(stash.content)) {
+        return stash;
       }
-      data.payload.content.timestamp = Math.floor(new Date()/1000);
-      if (item.content && item.content.timestamp) {
-        data.payload.content.timestamp = item.content.timestamp;
+
+      var start = moment(stash.content.from);
+      var end = moment(stash.content.to);
+      var amDifference = $filter('amDifference');
+      var diff = amDifference(end, start, 'seconds');
+
+      stash.content.timestamp = start.unix();
+      stash.expiration = diff;
+      return stash;
+    };
+    this.getPath = function(item) {
+      var path = ['silence'];
+      var hasCheck = true;
+
+      // get client name
+      if (angular.isUndefined(item) || !angular.isObject(item)) {
+        $rootScope.$emit('notification', 'error', 'Cannot handle this stash. Try to refresh the page.');
+        return false;
       }
       else {
-        data.payload.content.timestamp = Math.floor(new Date()/1000);
-      }
-      backendService.createStash(data)
-        .success(function () {
-          $rootScope.$emit('notification', 'success', 'The stash has been created.');
-          element.acknowledged = !element.acknowledged;
-          return true;
-        })
-        .error(function (error) {
-          $rootScope.$emit('notification', 'error', 'The stash was not created. ' + error);
-          return false;
-        });
-    }
-  };
-  this.deleteStash = function (stash) {
-    $rootScope.skipRefresh = true;
-    var data = {dc: stash.dc, payload: {path: stash.path}};
-    backendService.deleteStash(data)
-      .success(function () {
-        $rootScope.$emit('notification', 'success', 'The stash has been deleted.');
-        for (var i=0; $rootScope.stashes; i++) {
-          if ($rootScope.stashes[i].path === stash.path) {
-            $rootScope.stashes.splice(i, 1);
-            break;
+        if (angular.isUndefined(item.client)) {
+          path.push(item.name);
+          hasCheck = false;
+        }
+        else {
+          if (angular.isObject(item.client)) {
+            path.push(item.client.name);
+          }
+          else {
+            path.push(item.client);
           }
         }
-        return true;
-      })
-      .error(function (error) {
-        $rootScope.$emit('notification', 'error', 'The stash was not created. ' + error);
-        return false;
-      });
-  };
+      }
+
+      // get check name
+      if (hasCheck && angular.isDefined(item.check)) {
+        if (angular.isObject(item.check)) {
+          path.push(item.check.name);
+        }
+        else {
+          path.push(item.check);
+        }
+      }
+
+      return path.join('/');
+    };
+    this.stash = function (e, i) {
+      var items = _.isArray(i) ? i : new Array(i);
+      var event = e || window.event;
+      event.stopPropagation();
+
+      if (items.length === 0) {
+        $rootScope.$emit('notification', 'error', 'No items selected');
+      } else {
+        var modalInstance = $modal.open({ // jshint ignore:line
+          templateUrl: $rootScope.partialsPath + '/stash-modal.html',
+          controller: 'StashModalCtrl',
+          resolve: {
+            items: function () {
+              return items;
+            }
+          }
+        });
+      }
+    };
+    this.submit = function (element, item) {
+      var dc = element.dc;
+      var isAcknowledged = element.acknowledged;
+      var payload = {};
+      var path = this.getPath(element);
+
+      if (angular.isUndefined(item.reason)) {
+        item.reason = '';
+      }
+
+      $rootScope.skipRefresh = true;
+      if (isAcknowledged) {
+        payload = {dc: dc, path: path};
+        backendService.deleteStash(payload)
+          .success(function () {
+            $rootScope.$emit('notification', 'success', 'The stash has been deleted.');
+            element.acknowledged = !element.acknowledged;
+            return true;
+          })
+          .error(function (error) {
+            $rootScope.$emit('notification', 'error', 'The stash was not created. ' + error);
+            return false;
+          });
+      }
+      else {
+        payload = {content: {'reason': item.reason, 'source': 'uchiwa'}, dc: dc, path: path};
+
+        // add expire attribute
+        if (item.expiration && item.expiration !== -1){
+          payload.expire = item.expiration;
+        }
+
+        // add timestamp attribute
+        if (angular.isUndefined(payload.content.timestamp)) {
+          payload.content.timestamp = Math.floor(new Date()/1000);
+        }
+        else {
+          payload.content.timestamp = item.content.timestamp;
+        }
+
+        // post payload
+        backendService.postStash(payload)
+          .success(function () {
+            $rootScope.$emit('notification', 'success', 'The stash has been created.');
+            element.acknowledged = !element.acknowledged;
+            return true;
+          })
+          .error(function (error) {
+            $rootScope.$emit('notification', 'error', 'The stash was not created. ' + error);
+            return false;
+          });
+      }
+    };
 }]);
 
 /**
