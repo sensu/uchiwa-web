@@ -52,6 +52,11 @@ directiveModule.directive('siteTheme', ['conf', '$cookieStore', '$rootScope', fu
       var setTheme = function (theme) {
         var themeName = angular.isDefined(theme) ? theme : conf.theme;
         scope.currentTheme = lookupTheme(themeName);
+
+        if (angular.isUndefined(scope.currentTheme)) {
+          scope.currentTheme = $rootScope.themes[0];
+        }
+
         var name = scope.currentTheme.name;
         var enterprise = scope.currentTheme.enterprise || false;
 

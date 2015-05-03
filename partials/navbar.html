@@ -7,6 +7,21 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
       <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown" dropdown ng-if="auth">
+          <a href class="dropdown-toggle" dropdown-toggle>
+            <span class="fullname">{{auth.FullName}}</span>
+            <img class="gravatar" gravatar-src-once="auth.Email" gravatar-size="30">
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#settings"><i class="fa fa-gear"></i> Settings</a>
+            </li>
+            <li>
+              <a href ng-click="logout()"><i class="fa fa-sign-out"></i> Logout</a>
+            </li>
+         </ul>
+        </li>
+
         <li id="info">
           <a href="#info">
             <span tooltip-placement="bottom" tooltip-trigger tooltip="Info">
@@ -15,18 +30,10 @@
           </a>
         </li>
 
-        <li id="settings">
+        <li id="settings" ng-if="!auth">
           <a href="#settings">
             <span tooltip-placement="bottom" tooltip-trigger tooltip="Settings">
               <i class="fa fa-gear"></i>
-            </span>
-          </a>
-        </li>
-
-        <li id="logout" ng-if="auth">
-          <a href="#" ng-click="logout()">
-            <span tooltip-placement="bottom" tooltip-trigger tooltip="Logout">
-              <i class="fa fa-sign-out"></i>
             </span>
           </a>
         </li>
