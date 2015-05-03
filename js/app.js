@@ -78,7 +78,7 @@ angular.module('uchiwa')
 angular.module('ui.gravatar').config([
   'gravatarServiceProvider', function(gravatarServiceProvider) {
     gravatarServiceProvider.defaults = {
-      "default": 'mm'
+      'default': 'mm'
     };
     gravatarServiceProvider.secure = true;
   }
