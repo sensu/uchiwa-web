@@ -15,6 +15,7 @@ module.exports = function(config) {
       'bower_components/moment/min/moment.min.js',
       'bower_components/angular-moment/angular-moment.js',
       'bower_components/highlightjs/highlight.pack.js',
+      'bower_components/angular-gravatar/build/angular-gravatar.js',
       'js/**/*.js',
       'test/karma/**/*.js'
     ],
