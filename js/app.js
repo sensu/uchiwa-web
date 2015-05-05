@@ -15,7 +15,8 @@ angular.module('uchiwa', [
   // 3rd party dependencies
   'angularMoment',
   'toastr',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ui.gravatar'
 ]);
 
 angular.module('uchiwa')
@@ -72,3 +73,13 @@ angular.module('uchiwa')
     }
   });
 });
+
+// Gravatar
+angular.module('ui.gravatar').config([
+  'gravatarServiceProvider', function(gravatarServiceProvider) {
+    gravatarServiceProvider.defaults = {
+      'default': 'mm'
+    };
+    gravatarServiceProvider.secure = true;
+  }
+]);
