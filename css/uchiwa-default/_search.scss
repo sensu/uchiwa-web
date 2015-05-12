@@ -20,6 +20,24 @@
   font-size: 22px;
 }
 
+.search-results {
+  color: $navbar-text-color;
+  position: absolute;
+  height: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding-left: 0;
+  padding-right: 4px !important;
+  padding-top: 7px;
+}
+
+.search-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+
 .navbar .uchiwa-search .form-control {
   @include placeholder {
     color: $search-text-color;

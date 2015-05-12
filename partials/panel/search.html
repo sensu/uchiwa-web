@@ -1,3 +1,6 @@
   <div class="col-xs-3 pull-right nopadding">
+    <span class="col-xs-3 search-container nopadding">
       <input type="text" class="form-control" placeholder="Search" ng-model="filters.q" ng-change="permalink($event, 'q', filters.q)">
+      <span class="search-results" ng-if="filters.q != ''">{{ filtered.length }} Items</span>
+    </span>
   </div>
