@@ -310,8 +310,8 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
 
     $scope.selectEvents = function(selectModel) {
       var filteredEvents = $filter('filter')($rootScope.events, $scope.filters.q);
+      filteredEvents = $filter('filter')(filteredEvents, $scope.filters.check);
       filteredEvents = $filter('filter')(filteredEvents, {dc: $scope.filters.dc});
-      filteredEvents = $filter('filter')(filteredEvents, {dc: $scope.filters.check});
       filteredEvents = $filter('hideSilenced')(filteredEvents, $scope.filters.silenced);
       filteredEvents = $filter('hideClientSilenced')(filteredEvents, $scope.filters.clientSilenced);
       filteredEvents = $filter('hideOccurrences')(filteredEvents, $scope.filters.occurrences);
