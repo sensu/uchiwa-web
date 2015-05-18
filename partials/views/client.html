@@ -58,7 +58,7 @@
             </div>
             <div class="col-xs-6">
               <div class="panel-icon">
-                <span class="pull-right" ng-if="user.canPost()">
+                <span class="pull-right" ng-if="!user.isReadOnly()">
                   <span class="dropdown" ng-click="stash($event, client)" dropdown-toggle>
                     <i class="fa {{client.acknowledged | getAckClass }}"></i>
                   </span>
@@ -105,7 +105,7 @@
           <tbody>
             <tr ng-repeat="check in client.history | orderBy:predicate:reverse" ng-click="permalink($event,'check', check.check)">
               <td class="well-{{ check.last_status | getStatusClass }}">
-                <i class="fa {{check.acknowledged | getAckClass }} dropdown" ng-click="stash($event, check)" ng-if="user.canPost()"></i>
+                <i class="fa {{check.acknowledged | getAckClass }} dropdown" ng-click="stash($event, check)" ng-if="!user.isReadOnly()"></i>
               </td>
               <td class="main" >{{ check.check }}</td>
               <td class="check-output" ng-bind-html="check.output | linky" ng-click="helpers.openLink($event)"></td>
@@ -127,7 +127,7 @@
             </div>
             <div class="col-xs-6">
               <div class="panel-icon">
-                <span class="pull-right" ng-if="user.canPost()">
+                <span class="pull-right" ng-if="!user.isReadOnly()">
                   <span class="dropdown" ng-click="stash($event, selectedCheck)">
                     <i class="fa {{selectedCheck.acknowledged | getAckClass }}"></i>
                   </span>

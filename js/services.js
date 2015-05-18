@@ -460,18 +460,13 @@ function ($cookieStore, $location, $rootScope) {
       return 'operator';
     }
   };
-  this.canPost = function () {
-    var role = getRole();
-    if (role === 'operator' || role === 'admin') {
+  this.isReadOnly = function () {
+    if (angular.isUndefined($rootScope.auth.Role.Readonly)) {
       return true;
     }
-    return false;
+    return $rootScope.auth.Role.Readonly;
   };
   this.isAdmin = function () {
-    var role = getRole();
-    if (role === 'admin') {
-      return true;
-    }
     return false;
   };
   this.logout = function () {
