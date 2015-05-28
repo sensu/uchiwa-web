@@ -277,7 +277,7 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
     $scope.filters = {};
 
     // Routing
-    routingService.initFilters($routeParams, $scope.filters, ['dc', 'limit', 'q']);
+    routingService.initFilters($routeParams, $scope.filters, ['dc', 'check', 'limit', 'q']);
     $scope.$on('$locationChangeSuccess', function(){
       routingService.updateFilters($routeParams, $scope.filters);
     });
@@ -310,6 +310,7 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
 
     $scope.selectEvents = function(selectModel) {
       var filteredEvents = $filter('filter')($rootScope.events, $scope.filters.q);
+      filteredEvents = $filter('filter')(filteredEvents, $scope.filters.check);
       filteredEvents = $filter('filter')(filteredEvents, {dc: $scope.filters.dc});
       filteredEvents = $filter('hideSilenced')(filteredEvents, $scope.filters.silenced);
       filteredEvents = $filter('hideClientSilenced')(filteredEvents, $scope.filters.clientSilenced);
@@ -342,6 +343,13 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
 
     $scope.$watch('filters.dc', function(newVal) {
       var matched = $filter('filter')($rootScope.events, {dc: '!'+newVal});
+      _.each(matched, function(match) {
+        match.selected = false;
+      });
+    });
+
+    $scope.$watch('filters.check', function(newVal) {
+      var matched = $filter('filter')($rootScope.events, {check: '!'+newVal});
       _.each(matched, function(match) {
         match.selected = false;
       });

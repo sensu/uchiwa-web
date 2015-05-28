@@ -37,6 +37,19 @@ filterModule.filter('buildEvents', function() {
   };
 });
 
+filterModule.filter('buildEventCount', function() {
+  return function(events) {
+    var eventCount = {};
+    angular.forEach(events, function(event) {
+      if (eventCount[event.check.name] === 'undefined' || !eventCount[event.check.name]) {
+        eventCount[event.check.name] = 0;
+      }
+      eventCount[event.check.name] = eventCount[event.check.name] + 1;
+    });
+    return eventCount;
+  };
+});
+
 filterModule.filter('buildStashes', function() {
   return function(stashes) {
     if (Object.prototype.toString.call(stashes) !== '[object Array]') {

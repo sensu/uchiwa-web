@@ -1,0 +1,22 @@
+<div class="dropdown" dropdown>
+  <span dropdown-toggle class="action" ng-if="filters.check == ''">
+    All Checks <i class="fa fa-caret-down"></i>
+  </span>
+  <span dropdown-toggle class="action" ng-if="filters.check != ''">
+    {{filters.check}} <i class="fa fa-caret-down"></i>
+  </span>
+  <ul class="dropdown-menu">
+    <li ng-class="{selected: filters.check == ''}">
+      <a href="" ng-click="permalink($event, 'check', '')">
+        <i class="fa fa-slack"></i>
+        All Checks
+      </a>
+    </li>
+    <li ng-repeat="(check, count) in events | buildEventCount" ng-class="{selected: filters.check == check}">
+      <a href="" ng-click="permalink($event, 'check', check)">
+        <i class="fa fa-slack"></i>
+          {{check}} ({{count}})
+      </a>
+    </li>
+  </ul>
+</div>
