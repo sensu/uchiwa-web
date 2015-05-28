@@ -40,9 +40,6 @@ serviceModule.service('backendService', ['conf', '$http', '$interval', '$locatio
     this.getConfigAuth = function () {
       return $http.get('config/auth');
     };
-    this.getHealth = function () {
-      return $http.get('health/sensu');
-    };
     this.getSensu = function () {
       return $http.get('get_sensu');
     };
@@ -60,10 +57,6 @@ serviceModule.service('backendService', ['conf', '$http', '$interval', '$locatio
         $rootScope.skipRefresh = false;
         return;
       }
-      self.getHealth()
-      .success(function (data) {
-        $rootScope.health = data;
-      });
       self.getSensu()
       .success(function (data) {
         angular.forEach(data, function(value, key) { // initialize null elements
@@ -72,9 +65,10 @@ serviceModule.service('backendService', ['conf', '$http', '$interval', '$locatio
           }
         });
 
+        $rootScope.aggregates = data.Aggregates;
         $rootScope.checks = data.Checks;
         $rootScope.dc = data.Dc;
-        $rootScope.aggregates = data.Aggregates;
+        $rootScope.health = data.Health;
 
         $rootScope.clients = _.map(data.Clients, function(client) {
           var existingClient = _.findWhere($rootScope.clients, {name: client.name, dc: client.dc});
@@ -210,7 +204,7 @@ serviceModule.service('navbarServices', ['$rootScope', function ($rootScope) {
   this.health = function () {
     var alerts = [];
     if (angular.isObject($rootScope.health)) {
-      angular.forEach($rootScope.health, function(value, key) {
+      angular.forEach($rootScope.health.sensu, function(value, key) {
         if (value.output !== 'ok') {
           alerts.push('Datacenter <strong>' + key + '</strong> returned: <em>' + value.output + '</em>');
         }
@@ -461,10 +455,10 @@ function ($cookieStore, $location, $rootScope) {
     }
   };
   this.isReadOnly = function () {
-    if (angular.isUndefined($rootScope.auth.Role.Readonly)) {
-      return true;
+    if ($rootScope.auth && $rootScope.auth.Role && angular.isDefined($rootScope.auth.Role.Readonly)) {
+      return $rootScope.auth.Role.Readonly;
     }
-    return $rootScope.auth.Role.Readonly;
+    return false;
   };
   this.isAdmin = function () {
     return false;

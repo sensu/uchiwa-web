@@ -62,7 +62,6 @@ angular.module('uchiwa')
   $rootScope.$on('$routeChangeSuccess', function () {
     backendService.update();
     $rootScope.auth = $cookieStore.get('uchiwa_auth') || false;
-    console.log($rootScope.auth)
   });
 
   $rootScope.$on('notification', function (event, type, message) {

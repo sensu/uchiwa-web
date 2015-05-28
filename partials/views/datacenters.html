@@ -34,17 +34,17 @@
             <tbody>
               <tr ng-repeat="datacenter in dc | orderBy:'name'">
                 <td class="main">{{ datacenter.name }}</td>
-                <td>{{ datacenter.version }}</td>
+                <td>{{ datacenter.info.sensu.version }}</td>
                 <td>
-                  <span ng-if="!datacenter.transport">Not</span> Connected
+                  <span ng-if="!datacenter.info.redis.connected">Not</span> Connected
                 </td>
                 <td>
-                  <span ng-if="!datacenter.redis">Not</span> Connected
+                  <span ng-if="!datacenter.info.transport.connected">Not</span> Connected
                 </td>
-                <td>{{ datacenter.events }}</td>
-                <td>{{ datacenter.clients }}</td>
-                <td>{{ datacenter.checks }}</td>
-                <td>{{ datacenter.stashes }}</td>
+                <td>{{ datacenter.stats.events }}</td>
+                <td>{{ datacenter.stats.clients }}</td>
+                <td>{{ datacenter.stats.checks }}</td>
+                <td>{{ datacenter.stats.stashes }}</td>
               </tr>
             </tbody>
           </table>
