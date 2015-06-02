@@ -447,13 +447,6 @@ serviceModule.service('helperService', function() {
 */
 serviceModule.service('userService', ['$cookieStore', '$location', '$rootScope',
 function ($cookieStore, $location, $rootScope) {
-  var getRole = function () {
-    if ($rootScope.auth) {
-      return $rootScope.auth.Role;
-    } else {
-      return 'operator';
-    }
-  };
   this.isReadOnly = function () {
     if ($rootScope.auth && $rootScope.auth.Role && angular.isDefined($rootScope.auth.Role.Readonly)) {
       return $rootScope.auth.Role.Readonly;

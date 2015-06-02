@@ -52,7 +52,7 @@ describe('services', function () {
       }));
 
       it('returns a single alert when one datacenters is not ok', inject(function (navbarServices) {
-        $rootScope.health = { foo: { output: "ok" }, bar: { output: "critical" } };
+        $rootScope.health = {sensu: { foo: { output: "ok" }, bar: { output: "critical" }}};
         navbarServices.health();
         expect($rootScope.alerts).toEqual([ 'Datacenter <strong>bar</strong> returned: <em>critical</em>' ]);
       }));
