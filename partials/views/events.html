@@ -16,7 +16,7 @@
               <! --dc-->
               <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
               <! --actions-->
-              <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents" ng-if="user.canPost()"></panel-actions>
+              <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents" ng-if="!user.isReadOnly()"></panel-actions>
               <! --hide-->
               <ng-include src="partialsPath + '/panel/hide.html'"></ng-include>
               <! --count-->
@@ -35,7 +35,7 @@
             <thead>
               <tr>
                 <th class="col-min">
-                  <input type="checkbox" ng-model="selectModel.selected" ng-change="selectEvents(selectModel)" ng-if="user.canPost()"></input>
+                  <input type="checkbox" ng-model="selectModel.selected" ng-change="selectEvents(selectModel)" ng-if="!user.isReadOnly()"></input>
                 </th>
                 <th class="col-sm-3" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
                 <th class="col-sm-3" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
@@ -48,16 +48,16 @@
             <tbody>
               <tr ng-repeat="event in filtered = (events | buildEvents | orderBy:predicate:reverse | collection:'events' | filter:filters.q | filter:filters.check | filter:{dc:filters.dc}:filterComparator) | hideSilenced:filters.silenced | hideClientSilenced:filters.clientSilenced | hideOccurrences:filters.occurrences | limitTo:filters.limit track by event._id" ng-click="go('/client/'+event.dc+'/'+event.client.name+'?check='+event.check.name)">
                 <td class="well-{{ event.check.status | getStatusClass }}" ng-click="$event.stopPropagation()">
-                  <input type="checkbox" ng-model="event.selected" ng-if="user.canPost()"></input>
+                  <input type="checkbox" ng-model="event.selected" ng-if="!user.isReadOnly()"></input>
                 </td>
                 <td class="source">
-                  <span ng-click="event.client['dc'] = event.dc; stash($event, event.client)" ng-if="user.canPost()">
+                  <span ng-click="event.client['dc'] = event.dc; stash($event, event.client)" ng-if="!user.isReadOnly()">
                     <i class="fa fa-fw {{ event.client.acknowledged | getAckClass }}"></i>
                   </span>
                   <span class="dropdown-toggle" >{{ event.sourceName }}</span>
                 </td>
                 <td class="main">
-                  <span ng-click="stash($event, event)" ng-if="user.canPost()">
+                  <span ng-click="stash($event, event)" ng-if="!user.isReadOnly()">
                     <i class="fa fa-fw {{ event.acknowledged | getAckClass }}"></i>
                   </span>
                   <span class="main check-name" tooltip-placement="top" tooltip-trigger tooltip-html="'Subscriptions<br /><small>{{event.check.subscribers|arrayToString}}</small>'">{{ event.check.name }}</span>

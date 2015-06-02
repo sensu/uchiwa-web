@@ -16,7 +16,7 @@
               <! --dc-->
               <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
               <! --actions-->
-              <panel-actions data="clients" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients" ng-if="user.canPost()"></panel-actions>
+              <panel-actions data="clients" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients" ng-if="!user.isReadOnly()"></panel-actions>
               <! --subscriptions-->
               <ng-include src="partialsPath + '/panel/subscriptions.html'"></ng-include>
               <! --limit-->
@@ -33,9 +33,9 @@
             <thead>
               <tr>
                 <th class="col-min">
-                  <input type="checkbox" ng-model="selectModel.selected" ng-change="selectClients(selectModel)"  ng-if="user.canPost()"></input>
+                  <input type="checkbox" ng-model="selectModel.selected" ng-change="selectClients(selectModel)"  ng-if="!user.isReadOnly()"></input>
                 </th>
-                <th class="col-min" ng-if="user.canPost()"></th>
+                <th class="col-min" ng-if="!user.isReadOnly()"></th>
                 <th class="col-sm-2" ng-click="predicate = 'name'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
                 <th class="col-sm-2" ng-click="predicate = 'address'; reverse=!reverse">IP <i class="fa fa-sort"></i></th>
                 <th class="col-sm-5" ng-click="predicate = 'output'; reverse=!reverse">Events <i class="fa fa-sort"></i></th>
@@ -47,9 +47,9 @@
             <tbody>
               <tr ng-repeat="client in filtered = (clients | orderBy:predicate:reverse | collection:'clients' | filter:filters.q | filter:{dc:filters.dc}:filterComparator) | filterSubscriptions:filters.subscription | limitTo:filters.limit track by $index" ng-click="go('/client/'+client.dc+'/'+client.name)">
                 <td class="well-{{ client.status | getStatusClass }}" ng-click="$event.stopPropagation()">
-                  <input type="checkbox" ng-model="client.selected" = ng-if="user.canPost()"></input>
+                  <input type="checkbox" ng-model="client.selected" = ng-if="!user.isReadOnly()"></input>
                 </td>
-                <td ng-click="stash($event, client)" ng-if="user.canPost()">
+                <td ng-click="stash($event, client)" ng-if="!user.isReadOnly()">
                   <i class="fa {{ client.acknowledged | getAckClass }}"></i>
                 </td>
                 <td class="main"><span tooltip-placement="top" tooltip-trigger tooltip-html="'Subscriptions<br /><small>{{client.subscriptions|arrayToString}}</small>'">{{ client.name }}</span></td>
