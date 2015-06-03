@@ -542,13 +542,13 @@ controllerModule.controller('StashModalCtrl', ['conf', '$filter', 'items', '$mod
     };
     $scope.stash.reason = '';
     $scope.stash.expiration = 900;
-    $scope.stash.content.from = moment().format(conf.date);
+    $scope.stash.content.to = moment().add(1, 'h').format(conf.date);
 
 
     $scope.ok = function () {
       if ($scope.stash.expiration === 'custom') {
-        if (angular.isUndefined($scope.stash.content.from) || angular.isUndefined($scope.stash.content.to)) {
-          notification('error', 'Please enter both from and to values.');
+        if (angular.isUndefined($scope.stash.content.to)) {
+          notification('error', 'Please enter a date for the custom expiration.');
           return false;
         }
         $scope.stash = stashesService.getExpirationFromDateRange($scope.stash);

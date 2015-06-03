@@ -133,15 +133,10 @@ describe('services', function () {
 
     describe('getExpirationFromDateRange', function () {
       it('returns the proper expiration & timestamp attributes', inject(function (stashesService){
-        var stash = {content: { from: '2015-01-01 00:00:01', to: '2015-02-01 00:00:01'}}
+        var stash = {content: { to: '2015-02-01 00:00:01'}}
         stash = stashesService.getExpirationFromDateRange(stash);
-        expect(stash.expiration).toEqual(2678400);
-        expect(stash.content.timestamp).toEqual(1420088401);
-
-        stash.content.to = '2015-01-02 00:00:01'
-        stash = stashesService.getExpirationFromDateRange(stash);
-        expect(stash.expiration).toEqual(86400);
-        expect(stash.content.timestamp).toEqual(1420088401);
+        expect(stash.expiration).toBeLessThan(-10000000);
+        expect(stash.content.timestamp).toBeGreaterThan(1000000000);
       }));
     });
 
