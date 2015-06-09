@@ -7,8 +7,8 @@
   </h3>
   <h3 class="modal-title" ng-if="acknowledged != items.length">
     <ng-pluralize count="items.length"
-                  when="{'one': 'Create a stash...',
-                        'other': 'Create stashes...'}">
+                  when="{'one': 'Create a silence stash...',
+                        'other': 'Create silence stashes...'}">
     </ng-pluralize>
   </h3>
 </div>
@@ -83,13 +83,9 @@
       </div>
 
       <div ng-show="stash.expiration === 'custom'">
-        <div style="float:left">
-          <h5>From</h5>
-          <input type="text" ng-model="stash.content.from" placeholder="yyyy/mm/dd hh:mm:ss"/>
-        </div>
-        <div style="float:left">
-          <h5>To</h5>
-          <input type="text" ng-model="stash.content.to" placeholder="yyyy/mm/dd hh:mm:ss">
+        <div class="mb15" style="float:left">
+          <h5>Expiration date</h5>
+          <input type="text" ng-model="stash.content.to" placeholder="yyyy-mm-dd hh:mm:ss">
         </div>
       </div>
       <div style="clear:both">

@@ -266,8 +266,8 @@ serviceModule.service('routingService', ['$location', function ($location) {
 /**
 * Stashes
 */
-serviceModule.service('stashesService', ['backendService', '$filter', '$modal', '$rootScope',
-  function (backendService, $filter, $modal, $rootScope) {
+serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$modal', '$rootScope',
+  function (backendService, conf, $filter, $modal, $rootScope) {
     this.deleteStash = function (stash) {
       $rootScope.skipRefresh = true;
       var payload = {dc: stash.dc, path: stash.path};
@@ -299,12 +299,13 @@ serviceModule.service('stashesService', ['backendService', '$filter', '$modal', 
         return stash;
       }
 
-      var start = moment(stash.content.from);
+      var now = moment();
+      var start = now.format(conf.date);
       var end = moment(stash.content.to);
       var amDifference = $filter('amDifference');
       var diff = amDifference(end, start, 'seconds');
 
-      stash.content.timestamp = start.unix();
+      stash.content.timestamp = now.unix();
       stash.expiration = diff;
       return stash;
     };
