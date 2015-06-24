@@ -10,14 +10,14 @@
           <div class="row">
             <div class="col-xs-12">
               <!-- title -->
-              <ul class="breadcrumb" ng-if="!selectedCheck">
+              <ul class="breadcrumb" ng-if="!currentCheck">
                 <li><a href="#/clients">Clients</a></li>
                 <li class="active">{{client.name}}</li>
               </ul>
-              <ul class="breadcrumb" ng-if="selectedCheck">
+              <ul class="breadcrumb" ng-if="currentCheck">
                 <li><a href="#/events">Events</a></li>
                 <li><a ng-href="#/client/{{client.dc | encodeURIComponent}}/{{client.name | encodeURIComponent}}">{{client.name}}</a></li>
-                <li class="active">{{selectedCheck.check}}</li>
+                <li class="active">{{currentCheck.check}}</li>
               </ul>
             </div>
           </div>
@@ -89,8 +89,8 @@
 
     <div class="col-lg-8">
 
-      <!-- Client History -->
-      <div class="panel panel-default panel-body client-checks" ng-if="!selectedCheck">
+      <!-- Client checks history -->
+      <div class="panel panel-default panel-body client-checks" ng-if="!currentCheck">
         <table class="table table-hover table-condensed" style="table-layout: fixed;">
           <thead>
             <tr>
@@ -115,74 +115,56 @@
         </table>
       </div>
 
-      <!-- Check view -->
-      <div class="panel panel-default check-info" ng-if="selectedCheck">
+      <!-- Check details -->
+      <div class="panel panel-default check-info" ng-if="currentCheck">
         <div class="panel-body">
 
           <div class="row mb15">
             <div class="col-xs-6">
               <div class="panel-title">
-                <i ng-if="client.status" status-glyph="{{ selectedCheck.last_status }}"></i> {{ selectedCheck.check }}
+                <i ng-if="client.status" status-glyph="{{ currentCheck.last_status }}"></i> {{ currentCheck.check }}
               </div>
             </div>
             <div class="col-xs-6">
               <div class="panel-icon">
                 <span class="pull-right" ng-if="!user.isReadOnly()">
-                  <span class="dropdown" ng-click="stash($event, selectedCheck)">
-                    <i class="fa {{selectedCheck.acknowledged | getAckClass }}"></i>
+                  <span class="dropdown" ng-click="stash($event, currentCheck)">
+                    <i class="fa {{currentCheck.acknowledged | getAckClass }}"></i>
                   </span>
-                  <i class="fa fa-check" tooltip-placement="top" tooltip-trigger tooltip="Resolve" ng-click="resolveEvent(client.dc, client, selectedCheck)" ng-if="selectedEvent"></i>
+                  <i class="fa fa-check" tooltip-placement="top" tooltip-trigger tooltip="Resolve" ng-click="resolveEvent(client.dc, client, currentCheck)" ng-if="checkIsEvent"></i>
                 </span>
               </div>
             </div>
           </div>
 
-          <!-- Event details -->
-          <div ng-if="selectedEvent">
-            <div ng-repeat="(key, value) in selectedEvent.check">
+          <!--  list of key - value -->
+          <div>
+            <div ng-repeat="(key, value) in currentCheck.model">
               <div class="row">
                 <div class="col-sm-2">
                   <span class="key pull-right">{{key}}</span>
                 </div>
                 <div class="col-sm-10">
-                  <span class="value" ng-bind-html="value | getTimestamp | richOutput"></span>
+                  <span class="value" ng-bind-html="value"></span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Check details -->
-          <div ng-if="!selectedEvent">
-            <div class="row">
-              <div class="col-sm-2">
-                <span class="key pull-right">last execution</span>
+        </div>
+      </div>
+
+      <!-- Check images -->
+      <div class="panel panel-default check-info" ng-if="currentCheck" ng-repeat="image in images">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="panel-title">
+                {{image.key}}
               </div>
-              <div class="col-sm-10">
-                <span class="value">{{selectedCheck.last_execution | getTimestamp}}</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-2">
-                <span class="key pull-right">history</span>
-              </div>
-              <div class="col-sm-10">
-                <span class="value">{{selectedCheck.history}}</span>
-              </div>
-            </div>
-            <div ng-repeat="(key, value) in selectedCheck.model">
-              <span ng-show="sanitizeObject('check', key)">
-                <div class="row">
-                  <div class="col-sm-2">
-                    <span class="key pull-right">{{key}}</span>
-                  </div>
-                  <div class="col-sm-10">
-                    <span class="value" ng-bind-html="value | displayObject | richOutput"></span>
-                  </div>
-                </div>
-              </span>
+              <span class="value" ng-bind-html="image.value"></span>
             </div>
           </div>
-
         </div>
       </div>
     </div>
