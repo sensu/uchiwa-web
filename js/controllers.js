@@ -104,8 +104,8 @@ controllerModule.controller('checks', ['filterService', '$routeParams', 'routing
 /**
 * Client
 */
-controllerModule.controller('client', ['backendService', 'clientsService', 'conf', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope','stashesService', 'userService',
-  function (backendService, clientsService, conf, notification, titleFactory, $routeParams, routingService, $scope, stashesService, userService) {
+controllerModule.controller('client', ['backendService', 'clientsService', 'conf', '$filter', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope','stashesService', 'userService',
+  function (backendService, clientsService, conf, $filter, notification, titleFactory, $routeParams, routingService, $scope, stashesService, userService) {
 
     $scope.predicate = '-last_status';
     $scope.missingClient = false;
@@ -129,37 +129,66 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
     $scope.pull();
     var timer = setInterval($scope.pull, conf.refresh);
 
+    // return the events or the client's history
+    var updateCheck = function() {
+      // get the check name
+      var requestedCheck = decodeURI($routeParams.check);
+
+      if (requestedCheck !== "undefined") {
+        var currentCheck = getCheck(requestedCheck, $scope.client.history);
+        $scope.checkIsEvent = false;
+
+
+        // search for an event
+        var event = getEvent($scope.client.name, requestedCheck, $scope.events);
+        if (angular.isObject(event)) {
+          $scope.checkIsEvent = true;
+          currentCheck.model = event.check;
+        }
+        else {
+          currentCheck.model.history = currentCheck.history;
+          currentCheck.model.last_execution = currentCheck.last_execution;
+        }
+
+        // apply filters
+        var images = [];
+        angular.forEach(currentCheck.model, function(value, key) {
+          value = $filter('getTimestamp')(value);
+          value = $filter('richOutput')(value);
+
+          if (/<img src=/.test(value)) {
+            var obj = {};
+            obj["key"] = key;
+            obj["value"] = value;
+            images.push(obj);
+            delete currentCheck.model[key];
+          } else {
+            currentCheck.model[key] = value;
+          }
+        });
+        $scope.images = images;
+        $scope.currentCheck = currentCheck;
+
+        titleFactory.set(requestedCheck + ' - ' + $scope.client.name);
+      }
+      else {
+        $scope.currentCheck = null;
+        titleFactory.set($scope.client.name);
+      }
+
+    }
+
+    // Update view when after receiving client's data
     $scope.$on('client', function (event, data) {
       $scope.client = data;
       $scope.pageHeaderText = $scope.client.name;
 
-      // Retrieve check & event
-      $scope.requestedCheck = decodeURI($routeParams.check);
-      $scope.selectedCheck = getCheck($scope.requestedCheck, $scope.client.history);
-      $scope.selectedEvent = getEvent($scope.client.name, $scope.requestedCheck, $scope.events);
-
-      // Set page titleFactory
-      if(angular.isDefined($scope.selectedCheck)) {
-        titleFactory.set($scope.requestedCheck + ' - ' + $scope.client.name);
-      }
-      else {
-        titleFactory.set($scope.client.name);
-      }
+      updateCheck();
     });
 
-    // Routing
+    // Update check on route update
     $scope.$on('$routeUpdate', function(){
-      // Retrieve check & event
-      $scope.requestedCheck = decodeURI($routeParams.check);
-      $scope.selectedCheck = getCheck($scope.requestedCheck, $scope.client.history);
-      $scope.selectedEvent = getEvent($scope.client.name, $scope.requestedCheck, $scope.events);
-
-      if(angular.isDefined($scope.selectedCheck)) {
-        titleFactory.set($scope.requestedCheck + ' - ' + $scope.client.name);
-      }
-      else {
-        titleFactory.set($scope.client.name);
-      }
+      updateCheck();
     });
 
     $scope.$on('$destroy', function() {
