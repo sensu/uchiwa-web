@@ -417,8 +417,8 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
     backendService.login($scope.login)
     .success(function (data) {
       $cookieStore.put('uchiwa_auth', data);
-      backendService.getConfig();
       $location.path('/');
+      backendService.getConfig();
     })
     .error(function () {
       notification('error', 'There was an error with your username/password combination. Please try again.');
