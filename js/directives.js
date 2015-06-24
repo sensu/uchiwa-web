@@ -40,7 +40,7 @@ directiveModule.directive('relativeTime', ['$filter', '$rootScope', function ($f
   };
 }]);
 
-directiveModule.directive('siteTheme', ['conf', '$cookieStore', '$rootScope', function (conf, $cookieStore, $rootScope) {
+directiveModule.directive('siteTheme', ['conf', '$cookies', '$rootScope', function (conf, $cookies, $rootScope) {
   return {
     restrict: 'EA',
     link: function (scope, element) {
@@ -60,7 +60,9 @@ directiveModule.directive('siteTheme', ['conf', '$cookieStore', '$rootScope', fu
         var name = scope.currentTheme.name;
         var enterprise = scope.currentTheme.enterprise || false;
 
-        $cookieStore.put('uchiwa_theme', name);
+        var oneYearExpiration = new Date();
+        oneYearExpiration.setYear(oneYearExpiration.getFullYear()+1);
+        $cookies.put('uchiwa_theme', name, { "expires": oneYearExpiration });
 
         var path = enterprise ? 'css/' : 'bower_components/uchiwa-web/css/';
         element.attr('href', path + name + '/' + name + '.css');
@@ -68,7 +70,7 @@ directiveModule.directive('siteTheme', ['conf', '$cookieStore', '$rootScope', fu
       scope.$on('theme:changed', function (event, theme) {
         setTheme(theme.name);
       });
-      var currentTheme = $cookieStore.get('uchiwa_theme');
+      var currentTheme = $cookies.get('uchiwa_theme');
       setTheme(currentTheme);
     }
   };
