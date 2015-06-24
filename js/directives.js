@@ -60,7 +60,9 @@ directiveModule.directive('siteTheme', ['conf', '$cookieStore', '$rootScope', fu
         var name = scope.currentTheme.name;
         var enterprise = scope.currentTheme.enterprise || false;
 
-        $cookieStore.put('uchiwa_theme', name);
+        var oneYearExpiration = new Date();
+        oneYearExpiration.setYear(oneYearExpiration.getFullYear()+1);
+        $cookieStore.put('uchiwa_theme', name, { "expires": oneYearExpiration });
 
         var path = enterprise ? 'css/' : 'bower_components/uchiwa-web/css/';
         element.attr('href', path + name + '/' + name + '.css');
