@@ -148,6 +148,9 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
         else {
           currentCheck.model.history = currentCheck.history;
           currentCheck.model.last_execution = currentCheck.last_execution;
+          if (currentCheck.output !== null) {
+            currentCheck.model.output = currentCheck.output;
+          }
         }
 
         // apply filters
