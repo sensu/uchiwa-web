@@ -5,8 +5,8 @@
     </div>
     <div class="login-form">
       <form ng-submit="submit()">
-        <input ng-model="login.user" name="user" type="text" placeholder="username">
-        <input ng-model="login.pass" name="pass" type="password" placeholder="password">
+        <input ng-model="login.user" name="user" type="text" placeholder="username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <input ng-model="login.pass" name="pass" type="password" placeholder="password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <button class="btn btn-default btn-block login" type="submit">Login</button>
       </form>
       <form action="/login/oauth" ng-if="configAuth === 'github'">
