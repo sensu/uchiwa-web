@@ -134,7 +134,7 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
       // get the check name
       var requestedCheck = decodeURI($routeParams.check);
 
-      if (requestedCheck !== "undefined") {
+      if (requestedCheck !== 'undefined') {
         var currentCheck = getCheck(requestedCheck, $scope.client.history);
         $scope.checkIsEvent = false;
 
@@ -147,7 +147,7 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
         }
         else {
           currentCheck.model.history = currentCheck.history;
-          currentCheck.model.last_execution = currentCheck.last_execution;
+          currentCheck.model.last_execution = currentCheck.last_execution; // jshint ignore:line
           if (currentCheck.output !== null) {
             currentCheck.model.output = currentCheck.output;
           }
@@ -161,8 +161,8 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
 
           if (/<img src=/.test(value)) {
             var obj = {};
-            obj["key"] = key;
-            obj["value"] = value;
+            obj.key = key;
+            obj.value = value;
             images.push(obj);
             delete currentCheck.model[key];
           } else {
@@ -179,7 +179,7 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
         titleFactory.set($scope.client.name);
       }
 
-    }
+    };
 
     // Update view when after receiving client's data
     $scope.$on('client', function (event, data) {

@@ -62,7 +62,7 @@ directiveModule.directive('siteTheme', ['conf', '$cookies', '$rootScope', functi
 
         var oneYearExpiration = new Date();
         oneYearExpiration.setYear(oneYearExpiration.getFullYear()+1);
-        $cookies.put('uchiwa_theme', name, { "expires": oneYearExpiration });
+        $cookies.put('uchiwa_theme', name, { 'expires': oneYearExpiration });
 
         var path = enterprise ? 'css/' : 'bower_components/uchiwa-web/css/';
         element.attr('href', path + name + '/' + name + '.css');
