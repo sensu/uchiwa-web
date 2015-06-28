@@ -116,11 +116,10 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
     $scope.pull = function() {
       backendService.getClient($scope.clientId, $scope.dcId)
         .success(function (data) {
+          $scope.missingClient = false;
           $scope.$emit('client', data);
         })
         .error(function (error) {
-          // Stop the pulling interval and set scope to display an error message
-          clearTimeout(timer);
           $scope.missingClient = true;
           console.error('Error: '+ JSON.stringify(error));
         });
