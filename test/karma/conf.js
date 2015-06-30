@@ -21,8 +21,9 @@ module.exports = function(config) {
     ],
     reporters: ['junit', 'coverage', 'dots'],
     coverageReporter: {
-      type: 'html',
-      dir: 'build/coverage/'
+      type: 'lcov',
+      dir: 'build/coverage/',
+      subdir: '.'
     },
     preprocessors: {
       'js/**/*.js': ['coverage']
