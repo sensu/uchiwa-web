@@ -145,6 +145,10 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
           currentCheck.model = event.check;
         }
         else {
+          if (!angular.isObject(currentCheck.model)) {
+            currentCheck.model = { standalone: true };
+          }
+
           currentCheck.model.history = currentCheck.history;
           currentCheck.model.last_execution = currentCheck.last_execution; // jshint ignore:line
           if (currentCheck.output !== null) {
