@@ -167,7 +167,7 @@ describe('filters', function () {
   describe('getAckClass', function () {
 
     it('should return icon based on acknowledgment', inject(function (getAckClassFilter) {
-      expect(getAckClassFilter(true)).toBe('fa-volume-off');
+      expect(getAckClassFilter(true)).toBe('fa-volume-off fa-stack-1x');
       expect(getAckClassFilter(null)).toBe('fa-volume-up');
     }));
 

@@ -50,7 +50,7 @@
                   <input type="checkbox" ng-model="client.selected" = ng-if="!user.isReadOnly()"></input>
                 </td>
                 <td ng-click="stash($event, client)" ng-if="!user.isReadOnly()">
-                  <i class="fa {{ client.acknowledged | getAckClass }}"></i>
+                  <silence-icon acknowledged="client.acknowledged"></silence-icon>
                 </td>
                 <td class="main"><span tooltip-placement="top" tooltip-trigger tooltip-html="'Subscriptions<br /><small>{{client.subscriptions|arrayToString}}</small>'">{{ client.name }}</span></td>
                 <td>{{ client.address }}</td>

@@ -338,6 +338,11 @@ pre.hljs .hljs-string {
 .show-on-hover:hover > div.dropdown-menu {
   display: block; }
 
+.fa-stack {
+  height: 1.4em;
+  line-height: 1.4em;
+  vertical-align: top; }
+
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */

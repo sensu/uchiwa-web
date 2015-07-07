@@ -60,7 +60,7 @@
               <div class="panel-icon">
                 <span class="pull-right" ng-if="!user.isReadOnly()">
                   <span class="dropdown" ng-click="stash($event, client)" dropdown-toggle>
-                    <i class="fa {{client.acknowledged | getAckClass }}"></i>
+                    <silence-icon acknowledged="client.acknowledged"></silence-icon>
                   </span>
                   <i class="fa fa-times" tooltip-placement="top" tooltip-trigger tooltip="Delete" ng-click="deleteClient(client.dc, client.name)"></i>
                 </span>
@@ -104,8 +104,8 @@
           </thead>
           <tbody>
             <tr ng-repeat="check in client.history | orderBy:predicate:reverse" ng-click="permalink($event,'check', check.check)">
-              <td class="well-{{ check.last_status | getStatusClass }}">
-                <i class="fa {{check.acknowledged | getAckClass }} dropdown" ng-click="stash($event, check)" ng-if="!user.isReadOnly()"></i>
+              <td class="well-{{ check.last_status | getStatusClass }} dropdown" ng-click="stash($event, check)" ng-if="!user.isReadOnly()">
+                <silence-icon acknowledged="check.acknowledged" ></silence-icon>
               </td>
               <td class="main" >{{ check.check }}</td>
               <td class="check-output">{{ check.output }}</td>
@@ -129,7 +129,7 @@
               <div class="panel-icon">
                 <span class="pull-right" ng-if="!user.isReadOnly()">
                   <span class="dropdown" ng-click="stash($event, currentCheck)">
-                    <i class="fa {{currentCheck.acknowledged | getAckClass }}"></i>
+                    <silence-icon acknowledged="currentCheck.acknowledged"></silence-icon>
                   </span>
                   <i class="fa fa-check" tooltip-placement="top" tooltip-trigger tooltip="Resolve" ng-click="resolveEvent(client.dc, client, currentCheck)" ng-if="checkIsEvent"></i>
                 </span>
