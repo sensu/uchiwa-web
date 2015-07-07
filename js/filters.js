@@ -102,7 +102,7 @@ filterModule.filter('filterSubscriptions', function() {
 
 filterModule.filter('getAckClass', function() {
   return function(isAcknowledged) {
-    return (isAcknowledged) ? 'fa-volume-off' : 'fa-volume-up';
+    return (isAcknowledged) ? 'fa-volume-off fa-stack-1x' : 'fa-volume-up';
   };
 });
 

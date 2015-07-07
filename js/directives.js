@@ -40,6 +40,19 @@ directiveModule.directive('relativeTime', ['$filter', '$rootScope', function ($f
   };
 }]);
 
+directiveModule.directive('silenceIcon', ['$filter', function ($filter) {
+  return {
+    restrict: 'E',
+    scope: {
+      acknowledged: '='
+    },
+    template: '<span class="fa-stack"> \
+      <i class="fa fa-fw {{ acknowledged | getAckClass }}"></i> \
+      <i class="fa fa-ban fa-stack-1x text-danger" ng-if="acknowledged"></i> \
+      </span>'
+  };
+}]);
+
 directiveModule.directive('siteTheme', ['conf', '$cookies', '$rootScope', function (conf, $cookies, $rootScope) {
   return {
     restrict: 'EA',
@@ -92,7 +105,7 @@ directiveModule.directive('statusGlyph', ['$filter', function ($filter) {
             element.addClass('fa-exclamation-circle');
             break;
           case 2:
-            element.addClass('fa-bomb');
+            element.addClass('fa-times-circle-o');
             break;
           case 3:
             element.addClass('fa-question-circle');
