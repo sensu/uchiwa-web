@@ -40,18 +40,18 @@ directiveModule.directive('relativeTime', ['$filter', '$rootScope', function ($f
   };
 }]);
 
-directiveModule.directive('silenceIcon', ['$filter', function ($filter) {
+directiveModule.directive('silenceIcon', function () {
   return {
     restrict: 'E',
     scope: {
       acknowledged: '='
     },
-    template: '<span class="fa-stack"> \
-      <i class="fa fa-fw {{ acknowledged | getAckClass }}"></i> \
-      <i class="fa fa-ban fa-stack-1x text-danger" ng-if="acknowledged"></i> \
-      </span>'
+    template: '<span class="fa-stack">' +
+      '<i class="fa fa-fw {{ acknowledged | getAckClass }}"></i>' +
+      '<i class="fa fa-ban fa-stack-1x text-danger" ng-if="acknowledged"></i>' +
+      '</span>'
   };
-}]);
+});
 
 directiveModule.directive('siteTheme', ['conf', '$cookies', '$rootScope', function (conf, $cookies, $rootScope) {
   return {
