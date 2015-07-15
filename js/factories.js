@@ -2,6 +2,17 @@
 
 var factoryModule = angular.module('uchiwa.factories', []);
 
+factoryModule.factory('audit', function ($http, $rootScope) {
+  return {
+    log: function (payload) {
+      if (!$rootScope.auth) {
+        return;
+      }
+      return $http.post('audit', payload);
+    }
+  };
+});
+
 factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, userService) {
   return {
     request: function (config) {

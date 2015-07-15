@@ -434,8 +434,8 @@ controllerModule.controller('info', ['backendService', '$scope', 'titleFactory',
 /**
 * Login
 */
-controllerModule.controller('login', [ 'backendService', '$cookieStore', '$location', 'notification', '$rootScope', '$scope',
-function (backendService, $cookieStore, $location, notification, $rootScope, $scope) {
+controllerModule.controller('login', ['audit', 'backendService', '$cookieStore', '$location', 'notification', '$rootScope', '$scope',
+function (audit, backendService, $cookieStore, $location, notification, $rootScope, $scope) {
 
   $scope.login = {user: '', pass: ''};
 
@@ -452,8 +452,17 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
     backendService.login($scope.login)
     .success(function (data) {
       $cookieStore.put('uchiwa_auth', data);
-      $location.path('/');
+      $rootScope.auth = {};
+      $location.path('/events');
       backendService.getConfig();
+
+      if ($rootScope.enterprise) {
+        var username = data.username;
+        if (angular.isUndefined(username)) {
+          username = '';
+        }
+        audit.log({action: 'login', level: 'default'});
+      }
     })
     .error(function () {
       notification('error', 'There was an error with your username/password combination. Please try again.');
@@ -461,7 +470,7 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
   };
 
   if (angular.isObject($rootScope.auth) || angular.isObject($rootScope.config)) {
-    $location.path('/');
+    $location.path('/events');
   }
 }
 ]);
@@ -469,8 +478,8 @@ function (backendService, $cookieStore, $location, notification, $rootScope, $sc
 /**
 * Navbar
 */
-controllerModule.controller('navbar', ['$location', '$rootScope', '$scope', 'navbarServices', 'routingService', 'userService',
-  function ($location, $rootScope, $scope, navbarServices, routingService, userService) {
+controllerModule.controller('navbar', ['audit', '$location', '$rootScope', '$scope', 'navbarServices', 'routingService', 'userService',
+  function (audit, $location, $rootScope, $scope, navbarServices, routingService, userService) {
 
     // Helpers
     $scope.getClass = function(path) {
@@ -483,8 +492,20 @@ controllerModule.controller('navbar', ['$location', '$rootScope', '$scope', 'nav
 
     // Services
     $scope.go = routingService.go;
-    $scope.logout = userService.logout;
     $scope.user = userService;
+
+    $scope.logout = function() {
+      if ($rootScope.enterprise) {
+        var username = userService.getUsername();
+        audit.log({action: 'logout', level: 'default', user: username}).finally(
+          function() {
+            userService.logout();
+          });
+      }
+      else {
+        userService.logout();
+      }
+    };
   }
 ]);
 
