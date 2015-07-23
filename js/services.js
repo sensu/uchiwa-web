@@ -5,19 +5,28 @@ var serviceModule = angular.module('uchiwa.services', []);
 /**
 * Uchiwa
 */
-serviceModule.service('backendService', ['conf', '$http', '$interval', '$location', '$rootScope', '$timeout',
-  function(conf, $http, $interval, $location, $rootScope, $timeout){
+serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', '$location', '$rootScope', '$timeout',
+  function(audit, conf, $http, $interval, $location, $rootScope, $timeout){
     var self = this;
     this.auth = function () {
       return $http.get('auth');
     };
     this.postStash = function (payload) {
+      if ($rootScope.enterprise) {
+        audit.log({action: 'create_stash', level: 'default', output: angular.toJson(payload)});
+      }
       return $http.post('stashes', payload);
     };
     this.deleteClient = function (client, dc) {
+      if ($rootScope.enterprise) {
+        audit.log({action: 'delete_client', level: 'default', output: dc+'/'+client});
+      }
       return $http.get('delete_client?id=' + client + '&dc=' + dc );
     };
     this.deleteStash = function (payload) {
+      if ($rootScope.enterprise) {
+        audit.log({action: 'delete_stash', level: 'default', output: angular.toJson(payload)});
+      }
       return $http.post('stashes/delete', payload);
     };
     this.getClient = function (client, dc) {
@@ -448,6 +457,12 @@ serviceModule.service('helperService', function() {
 */
 serviceModule.service('userService', ['$cookieStore', '$location', '$rootScope',
 function ($cookieStore, $location, $rootScope) {
+  this.getUsername = function () {
+    if ($rootScope.auth && $rootScope.username) {
+      return $rootScope.auth.username;
+    }
+    return '';
+  };
   this.isReadOnly = function () {
     if ($rootScope.auth && $rootScope.auth.Role && angular.isDefined($rootScope.auth.Role.Readonly)) {
       return $rootScope.auth.Role.Readonly;
