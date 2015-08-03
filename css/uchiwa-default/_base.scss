@@ -97,9 +97,17 @@ a {
   color: $critical-color;
 }
 
+.absolute {
+  position: absolute;
+}
+
 .nopadding {
    padding: 0 !important;
    margin: 0 !important;
+}
+
+.p20 {
+  padding: 20px;
 }
 
 pre.hljs {

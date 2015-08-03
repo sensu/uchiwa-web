@@ -19,6 +19,8 @@
               <panel-actions data="clients" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients" ng-if="!user.isReadOnly()"></panel-actions>
               <! --subscriptions-->
               <ng-include src="partialsPath + '/panel/subscriptions.html'"></ng-include>
+              <! --status-->
+              <ng-include src="partialsPath + '/panel/status.html'"></ng-include>
               <! --limit-->
               <panel-limit data="clients" filters="filters" permalink="permalink"></panel-limit>
               <! --search-->
@@ -45,7 +47,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="client in filtered = (clients | orderBy:predicate:reverse | collection:'clients' | filter:filters.q | filter:{dc:filters.dc}:filterComparator) | filterSubscriptions:filters.subscription | limitTo:filters.limit track by $index" ng-click="go('/client/'+client.dc+'/'+client.name)">
+              <tr ng-repeat="client in filtered = (clients | orderBy:predicate:reverse | collection:'clients' | filter:filters.q | filter:{dc:filters.dc}:filterComparator) | filter:{status:filters.status} | filterSubscriptions:filters.subscription | limitTo:filters.limit track by $index" ng-click="go('/client/'+client.dc+'/'+client.name)">
                 <td class="well-{{ client.status | getStatusClass }}" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="client.selected" = ng-if="!user.isReadOnly()"></input>
                 </td>

@@ -19,8 +19,10 @@
               <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents" ng-if="!user.isReadOnly()"></panel-actions>
               <! --hide-->
               <ng-include src="partialsPath + '/panel/hide.html'"></ng-include>
-              <! --count-->
+              <! --checks-->
               <ng-include src="partialsPath + '/panel/check.html'"></ng-include>
+              <! --status-->
+              <ng-include src="partialsPath + '/panel/status.html'"></ng-include>
               <! --limit-->
               <panel-limit data="events" filters="filters" permalink="permalink"></panel-limit>
               <! --search-->
@@ -46,7 +48,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="event in filtered = (events | buildEvents | orderBy:predicate:reverse | collection:'events' | filter:filters.q | filter:filters.check | filter:{dc:filters.dc}:filterComparator) | hideSilenced:filters.silenced | hideClientSilenced:filters.clientSilenced | hideOccurrences:filters.occurrences | limitTo:filters.limit track by event._id" ng-click="go('/client/'+event.dc+'/'+event.client.name+'?check='+event.check.name)">
+              <tr ng-repeat="event in filtered = (events | buildEvents | orderBy:predicate:reverse | collection:'events' | filter:filters.q | filter:filters.check | filter:{dc:filters.dc}:filterComparator) | filter:{check:{status:filters.status}} | hideSilenced:filters.silenced | hideClientSilenced:filters.clientSilenced | hideOccurrences:filters.occurrences | limitTo:filters.limit track by event._id" ng-click="go('/client/'+event.dc+'/'+event.client.name+'?check='+event.check.name)">
                 <td class="well-{{ event.check.status | getStatusClass }}" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="event.selected" ng-if="!user.isReadOnly()"></input>
                 </td>
