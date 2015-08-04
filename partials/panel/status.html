@@ -1,0 +1,20 @@
+<div class="dropdown" dropdown>
+  <span dropdown-toggle class="action" ng-if="filters.status === ''">
+    All Status <i class="fa fa-caret-down"></i>
+  </span>
+  <span dropdown-toggle class="action" ng-repeat="(key, value) in {0: 'Success', 1: 'Warning', 2: 'Critical', 3: 'Unknown'}" ng-if="filters.status !== '' && filters.status === key">
+    {{value}} <i class="fa fa-caret-down"></i>
+  </span>
+  <ul class="dropdown-menu">
+    <li ng-class="{selected: filters.status === ''}">
+      <a href="" ng-click="permalink($event, 'status', '')">
+        All Status
+      </a>
+    </li>
+    <li ng-repeat="(key, value) in statuses" ng-class="{selected: filters.status === key}">
+      <a href="" ng-click="permalink($event, 'status', key)">
+        {{value}}
+      </a>
+    </li>
+  </ul>
+</div>

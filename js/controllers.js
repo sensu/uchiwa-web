@@ -230,10 +230,11 @@ controllerModule.controller('clients', ['clientsService', '$filter', 'filterServ
     titleFactory.set($scope.pageHeaderText);
 
     $scope.predicate = ['-status', 'name'];
+    $scope.statuses = {0: 'Healthy', 1: 'Warning', 2: 'Critical', 3: 'Unknown'};
 
     // Routing
     $scope.filters = {};
-    routingService.initFilters($routeParams, $scope.filters, ['dc', 'subscription', 'limit', 'q']);
+    routingService.initFilters($routeParams, $scope.filters, ['dc', 'subscription', 'limit', 'q', 'status']);
     $scope.$on('$locationChangeSuccess', function(){
       routingService.updateFilters($routeParams, $scope.filters);
     });
@@ -249,6 +250,7 @@ controllerModule.controller('clients', ['clientsService', '$filter', 'filterServ
     $scope.selectClients = function(selectModel) {
       var filteredClients = $filter('filter')($rootScope.clients, $scope.filters.q);
       filteredClients = $filter('filter')(filteredClients, {dc: $scope.filters.dc});
+      filteredClients = $filter('filter')(filteredClients, {status: $scope.filters.status});
       filteredClients = $filter('hideSilenced')(filteredClients, $scope.filters.silenced);
       _.each(filteredClients, function(client) {
         client.selected = selectModel.selected;
@@ -287,6 +289,13 @@ controllerModule.controller('clients', ['clientsService', '$filter', 'filterServ
         match.selected = false;
       });
     });
+
+    $scope.$watch('filters.status', function(newVal) {
+      var matched = $filter('filter')($rootScope.clients, {status: '!'+newVal});
+      _.each(matched, function(match) {
+        match.selected = false;
+      });
+    });
   }
 ]);
 
@@ -310,9 +319,10 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
 
     $scope.predicate = ['-check.status', '-check.issued'];
     $scope.filters = {};
+    $scope.statuses = {1: 'Warning', 2: 'Critical', 3: 'Unknown'};
 
     // Routing
-    routingService.initFilters($routeParams, $scope.filters, ['dc', 'check', 'limit', 'q']);
+    routingService.initFilters($routeParams, $scope.filters, ['dc', 'check', 'limit', 'q', 'status']);
     $scope.$on('$locationChangeSuccess', function(){
       routingService.updateFilters($routeParams, $scope.filters);
     });
@@ -347,6 +357,7 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
       var filteredEvents = $filter('filter')($rootScope.events, $scope.filters.q);
       filteredEvents = $filter('filter')(filteredEvents, $scope.filters.check);
       filteredEvents = $filter('filter')(filteredEvents, {dc: $scope.filters.dc});
+      filteredEvents = $filter('filter')(filteredEvents, {check: {status: $scope.filters.status}});
       filteredEvents = $filter('hideSilenced')(filteredEvents, $scope.filters.silenced);
       filteredEvents = $filter('hideClientSilenced')(filteredEvents, $scope.filters.clientSilenced);
       filteredEvents = $filter('hideOccurrences')(filteredEvents, $scope.filters.occurrences);
@@ -385,6 +396,13 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
 
     $scope.$watch('filters.check', function(newVal) {
       var matched = $filter('filter')($rootScope.events, {check: '!'+newVal});
+      _.each(matched, function(match) {
+        match.selected = false;
+      });
+    });
+
+    $scope.$watch('filters.status', function(newVal) {
+      var matched = $filter('filter')($rootScope.events, {check: {status: '!'+newVal}});
       _.each(matched, function(match) {
         match.selected = false;
       });

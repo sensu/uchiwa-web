@@ -11,11 +11,8 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     this.auth = function () {
       return $http.get('auth');
     };
-    this.postStash = function (payload) {
-      if ($rootScope.enterprise) {
-        audit.log({action: 'create_stash', level: 'default', output: angular.toJson(payload)});
-      }
-      return $http.post('stashes', payload);
+    this.dashboard = function () {
+      return $http.get('dashboard');
     };
     this.deleteClient = function (client, dc) {
       if ($rootScope.enterprise) {
@@ -40,9 +37,8 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
         .success(function (data) {
           $rootScope.config = data;
           conf.refresh = data.Uchiwa.Refresh * 1000;
-          $interval(self.update, conf.refresh);
         })
-        .error(function () {
+        .finally(function () {
           $interval(self.update, conf.refresh);
         });
     };
@@ -54,6 +50,9 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     };
     this.login = function (payload) {
       return $http.post('login', payload);
+    };
+    this.postStash = function (payload) {
+      return $http.post('stashes', payload);
     };
     this.resolveEvent = function (payload) {
       return $http.post('post_event', payload);
@@ -172,7 +171,6 @@ serviceModule.service('clientsService', ['$location', '$rootScope', 'backendServ
       });
   };
 }]);
-
 
 /**
 * Filter

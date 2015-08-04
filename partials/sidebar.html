@@ -3,7 +3,14 @@
     <div class="">
       <ul class="nav sidebar-nav">
         <li class="logo"></li>
-        <li id="dashboard" class="show-on-hover" ng-class="getClass('/events')">
+        <li ng-if="enterprise " ng-class="getClass('/dashboard')" >
+          <a ng-href="#dashboard">
+            <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Dashboard">
+              <i class="fa fa-tachometer"></i>
+            </span>
+          </a>
+        </li>
+        <li id="events" class="show-on-hover" ng-class="getClass('/events')">
           <a ng-href="#events" class="dropdown-toggle" data-toggle="dropdown">
             <span class="small-nav">
               <i class="fa fa-bullhorn"></i>

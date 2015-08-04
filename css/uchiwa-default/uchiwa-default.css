@@ -3,6 +3,7 @@
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -90,9 +91,15 @@ a {
 .text-critical {
   color: #EA5443; }
 
+.absolute {
+  position: absolute; }
+
 .nopadding {
   padding: 0 !important;
   margin: 0 !important; }
+
+.p20 {
+  padding: 20px; }
 
 pre.hljs {
   border: 0;
@@ -123,6 +130,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -161,6 +169,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -198,6 +207,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -249,11 +259,15 @@ pre.hljs .hljs-string {
   padding-left: 0;
   padding-right: 0; }
 
+.container-fluid.dashboard {
+  padding-top: 15px; }
+
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -289,11 +303,104 @@ pre.hljs .hljs-string {
   overflow: hidden;
   white-space: nowrap; }
 
+.dashboard .col-xs-4 {
+  padding-right: 0px;
+  padding-left: 5px; }
+
+.dashboard .col-xs-4:last-child {
+  padding-right: 5px; }
+
+.dashboard .col-xs-6 {
+  padding-right: 0px;
+  padding-left: 5px; }
+
+.dashboard .col-xs-6:last-child {
+  padding-right: 5px; }
+
+.dashboard .panel {
+  margin-bottom: 5px; }
+
+.dashboard-panel {
+  height: 100px; }
+
+.dashboard-graph-panel {
+  height: 260px;
+  border: 0; }
+
+.dashboard-graph-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 30px; }
+
+.dashboard-graph-subtitle {
+  font-weight: 400;
+  font-size: 16px; }
+
+.dashboard-title {
+  font-weight: 400 !important; }
+
+.dashboard-subtitle {
+  display: block;
+  font-size: 13px;
+  text-transform: uppercase; }
+
+.dashboard-number {
+  padding-top: 20px;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.0; }
+
+.dashboard-percentage {
+  opacity: 0.9;
+  font-size: 17px;
+  font-weight: 300; }
+
+.dashboard-percentage:after {
+  content: '%';
+  font-size: 13px; }
+
+.dashboard-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 50px;
+  opacity: 0.3; }
+
+.dashboard-panel-silenced, .dashboard-panel-silenced > a {
+  color: #FFFFFF;
+  background-color: #9DA0A6; }
+
+.dashboard-panel-healthy, .dashboard-panel-healthy > a {
+  color: #FFFFFF;
+  background-color: #43ac6a; }
+
+.dashboard-panel-unknown, .dashboard-panel-unknown > a {
+  color: #FFFFFF;
+  background-color: #2C394A; }
+
+.dashboard-panel-critical, .dashboard-panel-critical > a {
+  color: #FFFFFF;
+  background-color: #EA5443; }
+
+.dashboard-panel-warning, .dashboard-panel-warning > a {
+  color: #FFFFFF;
+  background-color: #F9BA46;
+  border: 0px; }
+
+.dashboard-panel-unsupported, .dashboard-panel-unsupported > a {
+  color: #FFFFFF;
+  background-color: #000000; }
+
+.dashboard .rickshaw_graph {
+  position: absolute;
+  bottom: 5px; }
+
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -348,6 +455,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -374,6 +482,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -395,6 +504,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -427,6 +537,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -447,6 +558,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -478,6 +590,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -553,6 +666,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -579,6 +693,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -624,6 +739,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -672,6 +788,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -794,6 +911,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -863,6 +981,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -981,6 +1100,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -1048,6 +1168,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
@@ -1097,6 +1218,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Dashboard */
 /* Dropdown */
 /* Login */
 /* Modal */
