@@ -1,6 +1,6 @@
 {
   "name": "uchiwa-web",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "ignore": [
     "**/.*",
     "node_modules",
