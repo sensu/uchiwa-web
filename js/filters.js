@@ -50,14 +50,14 @@ filterModule.filter('buildEventCount', function() {
     keys = Object.keys(eventCount);
     var len = keys.length;
     keys.sort(alphabetical);
-    var events = {};
+    var eventsCounted = {};
     for (var i = 0; i < len; i++)
     {
         var k = keys[i];
-        events[k] = eventCount[k];
+        eventsCounted[k] = eventCount[k];
     }
     eventCount = {};
-    return events;
+    return eventsCounted;
   };
 
   function alphabetical(a, b)
