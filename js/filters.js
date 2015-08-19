@@ -46,8 +46,32 @@ filterModule.filter('buildEventCount', function() {
       }
       eventCount[event.check.name] = eventCount[event.check.name] + 1;
     });
-    return eventCount;
+    var keys = [];
+    keys = Object.keys(eventCount);
+    var len = keys.length;
+    keys.sort(alphabetical);
+    var events = {};
+    for (var i = 0; i < len; i++)
+    {
+        var k = keys[i];
+        events[k] = eventCount[k];
+    }
+    //console.log(eventCount);
+    return events;
   };
+
+  function alphabetical(a, b)
+  {
+       var A = a.toLowerCase();
+       var B = b.toLowerCase();
+       if (A < B){
+          return -1;
+       }else if (A > B){
+         return  1;
+       }else{
+         return 0;
+       }
+  }
 });
 
 filterModule.filter('buildStashes', function() {
