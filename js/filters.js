@@ -56,7 +56,7 @@ filterModule.filter('buildEventCount', function() {
         var k = keys[i];
         events[k] = eventCount[k];
     }
-    //console.log(eventCount);
+    eventCount = {};
     return events;
   };
 
