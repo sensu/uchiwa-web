@@ -50,7 +50,7 @@ filterModule.filter('buildEventCount', function() {
       return  0;
     }
   }
-  
+
   return function(events) {
     var eventCount = {};
     angular.forEach(events, function(event) {
