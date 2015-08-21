@@ -38,19 +38,6 @@ filterModule.filter('buildEvents', function() {
 });
 
 filterModule.filter('buildEventCount', function() {
-  function alphabetical(a, b)
-  {
-    var A = a.toLowerCase();
-    var B = b.toLowerCase();
-    if (A < B){
-      return -1;
-    }else if (A > B){
-      return  1;
-    }else{
-      return  0;
-    }
-  }
-
   return function(events) {
     var eventCount = {};
     angular.forEach(events, function(event) {
@@ -62,7 +49,9 @@ filterModule.filter('buildEventCount', function() {
     var keys = [];
     keys = Object.keys(eventCount);
     var len = keys.length;
-    keys.sort(alphabetical);
+    keys.sort(function(a, b) {
+      return a.toLowerCase().localeCompare(b.toLowerCase());
+    });
     var eventsCounted = {};
     for (var i = 0; i < len; i++)
     {
