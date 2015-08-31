@@ -46,7 +46,20 @@ filterModule.filter('buildEventCount', function() {
       }
       eventCount[event.check.name] = eventCount[event.check.name] + 1;
     });
-    return eventCount;
+    var keys = [];
+    keys = Object.keys(eventCount);
+    var len = keys.length;
+    keys.sort(function(a, b) {
+      return a.toLowerCase().localeCompare(b.toLowerCase());
+    });
+    var eventsCounted = {};
+    for (var i = 0; i < len; i++)
+    {
+      var k = keys[i];
+      eventsCounted[k] = eventCount[k];
+    }
+    eventCount = {};
+    return eventsCounted;
   };
 });
 
