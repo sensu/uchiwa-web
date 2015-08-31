@@ -5,36 +5,36 @@
     <div class="col-lg-12">
       <div class="panel panel-default">
 
-        <! --panel-heading-->
+        <!--panel-heading-->
         <div class="panel-heading">
           <div class="row">
             <div class="col-xs-12">
-              <! --title-->
+              <!--title-->
               <ng-include src="partialsPath + '/panel/breadcrumb.html'"></ng-include>
             </div>
             <div class="col-xs-12 nopadding">
-              <! --dc-->
+              <!--dc-->
               <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
-              <! --actions-->
+              <!--actions-->
               <panel-actions data="clients" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients" ng-if="!user.isReadOnly()"></panel-actions>
-              <! --subscriptions-->
+              <!--subscriptions-->
               <ng-include src="partialsPath + '/panel/subscriptions.html'"></ng-include>
-              <! --status-->
+              <!--status-->
               <ng-include src="partialsPath + '/panel/status.html'"></ng-include>
-              <! --limit-->
+              <!--limit-->
               <panel-limit data="clients" filters="filters" permalink="permalink"></panel-limit>
-              <! --search-->
+              <!--search-->
               <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
             </div>
           </div>
         </div>
 
-        <! --panel-body-->
+        <!--panel-body-->
         <div class="panel-body">
           <table class="table table-hover table-condensed" style="table-layout: fixed;">
             <thead>
               <tr>
-                <th class="col-min">
+                <th ng-class="user.isReadOnly() ? 'col-min-ro' : 'col-min'">
                   <input type="checkbox" ng-model="selectModel.selected" ng-change="selectClients(selectModel)"  ng-if="!user.isReadOnly()"></input>
                 </th>
                 <th class="col-min" ng-if="!user.isReadOnly()"></th>

@@ -5,11 +5,11 @@
   <div class="row-fluid">
     <div class="col-xs-12">
       <div class="panel panel-default panel-breadcrump">
-        <!-- panel-heading -->
+        <!--panel-heading-->
         <div class="panel-heading">
           <div class="row">
             <div class="col-xs-12">
-              <!-- title -->
+              <!--title-->
               <ul class="breadcrumb" ng-if="!currentCheck">
                 <li><a href="#/clients">Clients</a></li>
                 <li class="active">{{client.name}}</li>
@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <!-- missing client -->
+  <!--missing client-->
   <div class="row-fluid" ng-if='missingClient'>
     <div class="col-lg-12">
       <div class="panel panel-default">
@@ -41,7 +41,7 @@
 
   <div class="row-fluid" ng-if='!missingClient'>
 
-    <!-- client-->
+    <!--client-->
     <div class="col-lg-4">
       <div class="panel panel-default client-info">
         <div class="panel-body">
@@ -89,12 +89,12 @@
 
     <div class="col-lg-8">
 
-      <!-- Client checks history -->
+      <!--Client checks history-->
       <div class="panel panel-default panel-body client-checks" ng-if="!currentCheck">
         <table class="table table-hover table-condensed" style="table-layout: fixed;">
           <thead>
             <tr>
-              <th class="col-min" ng-click="predicate = 'history'; reverse=!reverse"><i class="fa fa-sort"></i></th>
+              <th ng-class="user.isReadOnly() ? 'col-min-ro' : 'col-min'"></th>
               <th class="col-sm-2" ng-click="predicate = 'check'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
               <th class="col-sm-6" ng-click="predicate = 'output'; reverse=!reverse">Output <i class="fa fa-sort"></i></th>
               <th class="col-sm-2" ng-click="predicate = 'last_execution'; reverse=!reverse">
@@ -104,8 +104,8 @@
           </thead>
           <tbody>
             <tr ng-repeat="check in client.history | orderBy:predicate:reverse" ng-click="permalink($event,'check', check.check)">
-              <td class="well-{{ check.last_status | getStatusClass }} dropdown" ng-click="stash($event, check)" ng-if="!user.isReadOnly()">
-                <silence-icon acknowledged="check.acknowledged" ></silence-icon>
+              <td class="well-{{ check.last_status | getStatusClass }}" ng-class="user.isReadOnly() ? '' : 'dropdown'">
+                <silence-icon acknowledged="check.acknowledged" ng-click="stash($event, check)" ng-if="!user.isReadOnly()"></silence-icon>
               </td>
               <td class="main" >{{ check.check }}</td>
               <td class="check-output">{{ check.output }}</td>
@@ -115,7 +115,7 @@
         </table>
       </div>
 
-      <!-- Check details -->
+      <!--Check details-->
       <div class="panel panel-default check-info" ng-if="currentCheck">
         <div class="panel-body">
 
@@ -137,7 +137,7 @@
             </div>
           </div>
 
-          <!--  list of key - value -->
+          <!--list of key - value-->
           <div>
             <div ng-repeat="(key, value) in currentCheck.model">
               <div class="row">
@@ -154,7 +154,7 @@
         </div>
       </div>
 
-      <!-- Check images -->
+      <!--Check images-->
       <div class="panel panel-default check-info" ng-if="currentCheck" ng-repeat="image in images">
         <div class="panel-body">
           <div class="row">
