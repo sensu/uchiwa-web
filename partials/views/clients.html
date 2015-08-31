@@ -34,7 +34,7 @@
           <table class="table table-hover table-condensed" style="table-layout: fixed;">
             <thead>
               <tr>
-                <th class="col-min">
+                <th ng-class="user.isReadOnly() ? 'col-min-ro' : 'col-min'">
                   <input type="checkbox" ng-model="selectModel.selected" ng-change="selectClients(selectModel)"  ng-if="!user.isReadOnly()"></input>
                 </th>
                 <th class="col-min" ng-if="!user.isReadOnly()"></th>
