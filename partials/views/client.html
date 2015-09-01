@@ -28,7 +28,7 @@
 
   <!--missing client-->
   <div class="row-fluid" ng-if='missingClient'>
-    <div class="col-lg-12">
+    <div class="col-xs-12">
       <div class="panel panel-default">
         <div class="panel-body">
           <p class="lead text-center">Could not retrieve the client <strong>{{clientId}}</strong> from the datacenter <strong>{{dcId}}</strong>!</p>
@@ -42,7 +42,7 @@
   <div class="row-fluid" ng-if='!missingClient'>
 
     <!--client-->
-    <div class="col-lg-4">
+    <div class="col-xs-4">
       <div class="panel panel-default client-info">
         <div class="panel-body">
 
@@ -72,10 +72,10 @@
             <div ng-repeat="(key, value) in client">
               <span ng-show="sanitizeObject('client', key)">
                 <div class="row">
-                  <div class="col-sm-4">
+                  <div class="col-xs-4">
                     <div class="key pull-right">{{key}}</div>
                   </div>
-                  <div class="col-sm-8">
+                  <div class="col-xs-8">
                     <div class="value" ng-bind-html="value | displayObject | richOutput"></div>
                   </div>
                 </div>
@@ -87,7 +87,7 @@
       </div>
     </div>
 
-    <div class="col-lg-8">
+    <div class="col-xs-8">
 
       <!--Client checks history-->
       <div class="panel panel-default panel-body client-checks" ng-if="!currentCheck">
@@ -141,10 +141,10 @@
           <div>
             <div ng-repeat="(key, value) in currentCheck.model">
               <div class="row">
-                <div class="col-sm-2">
+                <div class="col-xs-3">
                   <span class="key pull-right">{{key}}</span>
                 </div>
-                <div class="col-sm-10">
+                <div class="col-xs-9">
                   <span class="value" ng-bind-html="value"></span>
                 </div>
               </div>
