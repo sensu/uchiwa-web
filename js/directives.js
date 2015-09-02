@@ -2,6 +2,38 @@
 
 var directiveModule = angular.module('uchiwa.directives', []);
 
+// clientSummary generate the client key/value panel on the client view
+directiveModule.directive('clientSummary', ['$filter', '$rootScope', function ($filter, $rootScope) {
+  return {
+    templateUrl: $rootScope.partialsPath + '/directives/client-summary.html',
+    link: function (scope, element, attrs) {
+      scope.clientSummary = {};
+
+      attrs.$observe('client', function() {
+        scope.images = [];
+        angular.forEach(scope.client, function(value, key) {
+          // Ignore redundant keys
+          var unusedKeys = [ 'acknowledged', 'dc', 'events', 'eventsSummary', 'history', 'output', 'status' ];
+          if (unusedKeys.indexOf(key) === -1) {
+            // Apply filters
+            value = $filter('getTimestamp')(value);
+            value = $filter('richOutput')(value);
+
+            // Move images to their own panels
+            if (/<img src=/.test(value)) {
+              scope.images.push({key: key, value: value});
+              delete scope.clientSummary[key];
+            } else {
+              scope.clientSummary[key] = value;
+              scope.timestamp = scope.client.timestamp;
+            }
+          }
+        });
+      });
+    }
+  };
+}]);
+
 directiveModule.directive('panelActions', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'E',
@@ -33,10 +65,7 @@ directiveModule.directive('relativeTime', ['$filter', '$rootScope', function ($f
     scope: {
       timestamp: '='
     },
-    templateUrl: $rootScope.partialsPath + '/directives/relative-time.html',
-    link: function (scope) {
-      scope.date = $filter('getTimestamp')(scope.timestamp);
-    }
+    templateUrl: $rootScope.partialsPath + '/directives/relative-time.html'
   };
 }]);
 

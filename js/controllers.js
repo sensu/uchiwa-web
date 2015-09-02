@@ -181,14 +181,12 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
         $scope.currentCheck = null;
         titleFactory.set($scope.client.name);
       }
-
     };
 
     // Update view when after receiving client's data
     $scope.$on('client', function (event, data) {
       $scope.client = data;
       $scope.pageHeaderText = $scope.client.name;
-
       updateCheck();
     });
 
@@ -200,15 +198,6 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
     $scope.$on('$destroy', function() {
       clearInterval(timer);
     });
-
-    // Sanitize - only display useful information 'acknowledged', 'dc', 'events', 'eventsSummary', 'history', 'status', 'timestamp'
-    /* jshint ignore:start */
-    var clientWhitelist = [ 'acknowledged', 'dc', 'events', 'eventsSummary', 'history', 'output', 'status', 'timestamp' ];
-    var checkWhitelist = [ 'dc', 'hasSubscribers', 'name'];
-    $scope.sanitizeObject = function(type, key){
-      return eval(type + 'Whitelist').indexOf(key) === -1;
-    };
-    /* jshint ignore:end */
 
     // Services
     $scope.deleteClient = clientsService.deleteClient;
