@@ -1140,6 +1140,9 @@ li.timestamp .relative-timestamp {
   overflow: hidden;
   white-space: nowrap; }
 
+.table td.dc {
+  word-break: break-all; }
+
 .table th.col-min {
   width: 4%; }
 
