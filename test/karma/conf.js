@@ -16,6 +16,7 @@ module.exports = function(config) {
       'bower_components/angular-moment/angular-moment.js',
       'bower_components/highlightjs/highlight.pack.js',
       'bower_components/angular-gravatar/build/angular-gravatar.js',
+      'partials/**/*.html',
       'js/**/*.js',
       'test/karma/**/*.js'
     ],
@@ -25,8 +26,12 @@ module.exports = function(config) {
       dir: 'build/coverage/',
       subdir: '.'
     },
+    ngHtml2JsPreprocessor: {
+        moduleName: 'partials'
+    },
     preprocessors: {
-      'js/**/*.js': ['coverage']
+      'js/**/*.js': ['coverage'],
+      'partials/**/*.html': ['ng-html2js']
     },
     junitReporter: {
       outputFile: 'build/karma/test-results.xml'
