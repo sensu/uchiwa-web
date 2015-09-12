@@ -88,6 +88,9 @@ hr {
 a {
   color: #5F97FB; }
 
+[ng-click] {
+  cursor: pointer; }
+
 .text-critical {
   color: #EA5443; }
 
@@ -449,10 +452,6 @@ pre.hljs .hljs-string {
   height: 1.4em;
   line-height: 1.4em;
   vertical-align: top; }
-
-.fa-times {
-  padding-right: 5px;
-}
 
 /* Colors */
 /* Body, Sections and Headers */
