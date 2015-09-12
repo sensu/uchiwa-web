@@ -101,7 +101,18 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
           return existingEvent || event;
         });
 
-        $rootScope.stashes = data.Stashes;
+        $rootScope.stashes = _.map(data.Stashes, function(stash) {
+          if (stash.dc === null && stash.path === null) {
+            return false;
+          }
+          stash._id = stash.dc + '/' + stash.path + '/' + stash.content.timestamp;
+          var existingStash = _.findWhere($rootScope.stashes, {_id: stash._id});
+          if (existingStash !== undefined) {
+            stash = angular.extend(existingStash, stash);
+          }
+          return existingStash || stash;
+        });
+
         $rootScope.subscriptions = data.Subscriptions;
 
         $timeout(function() {

@@ -565,13 +565,14 @@ controllerModule.controller('sidebar', ['$location', 'navbarServices', '$scope',
 /**
 * Stashes
 */
-controllerModule.controller('stashes', ['filterService', '$routeParams', 'routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
-  function (filterService, $routeParams, routingService, $scope, stashesService, titleFactory, userService) {
+controllerModule.controller('stashes', ['filterService', '$routeParams', 'routingService', '$filter', '$scope', '$rootScope', 'stashesService', 'titleFactory', 'userService', 'helperService',
+  function (filterService, $routeParams, routingService, $filter, $scope, $rootScope, stashesService, titleFactory, userService, helperService) {
     $scope.pageHeaderText = 'Stashes';
     titleFactory.set($scope.pageHeaderText);
 
     $scope.predicate = 'client';
     $scope.deleteStash = stashesService.deleteStash;
+    $scope.selectAll = {checked: false};
 
     // Routing
     $scope.filters = {};
@@ -584,6 +585,23 @@ controllerModule.controller('stashes', ['filterService', '$routeParams', 'routin
     $scope.filterComparator = filterService.comparator;
     $scope.permalink = routingService.permalink;
     $scope.user = userService;
+
+    $scope.selectStashes = function(selectAll) {
+      var filteredStashes = $filter('filter')($rootScope.stashes, $scope.filters.q);
+      filteredStashes = $filter('filter')(filteredStashes, {dc: $scope.filters.dc});
+      _.each(filteredStashes, function(stash) {
+        stash.selected = selectAll.checked;
+      });
+    };
+
+    $scope.deleteStashes = function(stashes) {
+      var selectedStashes = helperService.selectedItems(stashes);
+      _.each(selectedStashes, function(stash) {
+        $scope.deleteStash(stash);
+      });
+      helperService.unselectItems(selectedStashes);
+      $scope.selectAll.checked = false;
+    };
   }
 ]);
 

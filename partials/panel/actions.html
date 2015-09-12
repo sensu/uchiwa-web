@@ -3,13 +3,13 @@
     Actions <i class="fa fa-caret-down"></i>
   </span>
   <ul class="dropdown-menu">
-    <li>
+    <li ng-if="resolveFn">
       <a href="" ng-click="resolveFn(data)">
         <i class="fa fa-times fa-fw"></i>
-        {{resolveLegend}}
+        {{resolveLegend}} {{angular.isFunction(silenceFn)}}
       </a>
     </li>
-    <li>
+    <li ng-if="silenceFn">
       <a href="" ng-click="silenceFn($event, data)">
         <i class="fa fa-volume-up fa-fw"></i>
         Silence/Unsilence

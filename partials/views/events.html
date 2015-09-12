@@ -50,7 +50,8 @@
             <tbody>
               <tr ng-repeat="event in filtered = (events | buildEvents | orderBy:predicate:reverse | collection:'events' | filter:filters.q | filter:filters.check | filter:{dc:filters.dc}:filterComparator) | filter:{check:{status:filters.status}} | hideSilenced:filters.silenced | hideClientSilenced:filters.clientSilenced | hideOccurrences:filters.occurrences | limitTo:filters.limit track by event._id" ng-click="go('/client/'+event.dc+'/'+event.client.name+'?check='+event.check.name)">
                 <td class="well-{{ event.check.status | getStatusClass }}" ng-click="$event.stopPropagation()">
-                  <input type="checkbox" ng-model="event.selected" ng-if="!user.isReadOnly()"></input>
+                  <!-- adding ng-click to get event info -->
+                  <input type="checkbox" ng-click="eventInfo(event, events)" ng-model="event.selected" ng-if="!user.isReadOnly()"></input>
                 </td>
                 <td class="source">
                   <span ng-click="event.client['dc'] = event.dc; stash($event, event.client)" ng-if="!user.isReadOnly()">

@@ -450,6 +450,10 @@ pre.hljs .hljs-string {
   line-height: 1.4em;
   vertical-align: top; }
 
+.fa-times {
+  padding-right: 5px;
+}
+
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */
