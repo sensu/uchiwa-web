@@ -240,8 +240,10 @@ serviceModule.service('routingService', ['$location', function ($location) {
     'limit': 50
   };
   this.go = function (path) {
-    path = encodeURI(path);
-    $location.url(path);
+    if (window.getSelection().toString() === '') {
+      path = encodeURI(path);
+      $location.url(path);
+    }
   };
   this.deleteEmptyParameter = function (routeParams, key) {
     if (routeParams[key] === '') {
