@@ -9,7 +9,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown" dropdown ng-if="auth">
           <a href class="dropdown-toggle" dropdown-toggle>
-            <span class="fullname">{{auth.FullName}}</span>
+            <span class="fullname">{{auth.FullName || auth.Username}}</span>
             <img class="gravatar" gravatar-src-once="auth.Email" gravatar-size="30">
           </a>
           <ul class="dropdown-menu">
