@@ -363,10 +363,20 @@ label,
 
 .progress {
   height: 22px;
-  padding: 2px;
+  padding: 0;
   background-color: #f6f6f6;
-  border: 1px solid #ccc;
+  border: 0;
   @include box-shadow(none);
+}
+
+.progress-bar {
+  overflow: hidden;
+  @include box-shadow(none);
+
+  &-default {
+    background-color: $btn-default-bg;
+    color: $btn-default-color;
+  }
 }
 
 // Containers =================================================================

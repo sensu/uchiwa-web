@@ -59,6 +59,24 @@ directiveModule.directive('panelLimit', ['$rootScope', function ($rootScope) {
   };
 }]);
 
+directiveModule.directive('progressBar', ['$filter', '$rootScope', function ($filter, $rootScope) {
+  return {
+    restrict: 'E',
+    scope: {
+      aggregate: '='
+    },
+    templateUrl: $rootScope.partialsPath + '/directives/progress-bar.html',
+    link: function (scope, element, attrs) {
+      attrs.$observe('aggregate', function() {
+        scope.critical = $filter('number')(scope.aggregate.critical / scope.aggregate.total * 100, 0);
+        scope.success = $filter('number')(scope.aggregate.ok / scope.aggregate.total * 100, 0);
+        scope.unknown = $filter('number')(scope.aggregate.unknown / scope.aggregate.total * 100, 0);
+        scope.warning = $filter('number')(scope.aggregate.warning / scope.aggregate.total * 100, 0);
+      });
+    }
+  };
+}]);
+
 directiveModule.directive('relativeTime', ['$filter', '$rootScope', function ($filter, $rootScope) {
   return {
     restrict: 'E',

@@ -73,6 +73,10 @@
                 <td><span class="label label-success">{{aggregate.ok}}</span></td>
               </tr>
               <tr>
+                <td>Warning</td>
+                <td><span class="label label-warning">{{aggregate.warning}}</span></td>
+              </tr>
+              <tr>
                 <td>Critical</td>
                 <td><span class="label label-danger">{{aggregate.critical}}</span></td>
               </tr>
@@ -80,12 +84,10 @@
                 <td>Unknown</td>
                 <td><span class="label label-default">{{aggregate.unknown}}</span></td>
               </tr>
-              <tr>
-                <td>Warning</td>
-                <td><span class="label label-warning">{{aggregate.warning}}</span></td>
-              </tr>
             </tbody>
           </table>
+
+          <progress-bar aggregate="aggregate"></progress-bar>
 
         </div>
       </div>
