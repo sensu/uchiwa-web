@@ -46,9 +46,9 @@
             </thead>
             <tbody>
               <tr ng-repeat="stash in filtered = (stashes | collection:'stashes' | filter:filters.q | filter:{dc:filters.dc}:filterComparator) | limitTo:filters.limit | buildStashes | orderBy:predicate:reverse">
-                <td class="well-{{ event.check.status }}" ng-click="$event.stopPropagation()">
+                <td ng-if="!user.isReadOnly()">
                   <!-- adding ng-click to get stash info -->
-                  <input type="checkbox" ng-click="stashInfo(stash, filtered)" ng-model="stash.selected" ng-if="!user.isReadOnly()"></input>
+                  <input type="checkbox" ng-click="stashInfo(stash, filtered)" ng-model="stash.selected"></input>
                 </td>
                 <td class="main"><span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteStash(stash);"></i></span>{{ stash.client }}</td>
                 <td>{{ stash.check }}</td>
