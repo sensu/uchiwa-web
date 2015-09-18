@@ -134,12 +134,12 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
       var requestedCheck = decodeURI($routeParams.check);
 
       if (requestedCheck !== 'undefined') {
-        var currentCheck = getCheck(requestedCheck, $scope.client.history);
+        var currentCheck = searchCheckHistory(requestedCheck, $scope.client.history);
         $scope.checkIsEvent = false;
 
 
         // search for an event
-        var event = getEvent($scope.client.name, requestedCheck, $scope.events);
+        var event = searchEvent($scope.client.name, requestedCheck, $scope.client.dc, $scope.events);
         if (angular.isObject(event)) {
           $scope.checkIsEvent = true;
           currentCheck.model = event.check;
@@ -205,8 +205,8 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
     $scope.permalink = routingService.permalink;
     $scope.stash = stashesService.stash;
     $scope.user = userService;
-    var getCheck = clientsService.getCheck;
-    var getEvent = clientsService.getEvent;
+    var searchCheckHistory = clientsService.searchCheckHistory;
+    var searchEvent = clientsService.searchEvent;
   }
 ]);
 

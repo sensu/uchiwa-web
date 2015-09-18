@@ -11,6 +11,26 @@ describe('services', function () {
   }));
 
   describe('clientsService', function () {
+    describe('searchCheckHistory()', function() {
+      it('returns the right check from the client history', inject(function (clientsService) {
+        var history = [{check: 'foo', last_status: 0}, {check: 'bar', last_status: 1}];
+        var expectedCheck = {check: 'bar', last_status: 1};
+        expect(clientsService.searchCheckHistory('bar', history)).toEqual(expectedCheck);
+      }));
+    });
+
+    describe('searchEvent()', function() {
+      it('returns the right event from the events', inject(function (clientsService) {
+        var event1 = {check: {name: 'check_foo'}, client: {name: 'foo'}, dc: 'east'};
+        var event2 = {check: {name: 'check_foo'}, client: {name: 'foo'}, dc: 'west'};
+        var event3 = {check: {name: 'check_bar'}, client: {name: 'foo'}, dc: 'west'};
+        var events = [event1, event2, event3];
+        expect(clientsService.searchEvent('foo', 'check_bar', 'east', events)).toEqual(undefined);
+        expect(clientsService.searchEvent('foo', 'check_foo', 'west', events)).toEqual(event2);
+        expect(clientsService.searchEvent('foo', 'check_bar', 'west', events)).toEqual(event3);
+      }));
+    });
+
     describe('resolveEvent', function () {
       it('should return false when neither client & check are undefined or not objects', inject(function (clientsService) {
         expect(clientsService.resolveEvent('foo', null, null)).toEqual(false);

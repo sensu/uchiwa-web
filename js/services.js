@@ -129,18 +129,18 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
 ]);
 
 /**
-* Clients
+* Clients Services
 */
 serviceModule.service('clientsService', ['$location', '$rootScope', 'backendService', function ($location, $rootScope, backendService) {
-  this.getCheck = function (id, history) {
+  this.searchCheckHistory = function (name, history) {
     return history.filter(function (item) {
-      return item.check === id;
+      return item.check === name;
     })[0];
   };
-  this.getEvent = function (client, check, events) {
-    if (!client || !check || events.constructor.toString().indexOf('Array') === -1) { return null; }
+  this.searchEvent = function (client, check, dc, events) {
+    if (!client || !check || !dc || events.constructor.toString().indexOf('Array') === -1) { return null; }
     return events.filter(function (item) {
-      return (item.client.name === client && item.check.name === check);
+      return (item.dc === dc && item.client.name === client && item.check.name === check);
     })[0];
   };
   this.resolveEvent = function (dc, client, check) {
