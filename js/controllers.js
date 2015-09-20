@@ -5,7 +5,7 @@ var controllerModule = angular.module('uchiwa.controllers', []);
 /**
 * Aggregate
 */
-controllerModule.controller('aggregate', ['backendService', '$http', '$rootScope', '$scope', '$routeParams', 'routingService', 'titleFactory',
+controllerModule.controller('AggregateController', ['backendService', '$http', '$rootScope', '$scope', '$routeParams', 'routingService', 'titleFactory',
   function (backendService, $http, $rootScope, $scope, $routeParams, routingService, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
@@ -51,7 +51,7 @@ controllerModule.controller('aggregate', ['backendService', '$http', '$rootScope
 /**
 * Aggregates
 */
-controllerModule.controller('aggregates', ['filterService', '$routeParams', 'routingService', '$scope', 'titleFactory',
+controllerModule.controller('AggregatesController', ['filterService', '$routeParams', 'routingService', '$scope', 'titleFactory',
   function (filterService, $routeParams, routingService, $scope, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
@@ -75,7 +75,7 @@ controllerModule.controller('aggregates', ['filterService', '$routeParams', 'rou
 /**
 * Checks
 */
-controllerModule.controller('checks', ['filterService', '$routeParams', 'routingService', '$scope', 'titleFactory',
+controllerModule.controller('ChecksController', ['filterService', '$routeParams', 'routingService', '$scope', 'titleFactory',
   function (filterService, $routeParams, routingService, $scope, titleFactory) {
     $scope.pageHeaderText = 'Checks';
     titleFactory.set($scope.pageHeaderText);
@@ -104,7 +104,7 @@ controllerModule.controller('checks', ['filterService', '$routeParams', 'routing
 /**
 * Client
 */
-controllerModule.controller('client', ['backendService', 'clientsService', 'conf', '$filter', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope','stashesService', 'userService',
+controllerModule.controller('ClientController', ['backendService', 'clientsService', 'conf', '$filter', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope','stashesService', 'userService',
   function (backendService, clientsService, conf, $filter, notification, titleFactory, $routeParams, routingService, $scope, stashesService, userService) {
 
     $scope.predicate = '-last_status';
@@ -213,7 +213,7 @@ controllerModule.controller('client', ['backendService', 'clientsService', 'conf
 /**
 * Clients
 */
-controllerModule.controller('clients', ['clientsService', '$filter', 'filterService', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
+controllerModule.controller('ClientsController', ['clientsService', '$filter', 'filterService', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
   function (clientsService, $filter, filterService, helperService, $rootScope, $routeParams, routingService, $scope, stashesService, titleFactory, userService) {
     $scope.pageHeaderText = 'Clients';
     titleFactory.set($scope.pageHeaderText);
@@ -291,7 +291,7 @@ controllerModule.controller('clients', ['clientsService', '$filter', 'filterServ
 /**
 * Datacenters
 */
-controllerModule.controller('datacenters', ['$scope', 'titleFactory',
+controllerModule.controller('DatacentersController', ['$scope', 'titleFactory',
   function ($scope, titleFactory) {
     $scope.pageHeaderText = 'Datacenters';
     titleFactory.set($scope.pageHeaderText);
@@ -301,7 +301,7 @@ controllerModule.controller('datacenters', ['$scope', 'titleFactory',
 /**
 * Events
 */
-controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore', '$filter', 'filterService', 'helperService', '$rootScope', '$routeParams','routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
+controllerModule.controller('EventsController', ['clientsService', 'conf', '$cookieStore', '$filter', 'filterService', 'helperService', '$rootScope', '$routeParams','routingService', '$scope', 'stashesService', 'titleFactory', 'userService',
   function (clientsService, conf, $cookieStore, $filter, filterService, helperService, $rootScope, $routeParams, routingService, $scope, stashesService, titleFactory, userService) {
     $scope.pageHeaderText = 'Events';
     titleFactory.set($scope.pageHeaderText);
@@ -429,7 +429,7 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
 /**
 * Info
 */
-controllerModule.controller('info', ['backendService', '$scope', 'titleFactory', 'version',
+controllerModule.controller('InfoController', ['backendService', '$scope', 'titleFactory', 'version',
   function (backendService, $scope, titleFactory, version) {
     $scope.pageHeaderText = 'Info';
     titleFactory.set($scope.pageHeaderText);
@@ -441,7 +441,7 @@ controllerModule.controller('info', ['backendService', '$scope', 'titleFactory',
 /**
 * Login
 */
-controllerModule.controller('login', ['audit', 'backendService', '$cookieStore', '$location', 'notification', '$rootScope', '$scope',
+controllerModule.controller('LoginController', ['audit', 'backendService', '$cookieStore', '$location', 'notification', '$rootScope', '$scope',
 function (audit, backendService, $cookieStore, $location, notification, $rootScope, $scope) {
 
   $scope.login = {user: '', pass: ''};
@@ -485,7 +485,7 @@ function (audit, backendService, $cookieStore, $location, notification, $rootSco
 /**
 * Navbar
 */
-controllerModule.controller('navbar', ['audit', '$location', '$rootScope', '$scope', 'navbarServices', 'routingService', 'userService',
+controllerModule.controller('NavbarController', ['audit', '$location', '$rootScope', '$scope', 'navbarServices', 'routingService', 'userService',
   function (audit, $location, $rootScope, $scope, navbarServices, routingService, userService) {
 
     // Helpers
@@ -519,7 +519,7 @@ controllerModule.controller('navbar', ['audit', '$location', '$rootScope', '$sco
 /**
 * Settings
 */
-controllerModule.controller('settings', ['$cookies', '$scope', 'titleFactory',
+controllerModule.controller('SettingsController', ['$cookies', '$scope', 'titleFactory',
   function ($cookies, $scope, titleFactory) {
     $scope.pageHeaderText = 'Settings';
     titleFactory.set($scope.pageHeaderText);
@@ -533,7 +533,7 @@ controllerModule.controller('settings', ['$cookies', '$scope', 'titleFactory',
 /**
 * Sidebar
 */
-controllerModule.controller('sidebar', ['$location', 'navbarServices', '$scope', 'userService',
+controllerModule.controller('SidebarController', ['$location', 'navbarServices', '$scope', 'userService',
   function ($location, navbarServices, $scope, userService) {
 
     $scope.user = userService;
@@ -565,7 +565,7 @@ controllerModule.controller('sidebar', ['$location', 'navbarServices', '$scope',
 /**
 * Stashes
 */
-controllerModule.controller('stashes', ['filterService', '$routeParams', 'routingService', '$filter', '$scope', '$rootScope', 'stashesService', 'titleFactory', 'userService', 'helperService',
+controllerModule.controller('StashesController', ['filterService', '$routeParams', 'routingService', '$filter', '$scope', '$rootScope', 'stashesService', 'titleFactory', 'userService', 'helperService',
   function (filterService, $routeParams, routingService, $filter, $scope, $rootScope, stashesService, titleFactory, userService, helperService) {
     $scope.pageHeaderText = 'Stashes';
     titleFactory.set($scope.pageHeaderText);
@@ -608,7 +608,7 @@ controllerModule.controller('stashes', ['filterService', '$routeParams', 'routin
 /**
 * Stash Modal
 */
-controllerModule.controller('StashModalCtrl', ['conf', '$filter', 'items', '$modalInstance', 'notification', '$scope', 'stashesService',
+controllerModule.controller('StashModalController', ['conf', '$filter', 'items', '$modalInstance', 'notification', '$scope', 'stashesService',
   function (conf, $filter, items, $modalInstance, notification, $scope, stashesService) {
     $scope.items = items;
     $scope.acknowledged = $filter('filter')(items, {acknowledged: true}).length;

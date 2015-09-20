@@ -374,7 +374,7 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
       } else {
         var modalInstance = $modal.open({ // jshint ignore:line
           templateUrl: $rootScope.partialsPath + '/stash-modal.html',
-          controller: 'StashModalCtrl',
+          controller: 'StashModalController',
           resolve: {
             items: function () {
               return items;

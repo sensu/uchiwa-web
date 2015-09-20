@@ -45,8 +45,8 @@ describe('Controller', function () {
     $httpBackend.whenGET('config').respond([]);
   }));
 
-  describe('checks', function () {
-    var controllerName = 'checks';
+  describe('ChecksController', function () {
+    var controllerName = 'ChecksController';
 
     beforeEach(function () {
       spyOn($scope, '$on').and.callThrough();
@@ -79,8 +79,8 @@ describe('Controller', function () {
 
   });
 
-  describe('client', function () {
-    var controllerName = 'client';
+  describe('ClientController', function () {
+    var controllerName = 'ClientController';
 
     it('should have a deleteClient method', function () {
       createController(controllerName);
@@ -100,8 +100,8 @@ describe('Controller', function () {
     });
   });
 
-  describe('clients', function () {
-    var controllerName = 'clients';
+  describe('ClientsController', function () {
+    var controllerName = 'ClientsController';
 
     it('should have a go method', function () {
       createController(controllerName);
@@ -127,8 +127,8 @@ describe('Controller', function () {
     })
   });
 
-  describe('events', function () {
-    var controllerName = 'events';
+  describe('EventsController', function () {
+    var controllerName = 'EventsController';
 
     describe('methods', function () {
 
@@ -145,18 +145,39 @@ describe('Controller', function () {
     });
   });
 
-  describe('info', function () {
+  describe('InfoController', function () {
     var controllerName = 'info';
+    // TODO
   });
 
-  describe('navbar', function () {
-    var controllerName = 'navbar';
-
-
+  describe('LoginController', function () {
+    var controllerName = 'LoginController';
+    // TODO
   });
 
-  describe('sidebar', function () {
-    var controllerName = 'sidebar';
+  describe('NavbarController', function () {
+    var controllerName = 'NavbarController';
+    // TODO
+  });
+
+  describe('SettingsController', function () {
+    var controllerName = 'SettingsController';
+
+    it("should emit a theme:changed event when the current theme changes", function () {
+      createController(controllerName);
+      var expectedTheme = 'foo theme';
+      var expectedEvent = 'theme:changed';
+      spyOn($scope, '$emit');
+
+      $scope.currentTheme = expectedTheme;
+
+      $scope.$apply();
+      expect($scope.$emit).toHaveBeenCalledWith(expectedEvent, expectedTheme);
+    });
+  });
+
+  describe('SidebarController', function () {
+    var controllerName = 'SidebarController';
 
     it('should have a getClass method', function () {
       createController(controllerName);
@@ -250,8 +271,8 @@ describe('Controller', function () {
 
   });
 
-  describe('stashes', function () {
-    var controllerName = 'stashes';
+  describe('StashesController', function () {
+    var controllerName = 'StashesController';
 
     it('should listen for the $locationChangeSuccess event', function () {
       spyOn($scope, '$on').and.callThrough();
@@ -262,23 +283,6 @@ describe('Controller', function () {
       createController(controllerName);
       $scope.$emit('$locationChangeSuccess', {});
       expect(mockRoutingService.updateFilters).toHaveBeenCalled();
-    });
-
-  });
-
-  describe('settings', function () {
-    var controllerName = 'settings';
-
-    it("should emit a theme:changed event when the current theme changes", function () {
-      createController(controllerName);
-      var expectedTheme = 'foo theme';
-      var expectedEvent = 'theme:changed';
-      spyOn($scope, '$emit');
-
-      $scope.currentTheme = expectedTheme;
-
-      $scope.$apply();
-      expect($scope.$emit).toHaveBeenCalledWith(expectedEvent, expectedTheme);
     });
   });
 });

@@ -30,17 +30,17 @@ angular.module('uchiwa')
       .when('/', {redirectTo: function () {
         return '/events';
       }})
-      .when('/aggregates', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregates.html', reloadOnSearch: false, controller: 'aggregates'})
-      .when('/aggregate/:dcId/:checkId', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregate.html', reloadOnSearch: false, controller: 'aggregate'})
-      .when('/client/:dcId/:clientId', {templateUrl: 'bower_components/uchiwa-web/partials/views/client.html', reloadOnSearch: false, controller: 'client'})
-      .when('/clients', {templateUrl: 'bower_components/uchiwa-web/partials/views/clients.html', reloadOnSearch: false, controller: 'clients'})
-      .when('/checks', {templateUrl: 'bower_components/uchiwa-web/partials/views/checks.html', reloadOnSearch: false, controller: 'checks'})
-      .when('/datacenters', {templateUrl: 'bower_components/uchiwa-web/partials/views/datacenters.html', controller: 'datacenters'})
-      .when('/events', {templateUrl: 'bower_components/uchiwa-web/partials/views/events.html', reloadOnSearch: false, controller: 'events'})
-      .when('/info', {templateUrl: 'bower_components/uchiwa-web/partials/views/info.html', controller: 'info'})
-      .when('/login', {templateUrl: 'bower_components/uchiwa-web/partials/login/index.html', controller: 'login'})
-      .when('/settings', {templateUrl: 'bower_components/uchiwa-web/partials/views/settings.html', controller: 'settings'})
-      .when('/stashes', {templateUrl: 'bower_components/uchiwa-web/partials/views/stashes.html', reloadOnSearch: false, controller: 'stashes'})
+      .when('/aggregate/:dcId/:checkId', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregate.html', reloadOnSearch: false, controller: 'AggregateController'})
+      .when('/aggregates', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregates.html', reloadOnSearch: false, controller: 'AggregatesController'})
+      .when('/checks', {templateUrl: 'bower_components/uchiwa-web/partials/views/checks.html', reloadOnSearch: false, controller: 'ChecksController'})
+      .when('/client/:dcId/:clientId', {templateUrl: 'bower_components/uchiwa-web/partials/views/client.html', reloadOnSearch: false, controller: 'ClientController'})
+      .when('/clients', {templateUrl: 'bower_components/uchiwa-web/partials/views/clients.html', reloadOnSearch: false, controller: 'ClientsController'})
+      .when('/datacenters', {templateUrl: 'bower_components/uchiwa-web/partials/views/datacenters.html', controller: 'DatacentersController'})
+      .when('/events', {templateUrl: 'bower_components/uchiwa-web/partials/views/events.html', reloadOnSearch: false, controller: 'EventsController'})
+      .when('/info', {templateUrl: 'bower_components/uchiwa-web/partials/views/info.html', controller: 'InfoController'})
+      .when('/login', {templateUrl: 'bower_components/uchiwa-web/partials/login/index.html', controller: 'LoginController'})
+      .when('/settings', {templateUrl: 'bower_components/uchiwa-web/partials/views/settings.html', controller: 'SettingsController'})
+      .when('/stashes', {templateUrl: 'bower_components/uchiwa-web/partials/views/stashes.html', reloadOnSearch: false, controller: 'StashesController'})
       .otherwise('/');
 
     $tooltipProvider.options({animation: false, 'placement': 'bottom'});
