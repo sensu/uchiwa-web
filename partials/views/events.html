@@ -65,7 +65,7 @@
                   </span>
                   <span class="main check-name" tooltip-placement="top" tooltip-trigger tooltip-html="'Subscriptions<br /><small>{{event.check.subscribers|arrayToString}}</small>'">{{ event.check.name }}</span>
                 </td>
-                <td class="output" ng-bind-html="event.check.output | linky" ng-click="helpers.openLink($event)"></td>
+                <td class="output" ng-bind-html="event.check.output | linky" ng-click="openLink($event)"></td>
                 <td>{{ event.occurrences }}</td>
                 <td class="dc">{{ event.dc }}</td>
                 <td>

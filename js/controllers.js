@@ -57,6 +57,7 @@ controllerModule.controller('AggregatesController', ['filterService', '$routePar
     titleFactory.set($scope.pageHeaderText);
 
     $scope.predicate = 'check';
+    $scope.reverse = false;
 
     // Routing
     $scope.filters = {};
@@ -81,6 +82,7 @@ controllerModule.controller('ChecksController', ['filterService', '$routeParams'
     titleFactory.set($scope.pageHeaderText);
 
     $scope.predicate = 'name';
+    $scope.reverse = false;
 
     // Helpers
     $scope.subscribersSummary = function(subscribers){
@@ -108,6 +110,7 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
   function (backendService, clientsService, conf, $filter, notification, titleFactory, $routeParams, routingService, $scope, stashesService, userService) {
 
     $scope.predicate = '-last_status';
+    $scope.reverse = false;
     $scope.missingClient = false;
 
     // Retrieve client
@@ -219,6 +222,7 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     titleFactory.set($scope.pageHeaderText);
 
     $scope.predicate = ['-status', 'name'];
+    $scope.reverse = false;
     $scope.statuses = {0: 'Healthy', 1: 'Warning', 2: 'Critical', 3: 'Unknown'};
 
     // Routing
@@ -232,6 +236,7 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     $scope.deleteClient = clientsService.deleteClient;
     $scope.filterComparator = filterService.comparator;
     $scope.go = routingService.go;
+    $scope.openLink = helperService.openLink;
     $scope.permalink = routingService.permalink;
     $scope.stash = stashesService.stash;
     $scope.user = userService;
@@ -306,8 +311,9 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     $scope.pageHeaderText = 'Events';
     titleFactory.set($scope.pageHeaderText);
 
-    $scope.predicate = ['-check.status', '-check.issued'];
     $scope.filters = {};
+    $scope.predicate = ['-check.status', '-check.issued'];
+    $scope.reverse = false;
     $scope.statuses = {1: 'Warning', 2: 'Critical', 3: 'Unknown'};
 
     // Routing
@@ -319,6 +325,7 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     // Services
     $scope.filterComparator = filterService.comparator;
     $scope.go = routingService.go;
+    $scope.openLink = helperService.openLink;
     $scope.permalink = routingService.permalink;
     $scope.resolveEvent = clientsService.resolveEvent;
     $scope.stash = stashesService.stash;
@@ -571,7 +578,7 @@ controllerModule.controller('StashesController', ['filterService', '$routeParams
     titleFactory.set($scope.pageHeaderText);
 
     $scope.predicate = 'client';
-    $scope.deleteStash = stashesService.deleteStash;
+    $scope.reverse = false;
     $scope.selectAll = {checked: false};
 
     // Routing
@@ -582,6 +589,7 @@ controllerModule.controller('StashesController', ['filterService', '$routeParams
     });
 
     // Services
+    $scope.deleteStash = stashesService.deleteStash;
     $scope.filterComparator = filterService.comparator;
     $scope.permalink = routingService.permalink;
     $scope.user = userService;

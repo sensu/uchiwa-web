@@ -56,7 +56,7 @@
                 </td>
                 <td class="main"><span tooltip-placement="top" tooltip-trigger tooltip-html="'Subscriptions<br /><small>{{client.subscriptions|arrayToString}}</small>'">{{ client.name }}</span></td>
                 <td>{{ client.address }}</td>
-                <td class="output" ng-bind-html="client.output | linky" ng-click="helpers.openLink($event)"></td>
+                <td class="output" ng-bind-html="client.output | linky" ng-click="openLink($event)"></td>
                 <td class="dc">{{ client.dc }}</td>
                 <td>{{ client.version }}</td>
                 <td>
