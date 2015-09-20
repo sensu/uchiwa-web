@@ -18,22 +18,28 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
       if ($rootScope.enterprise) {
         audit.log({action: 'delete_client', level: 'default', output: dc+'/'+client});
       }
-      return $http.get('delete_client?id=' + client + '&dc=' + dc );
+      return $http.delete('/clients/'+dc+'/'+client);
     };
-    this.deleteStash = function (payload) {
+    this.deleteEvent = function (check, client, dc) {
+      return $http.delete('/events/'+dc+'/'+client+'/'+check);
+    };
+    this.deleteStash = function (dc, path) {
       if ($rootScope.enterprise) {
-        audit.log({action: 'delete_stash', level: 'default', output: angular.toJson(payload)});
+        audit.log({action: 'delete_stash', level: 'default', output: dc+'/'+path});
       }
-      return $http.post('stashes/delete', payload);
+      return $http.delete('stashes/'+dc+'/'+path);
+    };
+    this.getAggregate = function(check, dc, issued) {
+      return $http.get('aggregates/'+dc+'/'+check+'/'+issued);
     };
     this.getClient = function (client, dc) {
-      return $http.get('get_client?id=' + client + '&dc=' + dc );
+      return $http.get('/clients/'+dc+'/'+client);
     };
     this.getConfig = function () {
       if ($location.path().substring(0, 6) === '/login') {
         return;
       }
-      $http.get('get_config')
+      $http.get('config')
         .success(function (data) {
           $rootScope.config = data;
           conf.refresh = data.Uchiwa.Refresh * 1000;
@@ -54,9 +60,7 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     this.postStash = function (payload) {
       return $http.post('stashes', payload);
     };
-    this.resolveEvent = function (payload) {
-      return $http.post('post_event', payload);
-    };
+
     this.update = function () {
       if ($location.path().substring(0, 6) === '/login') {
         return;
@@ -143,23 +147,19 @@ serviceModule.service('clientsService', ['$location', '$rootScope', 'backendServ
       return (item.dc === dc && item.client.name === client && item.check.name === check);
     })[0];
   };
-  this.resolveEvent = function (dc, client, check) {
-    if (!angular.isObject(client) || !angular.isObject(check)) {
+  this.resolveEvent = function (check, client, dc) {
+    if (!angular.isString(check) || !angular.isString(client) || !angular.isString(dc)) {
       $rootScope.$emit('notification', 'error', 'Could not resolve this event. Try to refresh the page.');
-      console.error('Received:\nclient='+ JSON.stringify(client) + '\ncheck=' + JSON.stringify(check));
       return false;
     }
 
-    var checkName = check.name || check.check;
-    var payload = {dc: dc, payload: {client: client.name, check: checkName}};
-
-    backendService.resolveEvent(payload)
+    backendService.deleteEvent(check, client, dc)
       .success(function () {
         $rootScope.$emit('notification', 'success', 'The event has been resolved.');
         if ($location.url() !== '/events') {
-          $location.url(encodeURI('/client/' + dc + '/' + client.name));
+          $location.url(encodeURI('/client/' + dc + '/' + client));
         } else {
-          var _id = dc + '/' + client.name + '/' + checkName;
+          var _id = dc + '/' + client + '/' + check;
           var event = _.findWhere($rootScope.events, {_id: _id});
           var eventPosition = $rootScope.events.indexOf(event);
           $rootScope.events.splice(eventPosition, 1);
@@ -290,8 +290,7 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
   function (backendService, conf, $filter, $modal, $rootScope) {
     this.deleteStash = function (stash) {
       $rootScope.skipRefresh = true;
-      var payload = {dc: stash.dc, path: stash.path};
-      backendService.deleteStash(payload)
+      backendService.deleteStash(stash.dc, stash.path)
         .success(function () {
           $rootScope.$emit('notification', 'success', 'The stash has been deleted.');
           for (var i=0; $rootScope.stashes; i++) {
@@ -387,7 +386,6 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
     this.submit = function (element, item) {
       var dc = element.dc;
       var isAcknowledged = element.acknowledged;
-      var payload = {};
       var path = this.getPath(element);
 
       if (angular.isUndefined(item.reason)) {
@@ -396,8 +394,7 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
 
       $rootScope.skipRefresh = true;
       if (isAcknowledged) {
-        payload = {dc: dc, path: path};
-        backendService.deleteStash(payload)
+        backendService.deleteStash(dc, path)
           .success(function () {
             $rootScope.$emit('notification', 'success', 'The stash has been deleted.');
             element.acknowledged = !element.acknowledged;
@@ -409,7 +406,7 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
           });
       }
       else {
-        payload = {content: {'reason': item.reason, 'source': 'uchiwa'}, dc: dc, path: path};
+        var payload = {content: {'reason': item.reason, 'source': 'uchiwa'}, dc: dc, path: path};
 
         // add expire attribute
         if (item.expiration && item.expiration !== -1){

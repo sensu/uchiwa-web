@@ -42,7 +42,7 @@ describe('Controller', function () {
         '$scope': $scope
       }, properties));
     };
-    $httpBackend.whenGET('get_config').respond([]);
+    $httpBackend.whenGET('config').respond([]);
   }));
 
   describe('checks', function () {

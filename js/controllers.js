@@ -5,8 +5,8 @@ var controllerModule = angular.module('uchiwa.controllers', []);
 /**
 * Aggregate
 */
-controllerModule.controller('aggregate', ['$http', '$rootScope', '$scope', '$routeParams', 'routingService', 'titleFactory',
-  function ($http, $rootScope, $scope, $routeParams, routingService, titleFactory) {
+controllerModule.controller('aggregate', ['backendService', '$http', '$rootScope', '$scope', '$routeParams', 'routingService', 'titleFactory',
+  function (backendService, $http, $rootScope, $scope, $routeParams, routingService, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
 
@@ -29,13 +29,13 @@ controllerModule.controller('aggregate', ['$http', '$rootScope', '$scope', '$rou
         return;
       }
 
-      $http.get('get_aggregate_by_issued?check=' + $scope.checkId + '&issued=' + $scope.issued + '&dc=' + $scope.dcId)
-      .success(function(data) {
-        $scope.aggregate = data;
-      })
-      .error(function(error) {
-        console.log('Error: ' + JSON.stringify(error));
-      });
+      backendService.getAggregate($scope.checkId, $scope.dcId, $scope.issued)
+        .success(function(data) {
+          $scope.aggregate = data;
+        })
+        .error(function(error) {
+          console.log('Error: ' + JSON.stringify(error));
+        });
     };
 
     // do we have a issued parameter? if so, display the aggregate result
@@ -358,7 +358,7 @@ controllerModule.controller('events', ['clientsService', 'conf', '$cookieStore',
     $scope.resolveEvents = function(events) {
       var selectedEvents = helperService.selectedItems(events);
       _.each(selectedEvents, function(event) {
-        $scope.resolveEvent(event.dc, event.client, event.check);
+        $scope.resolveEvent(event.check.name, event.client.name, event.dc);
       });
       helperService.unselectItems(selectedEvents);
     };
@@ -550,10 +550,10 @@ controllerModule.controller('sidebar', ['$location', 'navbarServices', '$scope',
     $scope.$on('sensu', function () {
       // Update badges
       navbarServices.countStatuses('clients', function (item) {
-        return item.status;
+        return parseInt(item.status);
       });
       navbarServices.countStatuses('events', function (item) {
-        return item.check.status;
+        return parseInt(item.check.status);
       });
 
       // Update alert badge

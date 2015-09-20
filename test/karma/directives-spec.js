@@ -10,7 +10,7 @@ describe('directives', function () {
   beforeEach(module('partials'));
   beforeEach(inject(function (_$compile_, _$rootScope_, $httpBackend) {
     $compile = _$compile_;
-    $httpBackend.whenGET('get_config').respond([]);
+    $httpBackend.whenGET('config').respond([]);
     $rootScope = _$rootScope_;
     $rootScope.partialsPath = 'partials';
     element = jasmine.createSpyObj('element', ['tooltip', 'attr', 'removeAttr', 'addClass']);
