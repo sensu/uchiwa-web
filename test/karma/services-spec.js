@@ -18,10 +18,9 @@ describe('services', function () {
       }));
 
       it('should emit HTTP POST to /resolveEvent', inject(function (clientsService, backendService) {
-        var expectedPayload = {dc: 'foo', payload: {client: 'bar', check: 'qux'}};
-        spyOn(backendService, 'resolveEvent').and.callThrough();
-        clientsService.resolveEvent('foo', {name: 'bar'}, {check: 'qux'});
-        expect(backendService.resolveEvent).toHaveBeenCalledWith(expectedPayload);
+        spyOn(backendService, 'deleteEvent').and.callThrough();
+        clientsService.resolveEvent('qux', 'bar', 'foo');
+        expect(backendService.deleteEvent).toHaveBeenCalledWith('qux', 'bar', 'foo');
       }));
     });
   });
