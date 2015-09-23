@@ -5,9 +5,8 @@ var serviceModule = angular.module('uchiwa.services', []);
 /**
 * Uchiwa
 */
-serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', '$location', '$rootScope', '$timeout',
-  function(audit, conf, $http, $interval, $location, $rootScope, $timeout){
-    var self = this;
+serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', '$location', '$rootScope',
+  function(audit, conf, $http, $interval, $location, $rootScope){
     this.auth = function () {
       return $http.get('auth');
     };
@@ -18,10 +17,10 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
       if ($rootScope.enterprise) {
         audit.log({action: 'delete_client', level: 'default', output: dc+'/'+client});
       }
-      return $http.delete('/clients/'+dc+'/'+client);
+      return $http.delete('clients/'+dc+'/'+client);
     };
     this.deleteEvent = function (check, client, dc) {
-      return $http.delete('/events/'+dc+'/'+client+'/'+check);
+      return $http.delete('events/'+dc+'/'+client+'/'+check);
     };
     this.deleteStash = function (dc, path) {
       if ($rootScope.enterprise) {
@@ -32,8 +31,17 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     this.getAggregate = function(check, dc, issued) {
       return $http.get('aggregates/'+dc+'/'+check+'/'+issued);
     };
+    this.getAggregates = function() {
+      return $http.get('aggregates');
+    };
+    this.getChecks = function () {
+      return $http.get('checks');
+    };
     this.getClient = function (client, dc) {
-      return $http.get('/clients/'+dc+'/'+client);
+      return $http.get('clients/'+dc+'/'+client);
+    };
+    this.getClients = function () {
+      return $http.get('clients');
     };
     this.getConfig = function () {
       if ($location.path().substring(0, 6) === '/login') {
@@ -44,90 +52,55 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
           $rootScope.config = data;
           conf.refresh = data.Uchiwa.Refresh * 1000;
         })
-        .finally(function () {
-          $interval(self.update, conf.refresh);
+        .error(function(error) {
+          console.error(JSON.stringify(error));
         });
     };
     this.getConfigAuth = function () {
       return $http.get('config/auth');
     };
-    this.getSensu = function () {
-      return $http.get('get_sensu');
+    this.getDatacenters = function() {
+      $http.get('datacenters')
+        .success(function(data) {
+          $rootScope.datacenters = data;
+        })
+        .error(function(error) {
+          console.error(JSON.stringify(error));
+        });
+    };
+    this.getEvents = function () {
+      return $http.get('events');
+    };
+    this.getHealth = function() {
+      $http.get('health')
+        .success(function(data) {
+          $rootScope.health = data;
+        })
+        .error(function(error) {
+          console.error(JSON.stringify(error));
+        });
+    };
+    this.getMetrics = function() {
+      $http.get('metrics')
+        .success(function(data) {
+          $rootScope.metrics = data;
+        })
+        .error(function(error) {
+          $rootScope.metrics = {aggregates: {total: 0}, checks: {total: 0}, clients: {critical: 0, total: 0, unknown: 0, warning: 0}, datacenters: {total: 0}, events: {critical: 0, total: 0, unknown: 0, warning: 0}, stashes: {total: 0}};
+          console.error(JSON.stringify(error));
+        });
+    };
+    this.getStashes = function () {
+      return $http.get('stashes');
+    };
+    this.getSubscriptions = function () {
+      return $http.get('subscriptions');
     };
     this.login = function (payload) {
       return $http.post('login', payload);
     };
     this.postStash = function (payload) {
       return $http.post('stashes', payload);
-    };
-
-    this.update = function () {
-      if ($location.path().substring(0, 6) === '/login') {
-        return;
-      }
-      if ($rootScope.skipRefresh) {
-        $rootScope.skipRefresh = false;
-        return;
-      }
-      self.getSensu()
-      .success(function (data) {
-        angular.forEach(data, function(value, key) { // initialize null elements
-          if (!value || value === null) {
-            data[key] = [];
-          }
-        });
-
-        $rootScope.aggregates = data.Aggregates;
-        $rootScope.checks = data.Checks;
-        $rootScope.dc = data.Dc;
-        $rootScope.health = data.Health;
-
-        $rootScope.clients = _.map(data.Clients, function(client) {
-          var existingClient = _.findWhere($rootScope.clients, {name: client.name, dc: client.dc});
-          if (angular.isDefined(existingClient)) {
-            if (angular.isUndefined(client.output) && angular.isDefined(existingClient.output)) {
-              client.output = '';
-            }
-            client = angular.extend(existingClient, client);
-          }
-          return existingClient || client;
-        });
-
-        $rootScope.events = _.map(data.Events, function(event) {
-          if (event.client.name === null && event.check.name === null) {
-            return false;
-          }
-          event._id = event.dc + '/' + event.client.name + '/' + event.check.name;
-          var existingEvent = _.findWhere($rootScope.events, {_id: event._id});
-          if (existingEvent !== undefined) {
-            event = angular.extend(existingEvent, event);
-          }
-          return existingEvent || event;
-        });
-
-        $rootScope.stashes = _.map(data.Stashes, function(stash) {
-          if (stash.dc === null && stash.path === null) {
-            return false;
-          }
-          stash._id = stash.dc + '/' + stash.path + '/' + stash.content.timestamp;
-          var existingStash = _.findWhere($rootScope.stashes, {_id: stash._id});
-          if (existingStash !== undefined) {
-            stash = angular.extend(existingStash, stash);
-          }
-          return existingStash || stash;
-        });
-
-        $rootScope.subscriptions = data.Subscriptions;
-
-        $timeout(function() {
-          $rootScope.$broadcast('sensu');
-        }, 100);
-
-      })
-      .error(function (error) {
-        $rootScope.$emit('notification', 'error', 'Could not fetch Sensu data. Is Uchiwa running?');
-        console.error(error);
-      });
     };
   }
 ]);
@@ -199,26 +172,6 @@ serviceModule.service('filterService', function () {
 * Navbar
 */
 serviceModule.service('navbarServices', ['$rootScope', function ($rootScope) {
-  // Badges count
-  this.countStatuses = function (item, getStatusCode) {
-    var collection = $rootScope[item];
-    if (!_.isObject($rootScope.navbar)) {
-      $rootScope.navbar = {};
-    }
-    $rootScope.navbar[item] = { critical: 0, warning: 0, unknown: 0, style: '' };
-
-    $rootScope.navbar[item].critical += collection.filter(function (item) {
-      return getStatusCode(item) === 2;
-    }).length;
-    $rootScope.navbar[item].warning += collection.filter(function (item) {
-      return getStatusCode(item) === 1;
-    }).length;
-    $rootScope.navbar[item].unknown += collection.filter(function (item) {
-      return getStatusCode(item) > 2;
-    }).length;
-
-    $rootScope.navbar[item].style = $rootScope.navbar[item].critical > 0 ? 'critical' : $rootScope.navbar[item].warning > 0 ? 'warning' : $rootScope.navbar[item].unknown > 0 ? 'unknown' : 'success';
-  };
   this.health = function () {
     var alerts = [];
     if (angular.isObject($rootScope.health)) {

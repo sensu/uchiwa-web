@@ -12,7 +12,7 @@
               <!--title-->
               <ul class="breadcrumb">
                 <li><a href="#/aggregates">Aggregates</a></li>
-                <li class="active">{{checkId}}</li>
+                <li class="active">{{check}}</li>
               </ul>
             </div>
           </div>
@@ -28,14 +28,14 @@
 
           <div class="row mb15">
             <div class="col-xs-6">
-              <div class="panel-title">{{checkId}}</div>
-              <p><small><i class="fa fa-cloud"></i> {{dcId}}</small></p>
+              <div class="panel-title">{{check}}</div>
+              <p><small><i class="fa fa-cloud"></i> {{dc}}</small></p>
             </div>
           </div>
 
           <ul class="list-unstyled">
-            <li class= "timestamp" ng-repeat="issued in check_aggregates.issued">
-              <a href="" ng-click="permalink($event,'issued', issued)">
+            <li class= "timestamp" ng-repeat="issued in aggregates.issued">
+              <a href="" ng-click="permalink($event, 'issued', issued)">
                 {{ issued | getTimestamp }}
                 <span class="small relative-timestamp"> - {{ issued | relativeTimestamp }}</span>
               </a>

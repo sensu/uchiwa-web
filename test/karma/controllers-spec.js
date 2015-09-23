@@ -177,6 +177,10 @@ describe('Controller', function () {
   });
 
   describe('SidebarController', function () {
+    beforeEach(function () {
+      $rootScope.metrics = {aggregates: {total: 0}, checks: {total: 0}, clients: {critical: 0, total: 0, unknown: 0, warning: 0}, datacenters: {total: 0}, events: {critical: 0, total: 0, unknown: 0, warning: 0}, stashes: {total: 0}};
+    });
+
     var controllerName = 'SidebarController';
 
     it('should have a getClass method', function () {
@@ -197,78 +201,6 @@ describe('Controller', function () {
         expect($scope.getClass('clients')).toBe('');
       });
     });
-
-    it('should count events and client status on sensu', function () {
-      createController(controllerName);
-      var clients = [
-        {
-          status: 2
-        },
-        {
-          status: 2
-        },
-        {
-          status: 1
-        },
-        {
-          status: 1
-        },
-        {
-          status: 3
-        }
-      ];
-      var expectedCriticalClients = 2;
-      var expectedWarningClients = 2;
-      var expectedUnknownClients = 1;
-      var expectedClientsStyle = 'critical';
-
-      var events = [
-        {
-          check: {
-            status: 2
-          }
-        },
-        {
-          check: {
-            status: 2
-          }
-        },
-        {
-          check: {
-            status: 1
-          }
-        },
-        {
-          check: {
-            status: 1
-          }
-        },
-        {
-          check: {
-            status: 3
-          }
-        }
-      ];
-      var expectedCriticalEvents = 2;
-      var expectedWarningEvents = 2;
-      var expectedUnknownEvents = 1;
-      var expectedEventsStyle = 'critical';
-
-      //var payload = {Events: expectedEvents, Clients: expectedClients};
-      $rootScope.events = events;
-      $rootScope.clients = clients;
-      $rootScope.$broadcast('sensu');
-
-      expect($rootScope.navbar.clients.critical).toEqual(expectedCriticalClients);
-      expect($rootScope.navbar.clients.warning).toEqual(expectedWarningClients);
-      expect($rootScope.navbar.clients.unknown).toEqual(expectedUnknownClients);
-      expect($rootScope.navbar.events.critical).toEqual(expectedCriticalEvents);
-      expect($rootScope.navbar.events.warning).toEqual(expectedWarningEvents);
-      expect($rootScope.navbar.events.unknown).toEqual(expectedUnknownEvents);
-      expect($rootScope.navbar.clients.style).toEqual(expectedClientsStyle);
-      expect($rootScope.navbar.events.style).toEqual(expectedEventsStyle);
-    });
-
   });
 
   describe('StashesController', function () {
