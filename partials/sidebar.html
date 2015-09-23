@@ -14,26 +14,26 @@
           <a ng-href="#events" class="dropdown-toggle" data-toggle="dropdown">
             <span class="small-nav">
               <i class="fa fa-bullhorn"></i>
-              <span class="badge badge-{{navbar.events.style}}">{{events | arrayLength}}</span>
+              <span class="badge badge-{{ eventsStyle }}">{{ metrics.events.total }}</span>
             </span>
           </a>
           <div class="dropdown-menu popover-menu" role="menu">
             <div class="row">
               <div class="col-md-12">
-                <div class="panel panel-body panel-popover panel-{{navbar.events.style}}">
+                <div class="panel panel-body panel-popover panel-{{ eventsStyle }}">
                   <div class="panel-title">events</div>
 
                   <div class="row counts">
                     <div class="col-sm-4">
-                      <span class="total">{{ navbar.events.critical }}</span>
+                      <span class="total">{{ metrics.events.critical }}</span>
                       <p class="category">critical</p>
                     </div>
                     <div class="col-sm-4">
-                      <span class="total">{{ navbar.events.warning }}</span>
+                      <span class="total">{{ metrics.events.warning }}</span>
                       <p class="category">warning</p>
                     </div>
                     <div class="col-sm-4">
-                      <span class="total">{{ navbar.events.unknown }}</span>
+                      <span class="total">{{ metrics.events.unknown }}</span>
                       <p class="category">unknown</p>
                     </div>
                   </div>
@@ -47,26 +47,26 @@
           <a ng-href="#clients" class="dropdown-toggle" data-toggle="dropdown">
             <span class="small-nav">
               <i class="fa fa-hdd-o"></i>
-              <span class="badge badge-{{navbar.clients.style}}">{{clients | arrayLength}}</span>
+              <span class="badge badge-{{ clientsStyle }}">{{ metrics.clients.total }}</span>
             </span>
           </a>
           <div class="dropdown-menu popover-menu" role="menu">
             <div class="row">
               <div class="col-md-12">
-                <div class="panel panel-body panel-popover panel-{{navbar.clients.style}}">
+                <div class="panel panel-body panel-popover panel-{{ clientsStyle }}">
                   <div class="panel-title">clients</div>
 
                   <div class="row counts">
                     <div class="col-sm-4">
-                      <span class="total">{{ navbar.clients.critical }}</span>
+                      <span class="total">{{ metrics.clients.critical }}</span>
                       <p class="category">critical</p>
                     </div>
                     <div class="col-sm-4">
-                      <span class="total">{{ navbar.clients.warning }}</span>
+                      <span class="total">{{ metrics.clients.warning }}</span>
                       <p class="category">warning</p>
                     </div>
                     <div class="col-sm-4">
-                      <span class="total">{{ navbar.clients.unknown }}</span>
+                      <span class="total">{{ metrics.clients.unknown }}</span>
                       <p class="category">unknown</p>
                     </div>
                   </div>
@@ -80,7 +80,7 @@
           <a ng-href="#checks" class="dropdown-toggle" data-toggle="dropdown">
             <span class="small-nav">
               <i class="fa fa-check-square"></i>
-              <span class="badge badge-ok">{{checks | arrayLength}}</span>
+              <span class="badge badge-ok">{{ metrics.checks.total }}</span>
             </span>
           </a>
           <div class="dropdown-menu popover-menu" role="menu">
@@ -91,7 +91,7 @@
 
                   <div class="row counts">
                     <div class="col-sm-4">
-                      <span class="total">{{checks | arrayLength}}</span>
+                      <span class="total">{{ metrics.checks.total }}</span>
                       <p class="category">total</p>
                     </div>
                   </div>
@@ -105,7 +105,7 @@
           <a ng-href="#stashes" class="dropdown-toggle" data-toggle="dropdown">
             <span class="small-nav">
               <i class="fa fa-briefcase"></i>
-              <span class="badge badge-ok">{{stashes | arrayLength}}</span>
+              <span class="badge badge-ok">{{ metrics.stashes.total }}</span>
             </span>
           </a>
           <div class="dropdown-menu popover-menu" role="menu">
@@ -116,7 +116,7 @@
 
                   <div class="row counts">
                     <div class="col-sm-4">
-                      <span class="total">{{stashes | arrayLength}}</span>
+                      <span class="total">{{ metrics.stashes.total }}</span>
                       <p class="category">total</p>
                     </div>
                   </div>
@@ -130,7 +130,7 @@
           <a ng-href="#aggregates" class="dropdown-toggle" data-toggle="dropdown">
             <span class="small-nav">
               <i class="fa fa-folder"></i>
-              <span class="badge badge-ok">{{aggregates | arrayLength}}</span>
+              <span class="badge badge-ok">{{ metrics.aggregates.total }}</span>
             </span>
           </a>
           <div class="dropdown-menu popover-menu" role="menu">
@@ -141,7 +141,7 @@
 
                   <div class="row counts">
                     <div class="col-sm-4">
-                      <span class="total">{{aggregates | arrayLength}}</span>
+                      <span class="total">{{ metrics.aggregates.total }}</span>
                       <p class="category">total</p>
                     </div>
                   </div>
@@ -155,7 +155,7 @@
           <a ng-href="#datacenters" class="dropdown-toggle" data-toggle="dropdown">
             <span class="small-nav">
               <i class="fa fa-cloud"></i>
-              <span class="badge badge-ok">{{dc  | arrayLength}}</span>
+              <span class="badge badge-ok">{{ metrics.datacenters.total }}</span>
             </span>
           </a>
           <div class="dropdown-menu popover-menu" role="menu">
@@ -166,7 +166,7 @@
 
                   <div class="row counts">
                     <div class="col-sm-4">
-                      <span class="total">{{dc | arrayLength}}</span>
+                      <span class="total">{{ metrics.datacenters.total }}</span>
                       <p class="category">total</p>
                     </div>
                   </div>
@@ -180,7 +180,7 @@
           <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">
             <span class="small-nav">
               <i class="fa fa-exclamation-triangle"></i>
-              <span class="badge badge-critical">{{alerts  | arrayLength}}</span>
+              <span class="badge badge-critical">{{ alerts | arrayLength }}</span>
             </span>
           </a>
           <div class="dropdown-menu popover-menu" role="menu">

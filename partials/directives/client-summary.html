@@ -7,7 +7,7 @@
         </div>
         <p>
           <small><i class="fa fa-clock-o"></i> <relative-time timestamp="client.timestamp"></relative-time></small> <br />
-          <small><i class="fa fa-cloud"></i> {{ dcId }}</small>
+          <small><i class="fa fa-cloud"></i> {{ client.dc }}</small>
         </p>
       </div>
       <div class="col-xs-6">
@@ -41,7 +41,7 @@
 </div>
 
 <!--Client images-->
-<div class="panel panel-default check-info" ng-repeat="image in images">
+<div class="panel panel-default check-info" ng-repeat="image in clientImages">
   <div class="panel-body">
     <div class="row">
       <div class="col-xs-12">

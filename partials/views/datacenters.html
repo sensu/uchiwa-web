@@ -32,7 +32,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="datacenter in dc | orderBy:'name'">
+              <tr ng-repeat="datacenter in datacenters | orderBy:'name'">
                 <td class="main">{{ datacenter.name }}</td>
                 <td>{{ datacenter.info.sensu.version }}</td>
                 <td>

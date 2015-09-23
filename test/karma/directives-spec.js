@@ -25,7 +25,7 @@ describe('directives', function () {
       scope.$digest();
 
       expect(scope.clientSummary).toEqual({version: '0.20.4'});
-      expect(scope.images[0].value).toBe('<a target="_blank" href="https://uchiwa.io/dashboard.jpg"><img src="https://uchiwa.io/dashboard.jpg"></a>');
+      expect(scope.clientImages[0].value).toBe('<a target="_blank" href="https://uchiwa.io/dashboard.jpg"><img src="https://uchiwa.io/dashboard.jpg"></a>');
       expect(element.find('img').eq(0).attr('src')).toBe('https://uchiwa.io/dashboard.jpg')
     });
   });

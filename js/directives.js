@@ -10,7 +10,7 @@ directiveModule.directive('clientSummary', ['$filter', '$rootScope', function ($
       scope.clientSummary = {};
 
       attrs.$observe('client', function() {
-        scope.images = [];
+        scope.clientImages = [];
         angular.forEach(scope.client, function(value, key) {
           // Ignore redundant keys
           var unusedKeys = [ 'acknowledged', 'dc', 'events', 'eventsSummary', 'history', 'output', 'status' ];
@@ -21,7 +21,7 @@ directiveModule.directive('clientSummary', ['$filter', '$rootScope', function ($
 
             // Move images to their own panels
             if (/<img src=/.test(value)) {
-              scope.images.push({key: key, value: value});
+              scope.clientImages.push({key: key, value: value});
               delete scope.clientSummary[key];
             } else {
               scope.clientSummary[key] = value;

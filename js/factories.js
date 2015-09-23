@@ -41,6 +41,140 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, 
 });
 
 /**
+* Sensu Data
+*/
+factoryModule.factory('Sensu', function(backendService, conf, $interval) {
+  var sensu = {aggregates: [], checks: [], client: {}, clients: [], events: [], stashes: [], subscriptions: []};
+
+  return {
+    getAggregates: function() {
+      return sensu.aggregates;
+    },
+    getChecks: function() {
+      return sensu.checks;
+    },
+    getClient: function() {
+      return sensu.client;
+    },
+    getClients: function() {
+      return sensu.clients;
+    },
+    getEvents: function() {
+      return sensu.events;
+    },
+    getStashes: function() {
+      return sensu.stashes;
+    },
+    getSubscriptions: function() {
+      return sensu.subscriptions;
+    },
+    stop: function(timer) {
+      $interval.cancel(timer);
+    },
+    updateAggregates: function() {
+      var update = function() {
+        backendService.getHealth();
+        backendService.getMetrics();
+        backendService.getAggregates()
+          .success(function (data) {
+            sensu.aggregates = data;
+          })
+          .error(function(error) {
+            console.error(JSON.stringify(error));
+          });
+      };
+      update();
+      return $interval(update, conf.refresh);
+    },
+    updateChecks: function() {
+      var update = function() {
+        backendService.getHealth();
+        backendService.getMetrics();
+        backendService.getChecks()
+          .success(function (data) {
+            sensu.checks = data;
+          })
+          .error(function(error) {
+            console.error(JSON.stringify(error));
+          });
+      };
+      update();
+      return $interval(update, conf.refresh);
+    },
+    updateClient: function(client, dc) {
+      var update = function() {
+        backendService.getHealth();
+        backendService.getMetrics();
+        backendService.getClient(client, dc)
+          .success(function (data) {
+            sensu.client = data;
+          })
+          .error(function(error) {
+            sensu.client = null;
+            console.error(JSON.stringify(error));
+          });
+      };
+      update();
+      return $interval(update, conf.refresh);
+    },
+    updateClients: function() {
+      var update = function() {
+        backendService.getHealth();
+        backendService.getMetrics();
+        backendService.getClients()
+          .success(function (data) {
+            sensu.clients = data;
+          })
+          .error(function(error) {
+            console.error(JSON.stringify(error));
+          });
+      };
+      update();
+      return $interval(update, conf.refresh);
+    },
+    updateEvents: function() {
+      var update = function() {
+        backendService.getHealth();
+        backendService.getMetrics();
+        backendService.getEvents()
+          .success(function (data) {
+            sensu.events = data;
+          })
+          .error(function(error) {
+            console.error(JSON.stringify(error));
+          });
+      };
+      update();
+      return $interval(update, conf.refresh);
+    },
+    updateStashes: function() {
+      var update = function() {
+        backendService.getHealth();
+        backendService.getMetrics();
+        backendService.getStashes()
+          .success(function (data) {
+            sensu.stashes = data;
+          })
+          .error(function(error) {
+            console.error(JSON.stringify(error));
+          });
+      };
+      update();
+      return $interval(update, conf.refresh);
+    },
+    updateSubscriptions: function() {
+      backendService.getSubscriptions()
+        .success(function (data) {
+          sensu.subscriptions = data;
+        })
+        .error(function(error) {
+          console.error(JSON.stringify(error));
+        });
+    }
+  };
+});
+
+/**
 * Page title
 */
 factoryModule.factory('titleFactory', function() {

@@ -12,7 +12,7 @@
         All Datacenters
       </a>
     </li>
-    <li ng-repeat="datacenter in dc | orderBy:'name'" ng-class="{selected: filters.dc == datacenter.name}">
+    <li ng-repeat="datacenter in datacenters | orderBy:'name'" ng-class="{selected: filters.dc == datacenter.name}">
       <a href="" ng-click="permalink($event, 'dc', datacenter.name)">
         <i class="fa fa-cloud"></i>
         {{datacenter.name}}
