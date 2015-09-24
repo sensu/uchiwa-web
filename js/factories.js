@@ -32,7 +32,8 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, 
         // handle the case where the user is not authenticated
         if ($location.path() !== '/login') {
           userService.logout();
-          $location.path('login');
+          $location.path('/login');
+          $location.url($location.path());
         }
       }
       return $q.reject(rejection);
