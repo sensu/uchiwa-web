@@ -24,6 +24,9 @@ filterModule.filter('buildEvents', function() {
       return events;
     }
     angular.forEach(events, function(event) {
+      if (angular.isUndefined(event)) {
+        return;
+      }
       if (typeof(event.check) === 'undefined' && typeof(event.client) === 'undefined') {
         event.sourceName = 'unknown';
         return true;

@@ -275,7 +275,9 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     // Get subscriptions
     Sensu.updateSubscriptions();
     $scope.$watch(function () { return Sensu.getSubscriptions(); }, function (data) {
-      $scope.subscriptions = data;
+      if (angular.isObject(data)) {
+        $scope.subscriptions = data;
+      }
     });
 
     // Routing
@@ -373,17 +375,19 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     $scope.events = [];
     var timer = Sensu.updateEvents();
     $scope.$watch(function () { return Sensu.getEvents(); }, function (data) {
-      $scope.events = _.map(data, function(event) {
-        if (event.client.name === null && event.check.name === null) {
-          return false;
-        }
-        event._id = event.dc + '/' + event.client.name + '/' + event.check.name;
-        var existingEvent = _.findWhere($scope.events, {_id: event._id});
-        if (existingEvent !== undefined) {
-          event = angular.extend(existingEvent, event);
-        }
-        return existingEvent || event;
-      });
+      if (angular.isObject(data)) {
+        $scope.events = _.map(data, function(event) {
+          if (event.client.name === null || event.check.name === null) {
+            return;
+          }
+          event._id = event.dc + '/' + event.client.name + '/' + event.check.name;
+          var existingEvent = _.findWhere($scope.events, {_id: event._id});
+          if (existingEvent !== undefined) {
+            event = angular.extend(existingEvent, event);
+          }
+          return existingEvent || event;
+        });
+      }
     });
     $scope.$on('$destroy', function() {
       Sensu.stop(timer);

@@ -62,7 +62,12 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     this.getDatacenters = function() {
       $http.get('datacenters')
         .success(function(data) {
-          $rootScope.datacenters = data;
+          if (!angular.isObject(data)) {
+            $rootScope.datacenters = [];
+          }
+          else {
+            $rootScope.datacenters = data;
+          }
         })
         .error(function(error) {
           console.error(JSON.stringify(error));
