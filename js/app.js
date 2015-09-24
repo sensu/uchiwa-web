@@ -50,7 +50,7 @@ angular.module('uchiwa')
   $rootScope.alerts = [];
   $rootScope.events = [];
   $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
-  $rootScope.skipRefresh = false;
+  $rootScope.skipOneRefresh = false;
   $rootScope.showCollectionBar = true;
   $rootScope.enterprise = conf.enterprise;
   $rootScope.themes = themes;

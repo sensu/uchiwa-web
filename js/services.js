@@ -246,17 +246,18 @@ serviceModule.service('routingService', ['$location', function ($location) {
 */
 serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$modal', '$rootScope',
   function (backendService, conf, $filter, $modal, $rootScope) {
-    this.deleteStash = function (stash) {
+    this.deleteStash = function (stash, stashes) {
       $rootScope.skipRefresh = true;
       backendService.deleteStash(stash.dc, stash.path)
         .success(function () {
           $rootScope.$emit('notification', 'success', 'The stash has been deleted.');
-          for (var i=0; $rootScope.stashes; i++) {
-            if ($rootScope.stashes[i].path === stash.path) {
-              $rootScope.stashes.splice(i, 1);
+          for (var i=0; stashes; i++) {
+            if (stashes[i].path === stash.path) {
+              stashes.splice(i, 1);
               break;
             }
           }
+          $rootScope.skipOneRefresh = true;
           return true;
         })
         .error(function (error) {
@@ -350,10 +351,10 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
         item.reason = '';
       }
 
-      $rootScope.skipRefresh = true;
       if (isAcknowledged) {
         backendService.deleteStash(dc, path)
           .success(function () {
+            $rootScope.skipOneRefresh = true;
             $rootScope.$emit('notification', 'success', 'The stash has been deleted.');
             element.acknowledged = !element.acknowledged;
             return true;
@@ -382,6 +383,7 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
         // post payload
         backendService.postStash(payload)
           .success(function () {
+            $rootScope.skipOneRefresh = true;
             $rootScope.$emit('notification', 'success', 'The stash has been created.');
             element.acknowledged = !element.acknowledged;
             return true;

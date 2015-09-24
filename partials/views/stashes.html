@@ -50,7 +50,7 @@
                   <!-- adding ng-click to get stash info -->
                   <input type="checkbox" ng-click="stashInfo(stash, filtered)" ng-model="stash.selected"></input>
                 </td>
-                <td class="main"><span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteStash(stash);"></i></span>{{ stash.client }}</td>
+                <td class="main"><span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteStash(stash, stashes);"></i></span>{{ stash.client }}</td>
                 <td>{{ stash.check }}</td>
                 <td>{{ stash.type }}</td>
                 <td ng-bind-html="stash.content.reason | linky"></td>

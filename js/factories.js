@@ -44,7 +44,7 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, 
 /**
 * Sensu Data
 */
-factoryModule.factory('Sensu', function(backendService, conf, $interval) {
+factoryModule.factory('Sensu', function(backendService, conf, $interval, $rootScope) {
   var sensu = {aggregates: [], checks: [], client: {}, clients: [], events: [], stashes: [], subscriptions: []};
 
   return {
@@ -106,6 +106,10 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval) {
       var update = function() {
         backendService.getHealth();
         backendService.getMetrics();
+        if ($rootScope.skipOneRefresh) {
+          $rootScope.skipOneRefresh = false;
+          return;
+        }
         backendService.getClient(client, dc)
           .success(function (data) {
             sensu.client = data;
@@ -122,6 +126,10 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval) {
       var update = function() {
         backendService.getHealth();
         backendService.getMetrics();
+        if ($rootScope.skipOneRefresh) {
+          $rootScope.skipOneRefresh = false;
+          return;
+        }
         backendService.getClients()
           .success(function (data) {
             sensu.clients = data;
@@ -137,6 +145,10 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval) {
       var update = function() {
         backendService.getHealth();
         backendService.getMetrics();
+        if ($rootScope.skipOneRefresh) {
+          $rootScope.skipOneRefresh = false;
+          return;
+        }
         backendService.getEvents()
           .success(function (data) {
             sensu.events = data;
@@ -152,6 +164,10 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval) {
       var update = function() {
         backendService.getHealth();
         backendService.getMetrics();
+        if ($rootScope.skipOneRefresh) {
+          $rootScope.skipOneRefresh = false;
+          return;
+        }
         backendService.getStashes()
           .success(function (data) {
             sensu.stashes = data;

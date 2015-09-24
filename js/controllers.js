@@ -685,7 +685,7 @@ controllerModule.controller('StashesController', ['filterService', '$routeParams
     $scope.deleteStashes = function(stashes) {
       var selectedStashes = helperService.selectedItems(stashes);
       _.each(selectedStashes, function(stash) {
-        $scope.deleteStash(stash);
+        $scope.deleteStash(stash, $scope.stashes);
       });
       helperService.unselectItems(selectedStashes);
       $scope.selectAll.checked = false;
