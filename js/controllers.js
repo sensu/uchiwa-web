@@ -628,12 +628,20 @@ controllerModule.controller('SidebarController', ['$location', 'navbarServices',
       }
     };
 
-    $scope.clientsStyle = $scope.metrics.clients.critical > 0 ? 'critical' : $scope.metrics.clients.warning > 0 ? 'warning' : $scope.metrics.clients.unknown > 0 ? 'unknown' : 'success';
-    $scope.eventsStyle = $scope.metrics.events.critical > 0 ? 'critical' : $scope.metrics.events.warning > 0 ? 'warning' : $scope.metrics.events.unknown > 0 ? 'unknown' : 'success';
+    $scope.$watch('metrics', function() {
+      if (angular.isObject($scope.metrics) && angular.isDefined($scope.metrics.clients)) {
+        $scope.clientsStyle = $scope.metrics.clients.critical > 0 ? 'critical' : $scope.metrics.clients.warning > 0 ? 'warning' : $scope.metrics.clients.unknown > 0 ? 'unknown' : 'success';
+        $scope.eventsStyle = $scope.metrics.events.critical > 0 ? 'critical' : $scope.metrics.events.warning > 0 ? 'warning' : $scope.metrics.events.unknown > 0 ? 'unknown' : 'success';
+      }
+      else {
+        $scope.clientsStyle = 'unknown';
+        $scope.eventsStyle = 'unknown';
+      }
+    });
 
     // Services
     $scope.user = userService;
-    $scope.$watch('health', function () {
+    $scope.$watch('health', function (){
       navbarServices.health();
     });
   }
