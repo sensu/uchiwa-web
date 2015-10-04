@@ -10,9 +10,6 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     this.auth = function () {
       return $http.get('auth');
     };
-    this.dashboard = function () {
-      return $http.get('dashboard');
-    };
     this.deleteClient = function (client, dc) {
       if ($rootScope.enterprise) {
         audit.log({action: 'delete_client', level: 'default', output: dc+'/'+client});
