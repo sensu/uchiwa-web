@@ -141,6 +141,14 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $rootSc
       update();
       return $interval(update, conf.refresh);
     },
+    updateDashboard: function() {
+      var update = function() {
+        backendService.getHealth();
+        backendService.getMetrics();
+      };
+      update();
+      return $interval(update, conf.refresh);
+    },
     updateEvents: function() {
       var update = function() {
         backendService.getHealth();
