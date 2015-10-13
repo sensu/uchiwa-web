@@ -10,11 +10,11 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     this.auth = function () {
       return $http.get('auth');
     };
-    this.deleteClient = function (client, dc) {
+    this.deleteClient = function (id) {
       if ($rootScope.enterprise) {
-        audit.log({action: 'delete_client', level: 'default', output: dc+'/'+client});
+        audit.log({action: 'delete_client', level: 'default', output: id});
       }
-      return $http.delete('clients/'+dc+'/'+client);
+      return $http.delete('clients/'+id);
     };
     this.deleteEvent = function (check, client, dc) {
       return $http.delete('events/'+dc+'/'+client+'/'+check);
@@ -144,15 +144,15 @@ serviceModule.service('clientsService', ['$location', '$rootScope', 'backendServ
         $rootScope.$emit('notification', 'error', 'The event was not resolved. ' + error);
       });
   };
-  this.deleteClient = function (dc, client) {
-    backendService.deleteClient(client, dc)
+  this.deleteClient = function (id) {
+    backendService.deleteClient(id)
       .success(function () {
         $rootScope.$emit('notification', 'success', 'The client has been deleted.');
         $location.url('/clients');
         return true;
       })
       .error(function (error) {
-        $rootScope.$emit('notification', 'error', 'Could not delete the client '+ client +'. Is Sensu API running on '+ dc +'?');
+        $rootScope.$emit('notification', 'error', 'Could not delete the client '+ id);
         console.error(error);
       });
   };

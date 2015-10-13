@@ -255,18 +255,12 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
 
     // Get clients
     $scope.clients = [];
+    $scope.filteredClients = [];
+    $scope.selection = {all: false, ids: {}};
     var timer = Sensu.updateClients();
     $scope.$watch(function () { return Sensu.getClients(); }, function (data) {
-      $scope.clients = _.map(data, function(client) {
-        var existingClient = _.findWhere($scope.clients, {name: client.name, dc: client.dc});
-        if (angular.isDefined(existingClient)) {
-          if (angular.isUndefined(client.output) && angular.isDefined(existingClient.output)) {
-            client.output = '';
-          }
-          client = angular.extend(existingClient, client);
-        }
-        return existingClient || client;
-      });
+      $scope.clients = data;
+      updateFilters();
     });
     $scope.$on('$destroy', function() {
       Sensu.stop(timer);
@@ -296,55 +290,78 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     $scope.stash = stashesService.stash;
     $scope.user = userService;
 
-    $scope.selectClients = function(selectModel) {
-      var filteredClients = $filter('filter')($scope.clients, $scope.filters.q);
-      filteredClients = $filter('filter')(filteredClients, {dc: $scope.filters.dc});
-      filteredClients = $filter('filter')(filteredClients, {status: $scope.filters.status});
-      filteredClients = $filter('hideSilenced')(filteredClients, $scope.filters.silenced);
-      _.each(filteredClients, function(client) {
-        client.selected = selectModel.selected;
+    $scope.selectAll = function() {
+      angular.forEach($scope.filteredClients, function(value) {
+        $scope.selection.ids[value._id] = $scope.selection.all;
       });
     };
 
-    $scope.deleteClients = function(clients) {
-      var selectedClients = helperService.selectedItems(clients);
-      _.each(selectedClients, function(client) {
-        $scope.deleteClient(client.dc, client.name);
+    $scope.deleteClients = function() {
+      angular.forEach($scope.selection.ids, function(value, key) {
+        if (value) {
+          $scope.deleteClient(key);
+          $scope.selection.ids[key] = false;
+        }
       });
+      $scope.selection.all = false;
     };
 
-    $scope.silenceClients = function($event, clients) {
-      var selectedClients = helperService.selectedItems(clients);
+    $scope.silenceClients = function($event) {
+      var selectedClients = [];
+      angular.forEach($scope.selection.ids, function(value, key) {
+        if (value) {
+          var found = $filter('filter')($scope.filteredClients, {_id: key});
+          if (found.length) {
+            selectedClients.push(found[0]);
+            $scope.selection.ids[key] = false;
+          }
+        }
+      });
       $scope.stash($event, selectedClients);
+      $scope.selection.all = false;
     };
 
-    $scope.$watch('filters.q', function(newVal) {
-      var matched = $filter('filter')($scope.clients, '!'+newVal);
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
-    });
-
+    // Filters
     $scope.$watch('filters.dc', function(newVal) {
-      var matched = $filter('filter')($scope.clients, {dc: '!'+newVal});
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
+      updateFilters();
+      updateSelection(newVal);
     });
-
-    $scope.$watch('filters.silenced', function() {
-      var matched = $filter('filter')($scope.clients, {acknowledged: true});
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
+    $scope.$watch('filters.q', function(newVal) {
+      updateFilters();
+      updateSelection(newVal);
     });
-
+    $scope.$watch('filters.subscription', function(newVal) {
+      updateFilters();
+      updateSelection(newVal);
+    });
     $scope.$watch('filters.status', function(newVal) {
-      var matched = $filter('filter')($scope.clients, {status: '!'+newVal});
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
+      updateFilters();
+      updateSelection(newVal);
     });
+
+    var updateFilters = function() {
+      var filteredClients = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filteredClients = $filter('filter')(filteredClients, {status: $scope.filters.status});
+      filteredClients = $filter('filterSubscriptions')(filteredClients, $scope.filters.subscription);
+      filteredClients = $filter('filter')(filteredClients, $scope.filters.q);
+      filteredClients = $filter('collection')(filteredClients, 'clients');
+
+      $scope.filteredClients = filteredClients;
+    };
+
+    var updateSelection = function(newVal) {
+      if (newVal === '') {
+        return;
+      }
+      angular.forEach($scope.selection.ids, function(value, key) {
+        if (value) {
+          var found = $filter('filter')($scope.filteredClients, {_id: key});
+          if (!found.length) {
+            $scope.selection.ids[key] = false;
+          }
+        }
+      });
+    };
   }
 ]);
 
