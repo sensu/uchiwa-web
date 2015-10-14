@@ -390,20 +390,13 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
 
     // Get events
     $scope.events = [];
+    $scope.filteredEvents = [];
+    $scope.selection = {all: false, ids: {}};
     var timer = Sensu.updateEvents();
     $scope.$watch(function () { return Sensu.getEvents(); }, function (data) {
       if (angular.isObject(data)) {
-        $scope.events = _.map(data, function(event) {
-          if (event.client.name === null || event.check.name === null) {
-            return;
-          }
-          event._id = event.dc + '/' + event.client.name + '/' + event.check.name;
-          var existingEvent = _.findWhere($scope.events, {_id: event._id});
-          if (existingEvent !== undefined) {
-            event = angular.extend(existingEvent, event);
-          }
-          return existingEvent || event;
-        });
+        $scope.events = data;
+        updateFilters();
       }
     });
     $scope.$on('$destroy', function() {
@@ -425,6 +418,92 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     $scope.stash = stashesService.stash;
     $scope.user = userService;
 
+    $scope.selectAll = function() {
+      angular.forEach($scope.filteredEvents, function(value) {
+        $scope.selection.ids[value._id] = $scope.selection.all;
+      });
+    };
+
+    $scope.resolveEvents = function() {
+      angular.forEach($scope.selection.ids, function(value, key) {
+        if (value) {
+          $scope.resolveEvent(key);
+          $scope.selection.ids[key] = false;
+        }
+      });
+      $scope.selection.all = false;
+    };
+
+    $scope.silenceEvents = function($event) {
+      var selectedEvents = [];
+      angular.forEach($scope.selection.ids, function(value, key) {
+        if (value) {
+          var found = $filter('filter')($scope.filteredEvents, {_id: key});
+          if (found.length) {
+            selectedEvents.push(found[0]);
+            $scope.selection.ids[key] = false;
+          }
+        }
+      });
+      $scope.stash($event, selectedEvents);
+      $scope.selection.all = false;
+    };
+
+    // Filters
+    $scope.$watch('filters.q', function(newVal) {
+      updateFilters();
+      updateSelection(newVal);
+    });
+    $scope.$watch('filters.dc', function(newVal) {
+      updateFilters();
+      updateSelection(newVal);
+    });
+    $scope.$watch('filters.check', function(newVal) {
+      updateFilters();
+      updateSelection(newVal);
+    });
+    $scope.$watch('filters.status', function(newVal) {
+      updateFilters();
+      updateSelection(newVal);
+    });
+    $scope.$watch('filters.silenced', function(newVal) {
+      updateFilters();
+      updateSelection(newVal);
+    });
+    $scope.$watch('filters.clientsSilenced', function(newVal) {
+      updateFilters();
+      updateSelection(newVal);
+    });
+    $scope.$watch('filters.occurrences', function(newVal) {
+      updateFilters();
+      updateSelection(newVal);
+    });
+
+    var updateFilters = function() {
+      var filteredEvents = $filter('filter')($scope.events, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filteredEvents = $filter('filter')(filteredEvents, {check: {status: $scope.filters.status}});
+      filteredEvents = $filter('hideSilenced')(filteredEvents, $scope.filters.silenced);
+      filteredEvents = $filter('hideClientsSilenced')(filteredEvents, $scope.filters.clientsSilenced);
+      filteredEvents = $filter('hideOccurrences')(filteredEvents, $scope.filters.occurrences);
+      filteredEvents = $filter('filter')(filteredEvents, $scope.filters.check);
+      filteredEvents = $filter('filter')(filteredEvents, $scope.filters.q);
+      $scope.filteredEvents = filteredEvents;
+    };
+
+    var updateSelection = function(newVal) {
+      if (newVal === '') {
+        return;
+      }
+      angular.forEach($scope.selection.ids, function(value, key) {
+        if (value) {
+          var found = $filter('filter')($scope.filteredEvents, {_id: key});
+          if (!found.length) {
+            $scope.selection.ids[key] = false;
+          }
+        }
+      });
+    };
+
     // Hide silenced
     $scope.filters.silenced = $cookieStore.get('hideSilenced') || conf.hideSilenced;
     $scope.$watch('filters.silenced', function () {
@@ -432,97 +511,15 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     });
 
     // Hide events from silenced clients
-    $scope.filters.clientSilenced = $cookieStore.get('hideClientSilenced') || conf.hideClientSilenced;
-    $scope.$watch('filters.clientSilenced', function () {
-      $cookieStore.put('hideClientSilenced', $scope.filters.clientSilenced);
+    $scope.filters.clientsSilenced = $cookieStore.get('hideClientsSilenced') || conf.hideClientsSilenced;
+    $scope.$watch('filters.clientsSilenced', function () {
+      $cookieStore.put('hideClientsSilenced', $scope.filters.clientsSilenced);
     });
 
     // Hide occurrences
     $scope.filters.occurrences = $cookieStore.get('hideOccurrences') || conf.hideOccurrences;
     $scope.$watch('filters.occurrences', function () {
       $cookieStore.put('hideOccurrences', $scope.filters.occurrences);
-    });
-
-    $scope.selectEvents = function(selectModel) {
-      var filteredEvents = $filter('filter')($scope.events, $scope.filters.q);
-      filteredEvents = $filter('filter')(filteredEvents, $scope.filters.check);
-      filteredEvents = $filter('filter')(filteredEvents, {dc: $scope.filters.dc});
-      filteredEvents = $filter('filter')(filteredEvents, {check: {status: $scope.filters.status}});
-      filteredEvents = $filter('hideSilenced')(filteredEvents, $scope.filters.silenced);
-      filteredEvents = $filter('hideClientSilenced')(filteredEvents, $scope.filters.clientSilenced);
-      filteredEvents = $filter('hideOccurrences')(filteredEvents, $scope.filters.occurrences);
-      _.each(filteredEvents, function(event) {
-        event.selected = selectModel.selected;
-      });
-    };
-
-    $scope.resolveEvents = function(events) {
-      var selectedEvents = helperService.selectedItems(events);
-      _.each(selectedEvents, function(event) {
-        $scope.resolveEvent(event.check.name, event.client.name, event.dc);
-      });
-      helperService.unselectItems(selectedEvents);
-    };
-
-    $scope.silenceEvents = function($event, events) {
-      var selectedEvents = helperService.selectedItems(events);
-      $scope.stash($event, selectedEvents);
-      helperService.unselectItems(selectedEvents);
-    };
-
-    $scope.$watch('filters.q', function(newVal) {
-      var matched = $filter('filter')($scope.events, '!'+newVal);
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
-    });
-
-    $scope.$watch('filters.dc', function(newVal) {
-      var matched = $filter('filter')($scope.events, {dc: '!'+newVal});
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
-    });
-
-    $scope.$watch('filters.check', function(newVal) {
-      var matched = $filter('filter')($scope.events, {check: '!'+newVal});
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
-    });
-
-    $scope.$watch('filters.status', function(newVal) {
-      var matched = $filter('filter')($scope.events, {check: {status: '!'+newVal}});
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
-    });
-
-    $scope.$watch('filters.silenced', function() {
-      var matched = $filter('filter')($scope.events, {acknowledged: true});
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
-    });
-
-    $scope.$watch('filters.clientSilenced', function() {
-      var matched = $filter('filter')($scope.events.client, {acknowledged: true});
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
-    });
-
-    $scope.$watch('filters.occurrences', function() {
-      var matched = $filter('filter')($scope.events, function(event) {
-        if (('occurrences' in event.check) && !isNaN(event.check.occurrences)) {
-          return event.occurrences >= event.check.occurrences;
-        } else {
-          return true;
-        }
-      });
-      _.each(matched, function(match) {
-        match.selected = false;
-      });
     });
   }
 ]);

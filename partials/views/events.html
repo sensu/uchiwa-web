@@ -29,14 +29,13 @@
             </div>
           </div>
         </div>
-
         <!--panel-body-->
         <div class="panel-body">
           <table class="table table-hover table-condensed" style="table-layout: fixed;">
             <thead>
               <tr>
                 <th ng-class="user.isReadOnly() ? 'col-min-ro' : 'col-min'">
-                  <input type="checkbox" ng-model="selectModel.selected" ng-change="selectEvents(selectModel)" ng-if="!user.isReadOnly()"></input>
+                  <input type="checkbox" ng-model="selection.all" ng-change="selectAll()"  ng-if="!user.isReadOnly()"></input>
                 </th>
                 <th class="col-sm-3" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
                 <th class="col-sm-3" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
@@ -47,10 +46,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="event in filtered = (events | buildEvents | orderBy:predicate:reverse | collection:'events' | filter:filters.q | filter:filters.check | filter:{dc:filters.dc}:filterComparator) | filter:{check:{status:filters.status}} | hideSilenced:filters.silenced | hideClientSilenced:filters.clientSilenced | hideOccurrences:filters.occurrences | limitTo:filters.limit track by event._id" ng-click="go('/client/'+event.dc+'/'+event.client.name+'?check='+event.check.name)">
+              <tr ng-repeat="event in filteredEvents | buildEvents | orderBy:predicate:reverse | limitTo:filters.limit track by event._id" ng-click="go('/client/'+event.dc+'/'+event.client.name+'?check='+event.check.name)">
                 <td class="well-{{ event.check.status | getStatusClass }}" ng-click="$event.stopPropagation()">
                   <!-- adding ng-click to get event info -->
-                  <input type="checkbox" ng-click="eventInfo(event, events)" ng-model="event.selected" ng-if="!user.isReadOnly()"></input>
+                  <input type="checkbox" ng-model="selection.ids[event._id]"  ng-if="!user.isReadOnly()"></input>
                 </td>
                 <td class="source">
                   <span ng-click="event.client['dc'] = event.dc; stash($event, event.client)" ng-if="!user.isReadOnly()">

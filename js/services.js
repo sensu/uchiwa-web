@@ -16,8 +16,8 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
       }
       return $http.delete('clients/'+id);
     };
-    this.deleteEvent = function (check, client, dc) {
-      return $http.delete('events/'+dc+'/'+client+'/'+check);
+    this.deleteEvent = function (id) {
+      return $http.delete('events/'+id);
     };
     this.deleteStash = function (dc, path) {
       if ($rootScope.enterprise) {
@@ -122,23 +122,15 @@ serviceModule.service('clientsService', ['$location', '$rootScope', 'backendServ
       return (item.dc === dc && item.client.name === client && item.check.name === check);
     })[0];
   };
-  this.resolveEvent = function (check, client, dc) {
-    if (!angular.isString(check) || !angular.isString(client) || !angular.isString(dc)) {
+  this.resolveEvent = function (id) {
+    if (!angular.isString(id)) {
       $rootScope.$emit('notification', 'error', 'Could not resolve this event. Try to refresh the page.');
       return false;
     }
 
-    backendService.deleteEvent(check, client, dc)
+    backendService.deleteEvent(id)
       .success(function () {
         $rootScope.$emit('notification', 'success', 'The event has been resolved.');
-        if ($location.url() !== '/events') {
-          $location.url(encodeURI('/client/' + dc + '/' + client));
-        } else {
-          var _id = dc + '/' + client + '/' + check;
-          var event = _.findWhere($rootScope.events, {_id: _id});
-          var eventPosition = $rootScope.events.indexOf(event);
-          $rootScope.events.splice(eventPosition, 1);
-        }
       })
       .error(function (error) {
         $rootScope.$emit('notification', 'error', 'The event was not resolved. ' + error);

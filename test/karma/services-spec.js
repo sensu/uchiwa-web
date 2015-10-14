@@ -32,15 +32,14 @@ describe('services', function () {
     });
 
     describe('resolveEvent', function () {
-      it('should return false when neither client & check are undefined or not objects', inject(function (clientsService) {
-        expect(clientsService.resolveEvent('foo', null, null)).toEqual(false);
-        expect(clientsService.resolveEvent('foo', undefined)).toEqual(false);
+      it('should return false when the ID is not a string', inject(function (clientsService) {
+        expect(clientsService.resolveEvent(null)).toEqual(false);
       }));
 
-      it('should emit HTTP POST to /resolveEvent', inject(function (clientsService, backendService) {
+      it('should emit HTTP DELETE to /events', inject(function (clientsService, backendService) {
         spyOn(backendService, 'deleteEvent').and.callThrough();
-        clientsService.resolveEvent('qux', 'bar', 'foo');
-        expect(backendService.deleteEvent).toHaveBeenCalledWith('qux', 'bar', 'foo');
+        clientsService.resolveEvent('foo/bar/qux');
+        expect(backendService.deleteEvent).toHaveBeenCalledWith('foo/bar/qux');
       }));
     });
   });
