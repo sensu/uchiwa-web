@@ -388,7 +388,8 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
 /**
 * Helpers service
 */
-serviceModule.service('helperService', function() {
+serviceModule.service('helperService', ['$filter',
+function($filter) {
   // Stop event propagation if an A tag is clicked
   this.openLink = function($event) {
     if($event.srcElement.tagName === 'A'){
@@ -407,7 +408,22 @@ serviceModule.service('helperService', function() {
       }
     });
   };
-});
+  // updateSelected updates the selected array to remove any filtered items
+  this.updateSelected = function(filterValue, filtered, selected) {
+    // We don't need to remove anything if the filter new value is empty
+    if (filterValue === '') {
+      return;
+    }
+    angular.forEach(selected.ids, function(value, key) {
+      if (value) {
+        var found = $filter('filter')(filtered, {_id: key});
+        if (!found.length) {
+          selected.ids[key] = false;
+        }
+      }
+    });
+  };
+}]);
 
 /**
 * User service

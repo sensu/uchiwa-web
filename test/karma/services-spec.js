@@ -60,6 +60,25 @@ describe('services', function () {
     });
   });
 
+  describe('helperService', function () {
+    describe('updateSelected()', function () {
+      it('returns the same data set when the filter value is empty', inject(function (helperService) {
+        var filtered = [{_id: 'foo'}];
+        var selected = {ids: {foo: true, bar: true}}
+        var expectedSelected = {ids: {foo: true, bar: false}}
+        expect(helperService.updateSelected('', filtered, selected)).toEqual(undefined);
+        expect(selected).not.toEqual(expectedSelected);
+      }));
+      it('removed any selected items that are filtered', inject(function (helperService) {
+        var filtered = [{_id: 'foo'}];
+        var selected = {ids: {foo: true, bar: true}}
+        var expectedSelected = {ids: {foo: true, bar: false}}
+        expect(helperService.updateSelected('foobar', filtered, selected)).toEqual(undefined);
+        expect(selected).toEqual(expectedSelected);
+      }));
+    });
+  });
+
 
   describe('navbarServices', function () {
     describe('health method', function (navbarServices) {

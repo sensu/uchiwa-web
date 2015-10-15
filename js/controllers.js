@@ -255,8 +255,8 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
 
     // Get clients
     $scope.clients = [];
-    $scope.filteredClients = [];
-    $scope.selection = {all: false, ids: {}};
+    $scope.filtered = [];
+    $scope.selected = {all: false, ids: {}};
     var timer = Sensu.updateClients();
     $scope.$watch(function () { return Sensu.getClients(); }, function (data) {
       $scope.clients = data;
@@ -291,76 +291,66 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     $scope.user = userService;
 
     $scope.selectAll = function() {
-      angular.forEach($scope.filteredClients, function(value) {
-        $scope.selection.ids[value._id] = $scope.selection.all;
+      angular.forEach($scope.filtered, function(value) {
+        $scope.selected.ids[value._id] = $scope.selected.all;
       });
     };
 
     $scope.deleteClients = function() {
-      angular.forEach($scope.selection.ids, function(value, key) {
+      angular.forEach($scope.selected.ids, function(value, key) {
         if (value) {
           $scope.deleteClient(key);
-          $scope.selection.ids[key] = false;
+          $scope.selected.ids[key] = false;
         }
       });
-      $scope.selection.all = false;
+      $scope.selected.all = false;
     };
 
     $scope.silenceClients = function($event) {
       var selectedClients = [];
       angular.forEach($scope.selection.ids, function(value, key) {
         if (value) {
-          var found = $filter('filter')($scope.filteredClients, {_id: key});
+          var found = $filter('filter')($scope.filtered, {_id: key});
           if (found.length) {
             selectedClients.push(found[0]);
-            $scope.selection.ids[key] = false;
+            $scope.selected.ids[key] = false;
           }
         }
       });
       $scope.stash($event, selectedClients);
-      $scope.selection.all = false;
+      $scope.selected.all = false;
     };
 
     // Filters
     $scope.$watch('filters.dc', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
     $scope.$watch('filters.q', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
     $scope.$watch('filters.subscription', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
     $scope.$watch('filters.status', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
 
     var updateFilters = function() {
-      var filteredClients = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, $scope.filterComparator);
-      filteredClients = $filter('filter')(filteredClients, {status: $scope.filters.status});
-      filteredClients = $filter('filterSubscriptions')(filteredClients, $scope.filters.subscription);
-      filteredClients = $filter('filter')(filteredClients, $scope.filters.q);
-      filteredClients = $filter('collection')(filteredClients, 'clients');
+      var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filtered = $filter('filter')(filtered, {status: $scope.filters.status});
+      filtered = $filter('filterSubscriptions')(filtered, $scope.filters.subscription);
+      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('collection')(filtered, 'clients');
 
-      $scope.filteredClients = filteredClients;
+      $scope.filtered = filtered;
     };
 
-    var updateSelection = function(newVal) {
-      if (newVal === '') {
-        return;
-      }
-      angular.forEach($scope.selection.ids, function(value, key) {
-        if (value) {
-          var found = $filter('filter')($scope.filteredClients, {_id: key});
-          if (!found.length) {
-            $scope.selection.ids[key] = false;
-          }
-        }
-      });
+    var updateSelected = function(filterValue) {
+      helperService.updateSelected(filterValue, $scope.filtered, $scope.selected);
     };
   }
 ]);
@@ -390,8 +380,8 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
 
     // Get events
     $scope.events = [];
-    $scope.filteredEvents = [];
-    $scope.selection = {all: false, ids: {}};
+    $scope.filtered = [];
+    $scope.selected = {all: false, ids: {}};
     var timer = Sensu.updateEvents();
     $scope.$watch(function () { return Sensu.getEvents(); }, function (data) {
       if (angular.isObject(data)) {
@@ -419,89 +409,79 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     $scope.user = userService;
 
     $scope.selectAll = function() {
-      angular.forEach($scope.filteredEvents, function(value) {
-        $scope.selection.ids[value._id] = $scope.selection.all;
+      angular.forEach($scope.filtered, function(value) {
+        $scope.selected.ids[value._id] = $scope.selected.all;
       });
     };
 
     $scope.resolveEvents = function() {
-      angular.forEach($scope.selection.ids, function(value, key) {
+      angular.forEach($scope.selected.ids, function(value, key) {
         if (value) {
           $scope.resolveEvent(key);
-          $scope.selection.ids[key] = false;
+          $scope.selected.ids[key] = false;
         }
       });
-      $scope.selection.all = false;
+      $scope.selected.all = false;
     };
 
     $scope.silenceEvents = function($event) {
       var selectedEvents = [];
-      angular.forEach($scope.selection.ids, function(value, key) {
+      angular.forEach($scope.selected.ids, function(value, key) {
         if (value) {
-          var found = $filter('filter')($scope.filteredEvents, {_id: key});
+          var found = $filter('filter')($scope.filtered, {_id: key});
           if (found.length) {
             selectedEvents.push(found[0]);
-            $scope.selection.ids[key] = false;
+            $scope.selected.ids[key] = false;
           }
         }
       });
       $scope.stash($event, selectedEvents);
-      $scope.selection.all = false;
+      $scope.selected.all = false;
     };
 
     // Filters
     $scope.$watch('filters.q', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
     $scope.$watch('filters.dc', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
     $scope.$watch('filters.check', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
     $scope.$watch('filters.status', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
     $scope.$watch('filters.silenced', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
     $scope.$watch('filters.clientsSilenced', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
     $scope.$watch('filters.occurrences', function(newVal) {
       updateFilters();
-      updateSelection(newVal);
+      updateSelected(newVal);
     });
 
     var updateFilters = function() {
-      var filteredEvents = $filter('filter')($scope.events, {dc: $scope.filters.dc}, $scope.filterComparator);
-      filteredEvents = $filter('filter')(filteredEvents, {check: {status: $scope.filters.status}});
-      filteredEvents = $filter('hideSilenced')(filteredEvents, $scope.filters.silenced);
-      filteredEvents = $filter('hideClientsSilenced')(filteredEvents, $scope.filters.clientsSilenced);
-      filteredEvents = $filter('hideOccurrences')(filteredEvents, $scope.filters.occurrences);
-      filteredEvents = $filter('filter')(filteredEvents, $scope.filters.check);
-      filteredEvents = $filter('filter')(filteredEvents, $scope.filters.q);
-      $scope.filteredEvents = filteredEvents;
+      var filtered = $filter('filter')($scope.events, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filtered = $filter('filter')(filtered, {check: {status: $scope.filters.status}});
+      filtered = $filter('hideSilenced')(filtered, $scope.filters.silenced);
+      filtered = $filter('hideClientsSilenced')(filtered, $scope.filters.clientsSilenced);
+      filtered = $filter('hideOccurrences')(filtered, $scope.filters.occurrences);
+      filtered = $filter('filter')(filtered, $scope.filters.check);
+      filtered = $filter('filter')(filtered, $scope.filters.q);
+      $scope.filtered = filtered;
     };
 
-    var updateSelection = function(newVal) {
-      if (newVal === '') {
-        return;
-      }
-      angular.forEach($scope.selection.ids, function(value, key) {
-        if (value) {
-          var found = $filter('filter')($scope.filteredEvents, {_id: key});
-          if (!found.length) {
-            $scope.selection.ids[key] = false;
-          }
-        }
-      });
+    var updateSelected = function(filterValue) {
+      helperService.updateSelected(filterValue, $scope.filtered, $scope.selected);
     };
 
     // Hide silenced
