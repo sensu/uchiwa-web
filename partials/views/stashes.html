@@ -45,7 +45,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="stash in filtered | limitTo:filters.limit | buildStashes | orderBy:predicate:reverse">
+              <tr ng-repeat="stash in filtered | buildStashes | orderBy:predicate:reverse | limitTo:filters.limit track by stash._id">
                 <td ng-if="!user.isReadOnly()">
                   <input type="checkbox" ng-model="selected.ids[stash._id]"></input>
                 </td>
