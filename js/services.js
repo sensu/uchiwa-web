@@ -116,12 +116,6 @@ serviceModule.service('clientsService', ['$location', '$rootScope', 'backendServ
       return item.check === name;
     })[0];
   };
-  this.searchEvent = function (client, check, dc, events) {
-    if (!client || !check || !dc || events.constructor.toString().indexOf('Array') === -1) { return null; }
-    return events.filter(function (item) {
-      return (item.dc === dc && item.client.name === client && item.check.name === check);
-    })[0];
-  };
   this.resolveEvent = function (id) {
     return backendService.deleteEvent(id)
       .success(function () {

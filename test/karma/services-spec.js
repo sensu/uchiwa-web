@@ -19,18 +19,6 @@ describe('services', function () {
       }));
     });
 
-    describe('searchEvent()', function() {
-      it('returns the right event from the events', inject(function (clientsService) {
-        var event1 = {check: {name: 'check_foo'}, client: {name: 'foo'}, dc: 'east'};
-        var event2 = {check: {name: 'check_foo'}, client: {name: 'foo'}, dc: 'west'};
-        var event3 = {check: {name: 'check_bar'}, client: {name: 'foo'}, dc: 'west'};
-        var events = [event1, event2, event3];
-        expect(clientsService.searchEvent('foo', 'check_bar', 'east', events)).toEqual(undefined);
-        expect(clientsService.searchEvent('foo', 'check_foo', 'west', events)).toEqual(event2);
-        expect(clientsService.searchEvent('foo', 'check_bar', 'west', events)).toEqual(event3);
-      }));
-    });
-
     describe('resolveEvent()', function () {
       it('should emit HTTP DELETE to /events', inject(function (clientsService, backendService) {
         spyOn(backendService, 'deleteEvent').and.callThrough();

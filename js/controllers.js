@@ -174,29 +174,17 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
       if (angular.isDefined($routeParams.check)) {
         checkName = $routeParams.check;
         var check = searchCheckHistory(checkName, $scope.client.history);
-
-        // search for an event associated to the check
-        $scope.checkHasEvent = false;
-        var event = searchEvent($scope.client.name, checkName, $scope.client.dc, events);
-        if (angular.isObject(event)) {
-          $scope.checkHasEvent = true;
-          check.model = event.check;
+        if (!check) {
+          return;
         }
-        else {
-          if (!angular.isObject(check.model)) {
-            check.model = { standalone: true };
-          }
 
-          check.model.history = check.history;
-          check.model.last_execution = check.last_execution; // jshint ignore:line
-          if (check.output !== null) {
-            check.model.output = check.output;
-          }
+        if (angular.isDefined(check.last_result)) { // jshint ignore:line
+          check.last_result.history = check.history; // jshint ignore:line
         }
 
         // apply filters
         var images = [];
-        angular.forEach(check.model, function(value, key) {
+        angular.forEach(check.last_result, function(value, key) { // jshint ignore:line
           value = $filter('getTimestamp')(value);
           value = $filter('richOutput')(value);
 
@@ -205,9 +193,9 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
             obj.key = key;
             obj.value = value;
             images.push(obj);
-            delete check.model[key];
+            delete check.last_result[key]; // jshint ignore:line
           } else {
-            check.model[key] = value;
+            check.last_result[key] = value; // jshint ignore:line
           }
         });
         $scope.images = images;
@@ -236,7 +224,6 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
     $scope.stash = stashesService.stash;
     $scope.user = userService;
     var searchCheckHistory = clientsService.searchCheckHistory;
-    var searchEvent = clientsService.searchEvent;
   }
 ]);
 
