@@ -59,14 +59,5 @@ describe('directives', function () {
     it('should have a link method', inject(function (statusGlyphDirective) {
       expect(statusGlyphDirective[0].link).toBeDefined();
     }));
-
-    it('should add classes when calling link', inject(function (statusGlyphDirective) {
-      var attrs = {
-        statusGlyph: 'client.style'
-      };
-      statusGlyphDirective[0].link(scope, element, attrs);
-
-      expect(scope.$watch).toHaveBeenCalledWith(attrs.statusGlyph, jasmine.any(Function));
-    }));
   });
 });

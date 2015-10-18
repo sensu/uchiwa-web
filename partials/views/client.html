@@ -90,7 +90,7 @@
                   <span class="dropdown" ng-click="stash($event, check)">
                     <silence-icon acknowledged="check.acknowledged"></silence-icon>
                   </span>
-                  <i class="fa fa-check" tooltip-placement="top" tooltip-trigger tooltip="Resolve" ng-click="resolveEvent(check.check, client.name, client.dc)" ng-if="checkHasEvent"></i>
+                  <i class="fa fa-check" tooltip-placement="top" tooltip-trigger tooltip="Resolve" ng-click="resolveEvent(check.dc+'/'+client.name+'/'+check.check)" ng-if="checkHasEvent"></i>
                 </span>
               </div>
             </div>

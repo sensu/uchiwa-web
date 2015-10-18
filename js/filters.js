@@ -174,12 +174,12 @@ filterModule.filter('hideSilenced', function() {
   };
 });
 
-filterModule.filter('hideClientSilenced', function() {
-  return function(events, hideClientSilenced) {
+filterModule.filter('hideClientsSilenced', function() {
+  return function(events, hideClientsSilenced) {
     if (Object.prototype.toString.call(events) !== '[object Array]') {
       return events;
     }
-    if (events && hideClientSilenced) {
+    if (events && hideClientsSilenced) {
       return events.filter(function (item) {
         return item.client.acknowledged === false;
       });
