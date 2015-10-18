@@ -142,6 +142,7 @@ directiveModule.directive('statusGlyph', ['$filter', function ($filter) {
     link: function(scope, element, attrs) {
 
       function updateGlyph(style) {
+        style = parseInt(style);
         element.removeAttr('class');
         element.addClass('fa fa-fw');
         switch(style) {
@@ -162,9 +163,8 @@ directiveModule.directive('statusGlyph', ['$filter', function ($filter) {
         var status = $filter('getStatusClass')(style);
         element.addClass('text-' + status);
       }
-
-      scope.$watch(attrs.statusGlyph, function(value) {
-        updateGlyph(value);
+      attrs.$observe('statusGlyph', function() {
+        updateGlyph(attrs.statusGlyph);
       });
     }
   };

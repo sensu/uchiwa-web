@@ -31,7 +31,7 @@
             <thead>
               <tr>
                 <th ng-if="!user.isReadOnly()">
-                  <input class="ng-pristine ng-untouched ng-valid ng-scope" ng-model="selectAll.checked" ng-change="selectStashes(selectAll)" ng-if="!user.isReadOnly()" type="checkbox">
+                  <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
                 <th ng-click="predicate = 'client'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'check'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
@@ -45,12 +45,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="stash in filtered = (stashes | collection:'stashes' | filter:filters.q | filter:{dc:filters.dc}:filterComparator) | limitTo:filters.limit | buildStashes | orderBy:predicate:reverse">
+              <tr ng-repeat="stash in filtered | limitTo:filters.limit | buildStashes | orderBy:predicate:reverse">
                 <td ng-if="!user.isReadOnly()">
-                  <!-- adding ng-click to get stash info -->
-                  <input type="checkbox" ng-click="stashInfo(stash, filtered)" ng-model="stash.selected"></input>
+                  <input type="checkbox" ng-model="selected.ids[stash._id]"></input>
                 </td>
-                <td class="main"><span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteStash(stash, stashes);"></i></span>{{ stash.client }}</td>
+                <td class="main"><span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteStash(stash._id);"></i></span>{{ stash.client }}</td>
                 <td>{{ stash.check }}</td>
                 <td>{{ stash.type }}</td>
                 <td ng-bind-html="stash.content.reason | linky"></td>

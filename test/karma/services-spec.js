@@ -31,11 +31,7 @@ describe('services', function () {
       }));
     });
 
-    describe('resolveEvent', function () {
-      it('should return false when the ID is not a string', inject(function (clientsService) {
-        expect(clientsService.resolveEvent(null)).toEqual(false);
-      }));
-
+    describe('resolveEvent()', function () {
       it('should emit HTTP DELETE to /events', inject(function (clientsService, backendService) {
         spyOn(backendService, 'deleteEvent').and.callThrough();
         clientsService.resolveEvent('foo/bar/qux');
@@ -61,19 +57,68 @@ describe('services', function () {
   });
 
   describe('helperService', function () {
+    describe('deleteItems()', function () {
+      it('calls the provided function for every selected item', inject(function (helperService, clientsService) {
+        spyOn(clientsService, 'deleteClient').and.callThrough();
+
+        var filtered = [{_id: 'foo'}, {_id: 'bar'}, {_id: 'qux'}];
+        var selected = {ids: {foo: true, qux: true}};
+
+        helperService.deleteItems(clientsService.deleteClient, filtered, selected);
+        expect(clientsService.deleteClient).toHaveBeenCalledWith('foo');
+        expect(clientsService.deleteClient).not.toHaveBeenCalledWith('bar');
+        expect(clientsService.deleteClient).toHaveBeenCalledWith('qux');
+        expect(selected.all).toEqual(false);
+      }));
+    });
+
+    describe('selectAll()', function () {
+      it('marks all filtered items as selected', inject(function (helperService) {
+        var filtered = [{_id: 'foo'}, {_id: 'bar'}];
+        var selected = {all: true, ids: {foo: true}};
+        var expectedSelected = {foo: true, bar: true};
+        helperService.selectAll(filtered, selected);
+        expect(selected.ids).toEqual(expectedSelected);
+      }));
+      it('marks all filtered items as unselected', inject(function (helperService) {
+        var filtered = [{_id: 'foo'}, {_id: 'bar'}];
+        var selected = {all: false, ids: {foo: true}};
+        var expectedSelected = {foo: false, bar: false};
+        helperService.selectAll(filtered, selected);
+        expect(selected.ids).toEqual(expectedSelected);
+      }));
+    });
+
+    describe('silenceItems()', function () {
+      it('calls the provided function for every selected item', inject(function (helperService, stashesService) {
+        spyOn(stashesService, 'stash').and.callThrough();
+
+        var filtered = [{_id: 'foo'}, {_id: 'bar'}, {_id: 'qux'}];
+        var selected = {ids: {foo: true, qux: true}};
+
+        helperService.silenceItems(stashesService.stash, filtered, selected);
+        expect(stashesService.stash).toHaveBeenCalledWith(null, [{_id: 'foo'}, {_id: 'qux'}]);
+        expect(selected.all).toEqual(false);
+      }));
+    });
+
     describe('updateSelected()', function () {
-      it('returns the same data set when the filter value is empty', inject(function (helperService) {
+      it('does not remove any items when a filter is removed', inject(function (helperService) {
+        var newValues = ['', false, ''];
+        var oldValues = ['', false, 'baz'];
         var filtered = [{_id: 'foo'}];
         var selected = {ids: {foo: true, bar: true}}
         var expectedSelected = {ids: {foo: true, bar: false}}
-        expect(helperService.updateSelected('', filtered, selected)).toEqual(undefined);
+        helperService.updateSelected(newValues, oldValues, filtered, selected);
         expect(selected).not.toEqual(expectedSelected);
       }));
-      it('removed any selected items that are filtered', inject(function (helperService) {
+      it('removes any selected items that are filtered', inject(function (helperService) {
+        var newValues = ['', false, 'baz'];
+        var oldValues = ['', false, ''];
         var filtered = [{_id: 'foo'}];
         var selected = {ids: {foo: true, bar: true}}
         var expectedSelected = {ids: {foo: true, bar: false}}
-        expect(helperService.updateSelected('foobar', filtered, selected)).toEqual(undefined);
+        helperService.updateSelected(newValues, oldValues, filtered, selected);
         expect(selected).toEqual(expectedSelected);
       }));
     });

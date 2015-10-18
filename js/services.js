@@ -19,11 +19,11 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     this.deleteEvent = function (id) {
       return $http.delete('events/'+id);
     };
-    this.deleteStash = function (dc, path) {
+    this.deleteStash = function (id) {
       if ($rootScope.enterprise) {
-        audit.log({action: 'delete_stash', level: 'default', output: dc+'/'+path});
+        audit.log({action: 'delete_stash', level: 'default', output: id});
       }
-      return $http.delete('stashes/'+dc+'/'+path);
+      return $http.delete('stashes/'+id);
     };
     this.getAggregate = function(check, dc, issued) {
       return $http.get('aggregates/'+dc+'/'+check+'/'+issued);
@@ -123,25 +123,19 @@ serviceModule.service('clientsService', ['$location', '$rootScope', 'backendServ
     })[0];
   };
   this.resolveEvent = function (id) {
-    if (!angular.isString(id)) {
-      $rootScope.$emit('notification', 'error', 'Could not resolve this event. Try to refresh the page.');
-      return false;
-    }
-
-    backendService.deleteEvent(id)
+    return backendService.deleteEvent(id)
       .success(function () {
         $rootScope.$emit('notification', 'success', 'The event has been resolved.');
       })
       .error(function (error) {
-        $rootScope.$emit('notification', 'error', 'The event was not resolved. ' + error);
+        $rootScope.$emit('notification', 'error', 'The event "'+id+'" was not resolved.');
+        console.error(error);
       });
   };
   this.deleteClient = function (id) {
-    backendService.deleteClient(id)
+    return backendService.deleteClient(id)
       .success(function () {
         $rootScope.$emit('notification', 'success', 'The client has been deleted.');
-        $location.url('/clients');
-        return true;
       })
       .error(function (error) {
         $rootScope.$emit('notification', 'error', 'Could not delete the client '+ id);
@@ -235,23 +229,14 @@ serviceModule.service('routingService', ['$location', function ($location) {
 */
 serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$modal', '$rootScope',
   function (backendService, conf, $filter, $modal, $rootScope) {
-    this.deleteStash = function (stash, stashes) {
-      $rootScope.skipRefresh = true;
-      backendService.deleteStash(stash.dc, stash.path)
+    this.deleteStash = function (id) {
+      return backendService.deleteStash(id)
         .success(function () {
           $rootScope.$emit('notification', 'success', 'The stash has been deleted.');
-          for (var i=0; stashes; i++) {
-            if (stashes[i].path === stash.path) {
-              stashes.splice(i, 1);
-              break;
-            }
-          }
-          $rootScope.skipOneRefresh = true;
-          return true;
         })
         .error(function (error) {
-          $rootScope.$emit('notification', 'error', 'The stash was not created. ' + error);
-          return false;
+          $rootScope.$emit('notification', 'error', 'The stash was not created.');
+          console.error(error);
         });
     };
     this.find = function(stashes, item) {
@@ -315,7 +300,9 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
     this.stash = function (e, i) {
       var items = _.isArray(i) ? i : new Array(i);
       var event = e || window.event;
-      event.stopPropagation();
+      if (angular.isDefined(event)) {
+        event.stopPropagation();
+      }
 
       if (items.length === 0) {
         $rootScope.$emit('notification', 'error', 'No items selected');
@@ -341,16 +328,14 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
       }
 
       if (isAcknowledged) {
-        backendService.deleteStash(dc, path)
+        return backendService.deleteStash(dc, path)
           .success(function () {
             $rootScope.skipOneRefresh = true;
             $rootScope.$emit('notification', 'success', 'The stash has been deleted.');
             element.acknowledged = !element.acknowledged;
-            return true;
           })
           .error(function (error) {
             $rootScope.$emit('notification', 'error', 'The stash was not created. ' + error);
-            return false;
           });
       }
       else {
@@ -370,16 +355,14 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
         }
 
         // post payload
-        backendService.postStash(payload)
+        return backendService.postStash(payload)
           .success(function () {
             $rootScope.skipOneRefresh = true;
             $rootScope.$emit('notification', 'success', 'The stash has been created.');
             element.acknowledged = !element.acknowledged;
-            return true;
           })
           .error(function (error) {
             $rootScope.$emit('notification', 'error', 'The stash was not created. ' + error);
-            return false;
           });
       }
     };
@@ -388,30 +371,65 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
 /**
 * Helpers service
 */
-serviceModule.service('helperService', ['$filter',
-function($filter) {
+serviceModule.service('helperService', ['$filter', '$q', '$rootScope',
+function($filter, $q, $rootScope) {
+  this.deleteItems = function(fn, filtered, selected) {
+    var promises = [];
+    angular.forEach(selected.ids, function(value, key) {
+      if (value) {
+        var deffered = $q.defer();
+        selected.ids[key] = false;
+        fn(key).then(function() {
+          filtered = $filter('filter')(filtered, {_id: '!'+key});
+          deffered.resolve(key);
+        }, function() {
+          deffered.reject();
+        });
+        promises.push(deffered.promise);
+      }
+    });
+    selected.all = false;
+    $rootScope.skipOneRefresh = true;
+    return $q.all(promises).then(function() {
+      return filtered;
+    });
+  };
   // Stop event propagation if an A tag is clicked
   this.openLink = function($event) {
     if($event.srcElement.tagName === 'A'){
       $event.stopPropagation();
     }
   };
-  this.selectedItems = function(items) {
-    return _.filter(items, function(item) {
-      return item.selected === true;
+  this.selectAll = function(filtered, selected) {
+    angular.forEach(filtered, function(value) {
+      selected.ids[value._id] = selected.all;
     });
   };
-  this.unselectItems = function(items) {
-    _.each(items, function(item) {
-      if (item.selected === true) {
-        item.selected = false;
+  this.silenceItems = function(fn, filtered, selected) {
+    var itemsToSilence = [];
+    angular.forEach(selected.ids, function(value, key) {
+      if (value) {
+        var found = $filter('filter')(filtered, {_id: key});
+        if (found.length) {
+          itemsToSilence.push(found[0]);
+          selected.ids[key] = false;
+        }
       }
     });
+    fn(null, itemsToSilence);
+    selected.all = false;
   };
   // updateSelected updates the selected array to remove any filtered items
-  this.updateSelected = function(filterValue, filtered, selected) {
-    // We don't need to remove anything if the filter new value is empty
-    if (filterValue === '') {
+  this.updateSelected = function(newValues, oldValues, filtered, selected) {
+    // Check if we need to exclude any items
+    var excludeItems = false;
+    for (var i = 0; i < newValues.length; i++) {
+      if ((newValues[i] !== '' && newValues[i]) && oldValues[i] !== newValues[i]) {
+        excludeItems = true;
+        break;
+      }
+    }
+    if (!excludeItems) {
       return;
     }
     angular.forEach(selected.ids, function(value, key) {
