@@ -322,7 +322,7 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
       }
 
       if (isAcknowledged) {
-        return backendService.deleteStash(dc, path)
+        return backendService.deleteStash(dc+'/'+path)
           .success(function () {
             $rootScope.skipOneRefresh = true;
             $rootScope.$emit('notification', 'success', 'The stash has been deleted.');
