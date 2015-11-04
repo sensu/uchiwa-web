@@ -152,6 +152,9 @@ filterModule.filter('getStatusClass', function() {
 
 filterModule.filter('getTimestamp', ['conf', function (conf) {
   return function(timestamp) {
+    if (angular.isUndefined(timestamp) || timestamp === null) {
+      return '';
+    }
     if (isNaN(timestamp) || timestamp.toString().length !== 10) {
       return timestamp;
     }
@@ -231,6 +234,11 @@ filterModule.filter('relativeTimestamp', function() {
 filterModule.filter('richOutput', ['$filter', '$sce', '$sanitize', '$interpolate', function($filter, $sce, $sanitize, $interpolate) {
   return function(text) {
     var output = '';
+
+    if (angular.isUndefined(text) || text === null) {
+      return '';
+    }
+
     if(typeof text === 'object') {
       if (text instanceof Array) {
         output = text.join(', ');
