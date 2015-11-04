@@ -67,7 +67,7 @@
                 <silence-icon acknowledged="check.acknowledged" ng-click="stash($event, check)" ng-if="!user.isReadOnly()"></silence-icon>
               </td>
               <td class="main" >{{ check.check }}</td>
-              <td class="check-output">{{ check.output }}</td>
+              <td class="check-output">{{ check.last_result.output }}</td>
               <td><relative-time timestamp="check.last_execution"></relative-time></td>
             </tr>
           </tbody>
