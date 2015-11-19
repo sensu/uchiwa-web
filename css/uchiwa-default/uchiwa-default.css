@@ -148,7 +148,7 @@ pre.hljs .hljs-string {
 .badge {
   position: absolute;
   top: 7px;
-  left: 0px;
+  left: 5px;
   color: #FFFFFF;
   font-weight: 700;
   padding: 2px 5px; }
@@ -1087,7 +1087,7 @@ li.timestamp .relative-timestamp {
 .sidebar .sidebar-nav > li > a > span {
   display: block;
   font-size: 16pt;
-  padding: 13px 15px 13px 9px; }
+  padding: 13px 15px 13px 14px; }
 
 .sidebar .tooltip,
 .sidebar .tooltip .tooltip-inner {
