@@ -1,0 +1,20 @@
+@import "variables";
+
+.rickshaw_graph .x_ticks_d3 .tick {
+  stroke-width: 0px;
+}
+
+.rickshaw_graph .x_grid_d3 .tick text {
+  display: none;
+}
+
+.rickshaw_graph .y_grid .tick, .rickshaw_graph .x_grid_d3 .tick {
+  stroke: rgba(0,0,0,.1);
+  stroke-width: 0.5px;
+  stroke-dasharray: 0;
+}
+
+.rickshaw_graph .y_ticks path, .rickshaw_graph .x_ticks_d3 path {
+    fill: none;
+    stroke: none;
+}

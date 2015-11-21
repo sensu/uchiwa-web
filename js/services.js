@@ -92,6 +92,9 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
           console.error(JSON.stringify(error));
         });
     };
+    this.getSEMetrics = function(endpoint) {
+      return $http.get('metrics/'+endpoint);
+    };
     this.getStashes = function () {
       return $http.get('stashes');
     };
