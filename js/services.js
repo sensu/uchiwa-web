@@ -78,8 +78,8 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
         .success(function(data) {
           $rootScope.health = data;
         })
-        .error(function(error) {
-          console.error(JSON.stringify(error));
+        .error(function() {
+          $rootScope.$emit('notification', 'error', 'Unable to get health.');
         });
     };
     this.getMetrics = function() {
@@ -87,9 +87,9 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
         .success(function(data) {
           $rootScope.metrics = data;
         })
-        .error(function(error) {
+        .error(function() {
           $rootScope.metrics = {aggregates: {total: 0}, checks: {total: 0}, clients: {critical: 0, total: 0, unknown: 0, warning: 0}, datacenters: {total: 0}, events: {critical: 0, total: 0, unknown: 0, warning: 0}, stashes: {total: 0}};
-          console.error(JSON.stringify(error));
+          $rootScope.$emit('notification', 'error', 'Unable to get metrics.');
         });
     };
     this.getSEMetrics = function(endpoint) {
