@@ -43,6 +43,8 @@ describe('Controller', function () {
       }, properties));
     };
     $httpBackend.whenGET('config').respond([]);
+    $httpBackend.whenGET('health').respond([]);
+    $httpBackend.whenGET('metrics').respond([]);
   }));
 
   describe('ChecksController', function () {

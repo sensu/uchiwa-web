@@ -304,10 +304,16 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
 /**
 * Datacenters
 */
-controllerModule.controller('DatacentersController', ['$scope', 'titleFactory',
-  function ($scope, titleFactory) {
+controllerModule.controller('DatacentersController', ['$scope', 'Sensu', 'titleFactory',
+  function ($scope, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Datacenters';
     titleFactory.set($scope.pageHeaderText);
+
+    // Get health and metrics
+    var timer = Sensu.updateMetrics();
+    $scope.$on('$destroy', function() {
+      Sensu.stop(timer);
+    });
   }
 ]);
 
@@ -403,12 +409,18 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
 /**
 * Info
 */
-controllerModule.controller('InfoController', ['backendService', '$scope', 'titleFactory', 'version',
-  function (backendService, $scope, titleFactory, version) {
+controllerModule.controller('InfoController', ['backendService', '$scope', 'Sensu', 'titleFactory', 'version',
+  function (backendService, $scope, Sensu, titleFactory, version) {
     $scope.pageHeaderText = 'Info';
     titleFactory.set($scope.pageHeaderText);
 
     $scope.uchiwa = { version: version.uchiwa };
+
+    // Get health and metrics
+    var timer = Sensu.updateMetrics();
+    $scope.$on('$destroy', function() {
+      Sensu.stop(timer);
+    });
   }
 ]);
 
@@ -493,13 +505,19 @@ controllerModule.controller('NavbarController', ['audit', '$location', '$rootSco
 /**
 * Settings
 */
-controllerModule.controller('SettingsController', ['$cookies', '$scope', 'titleFactory',
-  function ($cookies, $scope, titleFactory) {
+controllerModule.controller('SettingsController', ['$cookies', '$scope', 'Sensu', 'titleFactory',
+  function ($cookies, $scope, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Settings';
     titleFactory.set($scope.pageHeaderText);
 
     $scope.$watch('currentTheme', function (theme) {
       $scope.$emit('theme:changed', theme);
+    });
+
+    // Get health and metrics
+    var timer = Sensu.updateMetrics();
+    $scope.$on('$destroy', function() {
+      Sensu.stop(timer);
     });
   }
 ]);
