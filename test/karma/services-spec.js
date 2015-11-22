@@ -3,13 +3,39 @@
 describe('services', function () {
   var $rootScope;
   var $scope;
+  var $httpBackend;
 
   beforeEach(module('uchiwa'));
-  beforeEach(inject(function (_$rootScope_) {
+  beforeEach(inject(function (_$rootScope_, _$httpBackend_) {
+    $httpBackend = _$httpBackend_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
+    $httpBackend.expect('GET', 'config').respond(200, {Uchiwa:{Refresh: 10}});
   }));
 
+  describe('backendService', function () {
+    describe('getHealth', function() {
+      it('emit a signal when health endpoint is down', inject(function(backendService) {
+	  spyOn($rootScope, "$emit");
+	  $httpBackend.expect('GET', 'health').respond(500, 'Error 500');
+          backendService.getHealth();
+	  $httpBackend.flush();
+	  expect($rootScope.$emit).toHaveBeenCalledWith('notification', 'error', 'Uchiwa is having trouble updating its data. Try to refresh the page if this issue persists.');
+          $httpBackend.verifyNoOutstandingExpectation();
+          $httpBackend.verifyNoOutstandingRequest();
+	}));
+
+      it('emit a signal when metrics endpoint is down', inject(function(backendService) {
+	  spyOn($rootScope, "$emit");
+	  $httpBackend.expect('GET', 'metrics').respond(500, 'Error 500');
+          backendService.getMetrics();
+	  $httpBackend.flush();
+    expect($rootScope.$emit).toHaveBeenCalledWith('notification', 'error', 'Uchiwa is having trouble updating its data. Try to refresh the page if this issue persists.');
+          $httpBackend.verifyNoOutstandingExpectation();
+          $httpBackend.verifyNoOutstandingRequest();
+	}));
+    });
+  });
   describe('clientsService', function () {
     describe('searchCheckHistory()', function() {
       it('returns the right check from the client history', inject(function (clientsService) {

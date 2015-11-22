@@ -68,9 +68,6 @@ angular.module('uchiwa')
   $rootScope.$on('notification', function (event, type, message) {
     if ($location.path() !== '/login') {
       notification(type, message);
-      if (type === 'error') {
-        console.error(type + ': '+ JSON.stringify(message));
-      }
     }
   });
 });
