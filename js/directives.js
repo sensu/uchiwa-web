@@ -59,7 +59,7 @@ directiveModule.directive('panelLimit', ['$rootScope', function ($rootScope) {
   };
 }]);
 
-directiveModule.directive('progressBar', ['$filter', '$rootScope', function ($filter, $rootScope) {
+directiveModule.directive('uwProgressBar', ['$filter', '$rootScope', function ($filter, $rootScope) {
   return {
     restrict: 'E',
     scope: {

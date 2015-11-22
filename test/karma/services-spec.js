@@ -17,20 +17,20 @@ describe('services', function () {
     describe('getHealth', function() {
       it('emit a signal when health endpoint is down', inject(function(backendService) {
 	  spyOn($rootScope, "$emit");
-	  $httpBackend.expect('GET', 'health').respond(500, 'error');
+	  $httpBackend.expect('GET', 'health').respond(500, 'Error 500');
           backendService.getHealth();
 	  $httpBackend.flush();
-	  expect($rootScope.$emit).toHaveBeenCalledWith("notification", "error", "Unable to get health.");
+	  expect($rootScope.$emit).toHaveBeenCalledWith('notification', 'error', 'Uchiwa is having trouble updating its data. Try to refresh the page if this issue persists.');
           $httpBackend.verifyNoOutstandingExpectation();
           $httpBackend.verifyNoOutstandingRequest();
 	}));
 
       it('emit a signal when metrics endpoint is down', inject(function(backendService) {
 	  spyOn($rootScope, "$emit");
-	  $httpBackend.expect('GET', 'metrics').respond(500, 'error');
+	  $httpBackend.expect('GET', 'metrics').respond(500, 'Error 500');
           backendService.getMetrics();
 	  $httpBackend.flush();
-	  expect($rootScope.$emit).toHaveBeenCalledWith("notification", "error", "Unable to get metrics.");
+    expect($rootScope.$emit).toHaveBeenCalledWith('notification', 'error', 'Uchiwa is having trouble updating its data. Try to refresh the page if this issue persists.');
           $httpBackend.verifyNoOutstandingExpectation();
           $httpBackend.verifyNoOutstandingRequest();
 	}));

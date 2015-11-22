@@ -7,6 +7,8 @@ var serviceModule = angular.module('uchiwa.services', []);
 */
 serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', '$location', '$rootScope',
   function(audit, conf, $http, $interval, $location, $rootScope){
+    var errorRefresh = conf.appName+' is having trouble updating its data. Try to refresh the page if this issue persists.';
+
     this.auth = function () {
       return $http.get('auth');
     };
@@ -50,7 +52,10 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
           conf.refresh = data.Uchiwa.Refresh * 1000;
         })
         .error(function(error) {
-          console.error(JSON.stringify(error));
+          $rootScope.$emit('notification', 'error', errorRefresh);
+          if (error !== null) {
+            console.error(JSON.stringify(error));
+          }
         });
     };
     this.getConfigAuth = function () {
@@ -67,7 +72,10 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
           }
         })
         .error(function(error) {
-          console.error(JSON.stringify(error));
+          $rootScope.$emit('notification', 'error', errorRefresh);
+          if (error !== null) {
+            console.error(JSON.stringify(error));
+          }
         });
     };
     this.getEvents = function () {
@@ -78,8 +86,11 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
         .success(function(data) {
           $rootScope.health = data;
         })
-        .error(function() {
-          $rootScope.$emit('notification', 'error', 'Unable to get health.');
+        .error(function(error) {
+          $rootScope.$emit('notification', 'error', errorRefresh);
+          if (error !== null) {
+            console.error(JSON.stringify(error));
+          }
         });
     };
     this.getMetrics = function() {
@@ -87,9 +98,14 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
         .success(function(data) {
           $rootScope.metrics = data;
         })
-        .error(function() {
-          $rootScope.metrics = {aggregates: {total: 0}, checks: {total: 0}, clients: {critical: 0, total: 0, unknown: 0, warning: 0}, datacenters: {total: 0}, events: {critical: 0, total: 0, unknown: 0, warning: 0}, stashes: {total: 0}};
-          $rootScope.$emit('notification', 'error', 'Unable to get metrics.');
+        .error(function(error) {
+          $rootScope.$emit('notification', 'error', errorRefresh);
+          if (error !== null) {
+            console.error(JSON.stringify(error));
+          }
+          if (angular.isUndefined($rootScope.metrics)) {
+            $rootScope.metrics = {aggregates: {total: 0}, checks: {total: 0}, clients: {critical: 0, total: 0, unknown: 0, warning: 0}, datacenters: {total: 0}, events: {critical: 0, total: 0, unknown: 0, warning: 0}, stashes: {total: 0}};
+          }
         });
     };
     this.getSEMetrics = function(endpoint) {

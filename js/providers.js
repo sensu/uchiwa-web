@@ -7,10 +7,10 @@ var providerModule = angular.module('uchiwa.providers', []);
 */
 providerModule.provider('notification', function () {
   this.$get = function (toastr, toastrConfig, $cookieStore) {
-    var toastrSettings = $cookieStore.get('toastrSettings');
+    var toastrSettings = $cookieStore.get('uchiwa_toastrSettings');
     if(!toastrSettings) {
-      toastrSettings = { 'positionClass': 'toast-bottom-right', timeOut: 5000 };
-      $cookieStore.put('toastrSettings', toastrSettings);
+      toastrSettings = { 'positionClass': 'toast-bottom-right', 'preventOpenDuplicates': true, 'timeOut': 7500 };
+      $cookieStore.put('uchiwa_toastrSettings', toastrSettings);
     }
     angular.extend(toastrConfig, toastrSettings);
     return function (type, message) {
