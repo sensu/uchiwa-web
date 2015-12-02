@@ -94,7 +94,7 @@ directiveModule.directive('silenceIcon', function () {
       acknowledged: '='
     },
     template: '<span class="fa-stack">' +
-      '<i class="fa fa-fw {{ acknowledged | getAckClass }}"></i>' +
+      '<i class="fa {{ acknowledged | getAckClass }}"></i>' +
       '<i class="fa fa-ban fa-stack-1x text-danger" ng-if="acknowledged"></i>' +
       '</span>'
   };

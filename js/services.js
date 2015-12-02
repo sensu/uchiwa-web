@@ -120,6 +120,9 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     this.login = function (payload) {
       return $http.post('login', payload);
     };
+    this.postCheckRequest = function (payload) {
+      return $http.post('request', payload);
+    };
     this.postStash = function (payload) {
       return $http.post('stashes', payload);
     };
@@ -130,12 +133,29 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
 * Clients Services
 */
 serviceModule.service('clientsService', ['$location', '$rootScope', 'backendService', function ($location, $rootScope, backendService) {
-  this.searchCheckHistory = function (name, history) {
-    return history.filter(function (item) {
-      return item.check === name;
-    })[0];
+  this.deleteClient = function(id) {
+    return backendService.deleteClient(id)
+      .success(function () {
+        $rootScope.$emit('notification', 'success', 'The client has been deleted.');
+      })
+      .error(function (error) {
+        $rootScope.$emit('notification', 'error', 'Could not delete the client '+ id);
+        console.error(error);
+      });
   };
-  this.resolveEvent = function (id) {
+  this.issueCheckRequest = function(check, dc, subscribers) {
+    var payload = {check: check, dc: dc, subscribers: subscribers};
+
+    return backendService.postCheckRequest(payload)
+      .success(function () {
+        $rootScope.$emit('notification', 'success', 'The check execution request has been issued');
+      })
+      .error(function (error) {
+        $rootScope.$emit('notification', 'error', 'Could not issue the check execution request');
+        console.error(error);
+      });
+  };
+  this.resolveEvent = function(id) {
     return backendService.deleteEvent(id)
       .success(function () {
         $rootScope.$emit('notification', 'success', 'The event has been resolved.');
@@ -145,15 +165,10 @@ serviceModule.service('clientsService', ['$location', '$rootScope', 'backendServ
         console.error(error);
       });
   };
-  this.deleteClient = function (id) {
-    return backendService.deleteClient(id)
-      .success(function () {
-        $rootScope.$emit('notification', 'success', 'The client has been deleted.');
-      })
-      .error(function (error) {
-        $rootScope.$emit('notification', 'error', 'Could not delete the client '+ id);
-        console.error(error);
-      });
+  this.searchCheckHistory = function(name, history) {
+    return history.filter(function (item) {
+      return item.check === name;
+    })[0];
   };
 }]);
 

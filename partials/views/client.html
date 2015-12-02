@@ -77,7 +77,6 @@
       <!--Check details-->
       <div class="panel panel-default check-info" ng-if="check">
         <div class="panel-body">
-
           <div class="row mb15">
             <div class="col-xs-6">
               <div class="panel-title">
@@ -90,7 +89,8 @@
                   <span class="dropdown" ng-click="stash($event, check)">
                     <silence-icon acknowledged="check.acknowledged"></silence-icon>
                   </span>
-                  <i class="fa fa-check" tooltip-placement="top" tooltip-trigger tooltip="Resolve" ng-click="resolveEvent(check.dc+'/'+client.name+'/'+check.check)" ng-if="check.last_status"></i>
+                  <i class="fa fa-check" tooltip-placement="left" tooltip-trigger tooltip="Resolve" ng-click="resolveEvent(check.dc+'/'+client.name+'/'+check.check)" ng-if="check.last_status"></i>
+                  <i class="fa fa-refresh" tooltip-placement="left" tooltip-trigger tooltip="Issue check request" ng-click="issueCheckRequest(check.check, check.dc, check.last_result.subscribers)" ng-if="check.last_result.subscribers"></i>
                 </span>
               </div>
             </div>
