@@ -871,7 +871,8 @@ li.timestamp .relative-timestamp {
   font-weight: 700; }
 
 .panel .panel-icon i {
-  padding-left: 5px; }
+  padding-left: 10px;
+  padding-right: 10px; }
 
 .panel .panel-title {
   margin-top: 20px;

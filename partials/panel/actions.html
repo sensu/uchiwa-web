@@ -3,6 +3,12 @@
     Actions <i class="fa fa-caret-down"></i>
   </span>
   <ul class="dropdown-menu">
+    <li ng-if="refreshFn">
+      <a href="" ng-click="refreshFn($event, data)">
+        <i class="fa fa-refresh fa-fw"></i>
+        {{refreshLegend}}
+      </a>
+    </li>
     <li ng-if="resolveFn">
       <a href="" ng-click="resolveFn(data)">
         <i class="fa fa-times fa-fw"></i>

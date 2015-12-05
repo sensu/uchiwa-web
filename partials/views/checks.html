@@ -15,6 +15,8 @@
             <div class="col-xs-12 nopadding">
               <!--dc-->
               <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
+              <!--actions-->
+              <panel-actions data="checks" refresh-fn="issueCheckRequest" refresh-legend="Issue Check Request" ng-if="!user.isReadOnly()"></panel-actions>
               <!--limit-->
               <panel-limit data="checks" filters="filters" permalink="permalink"></panel-limit>
               <!--search-->
@@ -28,6 +30,9 @@
           <table class="table table-hover table-condensed">
             <thead>
               <tr>
+                <th class="col-min" ng-if="!user.isReadOnly()">
+                  <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)"></input>
+                </th>
                 <th ng-click="predicate = 'name'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'command'; reverse=!reverse">Command <i class="fa fa-sort"></i></th>
                 <th>Subscribers</th>
@@ -36,7 +41,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="check in filtered = (checks | orderBy:predicate:reverse | collection:'checks' | filter:{dc:filters.dc}:filterComparator |  filter:filters.q ) | limitTo:filters.limit">
+              <tr ng-repeat="check in filtered | orderBy:predicate:reverse | limitTo:filters.limit track by check._id">
+                <td ng-if="!user.isReadOnly()">
+                  <input type="checkbox" ng-model="selected.ids[check._id]"></input>
                 <td class="main">{{ check.name }}</td>
                 <td>{{ check.command }}</td>
                 <td>{{ check.subscribers | arrayToString }}</td>

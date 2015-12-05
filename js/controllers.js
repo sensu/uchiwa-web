@@ -94,19 +94,22 @@ controllerModule.controller('AggregatesController', ['filterService', '$routePar
 /**
 * Checks
 */
-controllerModule.controller('ChecksController', ['filterService', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory',
-  function (filterService, $routeParams, routingService, $scope, Sensu, titleFactory) {
+controllerModule.controller('ChecksController', ['checksService', '$filter', 'filterService', 'helperService', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory',
+  function (checksService, $filter, filterService, helperService, $routeParams, routingService, $scope, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Checks';
     titleFactory.set($scope.pageHeaderText);
 
     $scope.predicate = 'name';
     $scope.reverse = false;
+    $scope.selected = {all: false, ids: {}};
 
     // Get checks
     $scope.checks = [];
+    $scope.filtered = [];
     var timer = Sensu.updateChecks();
     $scope.$watch(function () { return Sensu.getChecks(); }, function (data) {
       $scope.checks = data;
+      updateFilters();
     });
     $scope.$on('$destroy', function() {
       Sensu.stop(timer);
@@ -116,6 +119,12 @@ controllerModule.controller('ChecksController', ['filterService', '$routeParams'
     $scope.subscribersSummary = function(subscribers){
       return subscribers.join(' ');
     };
+
+    // Filters
+    $scope.$watchGroup(['filters.q', 'filters.dc'], function(newValues, oldValues) {
+      updateFilters();
+      helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
+    });
 
     // Routing
     $scope.filters = {};
@@ -127,6 +136,21 @@ controllerModule.controller('ChecksController', ['filterService', '$routeParams'
     // Services
     $scope.filterComparator = filterService.comparator;
     $scope.permalink = routingService.permalink;
+    $scope.selectAll = helperService.selectAll;
+
+    $scope.issueCheckRequest = function() {
+      var items = helperService.getSelected($scope.filtered, $scope.selected);
+      angular.forEach(items, function(item) {
+        checksService.issueCheckRequest(item.name, item.dc, item.subscribers);
+      });
+    };
+
+    var updateFilters = function() {
+      var filtered = $filter('filter')($scope.checks, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('collection')(filtered, 'checks');
+      $scope.filtered = filtered;
+    };
   }
 ]);
 
