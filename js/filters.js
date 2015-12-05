@@ -241,7 +241,7 @@ filterModule.filter('richOutput', ['$filter', '$sce', '$sanitize', '$interpolate
 
     if(typeof text === 'object') {
       if (text instanceof Array) {
-        return text;
+        output = text.join(', ');
       } else {
         var code = hljs.highlight('json', angular.toJson(text, true)).value;
         output = '<pre class=\"hljs\">' + code + '</pre>';

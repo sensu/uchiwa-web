@@ -39,6 +39,8 @@ directiveModule.directive('panelActions', ['$rootScope', function ($rootScope) {
     restrict: 'E',
     scope: {
       data: '=',
+      refreshFn: '=',
+      refreshLegend: '@',
       resolveFn: '=',
       resolveLegend: '@',
       silenceFn: '='
