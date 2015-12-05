@@ -242,6 +242,7 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
     });
 
     // Services
+    $scope.deleteCheckResult = clientsService.deleteCheckResult;
     $scope.deleteClient = clientsService.deleteClient;
     $scope.resolveEvent = clientsService.resolveEvent;
     $scope.permalink = routingService.permalink;

@@ -18,6 +18,9 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
       }
       return $http.delete('clients/'+id);
     };
+    this.deleteCheckResult = function (id) {
+      return $http.delete('results/'+id);
+    };
     this.deleteEvent = function (id) {
       return $http.delete('events/'+id);
     };
@@ -150,6 +153,18 @@ serviceModule.service('checksService', ['$rootScope', 'backendService', function
 * Clients Services
 */
 serviceModule.service('clientsService', ['$location', '$rootScope', 'backendService', function ($location, $rootScope, backendService) {
+  this.deleteCheckResult = function(id) {
+    return backendService.deleteCheckResult(id)
+      .success(function () {
+        delete $location.$$search.check;
+        $location.$$compose();
+        $rootScope.$emit('notification', 'success', 'The check result has been deleted.');
+      })
+      .error(function (error) {
+        $rootScope.$emit('notification', 'error', 'Could not delete the result of the check '+ id);
+        console.error(error);
+      });
+  };
   this.deleteClient = function(id) {
     return backendService.deleteClient(id)
       .success(function () {
