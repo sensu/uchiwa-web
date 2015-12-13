@@ -62,7 +62,9 @@ angular.module('uchiwa')
   // fetch the sensu data on every page change
   $rootScope.$on('$routeChangeSuccess', function () {
     $rootScope.auth = $cookieStore.get('uchiwa_auth') || false;
-    backendService.getDatacenters();
+    if ($location.path().substring(0, 6) !== '/login') {
+      backendService.getDatacenters();
+    }
   });
 
   $rootScope.$on('notification', function (event, type, message) {
