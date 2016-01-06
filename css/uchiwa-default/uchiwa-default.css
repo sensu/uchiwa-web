@@ -79,6 +79,9 @@ hr {
 .mg-r-sm {
   margin-right: 10px; }
 
+.mg-l-10 {
+  margin-left: 10px; }
+
 .table > tbody > tr > td {
   vertical-align: middle; }
 
@@ -334,11 +337,15 @@ pre.hljs .hljs-string {
   height: 260px;
   border: 0; }
 
+.dashboard-color-box {
+  display: inline-block;
+  width: 10px;
+  height: 10px; }
+
 .dashboard-graph-title {
-  font-weight: 300;
-  font-size: 15px;
-  padding: 10px 0 0 10px;
-  text-transform: uppercase; }
+  font-weight: 400;
+  font-size: 14px;
+  padding: 10px 0 0 10px; }
 
 .dashboard-title {
   font-weight: 400 !important; }

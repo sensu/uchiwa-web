@@ -34,11 +34,16 @@
   border: 0;
 }
 
+.dashboard-color-box {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+
 .dashboard-graph-title {
-  font-weight: 300;
-  font-size: 15px;
+  font-weight: 400;
+  font-size: 14px;
   padding: 10px 0 0 10px;
-  text-transform: uppercase;
 }
 
 .dashboard-title {
