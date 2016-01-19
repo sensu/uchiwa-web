@@ -121,7 +121,7 @@ controllerModule.controller('ChecksController', ['checksService', '$filter', 'fi
     };
 
     // Filters
-    $scope.$watchGroup(['filters.q', 'filters.dc'], function(newValues, oldValues) {
+    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc'], function(newValues, oldValues) {
       updateFilters();
       helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
@@ -286,7 +286,7 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     });
 
     // Filters
-    $scope.$watchGroup(['filters.q', 'filters.dc', 'filters.subscription', 'filters.status'], function(newValues, oldValues) {
+    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc', 'filters.subscription', 'filters.status'], function(newValues, oldValues) {
       updateFilters();
       helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
@@ -371,7 +371,7 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     });
 
     // Filters
-    $scope.$watchGroup(['filters.q', 'filters.dc', 'filters.check' , 'filters.status' , 'filters.silenced' , 'filters.clientsSilenced' , 'filters.occurrences'], function(newValues, oldValues) {
+    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc', 'filters.check' , 'filters.status' , 'filters.silenced' , 'filters.clientsSilenced' , 'filters.occurrences'], function(newValues, oldValues) {
       updateFilters();
       helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
@@ -606,7 +606,7 @@ controllerModule.controller('StashesController', ['$filter', 'filterService', 'h
     });
 
     // Filters
-    $scope.$watchGroup(['filters.q', 'filters.dc'], function(newValues, oldValues) {
+    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc'], function(newValues, oldValues) {
       updateFilters();
       helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
