@@ -1,30 +1,30 @@
 @import "variables";
 
-.client .client-info .attributes {
+.element-view .attributes {
   padding-bottom: 15px;
 }
 
-.client .key {
+.element-view .key {
   font-weight: bold;
 }
 
-.client .value {
+.element-view .value {
   overflow-wrap: break-word;
   white-space: pre-line;
 }
 
-.client .value img {
+.element-view .value img {
   display: block;
   max-width: 100%;
   max-height: 100%;
 }
 
-.client .check-info .title {
+.element-view .check-info .title {
   font-size: 14px;
   font-weight: bold;
 }
 
-.client .check-output {
+.element-view .check-output {
   text-overflow: ellipsis;
   overflow : hidden;
   white-space: nowrap;

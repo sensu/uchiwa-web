@@ -227,6 +227,20 @@ describe('services', function () {
       }));
     });
 
+    describe('get', function () {
+      it('returns null if the stashes are empty', inject(function (stashesService){
+        expect(stashesService.get([], 'foo')).toEqual(null);
+      }));
+
+      it('returns null if the stash is missing', inject(function (stashesService){
+        expect(stashesService.get([{_id: 'foo/bar'}, {_id: 'foo/foo'}], 'foo')).toEqual(null);
+      }));
+
+      it('returns the stash found', inject(function (stashesService){
+        expect(stashesService.get([{name: 'foo/foo'}, {_id: 'foo/bar'}, {_id: 'foo/foo'}], 'foo/foo')).toEqual({_id: 'foo/foo'});
+      }));
+    });
+
     describe('getExpirationFromDateRange', function () {
       it('returns the proper expiration & timestamp attributes', inject(function (stashesService){
         var stash = {content: { to: '2015-02-01 00:00:01'}}

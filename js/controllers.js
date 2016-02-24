@@ -581,66 +581,42 @@ controllerModule.controller('SidebarController', ['$location', 'navbarServices',
 ]);
 
 /**
-* Stashes
+* Stash
 */
-controllerModule.controller('StashesController', ['$filter', 'filterService', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'stashesService', 'titleFactory', 'userService',
-  function ($filter, filterService, helperService, $rootScope, $routeParams, routingService, $scope, Sensu, stashesService, titleFactory, userService) {
-    $scope.pageHeaderText = 'Stashes';
-    titleFactory.set($scope.pageHeaderText);
+controllerModule.controller('StashController', [ 'backendService', '$filter', '$routeParams', '$scope', 'Sensu', 'stashesService', 'titleFactory',
+  function (backendService, $filter, $routeParams, $scope, Sensu, stashesService, titleFactory) {
+    // Routing
+    $scope.id = decodeURI($routeParams.id);
+    titleFactory.set($scope.id);
 
-    $scope.predicate = 'client';
-    $scope.reverse = false;
-    $scope.selectAll = {checked: false};
-    $scope.selected = {all: false, ids: {}};
+    // Get the stash
+    $scope.stash = null;
+    var stashes = [];
+    backendService.getStashes()
+      .success(function (data) {
+        stashes = data;
 
-    // Get stashes
-    $scope.stashes = [];
-    $scope.filtered = [];
-    var timer = Sensu.updateStashes();
-    $scope.$watch(function () { return Sensu.getStashes(); }, function (data) {
-      $scope.stashes = data;
-      updateFilters();
-    });
+        var stash = stashesService.get(stashes, $scope.id);
+        // Prepare rich output
+        angular.forEach(stash.content, function(value, key) { // jshint ignore:line
+          value = $filter('getTimestamp')(value);
+          value = $filter('richOutput')(value);
+          stash.content[key] = value; // jshint ignore:line
+        });
+
+        $scope.stash = stash;
+      })
+      .error(function(error) {
+        if (error !== null) {
+          console.error(JSON.stringify(error));
+        }
+      });
+
+    // Get health and metrics
+    var timer = Sensu.updateMetrics();
     $scope.$on('$destroy', function() {
       Sensu.stop(timer);
     });
-
-    // Filters
-    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc'], function(newValues, oldValues) {
-      updateFilters();
-      helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
-    });
-
-    // Routing
-    $scope.filters = {};
-    routingService.initFilters($routeParams, $scope.filters, ['dc', 'limit', 'q']);
-    $scope.$on('$locationChangeSuccess', function(){
-      routingService.updateFilters($routeParams, $scope.filters);
-    });
-
-    // Services
-    $scope.filterComparator = filterService.comparator;
-    $scope.permalink = routingService.permalink;
-    $scope.selectAll = helperService.selectAll;
-    $scope.user = userService;
-    $scope.deleteStash = function(id) {
-      stashesService.deleteStash(id).then(function() {
-        $scope.filtered = $filter('filter')($scope.filtered, {_id: '!'+id});
-        $rootScope.skipOneRefresh = true;
-      });
-    };
-    $scope.deleteStashes = function() {
-      helperService.deleteItems(stashesService.deleteStash, $scope.filtered, $scope.selected).then(function(filtered){
-        $scope.filtered = filtered;
-      });
-    };
-
-    var updateFilters = function() {
-      var filtered = $filter('filter')($scope.stashes, {dc: $scope.filters.dc}, $scope.filterComparator);
-      filtered = $filter('filter')(filtered, $scope.filters.q);
-      filtered = $filter('collection')(filtered, 'stashes');
-      $scope.filtered = filtered;
-    };
   }
 ]);
 
@@ -695,5 +671,70 @@ controllerModule.controller('StashModalController', ['conf', '$filter', 'items',
     // Services
     $scope.findStash = stashesService.find;
     $scope.getPath = stashesService.getPath;
+  }
+]);
+
+/**
+* Stashes
+*/
+controllerModule.controller('StashesController', ['$filter', 'filterService', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'stashesService', 'titleFactory', 'userService',
+  function ($filter, filterService, helperService, $rootScope, $routeParams, routingService, $scope, Sensu, stashesService, titleFactory, userService) {
+    $scope.pageHeaderText = 'Stashes';
+    titleFactory.set($scope.pageHeaderText);
+
+    $scope.predicate = 'client';
+    $scope.reverse = false;
+    $scope.selectAll = {checked: false};
+    $scope.selected = {all: false, ids: {}};
+
+    // Get stashes
+    $scope.stashes = [];
+    $scope.filtered = [];
+    var timer = Sensu.updateStashes();
+    $scope.$watch(function () { return Sensu.getStashes(); }, function (data) {
+      $scope.stashes = data;
+      updateFilters();
+    });
+    $scope.$on('$destroy', function() {
+      Sensu.stop(timer);
+    });
+
+    // Filters
+    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc'], function(newValues, oldValues) {
+      updateFilters();
+      helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
+    });
+
+    // Routing
+    $scope.filters = {};
+    routingService.initFilters($routeParams, $scope.filters, ['dc', 'limit', 'q']);
+    $scope.$on('$locationChangeSuccess', function(){
+      routingService.updateFilters($routeParams, $scope.filters);
+    });
+
+    // Services
+    $scope.filterComparator = filterService.comparator;
+    $scope.go = routingService.go;
+    $scope.permalink = routingService.permalink;
+    $scope.selectAll = helperService.selectAll;
+    $scope.user = userService;
+    $scope.deleteStash = function(id) {
+      stashesService.deleteStash(id).then(function() {
+        $scope.filtered = $filter('filter')($scope.filtered, {_id: '!'+id});
+        $rootScope.skipOneRefresh = true;
+      });
+    };
+    $scope.deleteStashes = function() {
+      helperService.deleteItems(stashesService.deleteStash, $scope.filtered, $scope.selected).then(function(filtered){
+        $scope.filtered = filtered;
+      });
+    };
+
+    var updateFilters = function() {
+      var filtered = $filter('filter')($scope.stashes, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('collection')(filtered, 'stashes');
+      $scope.filtered = filtered;
+    };
   }
 ]);

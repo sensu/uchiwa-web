@@ -40,6 +40,7 @@ angular.module('uchiwa')
       .when('/info', {templateUrl: 'bower_components/uchiwa-web/partials/views/info.html', controller: 'InfoController'})
       .when('/login', {templateUrl: 'bower_components/uchiwa-web/partials/login/index.html', controller: 'LoginController'})
       .when('/settings', {templateUrl: 'bower_components/uchiwa-web/partials/views/settings.html', controller: 'SettingsController'})
+      .when('/stash/:id*', {templateUrl: 'bower_components/uchiwa-web/partials/views/stash.html', reloadOnSearch: false, controller: 'StashController'})
       .when('/stashes', {templateUrl: 'bower_components/uchiwa-web/partials/views/stashes.html', reloadOnSearch: false, controller: 'StashesController'})
       .otherwise('/');
 
