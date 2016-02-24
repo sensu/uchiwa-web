@@ -294,6 +294,16 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
         path: path
       });
     };
+    this.get = function(stashes, id) {
+      for (var i = 0, len = stashes.length; i < len; i++) {
+        if (angular.isObject(stashes[i]) && angular.isDefined(stashes[i]._id)) {
+          if (stashes[i]._id === id) {
+            return stashes[i];
+          }
+        }
+      }
+      return null;
+    };
     this.getExpirationFromDateRange = function(stash) {
       if (angular.isUndefined(stash) || !angular.isObject(stash) || angular.isUndefined(stash.content) || !angular.isObject(stash.content)) {
         return stash;

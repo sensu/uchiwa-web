@@ -268,47 +268,6 @@ pre.hljs .hljs-string {
 .container-fluid.dashboard {
   padding-top: 15px; }
 
-/* Colors */
-/* Body, Sections and Headers */
-/* Breadcrumb */
-/* Buttons */
-/* Code */
-/* Dashboard */
-/* Dropdown */
-/* Login */
-/* Modal */
-/* Nav */
-/* Navbar */
-/* Search */
-/* Sidebar */
-/* Panels */
-/* Tables */
-/* Timestamp */
-/* Wells */
-.client .client-info .attributes {
-  padding-bottom: 15px; }
-
-.client .key {
-  font-weight: bold; }
-
-.client .value {
-  overflow-wrap: break-word;
-  white-space: pre-line; }
-
-.client .value img {
-  display: block;
-  max-width: 100%;
-  max-height: 100%; }
-
-.client .check-info .title {
-  font-size: 14px;
-  font-weight: bold; }
-
-.client .check-output {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap; }
-
 .dashboard .col-xs-4 {
   padding-right: 0px;
   padding-left: 5px; }
@@ -455,6 +414,47 @@ pre.hljs .hljs-string {
 
 .show-on-hover:hover > div.dropdown-menu {
   display: block; }
+
+/* Colors */
+/* Body, Sections and Headers */
+/* Breadcrumb */
+/* Buttons */
+/* Code */
+/* Dashboard */
+/* Dropdown */
+/* Login */
+/* Modal */
+/* Nav */
+/* Navbar */
+/* Search */
+/* Sidebar */
+/* Panels */
+/* Tables */
+/* Timestamp */
+/* Wells */
+.element-view .attributes {
+  padding-bottom: 15px; }
+
+.element-view .key {
+  font-weight: bold; }
+
+.element-view .value {
+  overflow-wrap: break-word;
+  white-space: pre-line; }
+
+.element-view .value img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%; }
+
+.element-view .check-info .title {
+  font-size: 14px;
+  font-weight: bold; }
+
+.element-view .check-output {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; }
 
 .fa-stack {
   height: 1.4em;
