@@ -240,9 +240,13 @@ describe('filters', function () {
 
   });
 
+  describe('highlight', function () {
+    it('converts an object to JSON string', inject(function (highlightFilter) {
+      expect(highlightFilter({foo: 'bar'})).toContain('<span class="hljs-string">"bar"</span>');
+    }));
+  });
 
   describe('imagey', function () {
-
     it('should find an image and display it', inject(function (imageyFilter) {
       expect(imageyFilter(false)).toBe(false);
       expect(imageyFilter('http://foo.bar')).toBe('http://foo.bar');
@@ -251,17 +255,12 @@ describe('filters', function () {
       expect(imageyFilter('https://foo.bar/qux.gif')).toBe('<img src="https://foo.bar/qux.gif">');
       expect(imageyFilter('https://foo.bar:443/qux.gif')).toBe('<img src="https://foo.bar:443/qux.gif">');
     }));
-
   });
 
   describe('richOutput', function () {
     it('handles bogus values', inject(function (richOutputFilter) {
       expect(richOutputFilter(null)).toBe('');
       expect(richOutputFilter(undefined)).toBe('');
-    }));
-
-    it('converts an object to JSON string', inject(function (richOutputFilter) {
-      expect(richOutputFilter({foo: 'bar'})).toContain('<span class="hljs-attribute">foo</span>');
     }));
 
     it('converts an image URL to a HTML image', inject(function (richOutputFilter) {
