@@ -209,6 +209,17 @@ filterModule.filter('hideOccurrences', function() {
   };
 });
 
+filterModule.filter('highlight', function() {
+  return function(text) {
+    if(typeof text === 'object') {
+      var code = hljs.highlight('json', angular.toJson(text, true)).value;
+      var output = '<pre class=\"hljs\">' + code + '</pre>';
+      return output;
+    }
+    return text;
+  };
+});
+
 filterModule.filter('imagey', function() {
   return function(url) {
     if (!url) {
@@ -243,8 +254,8 @@ filterModule.filter('richOutput', ['$filter', '$sce', '$sanitize', '$interpolate
       if (text instanceof Array) {
         output = text.join(', ');
       } else {
-        var code = hljs.highlight('json', angular.toJson(text, true)).value;
-        output = '<pre class=\"hljs\">' + code + '</pre>';
+        // We will highlight other objects with the "highlight" filter
+        output = text;
       }
     } else if (typeof text === 'number' || typeof text === 'boolean') {
       output = text.toString();
