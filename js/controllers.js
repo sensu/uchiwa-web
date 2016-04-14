@@ -405,7 +405,7 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
       filtered = $filter('hideSilenced')(filtered, $scope.filters.silenced);
       filtered = $filter('hideClientsSilenced')(filtered, $scope.filters.clientsSilenced);
       filtered = $filter('hideOccurrences')(filtered, $scope.filters.occurrences);
-      filtered = $filter('filter')(filtered, $scope.filters.check);
+      filtered = $filter('filter')(filtered, {check: {name: $scope.filters.check}});
       filtered = $filter('filter')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'events');
       $scope.filtered = filtered;
