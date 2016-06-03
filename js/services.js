@@ -30,7 +30,10 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
       }
       return $http.delete('stashes/'+id);
     };
-    this.getAggregate = function(check, dc, issued) {
+    this.getAggregate = function(check, dc) {
+      return $http.get('aggregates/'+dc+'/'+check);
+    };
+    this.getAggregateIssued = function(check, dc, issued) {
       return $http.get('aggregates/'+dc+'/'+check+'/'+issued);
     };
     this.getAggregates = function() {

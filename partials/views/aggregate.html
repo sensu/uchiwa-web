@@ -12,7 +12,7 @@
               <!--title-->
               <ul class="breadcrumb">
                 <li><a href="#/aggregates">Aggregates</a></li>
-                <li class="active">{{check}}</li>
+                <li class="active">{{name}}</li>
               </ul>
             </div>
           </div>
@@ -28,7 +28,7 @@
 
           <div class="row mb15">
             <div class="col-xs-6">
-              <div class="panel-title">{{check}}</div>
+              <div class="panel-title">{{name}}</div>
               <p><small><i class="fa fa-cloud"></i> {{dc}}</small></p>
             </div>
           </div>
@@ -49,7 +49,7 @@
       <div class="panel panel-default">
         <div class="panel-body">
 
-          <div class="row mb15">
+          <div class="row mb15" ng-if="issued !== 'undefined'">
             <div class="col-xs-6">
               <div class="panel-title">{{ issued | getTimestamp }}</div>
               <p><small><i class="fa fa-clock-o"></i> {{ issued | relativeTimestamp }}</small></p>
@@ -66,28 +66,28 @@
             <tbody>
               <tr>
                 <td>Total</td>
-                <td><span class="label label-primary">{{aggregate.total}}</span></td>
+                <td><span class="label label-primary">{{aggregate.results.total}}</span></td>
               </tr>
               <tr>
                 <td>OK</td>
-                <td><span class="label label-success">{{aggregate.ok}}</span></td>
+                <td><span class="label label-success">{{aggregate.results.ok}}</span></td>
               </tr>
               <tr>
                 <td>Warning</td>
-                <td><span class="label label-warning">{{aggregate.warning}}</span></td>
+                <td><span class="label label-warning">{{aggregate.results.warning}}</span></td>
               </tr>
               <tr>
                 <td>Critical</td>
-                <td><span class="label label-danger">{{aggregate.critical}}</span></td>
+                <td><span class="label label-danger">{{aggregate.results.critical}}</span></td>
               </tr>
               <tr>
                 <td>Unknown</td>
-                <td><span class="label label-default">{{aggregate.unknown}}</span></td>
+                <td><span class="label label-default">{{aggregate.results.unknown}}</span></td>
               </tr>
             </tbody>
           </table>
 
-          <uw-progress-bar aggregate="aggregate"></uw-progress-bar>
+          <uw-progress-bar aggregate="aggregate.results"></uw-progress-bar>
 
         </div>
       </div>
