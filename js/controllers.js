@@ -12,18 +12,32 @@ controllerModule.controller('AggregateController', ['backendService', '$http', '
 
     // Routing
     $scope.dc = decodeURI($routeParams.dc);
-    $scope.check = decodeURI($routeParams.check);
+    $scope.name = decodeURI($routeParams.name);
 
     // Get aggregates
     $scope.aggregates = [];
     var timer = Sensu.updateAggregates();
     $scope.$watch(function () { return Sensu.getAggregates(); }, function (data) {
       $scope.aggregates = _.find(data, function(aggregate) { // jshint ignore:line
-        return $scope.check === aggregate.check && $scope.dc === aggregate.dc;
+        return $scope.name === aggregate.name && $scope.dc === aggregate.dc;
       });
     });
     $scope.$on('$destroy', function() {
       Sensu.stop(timer);
+    });
+
+    // Add support for aggregates v2.0 in Sensu >= 0.24.0
+    $scope.$watch('aggregates', function () {
+      if (angular.isDefined($scope.aggregates) && angular.isUndefined($scope.aggregates.issued)) {
+        backendService.getAggregate($scope.name, $scope.dc)
+          .success(function(data) {
+            $scope.aggregate = data;
+          })
+          .error(function(error) {
+            $scope.aggregate = null;
+            console.error(error);
+          });
+      }
     });
 
     // Get aggregate
@@ -34,9 +48,9 @@ controllerModule.controller('AggregateController', ['backendService', '$http', '
         $scope.aggregate = null;
         return;
       }
-      backendService.getAggregate($scope.check, $scope.dc, $scope.issued)
+      backendService.getAggregateIssued($scope.name, $scope.dc, $scope.issued)
         .success(function(data) {
-          $scope.aggregate = data;
+          $scope.aggregate = {results: data};
         })
         .error(function(error) {
           $scope.aggregate = null;
