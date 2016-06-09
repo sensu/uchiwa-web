@@ -60,12 +60,12 @@ filterModule.filter('buildEvents', function() {
         event.check = {};
       }
       event.sourceName = event.check.source || event.client.name;
-      if (!('last_ok' in event)) {
+      /* jshint -W106  */
+      if (!('last_ok' in event) || event.last_ok === null) {
         lastOk = estimateLastOk(event);
-        /* jshint -W106  */
         if (lastOk) { event.last_ok = lastOk; }
-        /* jshint +W106 */
       }
+      /* jshint +W106 */
     });
     return events;
   };

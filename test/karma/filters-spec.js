@@ -99,6 +99,16 @@ describe('filters', function () {
         timestamp: 1465161618
       };
 
+      var event_with_null_last_ok = {
+        check: {
+          interval: 240,
+          timestamp: 1465161200
+        },
+        occurrences: 5,
+        client: { name: 'baz'},
+        last_ok: null
+      };
+
       var event_with_interval_and_occurences = {
         check: {
           interval: 240,
@@ -111,6 +121,7 @@ describe('filters', function () {
       expect(lastOkOf(event_with_last_ok)).toEqual(1465161618);
       expect(lastOkOf(event_with_keepalive)).toEqual(1464874088);
       expect(lastOkOf(event_with_interval_and_occurences)).toEqual(1465160000);
+      expect(lastOkOf(event_with_null_last_ok)).toEqual(1465160000);
     }));
 
   });
