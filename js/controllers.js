@@ -198,6 +198,7 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
     $scope.$on('$destroy', function() {
       Sensu.stop(clientTimer);
       Sensu.stop(eventsTimer);
+      Sensu.cleanClient();
     });
 
     // Get check
