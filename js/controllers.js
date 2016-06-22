@@ -732,7 +732,8 @@ controllerModule.controller('StashesController', ['$filter', 'filterService', 'h
     $scope.permalink = routingService.permalink;
     $scope.selectAll = helperService.selectAll;
     $scope.user = userService;
-    $scope.deleteStash = function(id) {
+    $scope.deleteStash = function($event, id) {
+      $event.stopPropagation();
       stashesService.deleteStash(id).then(function() {
         $scope.filtered = $filter('filter')($scope.filtered, {_id: '!'+id});
         $rootScope.skipOneRefresh = true;
