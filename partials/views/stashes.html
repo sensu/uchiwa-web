@@ -41,10 +41,12 @@
             </thead>
             <tbody>
               <tr ng-repeat="stash in filtered | buildStashes | orderBy:predicate:reverse | limitTo:filters.limit track by stash._id" ng-click="go('/stash/'+stash._id)">
-                <td ng-if="!user.isReadOnly()">
+                <td ng-if="!user.isReadOnly()" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="selected.ids[stash._id]"></input>
                 </td>
-                <td class="main"><span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteStash(stash._id);"></i></span>{{ stash.path }}</td>
+                <td class="main">
+                  <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteStash($event, stash._id);"></i></span>{{ stash.path }}
+                </td>
                 <td class="dc">{{ stash.dc }}</td>
                 <td>
                   <relative-time timestamp="stash.content.timestamp"></relative-time>

@@ -35,7 +35,7 @@
             <thead>
               <tr>
                 <th ng-class="user.isReadOnly() ? 'col-min-ro' : 'col-min'">
-                  <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)"  ng-if="!user.isReadOnly()"></input>
+                  <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
                 <th class="col-sm-3" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
                 <th class="col-sm-3" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
