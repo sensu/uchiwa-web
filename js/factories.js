@@ -48,6 +48,9 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $rootSc
   var sensu = {aggregates: [], checks: [], client: {}, clients: [], events: [], stashes: [], subscriptions: []};
 
   return {
+    cleanClient: function() {
+      sensu.client = {};
+    },
     getAggregates: function() {
       return sensu.aggregates;
     },
