@@ -85,6 +85,11 @@ directiveModule.directive('relativeTime', ['$filter', '$rootScope', function ($f
     scope: {
       timestamp: '='
     },
+    link: function(scope) {
+      if (angular.isDefined(scope.timestamp) && !angular.isNumber(scope.timestamp)) {
+        scope.timestamp = Date.parse(scope.timestamp)/1000;
+      }
+    },
     templateUrl: $rootScope.partialsPath + '/directives/relative-time.html'
   };
 }]);
