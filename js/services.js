@@ -266,6 +266,10 @@ serviceModule.service('routingService', ['$location', function ($location) {
     });
   };
   this.updateValue = function (filters, value, key) {
+    if (key === 'limit' && value === '0') {
+      filters[key] = undefined;
+      return;
+    }
     if (value === '') {
       filters[key] = filtersDefaultValues[key] ? filtersDefaultValues[key] : value;
     }
