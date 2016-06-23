@@ -3,7 +3,7 @@
     {{filters.limit}} of {{data.length}}
     <i class="fa fa-caret-down"></i>
   </span>
-  <span dropdown-toggle class="action" ng-if="filters.limit >= data.length">
+  <span dropdown-toggle class="action" ng-if="filters.limit >= data.length || filters.limit === undefined">
     {{data.length}} of {{data.length}}
     <i class="fa fa-caret-down"></i>
   </span>
@@ -23,8 +23,8 @@
         Show 200 items
       </a>
     </li>
-    <li ng-class="{selected: filters.limit == data.length}">
-      <a href="" ng-click="permalink($event, 'limit', data.length)">
+    <li ng-class="{selected: filters.limit == data.length || filters.limit === undefined}">
+      <a href="" ng-click="permalink($event, 'limit', '0')">
         Show all items
       </a>
     </li>
