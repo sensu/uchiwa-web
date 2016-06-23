@@ -44,7 +44,7 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, 
 /**
 * Sensu Data
 */
-factoryModule.factory('Sensu', function(backendService, conf, $interval, $rootScope) {
+factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $rootScope) {
   var sensu = {aggregates: [], checks: [], client: {}, clients: [], events: [], stashes: [], subscriptions: []};
 
   return {
@@ -117,16 +117,18 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $rootSc
           $rootScope.skipOneRefresh = false;
           return;
         }
-        backendService.getClient(client, dc)
-          .success(function (data) {
-            sensu.client = data;
-          })
-          .error(function(error) {
-            sensu.client = null;
-            if (error !== null) {
-              console.error(JSON.stringify(error));
-            }
-          });
+        $q.all([
+          backendService.getClient(client, dc),
+          backendService.getClientHistory(client, dc)
+        ]).then(function(result){
+          sensu.client = result[0].data;
+          sensu.client.history = result[1].data;
+        }, function(error) {
+          sensu.client = null;
+          if (error !== null) {
+            console.error(JSON.stringify(error));
+          }
+        });
       };
       update();
       return $interval(update, conf.refresh);
