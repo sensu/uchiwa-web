@@ -49,7 +49,7 @@
                 </td>
                 <td class="dc">{{ stash.dc }}</td>
                 <td>
-                  <relative-time timestamp="stash.content.timestamp"></relative-time>
+                  <relative-time timestamp="stash.content.timestamp" tooltip-placement="top" tooltip-trigger tooltip="{{stash.content.timestamp | getTimestamp}}"></relative-time>
                 </td>
                 <td>{{ stash | getExpireTimestamp }}</td>
               </tr>
