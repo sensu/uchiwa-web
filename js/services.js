@@ -9,32 +9,44 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
   function(audit, conf, $http, $interval, $location, $rootScope){
     var errorRefresh = conf.appName+' is having trouble updating its data. Try to refresh the page if this issue persists.';
 
+    var getResources = function(id) {
+      var resources = [];
+      var index = id.indexOf('/');
+      resources[0] = id.substr(0, index);
+      resources[1] = id.substr(index + 1);
+      return resources;
+    };
+
     this.auth = function () {
       return $http.get('auth');
     };
     this.deleteClient = function (id) {
+      var resources = getResources(id);
       if ($rootScope.enterprise) {
         audit.log({action: 'delete_client', level: 'default', output: id});
       }
-      return $http.delete('clients/'+id);
+      return $http.delete('clients/'+resources[1]+'?dc='+resources[0]);
     };
     this.deleteCheckResult = function (id) {
-      return $http.delete('results/'+id);
+      var resources = getResources(id);
+      return $http.delete('results/'+resources[1]+'?dc='+resources[0]);
     };
     this.deleteEvent = function (id) {
-      return $http.delete('events/'+id);
+      var resources = getResources(id);
+      return $http.delete('events/'+resources[1]+'?dc='+resources[0]);
     };
     this.deleteStash = function (id) {
+      var resources = getResources(id);
       if ($rootScope.enterprise) {
         audit.log({action: 'delete_stash', level: 'default', output: id});
       }
-      return $http.delete('stashes/'+id);
+      return $http.delete('stashes/'+resources[1]+'?dc='+resources[0]);
     };
     this.getAggregate = function(check, dc) {
-      return $http.get('aggregates/'+dc+'/'+check);
+      return $http.get('aggregates/'+check+'?dc='+dc);
     };
     this.getAggregateIssued = function(check, dc, issued) {
-      return $http.get('aggregates/'+dc+'/'+check+'/'+issued);
+      return $http.get('aggregates/'+check+'/'+issued+'?dc='+dc);
     };
     this.getAggregates = function() {
       return $http.get('aggregates');
@@ -43,7 +55,10 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
       return $http.get('checks');
     };
     this.getClient = function (client, dc) {
-      return $http.get('clients/'+dc+'/'+client);
+      return $http.get('clients/'+client+'?dc='+dc);
+    };
+    this.getClientHistory = function (client, dc) {
+      return $http.get('clients/'+client+'/history?dc='+dc);
     };
     this.getClients = function () {
       return $http.get('clients');
