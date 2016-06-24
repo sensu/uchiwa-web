@@ -211,7 +211,10 @@ filterModule.filter('hideOccurrences', function() {
 
 filterModule.filter('highlight', function() {
   return function(text) {
-    if(typeof text === 'object') {
+    if (typeof text === 'object') {
+      if (text.hasOwnProperty('$$unwrapTrustedValue')) {
+        return text;
+      }
       var code = hljs.highlight('json', angular.toJson(text, true)).value;
       var output = '<pre class=\"hljs\">' + code + '</pre>';
       return output;
@@ -261,7 +264,8 @@ filterModule.filter('richOutput', ['$filter', '$sce', '$sanitize', '$interpolate
       output = text.toString();
     } else if (/^iframe:/.test(text)) {
       var iframeSrc = $sanitize(text.replace(/^iframe:/, ''));
-      output = $sce.trustAsHtml($interpolate('<span class="iframe"><iframe width="100%" src="{{iframeSrc}}"></iframe></span>')({ 'iframeSrc': iframeSrc }));
+      var exp = $interpolate('<span class="iframe"><iframe width="100%" src="{{iframeSrc}}"></iframe></span>')({ 'iframeSrc': iframeSrc });
+      output = $sce.trustAsHtml(exp);
     }
     else {
       var linkified = $filter('linky')(text, '_blank');
