@@ -244,6 +244,11 @@ describe('filters', function () {
     it('converts an object to JSON string', inject(function (highlightFilter) {
       expect(highlightFilter({foo: 'bar'})).toContain('<span class="hljs-string">"bar"</span>');
     }));
+    it('does not convert an iframe', inject(function (highlightFilter) {
+      var obj = {foo: true};
+      obj['$$unwrapTrustedValue'] = function(){};
+      expect(highlightFilter(obj)).toBe(obj);
+    }));
   });
 
   describe('imagey', function () {
