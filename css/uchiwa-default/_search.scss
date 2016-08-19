@@ -1,25 +1,5 @@
 @import "variables";
 
-.navbar .uchiwa-search {
-  display: block;
-  position: absolute;
-  width: 100%;
-  top: 100%;
-  z-index: 100;
-  background-color: $quinary-color;
-}
-
-.navbar .uchiwa-search .form-control {
-  background-color: $quinary-color;
-  color: $search-text-color;
-  border-radius: 0;
-  border-width: 0;
-  box-shadow: none;
-  border: 0px;
-  padding: 8px 0;
-  font-size: 22px;
-}
-
 .search-results {
   color: $navbar-text-color;
   position: absolute;
@@ -38,21 +18,7 @@
   width: 100%;
 }
 
-.navbar .uchiwa-search .form-control {
-  @include placeholder {
-    color: $search-text-color;
-  }
-}
-
-.navbar .uchiwa-search .input-group {
-  margin-bottom: 0px;
-}
-
-.navbar .uchiwa-search .input-group-btn .btn {
-  margin-left: 0px;
-  font-size: 20px;
-}
-
-.navbar .uchiwa-search .input-group-btn .btn:hover {
-  border: 0;
+.search-container .form-control {
+  color: $search-containter-color;
+  background-color: $search-containter-background-color;
 }
