@@ -8,6 +8,7 @@
 /* Nav */
 /* Navbar */
 /* Panels */
+/* Search */
 /* Tables */
 /* Sidebar */
 /* Wells */
@@ -983,24 +984,6 @@ li.timestamp .relative-timestamp {
 /* Tables */
 /* Timestamp */
 /* Wells */
-.navbar .uchiwa-search {
-  display: block;
-  position: absolute;
-  width: 100%;
-  top: 100%;
-  z-index: 100;
-  background-color: #5F97FB; }
-
-.navbar .uchiwa-search .form-control {
-  background-color: #5F97FB;
-  color: white;
-  border-radius: 0;
-  border-width: 0;
-  box-shadow: none;
-  border: 0px;
-  padding: 8px 0;
-  font-size: 22px; }
-
 .search-results {
   color: #FFFFFF;
   position: absolute;
@@ -1017,24 +1000,9 @@ li.timestamp .relative-timestamp {
   position: relative;
   width: 100%; }
 
-.navbar .uchiwa-search .form-control::-webkit-input-placeholder {
-  color: white; }
-.navbar .uchiwa-search .form-control:-moz-placeholder {
-  color: white; }
-.navbar .uchiwa-search .form-control::-moz-placeholder {
-  color: white; }
-.navbar .uchiwa-search .form-control:-ms-input-placeholder {
-  color: white; }
-
-.navbar .uchiwa-search .input-group {
-  margin-bottom: 0px; }
-
-.navbar .uchiwa-search .input-group-btn .btn {
-  margin-left: 0px;
-  font-size: 20px; }
-
-.navbar .uchiwa-search .input-group-btn .btn:hover {
-  border: 0; }
+.search-container .form-control {
+  color: white;
+  background-color: #424256; }
 
 /* Colors */
 /* Body, Sections and Headers */
