@@ -43,6 +43,7 @@
                 <th class="col-sm-1" ng-click="predicate = 'occurrences'; reverse=!reverse"><i class="fa fa-slack" tooltip-placement="top" tooltip-trigger tooltip="Occurrences"></i> <i class="fa fa-sort"></i></th>
                 <th class="col-dc" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
                 <th class="col-date" ng-click="predicate = 'check.issued'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger tooltip="Issued"></i> <i class="fa fa-sort"></i></th>
+                <th class="col-sm-1" ng-click="predicate = 'last_ok'; reverse=!reverse"><i class="fa fa-calendar" tooltip-placement="top" tooltip-trigger tooltip="Last Ok"></i> <i class="fa fa-sort"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -68,6 +69,9 @@
                 <td class="dc">{{ event.dc }}</td>
                 <td>
                   <relative-time timestamp="event.check.issued"></relative-time>
+                </td>
+                <td>
+                  <relative-time timestamp="event.last_ok"></relative-time>
                 </td>
               </tr>
             </tbody>

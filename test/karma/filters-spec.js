@@ -80,6 +80,50 @@ describe('filters', function () {
       expect(buildEventsFilter(events)).toEqual(expectedEvents);
     }));
 
+    it("adds last_ok if it's missing", inject(function (buildEventsFilter) {
+      function lastOkOf(event) {
+        return buildEventsFilter([event])[0].last_ok
+      }
+
+      var event_with_last_ok = {
+        check: { source: 'foo' },
+        last_ok: 1465161618
+      };
+
+      var event_with_keepalive = {
+        check: {
+          source: 'bar',
+          name: 'keepalive',
+          output: "No keepalive sent from client for 287530 seconds (>=180)",
+        },
+        timestamp: 1465161618
+      };
+
+      var event_with_null_last_ok = {
+        check: {
+          interval: 240,
+          timestamp: 1465161200
+        },
+        occurrences: 5,
+        client: { name: 'baz'},
+        last_ok: null
+      };
+
+      var event_with_interval_and_occurences = {
+        check: {
+          interval: 240,
+          timestamp: 1465161200
+        },
+        occurrences: 5,
+        client: { name: 'baz'},
+      };
+
+      expect(lastOkOf(event_with_last_ok)).toEqual(1465161618);
+      expect(lastOkOf(event_with_keepalive)).toEqual(1464874088);
+      expect(lastOkOf(event_with_interval_and_occurences)).toEqual(1465160000);
+      expect(lastOkOf(event_with_null_last_ok)).toEqual(1465160000);
+    }));
+
   });
 
   describe('buildStashes', function () {
