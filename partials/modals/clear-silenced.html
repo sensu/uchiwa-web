@@ -1,0 +1,22 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger tooltip="Datacenter"></i></th>
+      <th><i class="fa fa-user" tooltip-placement="top" tooltip-trigger tooltip="Creator"></i></th>
+      <th>Reason</th>
+      <th><i class='fa fa-calendar-check-o' tooltip-placement="top" tooltip-trigger tooltip="Expire on Resolve"></i></th>
+      <th><i class='fa fa-hourglass-end' tooltip-placement="top" tooltip-trigger tooltip="Expiration"></i></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="entry in silenced">
+      <td>{{entry.id}}</td>
+      <td>{{entry.dc}}</td>
+      <td>{{entry.creator}}</td>
+      <td>{{entry.reason}}</td>
+      <td>{{entry.expire_on_resolve}}</td>
+      <td>{{entry.expire | getExpirationTimestamp}}</td>
+    </tr>
+  </tbody>
+</table>

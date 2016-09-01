@@ -1,0 +1,46 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Data Center</th>
+      <th>Client</th>
+      <th ng-if="itemType == 'check'">Check</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="item in items | filter:{silenced: false}">
+      <td>{{item.dc}}</td>
+      <td>{{item.name || item.client.name || item.client}}</td>
+      <td ng-if="itemType == 'check'">{{item.check.name || item.check}}</td>
+    </tr>
+  </tbody>
+</table>
+<hr/>
+<span>
+  <h5>Expiration</h5>
+  {{expire}}
+  <div class="btn-group">
+    <label class="btn btn-xs btn-default" ng-model="options.expire" btn-radio="900">15 minutes</label>
+    <label class="btn btn-xs btn-default" ng-model="options.expire" btn-radio="3600">1 hour</label>
+    <label class="btn btn-xs btn-default" ng-model="options.expire" btn-radio="86400">24 hours</label>
+    <label class="btn btn-xs btn-default" ng-model="options.expire" btn-radio="'custom'">Custom</label>
+    <label class="btn btn-xs btn-default" ng-model="options.expire" btn-radio="-1">No expiration</label>
+  </div>
+
+  <div ng-show="expire === 'custom'">
+    <div class="mb15" style="float:left">
+      <h5>Expiration date</h5>
+      <input type="text" ng-model="options.to" placeholder="yyyy-mm-dd hh:mm:ss">
+    </div>
+  </div>
+  <div style="clear:both">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="options.expire_on_resolve"> Expire on Resolve
+      </label>
+    </div>
+  </div>
+  <div style="clear:both">
+    <h5>Reason</h5>
+    <textarea class="form-control" rows="3" placeholder="Enter a reason" ng-model="options.reason"></textarea>
+  </div>
+</span>

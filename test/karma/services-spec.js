@@ -104,14 +104,14 @@ describe('services', function () {
     });
 
     describe('silenceItems()', function () {
-      it('calls the provided function for every selected item', inject(function (helperService, stashesService) {
-        spyOn(stashesService, 'stash').and.callThrough();
+      it('calls the provided function for every selected item', inject(function (helperService, silencedService) {
+        spyOn(silencedService, 'create').and.callThrough();
 
         var filtered = [{_id: 'foo'}, {_id: 'bar'}, {_id: 'qux'}];
         var selected = {ids: {foo: true, qux: true}};
 
-        helperService.silenceItems(stashesService.stash, filtered, selected);
-        expect(stashesService.stash).toHaveBeenCalledWith(null, [{_id: 'foo'}, {_id: 'qux'}]);
+        helperService.silenceItems(silencedService.create, filtered, selected);
+        expect(silencedService.create).toHaveBeenCalledWith(null, [{_id: 'foo'}, {_id: 'qux'}]);
         expect(selected.all).toEqual(false);
       }));
     });

@@ -172,12 +172,12 @@ describe('filters', function () {
     }));
   });
 
-  describe('getExpireTimestamp', function () {
+  describe('getExpirationTimestamp', function () {
 
-    it('should convert epoch to human readable date', inject(function (getExpireTimestampFilter) {
-      expect(getExpireTimestampFilter({content: { timestamp: new Date().getTime() }, expire: 'test'})).toBe('Unknown');
-      expect(getExpireTimestampFilter({content: { timestamp: new Date().getTime() }, expire: 900})).toMatch('\\d\\d\\d\\d-\\d\\d-');
-      expect(getExpireTimestampFilter({content: { timestamp: new Date().getTime() }, expire: -1})).toBe('Never');
+    it('should convert epoch to human readable date', inject(function (getExpirationTimestampFilter) {
+      expect(getExpirationTimestampFilter('test')).toBe('Unknown');
+      expect(getExpirationTimestampFilter(900)).toMatch('\\d\\d\\d\\d-\\d\\d-');
+      expect(getExpirationTimestampFilter(-1)).toBe('Never');
     }));
 
   });

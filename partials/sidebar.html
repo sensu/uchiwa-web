@@ -101,6 +101,31 @@
             </div>
           </div>
         </li>
+        <li id="silenced" class="show-on-hover" ng-class="getClass('/silenced')">
+          <a ng-href="#silenced" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="small-nav">
+              <i class="fa fa-bell-slash-o"></i>
+              <span class="badge badge-ok">{{ metrics.silenced.total }}</span>
+            </span>
+          </a>
+          <div class="dropdown-menu popover-menu" role="menu">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="panel panel-body panel-popover panel-ok">
+                  <div class="panel-title"><ng-pluralize count="silenced | arrayLength" when="{'0': 'silenced', '1': 'silenced', 'other': 'silenced'}"></ng-pluralize></div>
+
+                  <div class="row counts">
+                    <div class="col-sm-4">
+                      <span class="total">{{ metrics.silenced.total }}</span>
+                      <p class="category">total</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
         <li id="stashes" class="show-on-hover" ng-class="getClass('/stashes')">
           <a ng-href="#stashes" class="dropdown-toggle" data-toggle="dropdown">
             <span class="small-nav">

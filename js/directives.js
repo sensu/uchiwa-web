@@ -98,11 +98,11 @@ directiveModule.directive('silenceIcon', function () {
   return {
     restrict: 'E',
     scope: {
-      acknowledged: '='
+      silenced: '='
     },
     template: '<span class="fa-stack">' +
-      '<i class="fa {{ acknowledged | getAckClass }}"></i>' +
-      '<i class="fa fa-ban fa-stack-1x text-danger" ng-if="acknowledged"></i>' +
+      '<i class="fa {{ silenced | getAckClass }}"></i>' +
+      '<i class="fa fa-ban fa-stack-1x text-danger" ng-if="silenced"></i>' +
       '</span>'
   };
 });

@@ -42,7 +42,7 @@
                 <th class="col-sm-5" ng-click="predicate = 'output'; reverse=!reverse">Events <i class="fa fa-sort"></i></th>
                 <th class="col-dc" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
                 <th class="col-dc" ng-click="predicate = 'version'; reverse=!reverse"><i class="fa fa-upload" tooltip-placement="top" tooltip-trigger tooltip="Sensu Version"></i> <i class="fa fa-sort"></i></th>
-                <th class="col-date" ng-click="predicate = 'timestamp'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger tooltip="Issued"></i> <i class="fa fa-sort"></i></th>
+                <th class="col-date" ng-click="predicate = 'timestamp'; reverse=!reverse"><i class='fa fa-hourglass-start' tooltip-placement="top" tooltip-trigger tooltip="Issued"></i> <i class="fa fa-sort"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -50,8 +50,8 @@
                 <td class="well-{{ client.status | getStatusClass }}" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="selected.ids[client._id]" ng-if="!user.isReadOnly()"></input>
                 </td>
-                <td ng-click="stash($event, client)" ng-if="!user.isReadOnly()">
-                  <silence-icon acknowledged="client.acknowledged"></silence-icon>
+                <td ng-click="silence($event, client)" ng-if="!user.isReadOnly()">
+                  <silence-icon silenced="client.silenced"></silence-icon>
                 </td>
                 <td class="main"><span tooltip-placement="top" tooltip-trigger tooltip-html="'Subscriptions<br /><small>{{client.subscriptions|arrayToString}}</small>'">{{ client.name }}</span></td>
                 <td>{{ client.address }}</td>

@@ -153,15 +153,15 @@ filterModule.filter('getAckClass', function() {
   };
 });
 
-filterModule.filter('getExpireTimestamp', ['conf', function (conf) {
-  return function(stash) {
-    if (angular.isUndefined(stash) || isNaN(stash.expire)) {
+filterModule.filter('getExpirationTimestamp', ['conf', function (conf) {
+  return function(expire) {
+    if (angular.isUndefined(expire) || isNaN(expire)) {
       return 'Unknown';
     }
-    if (stash.expire === -1) {
+    if (expire === -1) {
       return 'Never';
     }
-    var expiration = (moment().unix() + stash.expire) * 1000;
+    var expiration = (moment().unix() + expire) * 1000;
     return moment(expiration).format(conf.date);
   };
 }]);

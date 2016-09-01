@@ -28,6 +28,7 @@
                 <th><i class="fa fa-bullhorn" tooltip-placement="top" tooltip-trigger tooltip="Events"></i></th>
                 <th><i class="fa fa-hdd-o" tooltip-placement="top" tooltip-trigger tooltip="Clients"></i></th>
                 <th><i class="fa fa-check-square" tooltip-placement="top" tooltip-trigger tooltip="Checks"></i></th>
+                <th><i class="fa fa-bell-slash-o" tooltip-placement="top" tooltip-trigger tooltip="Silenced"></i></th>
                 <th><i class="fa fa-briefcase" tooltip-placement="top" tooltip-trigger tooltip="Stashes"></i></th>
               </tr>
             </thead>
@@ -44,6 +45,7 @@
                 <td>{{ datacenter.stats.events }}</td>
                 <td>{{ datacenter.stats.clients }}</td>
                 <td>{{ datacenter.stats.checks }}</td>
+                <td>{{ datacenter.stats.silenced }}</td>
                 <td>{{ datacenter.stats.stashes }}</td>
               </tr>
             </tbody>
