@@ -117,6 +117,13 @@ controllerModule.controller('ChecksController', ['checksService', '$filter', 'fi
     $scope.reverse = false;
     $scope.selected = {all: false, ids: {}};
 
+    var updateFilters = function() {
+      var filtered = $filter('filter')($scope.checks, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('collection')(filtered, 'checks');
+      $scope.filtered = filtered;
+    };
+
     // Get checks
     $scope.checks = [];
     $scope.filtered = [];
@@ -158,13 +165,6 @@ controllerModule.controller('ChecksController', ['checksService', '$filter', 'fi
         checksService.issueCheckRequest(item.name, item.dc, item.subscribers);
       });
     };
-
-    var updateFilters = function() {
-      var filtered = $filter('filter')($scope.checks, {dc: $scope.filters.dc}, $scope.filterComparator);
-      filtered = $filter('filter')(filtered, $scope.filters.q);
-      filtered = $filter('collection')(filtered, 'checks');
-      $scope.filtered = filtered;
-    };
   }
 ]);
 
@@ -180,26 +180,7 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
     $scope.clientName = decodeURI($routeParams.client);
     $scope.dc = decodeURI($routeParams.dc);
 
-    // Get client
-    $scope.client = null;
-    var clientTimer = Sensu.updateClient($scope.clientName, $scope.dc);
-    $scope.$watch(function () { return Sensu.getClient(); }, function (data) {
-      $scope.client = data;
-      getCheck();
-    });
-
-    // Get events
-    var events = [];
-    var eventsTimer = Sensu.updateEvents();
-    $scope.$watch(function () { return Sensu.getEvents(); }, function (data) {
-      events = data;
-    });
-
-    $scope.$on('$destroy', function() {
-      Sensu.stop(clientTimer);
-      Sensu.stop(eventsTimer);
-      Sensu.cleanClient();
-    });
+    var searchCheckHistory = clientsService.searchCheckHistory;
 
     // Get check
     $scope.check = null;
@@ -249,6 +230,28 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
         titleFactory.set($scope.client.name);
       }
     };
+
+    // Get client
+    $scope.client = null;
+    var clientTimer = Sensu.updateClient($scope.clientName, $scope.dc);
+    $scope.$watch(function () { return Sensu.getClient(); }, function (data) {
+      $scope.client = data;
+      getCheck();
+    });
+
+    // Get events
+    var events = [];
+    var eventsTimer = Sensu.updateEvents();
+    $scope.$watch(function () { return Sensu.getEvents(); }, function (data) {
+      events = data;
+    });
+
+    $scope.$on('$destroy', function() {
+      Sensu.stop(clientTimer);
+      Sensu.stop(eventsTimer);
+      Sensu.cleanClient();
+    });
+
     $scope.$on('$routeChangeSuccess', function(){
       getCheck();
     });
@@ -263,7 +266,6 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
     $scope.permalink = routingService.permalink;
     $scope.silence = silencedService.create;
     $scope.user = userService;
-    var searchCheckHistory = clientsService.searchCheckHistory;
   }
 ]);
 
@@ -279,6 +281,15 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     $scope.reverse = false;
     $scope.selected = {all: false, ids: {}};
     $scope.statuses = {0: 'Healthy', 1: 'Warning', 2: 'Critical', 3: 'Unknown'};
+
+    var updateFilters = function() {
+      var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filtered = $filter('filter')(filtered, {status: $scope.filters.status});
+      filtered = $filter('filterSubscriptions')(filtered, $scope.filters.subscription);
+      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('collection')(filtered, 'clients');
+      $scope.filtered = filtered;
+    };
 
     // Get clients
     $scope.clients = [];
@@ -329,15 +340,6 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     $scope.silenceClients = function() {
       helperService.silenceItems(silencedService.create, $scope.filtered, $scope.selected);
     };
-
-    var updateFilters = function() {
-      var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, $scope.filterComparator);
-      filtered = $filter('filter')(filtered, {status: $scope.filters.status});
-      filtered = $filter('filterSubscriptions')(filtered, $scope.filters.subscription);
-      filtered = $filter('filter')(filtered, $scope.filters.q);
-      filtered = $filter('collection')(filtered, 'clients');
-      $scope.filtered = filtered;
-    };
   }
 ]);
 
@@ -370,6 +372,18 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     $scope.reverse = false;
     $scope.selected = {all: false, ids: {}};
     $scope.statuses = {1: 'Warning', 2: 'Critical', 3: 'Unknown'};
+
+    var updateFilters = function() {
+      var filtered = $filter('filter')($scope.events, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filtered = $filter('filter')(filtered, {check: {status: $scope.filters.status}});
+      filtered = $filter('hideSilenced')(filtered, $scope.filters.silenced);
+      filtered = $filter('hideClientsSilenced')(filtered, $scope.filters.clientsSilenced);
+      filtered = $filter('hideOccurrences')(filtered, $scope.filters.occurrences);
+      filtered = $filter('filter')(filtered, {check: {name: $scope.filters.check}});
+      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('collection')(filtered, 'events');
+      $scope.filtered = filtered;
+    };
 
     // Get events
     $scope.events = [];
@@ -412,18 +426,6 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     };
     $scope.silenceEvents = function() {
       helperService.silenceItems(silencedService.create, $scope.filtered, $scope.selected);
-    };
-
-    var updateFilters = function() {
-      var filtered = $filter('filter')($scope.events, {dc: $scope.filters.dc}, $scope.filterComparator);
-      filtered = $filter('filter')(filtered, {check: {status: $scope.filters.status}});
-      filtered = $filter('hideSilenced')(filtered, $scope.filters.silenced);
-      filtered = $filter('hideClientsSilenced')(filtered, $scope.filters.clientsSilenced);
-      filtered = $filter('hideOccurrences')(filtered, $scope.filters.occurrences);
-      filtered = $filter('filter')(filtered, {check: {name: $scope.filters.check}});
-      filtered = $filter('filter')(filtered, $scope.filters.q);
-      filtered = $filter('collection')(filtered, 'events');
-      $scope.filtered = filtered;
     };
 
     // Hide silenced
@@ -608,6 +610,13 @@ controllerModule.controller('SilencedController', ['$filter', 'filterService', '
     $scope.selectAll = {checked: false};
     $scope.selected = {all: false, ids: {}};
 
+    var updateFilters = function() {
+      var filtered = $filter('filter')($scope.silenced, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('collection')(filtered, 'silenced');
+      $scope.filtered = filtered;
+    };
+
     // Get silenced
     $scope.silenced = [];
     $scope.filtered = [];
@@ -650,13 +659,6 @@ controllerModule.controller('SilencedController', ['$filter', 'filterService', '
       helperService.deleteItems(silencedService.delete, $scope.filtered, $scope.selected).then(function(filtered){
         $scope.filtered = filtered;
       });
-    };
-
-    var updateFilters = function() {
-      var filtered = $filter('filter')($scope.silenced, {dc: $scope.filters.dc}, $scope.filterComparator);
-      filtered = $filter('filter')(filtered, $scope.filters.q);
-      filtered = $filter('collection')(filtered, 'silenced');
-      $scope.filtered = filtered;
     };
   }
 ]);
@@ -844,6 +846,13 @@ controllerModule.controller('StashesController', ['$filter', 'filterService', 'h
     $scope.selectAll = {checked: false};
     $scope.selected = {all: false, ids: {}};
 
+    var updateFilters = function() {
+      var filtered = $filter('filter')($scope.stashes, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('collection')(filtered, 'stashes');
+      $scope.filtered = filtered;
+    };
+
     // Get stashes
     $scope.stashes = [];
     $scope.filtered = [];
@@ -886,13 +895,6 @@ controllerModule.controller('StashesController', ['$filter', 'filterService', 'h
       helperService.deleteItems(stashesService.deleteStash, $scope.filtered, $scope.selected).then(function(filtered){
         $scope.filtered = filtered;
       });
-    };
-
-    var updateFilters = function() {
-      var filtered = $filter('filter')($scope.stashes, {dc: $scope.filters.dc}, $scope.filterComparator);
-      filtered = $filter('filter')(filtered, $scope.filters.q);
-      filtered = $filter('collection')(filtered, 'stashes');
-      $scope.filtered = filtered;
     };
   }
 ]);
