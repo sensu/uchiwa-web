@@ -13,8 +13,8 @@
       <div class="col-xs-6">
         <div class="panel-icon">
           <span class="pull-right" ng-if="!user.isReadOnly()">
-            <span class="dropdown" ng-click="stash($event, client)" dropdown-toggle>
-              <silence-icon acknowledged="client.acknowledged"></silence-icon>
+            <span class="dropdown" ng-click="silence($event, client)" dropdown-toggle>
+              <silence-icon silenced="client.silenced"></silence-icon>
             </span>
             <i class="fa fa-times" tooltip-placement="top" tooltip-trigger tooltip="Delete" ng-click="deleteClient(client._id)"></i>
           </span>

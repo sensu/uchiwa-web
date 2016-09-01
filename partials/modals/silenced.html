@@ -1,0 +1,42 @@
+<div class="modal-header">
+  <h3 class="modal-title" ng-if="silencedCount == items.length">
+    <ng-pluralize count="silenced.length"
+                  when="{'one': 'Clear a silence entry',
+                        'other': 'Clear multiple silence entries'}">
+    </ng-pluralize>
+  </h3>
+  <h3 class="modal-title" ng-if="silencedCount != items.length">
+    Silence...
+  </h3>
+</div>
+<div class="modal-body">
+  <div ng-if="silencedCount != items.length">
+    <p class="lead">
+      <ng-pluralize count="items.length"
+                    when="{'one': 'the following {{itemType}}:',
+                          'other': 'the following {{itemType}}s:'}">
+      </ng-pluralize>
+    </p>
+
+    <ng-include src="partialsPath + '/modals/create-silenced.html'"></ng-include>
+
+    <hr>
+
+    <div ng-if="silencedCount != 0">
+      <p class="lead" ng-if="silencedCount != items.length">
+        <ng-pluralize count="silencedCount"
+                      when="{'one': 'The silence entry for the following {{itemType}} is also going to be removed:',
+                            'other': 'The silence entries for the following {{itemType}}s are also going to be removed:'}">
+        </ng-pluralize>
+      </p>
+      <ng-include src="partialsPath + '/modals/clear-silenced.html'"></ng-include>
+    </div>
+  </div>
+  <div ng-if="silencedCount == items.length">
+    <ng-include src="partialsPath + '/modals/clear-silenced.html'"></ng-include>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-sm btn-success" ng-click="ok()">Submit</button>
+  <button class="btn btn-sm btn-warning" ng-click="cancel()">Cancel</button>
+</div>

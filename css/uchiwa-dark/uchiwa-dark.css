@@ -712,6 +712,9 @@ li.timestamp .relative-timestamp {
   background-color: #2C2C39;
   color: #6f6f6f; }
 
+.modal-dialog {
+  width: 70%; }
+
 .modal-footer {
   border-top: 1px solid #21212b; }
 

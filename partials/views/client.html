@@ -64,7 +64,7 @@
           <tbody>
             <tr ng-repeat="check in client.history | orderBy:predicate:reverse" ng-click="permalink($event,'check', check.check)">
               <td class="well-{{ check.last_status | getStatusClass }}" ng-class="user.isReadOnly() ? '' : 'dropdown'">
-                <silence-icon acknowledged="check.acknowledged" ng-click="stash($event, check)" ng-if="!user.isReadOnly()"></silence-icon>
+                <silence-icon silenced="check.silenced" ng-click="silence($event, check)" ng-if="!user.isReadOnly()"></silence-icon>
               </td>
               <td class="main" >{{ check.check }}</td>
               <td class="check-output">{{ check.last_result.output }}</td>
@@ -86,8 +86,8 @@
             <div class="col-xs-6">
               <div class="panel-icon">
                 <span class="pull-right" ng-if="!user.isReadOnly()">
-                  <span class="dropdown" ng-click="stash($event, check)">
-                    <silence-icon acknowledged="check.acknowledged"></silence-icon>
+                  <span class="dropdown" ng-click="silence($event, check)">
+                    <silence-icon silenced="check.silenced"></silence-icon>
                   </span>
                   <i class="fa fa-times" tooltip-placement="top" tooltip-trigger tooltip="Delete Result" ng-click="deleteCheckResult(check.dc+'/'+client.name+'/'+check.check)"></i>
                   <i class="fa fa-check" tooltip-placement="top" tooltip-trigger tooltip="Resolve" ng-click="resolveEvent(check.dc+'/'+client.name+'/'+check.check)" ng-if="check.last_status"></i>

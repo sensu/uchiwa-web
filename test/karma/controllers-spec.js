@@ -5,7 +5,7 @@ describe('Controller', function () {
   var $scope;
   var createController;
   var mockNotification;
-  var mockStashesService;
+  var mockSilencedService;
   var mockRoutingService;
   var mockSensuData;
   var mockVersion;
@@ -14,7 +14,7 @@ describe('Controller', function () {
 
   beforeEach(function () {
     mockNotification = jasmine.createSpy('mockNotification');
-    mockStashesService = jasmine.createSpyObj('mockStashesService', ['stash', 'deleteStash']);
+    mockSilencedService = jasmine.createSpyObj('mockSilencedService', ['create', 'delete']);
     mockRoutingService = jasmine.createSpyObj('mockRoutingService', ['search', 'go', 'initFilters', 'permalink', 'updateFilters']);
 
     mockSensuData = {
@@ -29,7 +29,7 @@ describe('Controller', function () {
     };
     module(function ($provide) {
       $provide.value('notification', mockNotification);
-      $provide.value('stashesService', mockStashesService);
+      $provide.value('silencedService', mockSilencedService);
       $provide.value('routingService', mockRoutingService);
     });
   });
@@ -96,9 +96,9 @@ describe('Controller', function () {
       createController(controllerName);
       expect($scope.permalink).toBeDefined();
     });
-    it('should have a stash method', function () {
+    it('should have a silence method', function () {
       createController(controllerName);
-      expect($scope.stash).toBeDefined();
+      expect($scope.silence).toBeDefined();
     });
   });
 
@@ -109,9 +109,9 @@ describe('Controller', function () {
       createController(controllerName);
       expect($scope.go).toBeDefined();
     });
-    it('should have a stash method', function () {
+    it('should have a silence method', function () {
       createController(controllerName);
-      expect($scope.stash).toBeDefined();
+      expect($scope.silence).toBeDefined();
     });
     it('should have a permalink method', function () {
       createController(controllerName);
@@ -140,8 +140,8 @@ describe('Controller', function () {
       it('should have a go method', function () {
         expect($scope.go).toBeDefined();
       });
-      it('should have a stash method', function () {
-        expect($scope.stash).toBeDefined();
+      it('should have a silence method', function () {
+        expect($scope.silence).toBeDefined();
       });
 
     });
@@ -180,7 +180,7 @@ describe('Controller', function () {
 
   describe('SidebarController', function () {
     beforeEach(function () {
-      $rootScope.metrics = {aggregates: {total: 0}, checks: {total: 0}, clients: {critical: 0, total: 0, unknown: 0, warning: 0}, datacenters: {total: 0}, events: {critical: 0, total: 0, unknown: 0, warning: 0}, stashes: {total: 0}};
+      $rootScope.metrics = {aggregates: {total: 0}, checks: {total: 0}, clients: {critical: 0, total: 0, unknown: 0, warning: 0}, datacenters: {total: 0}, events: {critical: 0, total: 0, unknown: 0, warning: 0}, silenced: {total: 0}, stashes: {total: 0}};
     });
 
     var controllerName = 'SidebarController';

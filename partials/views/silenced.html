@@ -1,6 +1,6 @@
 <ng-include src="partialsPath + '/navbar.html'"></ng-include>
 <ng-include src="partialsPath + '/sidebar.html'"></ng-include>
-<div class="container-fluid stashes">
+<div class="container-fluid silenced">
   <div class="row-fluid">
     <div class="col-lg-12">
       <div class="panel panel-default">
@@ -16,9 +16,9 @@
               <!--dc-->
               <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
               <!--actions-->
-              <panel-actions data="stashes" resolve-fn="deleteStashes" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
+              <panel-actions data="silenced" resolve-fn="deleteMultipleSilenced" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
               <!--limit-->
-              <panel-limit data="stashes" filters="filters" permalink="permalink"></panel-limit>
+              <panel-limit data="silenced" filters="filters" permalink="permalink"></panel-limit>
               <!--search-->
               <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
             </div>
@@ -33,25 +33,25 @@
                 <th ng-if="!user.isReadOnly()">
                   <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
-                <th ng-click="predicate = 'path'; reverse=!reverse">Path <i class="fa fa-sort"></i></th>
+                <th ng-click="predicate = 'id'; reverse=!reverse">ID <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'content.timestamp'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger tooltip="Created"></i> <i class="fa fa-sort"></i></th>
+                <th ng-click="predicate = 'creator'; reverse=!reverse"><i class="fa fa-user" tooltip-placement="top" tooltip-trigger tooltip="Creator"></i> <i class="fa fa-sort"></i></th>
+                <th ng-click="predicate = 'expire_on_resolve'; reverse=!reverse"><i class='fa fa-calendar-check-o' tooltip-placement="top" tooltip-trigger tooltip="Expire on Resolve"></i> <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'expire'; reverse=!reverse"><i class='fa fa-hourglass-end' tooltip-placement="top" tooltip-trigger tooltip="Expiration"></i> <i class="fa fa-sort"></i></th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="stash in filtered | buildStashes | orderBy:predicate:reverse | limitTo:filters.limit track by stash._id" ng-click="go('/stash/'+stash._id)">
+              <tr ng-repeat="entry in filtered | orderBy:predicate:reverse | limitTo:filters.limit track by entry._id" ng-click="go('/silenced/'+entry._id)">
                 <td ng-if="!user.isReadOnly()" ng-click="$event.stopPropagation()">
-                  <input type="checkbox" ng-model="selected.ids[stash._id]"></input>
+                  <input type="checkbox" ng-model="selected.ids[entry._id]"></input>
                 </td>
                 <td class="main">
-                  <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteStash($event, stash._id);"></i></span>{{ stash.path }}
+                  <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteSilenced($event, entry._id);"></i></span>{{ entry.id }}
                 </td>
-                <td class="dc">{{ stash.dc }}</td>
-                <td>
-                  <relative-time timestamp="stash.content.timestamp" tooltip-placement="top" tooltip-trigger tooltip="{{stash.content.timestamp | getTimestamp}}"></relative-time>
-                </td>
-                <td>{{ stash.expire | getExpirationTimestamp }}</td>
+                <td class="dc">{{ entry.dc }}</td>
+                <td>{{ entry.creator }}</td>
+                <td>{{ entry.expire_on_resolve }}</td>
+                <td>{{ entry.expire | getExpirationTimestamp }}</td>
               </tr>
             </tbody>
           </table>
