@@ -762,7 +762,7 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
         if (!item.silenced) {
           var payload = {dc: item.dc, expire_on_resolve: $scope.options.expire_on_resolve, reason: $scope.options.reason}; // jshint ignore:line
 
-          if ($scope.options.expire !== '-1' && $scope.options.expire !== 'custom') {
+          if ($scope.options.expire > 0) {
             payload.expire = $scope.options.expire;
           }
 
