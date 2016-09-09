@@ -760,7 +760,11 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
       // Silenced entries to create
       angular.forEach(items, function(item) {
         if (!item.silenced) {
-          var payload = {dc: item.dc, expire: $scope.options.expire, expire_on_resolve: $scope.options.expire_on_resolve, reason: $scope.options.reason}; // jshint ignore:line
+          var payload = {dc: item.dc, expire_on_resolve: $scope.options.expire_on_resolve, reason: $scope.options.reason}; // jshint ignore:line
+
+          if ($scope.options.expire !== '-1' && $scope.options.expire !== 'custom') {
+            payload.expire = $scope.options.expire;
+          }
 
           // Determine the subscription
           if ($scope.itemType === 'client') {
