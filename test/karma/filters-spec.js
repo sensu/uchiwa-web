@@ -224,11 +224,11 @@ describe('filters', function () {
 
     it('should only hide silenced events when hideSilenced is true', inject(function (hideSilencedFilter) {
       var events = [
-        {id: 'foo', acknowledged: true},
-        {id: 'bar', acknowledged: false}
+        {id: 'foo', silenced: true},
+        {id: 'bar', silenced: false}
       ];
       var expectedEvents = [
-        {id: 'bar', acknowledged: false}
+        {id: 'bar', silenced: false}
       ];
       expect(hideSilencedFilter(events, false)).toEqual(events);
       expect(hideSilencedFilter(events, true)).toEqual(expectedEvents);
@@ -236,15 +236,15 @@ describe('filters', function () {
 
   });
 
-  describe('hideClientssSilenced', function () {
+  describe('hideClientsSilenced', function () {
 
     it('should only hide events from silenced clients when hideClientsSilenced is true', inject(function (hideClientsSilencedFilter) {
       var events = [
-        {id: 'foo', client: {acknowledged: true}},
-        {id: 'bar', client: {acknowledged: false}}
+        {id: 'foo', client: {silenced: true}},
+        {id: 'bar', client: {silenced: false}}
       ];
       var expectedEvents = [
-        {id: 'bar', client: {acknowledged: false}}
+        {id: 'bar', client: {silenced: false}}
       ];
       expect(hideClientsSilencedFilter(events, false)).toEqual(events);
       expect(hideClientsSilencedFilter(events, true)).toEqual(expectedEvents);
