@@ -148,8 +148,8 @@ filterModule.filter('filterSubscriptions', function() {
 });
 
 filterModule.filter('getAckClass', function() {
-  return function(isAcknowledged) {
-    return (isAcknowledged) ? 'fa-volume-off fa-stack-1x' : 'fa-volume-up';
+  return function(isSilenced) {
+    return (isSilenced) ? 'fa-volume-off fa-stack-1x' : 'fa-volume-up';
   };
 });
 
@@ -201,7 +201,7 @@ filterModule.filter('hideSilenced', function() {
     }
     if (events && hideSilenced) {
       return events.filter(function (item) {
-        return item.acknowledged === false;
+        return item.silenced === false;
       });
     }
     return events;
@@ -215,7 +215,7 @@ filterModule.filter('hideClientsSilenced', function() {
     }
     if (events && hideClientsSilenced) {
       return events.filter(function (item) {
-        return item.client.acknowledged === false;
+        return item.client.silenced === false;
       });
     }
     return events;
