@@ -206,7 +206,11 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
         var images = [];
         angular.forEach(check.last_result, function(value, key) { // jshint ignore:line
           value = $filter('getTimestamp')(value);
-          value = $filter('richOutput')(value);
+
+          // Issue 558: do not move an image from the command attribute to its own box
+          if (key !== 'command') {
+            value = $filter('richOutput')(value);
+          }
 
           if (/<img src=/.test(value)) {
             var obj = {};
