@@ -3,6 +3,7 @@
 describe('Controller', function () {
   var $rootScope;
   var $scope;
+  var routeParams;
   var createController;
   var mockNotification;
   var mockSilencedService;
@@ -37,9 +38,12 @@ describe('Controller', function () {
   beforeEach(inject(function ($controller, $httpBackend, _$rootScope_) {
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
+    routeParams = {};
+
     createController = function (controllerName, properties) {
       return $controller(controllerName, _.extend({
-        '$scope': $scope
+        '$scope': $scope,
+        $routeParams : routeParams
       }, properties));
     };
     $httpBackend.whenGET('config').respond([]);
@@ -100,6 +104,32 @@ describe('Controller', function () {
       createController(controllerName);
       expect($scope.silence).toBeDefined();
     });
+
+    describe('richOutput', function() {
+      it('moves images to its own box', function() {
+        routeParams.check = 'cpu';
+        createController(controllerName);
+
+        $scope.client = {name: 'foo', history: [{check: 'cpu', last_result: {image: 'http://127.0.0.0.1/cat.gif'}}]};
+
+        // Mock a broadcast to run the getCheck function
+        $rootScope.$broadcast("$routeUpdate");
+
+        expect($scope.images.length).toEqual(1);
+      });
+
+      it('does not move an image from the command attribute to its own box', function() {
+        routeParams.check = 'cpu';
+        createController(controllerName);
+
+        $scope.client = {name: 'foo', history: [{check: 'cpu', last_result: {command: 'http://127.0.0.0.1/cat.gif'}}]};
+
+        // Mock a broadcast to run the getCheck function
+        $rootScope.$broadcast("$routeUpdate");
+
+        expect($scope.images.length).toEqual(0);
+      });
+    });
   });
 
   describe('ClientsController', function () {
@@ -113,20 +143,19 @@ describe('Controller', function () {
       createController(controllerName);
       expect($scope.silence).toBeDefined();
     });
-    it('should have a permalink method', function () {
-      createController(controllerName);
-      expect($scope.permalink).toBeDefined();
-    });
 
-    describe('permalink()', function () {
+    describe('permalink method', function () {
+      it('exists', function () {
+        createController(controllerName);
+        expect($scope.permalink).toBeDefined();
+      });
 
       it('should call routing service permalink method', function () {
         createController(controllerName);
         $scope.permalink();
         expect(mockRoutingService.permalink).toHaveBeenCalled();
       });
-
-    })
+    });
   });
 
   describe('EventsController', function () {
