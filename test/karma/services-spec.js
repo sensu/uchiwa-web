@@ -199,6 +199,22 @@ describe('services', function () {
     });
   });
 
+  describe('silencedService', function () {
+    describe('secondsBetweenDates function', function() {
+      it('returns "unknown" if at least one of the date is undefined', inject(function(silencedService){
+        expect(silencedService.secondsBetweenDates()).toEqual('unknown');
+      }));
+
+      it('returns the seconds between two unix timestamps (milliseconds)', inject(function(silencedService){
+        expect(silencedService.secondsBetweenDates(1474149594000, 1474153194000)).toEqual(3600);
+      }));
+
+      it('returns the seconds between two human dates', inject(function(silencedService){
+        expect(silencedService.secondsBetweenDates('2016-09-17 18:45:20', '2016-09-17 19:00:20')).toEqual(900);
+      }));
+    });
+  });
+
   describe('stashesService', function () {
     it('should have a deleteStash method', inject(function (stashesService) {
       expect(stashesService.deleteStash).toBeDefined();
@@ -238,15 +254,6 @@ describe('services', function () {
 
       it('returns the stash found', inject(function (stashesService){
         expect(stashesService.get([{name: 'foo/foo'}, {_id: 'foo/bar'}, {_id: 'foo/foo'}], 'foo/foo')).toEqual({_id: 'foo/foo'});
-      }));
-    });
-
-    describe('getExpirationFromDateRange', function () {
-      it('returns the proper expiration & timestamp attributes', inject(function (stashesService){
-        var stash = {content: { to: '2015-02-01 00:00:01'}}
-        stash = stashesService.getExpirationFromDateRange(stash);
-        expect(stash.expiration).toBeLessThan(-10000000);
-        expect(stash.content.timestamp).toBeGreaterThan(1000000000);
       }));
     });
 
