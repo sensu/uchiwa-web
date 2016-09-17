@@ -371,6 +371,14 @@ serviceModule.service('silencedService', ['backendService', 'conf', '$filter', '
           console.error(error);
         });
     };
+    this.secondsBetweenDates = function(start, end) {
+      if (angular.isUndefined(start) || angular.isUndefined(end)) {
+        return 'unknown';
+      }
+
+      var amDifference = $filter('amDifference');
+      return amDifference(moment(end), moment(start), 'seconds');
+    };
 }]);
 
 /**
@@ -404,21 +412,6 @@ serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$
         }
       }
       return null;
-    };
-    this.getExpirationFromDateRange = function(stash) {
-      if (angular.isUndefined(stash) || !angular.isObject(stash) || angular.isUndefined(stash.content) || !angular.isObject(stash.content)) {
-        return stash;
-      }
-
-      var now = moment();
-      var start = now.format(conf.date);
-      var end = moment(stash.content.to);
-      var amDifference = $filter('amDifference');
-      var diff = amDifference(end, start, 'seconds');
-
-      stash.content.timestamp = now.unix();
-      stash.expiration = diff;
-      return stash;
     };
     this.getPath = function(item) {
       var path = ['silence'];
