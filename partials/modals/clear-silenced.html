@@ -1,6 +1,7 @@
 <table class="table">
   <thead>
     <tr>
+      <th ng-class="user.isReadOnly() ? 'col-min-ro' : 'col-min'"></th>
       <th>ID</th>
       <th><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger tooltip="Datacenter"></i></th>
       <th><i class="fa fa-user" tooltip-placement="top" tooltip-trigger tooltip="Creator"></i></th>
@@ -11,7 +12,8 @@
   </thead>
   <tbody>
     <tr ng-repeat="entry in silenced">
-      <td>{{entry.id}}</td>
+      <td><input type="checkbox" ng-model="selected[entry._id]" ng-if="!user.isReadOnly()"></input></td>
+      <td>{{entry._id}}</td>
       <td>{{entry.dc}}</td>
       <td>{{entry.creator}}</td>
       <td>{{entry.reason}}</td>
