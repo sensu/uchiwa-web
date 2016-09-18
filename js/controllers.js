@@ -718,7 +718,7 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
 
     $scope.silenced = [];
     var getSilencedIDs = function(data) {
-      var silencedByIds = [];
+      $scope.selected = {};
       angular.forEach(items, function(item) {
         if (item.silenced) {
           // Do we have a client?
@@ -727,9 +727,9 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
           }
           angular.forEach(item.silenced_by, function(id){ // jshint ignore:line
             var _id = item.dc + ':' + id;
-            if (silencedByIds.indexOf(_id) === -1) {
+            if (angular.isUndefined($scope.selected[_id])) {
               $scope.silenced.push($scope.findSilenced(data, _id));
-              silencedByIds.push(_id);
+              $scope.selected[_id] = true;
             }
           });
         }
@@ -754,11 +754,13 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
 
       // Silenced entries to Clear
       angular.forEach($scope.silenced, function(entry) {
-        silencedService.delete(entry._id).then(function() {
-          deffered.resolve(entry);
-        }, function() {
-          deffered.reject();
-        });
+        if ($scope.selected[entry._id]) {
+          silencedService.delete(entry._id).then(function() {
+            deffered.resolve(entry);
+          }, function() {
+            deffered.reject();
+          });
+        }
       });
 
       // Silenced entries to create
