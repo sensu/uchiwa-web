@@ -651,6 +651,7 @@ controllerModule.controller('SilencedController', ['$filter', 'filterService', '
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
     $scope.selectAll = helperService.selectAll;
+    $scope.silence = silencedService.create;
     $scope.user = userService;
     $scope.deleteSilenced = function($event, id) {
       $event.stopPropagation();

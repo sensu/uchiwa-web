@@ -19,6 +19,8 @@
               <panel-actions data="silenced" resolve-fn="deleteMultipleSilenced" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
               <!--limit-->
               <panel-limit data="silenced" filters="filters" permalink="permalink"></panel-limit>
+              <!--add-->
+              <ng-include src="partialsPath + '/panel/add-silenced.html'"></ng-include>
               <!--search-->
               <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
             </div>
