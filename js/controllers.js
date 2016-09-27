@@ -108,8 +108,8 @@ controllerModule.controller('AggregatesController', ['filterService', '$routePar
 /**
 * Checks
 */
-controllerModule.controller('ChecksController', ['checksService', '$filter', 'filterService', 'helperService', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory',
-  function (checksService, $filter, filterService, helperService, $routeParams, routingService, $scope, Sensu, titleFactory) {
+controllerModule.controller('ChecksController', ['checksService', '$filter', 'filterService', 'helperService', '$routeParams', 'routingService', '$scope', 'Sensu', 'silencedService', 'titleFactory',
+  function (checksService, $filter, filterService, helperService, $routeParams, routingService, $scope, Sensu, silencedService, titleFactory) {
     $scope.pageHeaderText = 'Checks';
     titleFactory.set($scope.pageHeaderText);
 
@@ -164,6 +164,10 @@ controllerModule.controller('ChecksController', ['checksService', '$filter', 'fi
       angular.forEach(items, function(item) {
         checksService.issueCheckRequest(item.name, item.dc, item.subscribers);
       });
+    };
+
+    $scope.silenceChecks = function() {
+      helperService.silenceItems(silencedService.create, $scope.filtered, $scope.selected);
     };
   }
 ]);
@@ -715,7 +719,7 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
     $scope.items = items;
     $scope.silencedCount = $filter('filter')(items, {silenced: true}).length;
     if (angular.isDefined(items[0])) {
-      $scope.itemType = items[0].hasOwnProperty('client') ? 'check' : 'client';
+      $scope.itemType = items[0].hasOwnProperty('version') ? 'client' : 'check';
     } else {
       $scope.itemType = 'subscription';
     }
@@ -798,9 +802,15 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
           } else if ($scope.itemType === 'subscription') {
             payload.subscription = item.subscription;
           } else {
-            payload.subscription = 'client:';
-            payload.subscription += item.client.name || item.client;
-            payload.check = item.check.name || item.check;
+            if (angular.isDefined(item.client)) {
+              payload.subscription = 'client:';
+              payload.subscription += item.client.name || item.client;
+            }
+            if (angular.isDefined(item.check)) {
+              payload.check = item.check.name || item.check;
+            } else {
+              payload.check = item.name;
+            }
           }
 
           silencedService.post(payload).then(function() {
