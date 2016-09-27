@@ -1,14 +1,15 @@
-describe("constants", function () {
-  beforeEach(module('uchiwa'));
+var conf;
 
-  var settings;
+describe("constants", function () {
+  beforeEach(module('uchiwa.constants'));
+
+  beforeEach( inject(function (_conf_) {
+    conf = _conf_;
+  }));
 
   describe("conf", function () {
-    beforeEach(inject(function ($controller, _$rootScope_, _conf_) {
-      conf = _conf_;
-    }));
-
     it("should provide a value conf", function () {
+      console.log(conf)
       expect(angular.isObject(conf)).toBeTruthy();
     });
 

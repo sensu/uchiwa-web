@@ -27,7 +27,7 @@ module.exports = function(config) {
       subdir: '.'
     },
     ngHtml2JsPreprocessor: {
-        moduleName: 'partials'
+      moduleName: 'partials'
     },
     preprocessors: {
       'js/**/*.js': ['coverage'],

@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table" ng-if="itemType !== 'subscription'">
   <thead>
     <tr>
       <th>Data Center</th>
@@ -14,6 +14,14 @@
     </tr>
   </tbody>
 </table>
+<div class="mass-autocomplete" mass-autocomplete ng-if="itemType === 'subscription'">
+  <select ng-style="datacenter" name="datacenter" ng-model="options.ac.dc">
+    <option value="">---Please select datacenter---</option> <!-- not selected / blank option -->
+    <option ng-repeat="datacenter in datacenters | orderBy:'name'" value="{{datacenter.name}}">{{datacenter.name}}</option>
+  </select>
+  <br />
+  <input ng-model="options.ac.subscription" placeholder="Subscription" mass-autocomplete-item="autocompleteSubscription">
+</div>
 <hr/>
 <span>
   <h5>Expiration</h5>

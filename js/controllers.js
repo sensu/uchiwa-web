@@ -710,18 +710,23 @@ controllerModule.controller('SilencedEntryController', [ 'backendService', '$fil
 /**
 * Silenced Modal
 */
-controllerModule.controller('SilencedModalController', ['backendService', 'conf', '$filter', 'items', '$modalInstance', 'notification', '$q', '$scope', 'Sensu', 'silencedService',
-  function (backendService, conf, $filter, items, $modalInstance, notification, $q, $scope, Sensu, silencedService) {
+controllerModule.controller('SilencedModalController', ['backendService', 'conf', '$filter', 'items', '$modalInstance', 'notification', '$q', '$rootScope', '$scope', 'Sensu', 'silencedService',
+  function (backendService, conf, $filter, items, $modalInstance, notification, $q, $rootScope, $scope, Sensu, silencedService) {
     $scope.items = items;
     $scope.silencedCount = $filter('filter')(items, {silenced: true}).length;
-    $scope.itemType = items[0].hasOwnProperty('client') ? 'check' : 'client';
-    $scope.options = {expire: 900, reason: '', to: moment().add(1, 'h').format(conf.date)};
+    if (angular.isDefined(items[0])) {
+      $scope.itemType = items[0].hasOwnProperty('client') ? 'check' : 'client';
+    } else {
+      $scope.itemType = 'subscription';
+    }
+
+    $scope.options = {ac: {}, expire: 900, reason: '', to: moment().add(1, 'h').format(conf.date)};
 
     $scope.silenced = [];
     var getSilencedIDs = function(data) {
       $scope.selected = {};
       angular.forEach(items, function(item) {
-        if (item.silenced) {
+        if (angular.isDefined(item) && item.silenced) {
           // Do we have a client?
           if (angular.isUndefined(item.silenced_by)) { // jshint ignore:line
             item.silenced_by = ['client:' + item.name + ':*']; // jshint ignore:line
@@ -738,8 +743,13 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
     };
 
     // Get silenced entries
-    backendService.getSilenced().then(function(data) {
-      getSilencedIDs(data.data);
+    backendService.getSilenced().then(function(result) {
+      getSilencedIDs(result.data);
+    });
+
+    // Get subscriptions
+    backendService.getSubscriptions().then(function(result) {
+      $scope.subscriptions = result.data;
     });
 
     $scope.ok = function() {
@@ -764,9 +774,13 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
         }
       });
 
+      if ($scope.itemType === 'subscription') {
+        items.push({dc: $scope.options.ac.dc, silenced: false, subscription: $scope.options.ac.subscription});
+      }
+
       // Silenced entries to create
       angular.forEach(items, function(item) {
-        if (!item.silenced) {
+        if (angular.isObject(item) && !item.silenced) {
           var payload = {dc: item.dc, expire_on_resolve: $scope.options.expire_on_resolve, reason: $scope.options.reason}; // jshint ignore:line
 
           if ($scope.options.expire === 'custom') {
@@ -781,6 +795,8 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
           // Determine the subscription
           if ($scope.itemType === 'client') {
             payload.subscription = 'client:' + item.name;
+          } else if ($scope.itemType === 'subscription') {
+            payload.subscription = item.subscription;
           } else {
             payload.subscription = 'client:';
             payload.subscription += item.client.name || item.client;
@@ -806,6 +822,24 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
 
     // Services
     $scope.findSilenced = silencedService.find;
+
+    // Autocompletion
+    function suggestSubscription(term) {
+      var q = term.toLowerCase().trim();
+      var results = [];
+      // Find first 10 entries that start with `term`.
+      for (var i = 0; i < $scope.subscriptions.length && $scope.subscriptions.length < 10; i++) {
+        var subscription = $scope.subscriptions[i];
+        if (subscription.name.toLowerCase().indexOf(q) === 0 && subscription.dc === $scope.options.ac.dc) {
+          results.push({ label: subscription.name, value: subscription.name });
+        }
+      }
+      return results;
+    }
+
+    $scope.autocompleteSubscription = {
+      suggest: suggestSubscription
+    };
   }
 ]);
 

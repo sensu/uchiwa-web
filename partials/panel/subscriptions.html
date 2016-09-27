@@ -9,9 +9,9 @@
         None
       </a>
     </li>
-    <li ng-repeat="subscription in subscriptions | orderBy:'toString()'" ng-class="{selected: filters.subscription == subscription}">
-      <a href="" ng-click="permalink($event, 'subscription', subscription)">
-        {{subscription}}
+    <li ng-repeat="subscription in subscriptions | unique: 'name' | orderBy:'toString()'" ng-class="{selected: filters.subscription == subscription.name}">
+      <a href="" ng-click="permalink($event, 'subscription', subscription.name)">
+        {{subscription.name}}
       </a>
     </li>
   </ul>
