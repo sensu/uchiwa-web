@@ -1,7 +1,7 @@
 @import "variables";
 
-.modal-header {
-  border-bottom: 1px solid $modal-header-border;
+.modal-body .ac-container {
+  position: inherit;
 }
 
 .modal-content {
@@ -15,4 +15,8 @@
 
 .modal-footer {
   border-top: 1px solid $modal-header-border;
+}
+
+.modal-header {
+  border-bottom: 1px solid $modal-header-border;
 }

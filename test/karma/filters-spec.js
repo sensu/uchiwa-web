@@ -322,12 +322,16 @@ describe('filters', function () {
   });
 
   describe('setMissingProperty', function () {
-
     it('should set to false a missing property', inject(function (setMissingPropertyFilter) {
       expect(setMissingPropertyFilter(undefined)).toBe(false);
       expect(setMissingPropertyFilter({foo: 'bar'})).toEqual({foo: 'bar'});
     }));
-
   });
 
+  // describe('unique', function () {
+  //   it('returns unique objects based on a key', inject(function (uniqueFilter) {
+  //     var objects = [{dc: 'us-east-1', name: 'foo'}, {dc: 'us-east-1', name: 'bar'}, {dc: 'us-west-1', name: 'foo'}];
+  //     expect(uniqueFilter(objects, 'name').length).toBe(2);
+  //   }));
+  // });
 });

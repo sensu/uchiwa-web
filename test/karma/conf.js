@@ -16,6 +16,7 @@ module.exports = function(config) {
       'bower_components/angular-moment/angular-moment.js',
       'bower_components/highlightjs/highlight.pack.js',
       'bower_components/angular-gravatar/build/angular-gravatar.js',
+      'bower_components/angular-mass-autocomplete-uchiwa/massautocomplete.min.js',
       'partials/**/*.html',
       'js/**/*.js',
       'test/karma/**/*.js'
@@ -27,7 +28,7 @@ module.exports = function(config) {
       subdir: '.'
     },
     ngHtml2JsPreprocessor: {
-        moduleName: 'partials'
+      moduleName: 'partials'
     },
     preprocessors: {
       'js/**/*.js': ['coverage'],

@@ -311,3 +311,20 @@ filterModule.filter('setMissingProperty', function() {
     return property || false;
   };
 });
+
+filterModule.filter('unique', function() {
+  return function(collection, key) {
+    var results = [],
+    values = [];
+
+    angular.forEach(collection, function(item) {
+      var value = item[key];
+      if(values.indexOf(value) === -1) {
+        values.push(value);
+        results.push(item);
+      }
+    });
+
+    return results;
+  };
+});

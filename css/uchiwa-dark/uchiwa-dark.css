@@ -504,6 +504,13 @@ pre.hljs .hljs-string {
 .form-control.subscriptions {
   width: 140px; }
 
+.mass-autocomplete input {
+  margin-top: 10px;
+  width: 33%; }
+
+.mass-autocomplete .datacenter {
+  padding: 5px; }
+
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */
@@ -705,8 +712,8 @@ li.timestamp .relative-timestamp {
 /* Tables */
 /* Timestamp */
 /* Wells */
-.modal-header {
-  border-bottom: 1px solid #21212b; }
+.modal-body .ac-container {
+  position: inherit; }
 
 .modal-content {
   background-color: #2C2C39;
@@ -717,6 +724,9 @@ li.timestamp .relative-timestamp {
 
 .modal-footer {
   border-top: 1px solid #21212b; }
+
+.modal-header {
+  border-bottom: 1px solid #21212b; }
 
 /* Colors */
 /* Body, Sections and Headers */
