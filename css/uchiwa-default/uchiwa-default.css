@@ -455,6 +455,31 @@ pre.hljs .hljs-string {
   overflow: hidden;
   white-space: nowrap; }
 
+.element-view .widget-icon {
+  background-color: #2C394A;
+  color: #fff;
+  display: inline-block;
+  float: left !important;
+  margin-right: 15px;
+  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 40px; }
+
+.element-view .widget-text {
+  display: inline-block; }
+
+.element-view .widget .subtitle {
+  font-size: 12px;
+  text-transform: capitalize; }
+
+.element-view .widget .title {
+  display: block;
+  font-size: 18px; }
+
 .fa-stack {
   height: 1.4em;
   line-height: 1.4em;
