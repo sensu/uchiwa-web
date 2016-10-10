@@ -58,6 +58,7 @@
                     Check <ng-pluralize count="aggregate.checks" when="{'one': 'Member', 'other': 'Members'}"></ng-pluralize>
                   </span>
                 </div>
+                <div class="widget-chevon fa fa-chevron-right" aria-hidden="true"></div>
               </div>
             </div>
             <div class="col-xs-6">
@@ -69,6 +70,7 @@
                     Client <ng-pluralize count="aggregate.checks" when="{'one': 'Member', 'other': 'Members'}"></ng-pluralize>
                   </span>
                 </div>
+                <div class="widget-chevon fa fa-chevron-right" aria-hidden="true"></div>
               </div>
             </div>
           </div>
@@ -86,6 +88,18 @@
             <aggregate-result aggregate="aggregate" dc="dc" go="go" name="name" severity="unknown"></aggregate-result>
           </div>
 
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-7" ng-if="members === 'undefined'">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="p20">
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+            Please select aggregate check members, client members, or an
+            aggregate result severity for additional details.
+          </div>
         </div>
       </div>
     </div>
@@ -128,6 +142,6 @@
 
       </div>
     </div>
-
   </div>
+
 </div>
