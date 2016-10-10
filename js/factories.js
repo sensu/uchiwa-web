@@ -45,11 +45,44 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, 
 * Sensu Data
 */
 factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $rootScope) {
-  var sensu = {aggregates: [], checks: [], client: {}, clients: [], events: [], silenced: [], stashes: [], subscriptions: []};
+  var sensu = {
+    aggregate: {},
+    aggregateChecks: [],
+    aggregateClients: [],
+    aggregateResults: [],
+    aggregates: [],
+    checks: [],
+    client: {},
+    clients: [],
+    events: [],
+    silenced: [],
+    stashes: [],
+    subscriptions: []
+  };
 
   return {
+    cleanAggregate: function() {
+      sensu.aggregate = {};
+    },
+    cleanAggregateDetails: function() {
+      sensu.aggregateChecks = [];
+      sensu.aggregateClients = [];
+      sensu.aggregateResults = [];
+    },
     cleanClient: function() {
       sensu.client = {};
+    },
+    getAggregate: function() {
+      return sensu.aggregate;
+    },
+    getAggregateChecks: function() {
+      return sensu.aggregateChecks;
+    },
+    getAggregateClients: function() {
+      return sensu.aggregateClients;
+    },
+    getAggregateResults: function() {
+      return sensu.aggregateResults;
     },
     getAggregates: function() {
       return sensu.aggregates;
@@ -77,6 +110,68 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
     },
     stop: function(timer) {
       $interval.cancel(timer);
+    },
+    updateAggregate: function(name, dc) {
+      var update = function() {
+        backendService.getHealth();
+        backendService.getMetrics();
+        backendService.getAggregate(name, dc)
+          .success(function (data) {
+            sensu.aggregate = data;
+          })
+          .error(function(error) {
+            if (error !== null) {
+              console.error(JSON.stringify(error));
+            }
+          });
+      };
+      update();
+      return $interval(update, conf.refresh);
+    },
+    updateAggregateChecks: function(name, dc) {
+      var update = function() {
+        backendService.getAggregateMembers(name, 'checks', dc)
+          .success(function (data) {
+            sensu.aggregateChecks = data;
+          })
+          .error(function(error) {
+            if (error !== null) {
+              console.error(JSON.stringify(error));
+            }
+          });
+      };
+      update();
+      return $interval(update, conf.refresh);
+    },
+    updateAggregateClients: function(name, dc) {
+      var update = function() {
+        backendService.getAggregateMembers(name, 'clients', dc)
+          .success(function (data) {
+            sensu.aggregateClients = data;
+          })
+          .error(function(error) {
+            if (error !== null) {
+              console.error(JSON.stringify(error));
+            }
+          });
+      };
+      update();
+      return $interval(update, conf.refresh);
+    },
+    updateAggregateResults: function(name, severity, dc) {
+      var update = function() {
+        backendService.getAggregateResults(name, severity, dc)
+          .success(function (data) {
+            sensu.aggregateResults = data;
+          })
+          .error(function(error) {
+            if (error !== null) {
+              console.error(JSON.stringify(error));
+            }
+          });
+      };
+      update();
+      return $interval(update, conf.refresh);
     },
     updateAggregates: function() {
       var update = function() {

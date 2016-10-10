@@ -55,11 +55,14 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
       }
       return $http.delete('stashes/'+resources[1]+'?dc='+resources[0]);
     };
-    this.getAggregate = function(check, dc) {
-      return $http.get('aggregates/'+check+'?dc='+dc);
+    this.getAggregate = function(name, dc) {
+      return $http.get('aggregates/'+name+'?dc='+dc);
     };
-    this.getAggregateIssued = function(check, dc, issued) {
-      return $http.get('aggregates/'+check+'/'+issued+'?dc='+dc);
+    this.getAggregateMembers = function(name, type, dc) {
+      return $http.get('aggregates/'+name+'/'+type+'?dc='+dc);
+    };
+    this.getAggregateResults = function(name, severity, dc) {
+      return $http.get('aggregates/'+name+'/results/'+severity+'?dc='+dc);
     };
     this.getAggregates = function() {
       return $http.get('aggregates');

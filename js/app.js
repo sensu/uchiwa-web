@@ -31,7 +31,7 @@ angular.module('uchiwa')
       .when('/', {redirectTo: function () {
         return '/events';
       }})
-      .when('/aggregates/:dc/:name', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregate.html', reloadOnSearch: false, controller: 'AggregateController'})
+      .when('/aggregates/:dc/:name/:members?/:severity?', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregate.html', reloadOnSearch: false, controller: 'AggregateController'})
       .when('/aggregates', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregates.html', reloadOnSearch: false, controller: 'AggregatesController'})
       .when('/checks', {templateUrl: 'bower_components/uchiwa-web/partials/views/checks.html', reloadOnSearch: false, controller: 'ChecksController'})
       .when('/client/:dc/:client', {templateUrl: 'bower_components/uchiwa-web/partials/views/client.html', reloadOnSearch: false, controller: 'ClientController'})

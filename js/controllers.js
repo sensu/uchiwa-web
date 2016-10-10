@@ -5,64 +5,49 @@ var controllerModule = angular.module('uchiwa.controllers', []);
 /**
 * Aggregate
 */
-controllerModule.controller('AggregateController', ['backendService', '$http', '$rootScope', '$scope', '$routeParams', 'routingService', 'Sensu', 'titleFactory',
-  function (backendService, $http, $rootScope, $scope, $routeParams, routingService, Sensu, titleFactory) {
+controllerModule.controller('AggregateController', ['$rootScope', '$scope', '$routeParams', 'routingService', 'Sensu', 'titleFactory',
+  function ($rootScope, $scope, $routeParams, routingService, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
+
+    var detailsTimer;
 
     // Routing
     $scope.dc = decodeURI($routeParams.dc);
     $scope.name = decodeURI($routeParams.name);
-
-    // Get aggregates
-    $scope.aggregates = [];
-    var timer = Sensu.updateAggregates();
-    $scope.$watch(function () { return Sensu.getAggregates(); }, function (data) {
-      $scope.aggregates = _.find(data, function(aggregate) { // jshint ignore:line
-        return $scope.name === aggregate.name && $scope.dc === aggregate.dc;
-      });
-    });
-    $scope.$on('$destroy', function() {
-      Sensu.stop(timer);
-    });
-
-    // Add support for aggregates v2.0 in Sensu >= 0.24.0
-    $scope.$watch('aggregates', function () {
-      if (angular.isDefined($scope.aggregates) && angular.isUndefined($scope.aggregates.issued)) {
-        backendService.getAggregate($scope.name, $scope.dc)
-          .success(function(data) {
-            $scope.aggregate = data;
-          })
-          .error(function(error) {
-            $scope.aggregate = null;
-            console.error(error);
-          });
-      }
-    });
+    $scope.members = decodeURI($routeParams.members);
+    $scope.severity = decodeURI($routeParams.severity);
 
     // Get aggregate
     $scope.aggregate = null;
-    var getAggregate = function() {
-      $scope.issued = decodeURI($routeParams.issued);
-      if (isNaN($scope.issued)) {
-        $scope.aggregate = null;
-        return;
-      }
-      backendService.getAggregateIssued($scope.name, $scope.dc, $scope.issued)
-        .success(function(data) {
-          $scope.aggregate = {results: data};
-        })
-        .error(function(error) {
-          $scope.aggregate = null;
-          console.error(error);
-        });
-    };
-    $scope.$on('$routeChangeSuccess', function(){
-      getAggregate();
+    var timer = Sensu.updateAggregate($scope.name, $scope.dc);
+    $scope.$watch(function () { return Sensu.getAggregate(); }, function (data) {
+      $scope.aggregate = data;
     });
-    $scope.$on('$routeUpdate', function(){
-      getAggregate();
+    $scope.$on('$destroy', function() {
+      Sensu.stop(timer);
+      Sensu.stop(detailsTimer);
+      Sensu.cleanAggregate();
+      Sensu.cleanAggregateDetails();
     });
+
+    // Get check members
+    if ($scope.members === 'checks') {
+      detailsTimer = Sensu.updateAggregateChecks($scope.name, $scope.dc);
+      $scope.$watch(function () { return Sensu.getAggregateChecks(); }, function (data) {
+        $scope.checks = data;
+      });
+    } else if ($scope.members === 'clients') {
+      detailsTimer = Sensu.updateAggregateClients($scope.name, $scope.dc);
+      $scope.$watch(function () { return Sensu.getAggregateClients(); }, function (data) {
+        $scope.clients = data;
+      });
+    } else if ($scope.members === 'results' && $scope.severity !== 'undefined') {
+      detailsTimer = Sensu.updateAggregateResults($scope.name, $scope.severity, $scope.dc);
+      $scope.$watch(function () { return Sensu.getAggregateResults(); }, function (data) {
+        $scope.results = data;
+      });
+    }
 
     // Services
     $scope.go = routingService.go;
