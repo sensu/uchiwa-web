@@ -51,7 +51,10 @@
                   <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteSilenced($event, entry._id);"></i></span>{{ entry.id }}
                 </td>
                 <td class="dc">{{ entry.dc }}</td>
-                <td>{{ entry.creator }}</td>
+                <td>
+                  {{ entry.creator }}
+                  <span ng-if="entry.creator === null">N/A</span>
+                </td>
                 <td>{{ entry.expire_on_resolve }}</td>
                 <td>{{ entry.expire | getExpirationTimestamp }}</td>
               </tr>
