@@ -18,7 +18,7 @@
               <!--actions-->
               <panel-actions data="stashes" resolve-fn="deleteStashes" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
               <!--limit-->
-              <panel-limit data="stashes" filters="filters" permalink="permalink"></panel-limit>
+              <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
               <!--search-->
               <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
             </div>
