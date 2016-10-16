@@ -18,7 +18,7 @@
               <!--actions-->
               <panel-actions data="checks" refresh-fn="issueCheckRequest" refresh-legend="Issue Check Request" silence-fn="silenceChecks" ng-if="!user.isReadOnly()"></panel-actions>
               <!--limit-->
-              <panel-limit data="checks" filters="filters" permalink="permalink"></panel-limit>
+              <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
               <!--search-->
               <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
             </div>
