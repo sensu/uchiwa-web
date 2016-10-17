@@ -32,7 +32,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="aggregate in filtered = (aggregates | filter:filters.q | filter:{dc:filters.dc}:filterComparator | limitTo:filters.limit) | orderBy:predicate:reverse" ng-click="go('/aggregates/'+aggregate.dc+'/'+aggregate.name)">
+              <tr ng-repeat="aggregate in filtered | orderBy:predicate:reverse | limitTo:filters.limit track by $index" ng-click="go('/aggregates/'+aggregate.dc+'/'+aggregate.name)">
                 <td class="main">{{ aggregate.name }}</td>
                 <td class="dc">{{ aggregate.dc }}</td>
               </tr>
