@@ -58,19 +58,32 @@ controllerModule.controller('AggregateController', ['$rootScope', '$scope', '$ro
 /**
 * Aggregates
 */
-controllerModule.controller('AggregatesController', ['filterService', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory',
-  function (filterService, $routeParams, routingService, $scope, Sensu, titleFactory) {
+controllerModule.controller('AggregatesController', ['$filter', 'filterService', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory',
+  function ($filter, filterService, $routeParams, routingService, $scope, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
 
     $scope.predicate = 'check';
     $scope.reverse = false;
 
+    // Filters
+    var updateFilters = function() {
+      var filtered = $filter('filter')($scope.aggregates, {dc: $scope.filters.dc}, $scope.filterComparator);
+      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('collection')(filtered, 'aggregates');
+      $scope.filtered = filtered;
+    };
+
+    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc'], function() {
+      updateFilters();
+    });
+
     // Get aggregates
     $scope.aggregates = [];
     var timer = Sensu.updateAggregates();
     $scope.$watch(function () { return Sensu.getAggregates(); }, function (data) {
       $scope.aggregates = data;
+      updateFilters();
     });
     $scope.$on('$destroy', function() {
       Sensu.stop(timer);
