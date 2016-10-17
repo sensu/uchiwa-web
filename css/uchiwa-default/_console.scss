@@ -11,7 +11,7 @@
 
 .console-collection .form-control {
   background-color: $quinary-color;
-  color: $search-text-color;
+  color: $collection-text-color;
   border-radius: 0;
   border-width: 0;
   box-shadow: none;
@@ -22,7 +22,7 @@
 
 .console-collection .form-control {
   @include placeholder {
-    color: $search-text-color;
+    color: $collection-text-color;
   }
 }
 

@@ -17,6 +17,7 @@
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -150,6 +151,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -188,6 +190,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -226,6 +229,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -273,6 +277,61 @@ pre.hljs .hljs-string {
   color: #ffffff;
   background-color: #5F97FB;
   border: 0px; }
+
+/* Colors */
+/* Body, Sections and Headers */
+/* Breadcrumb */
+/* Buttons */
+/* Code */
+/* Console */
+/* Dashboard */
+/* Dropdown */
+/* Login */
+/* Modal */
+/* Nav */
+/* Navbar */
+/* Search */
+/* Sidebar */
+/* Panels */
+/* Tables */
+/* Timestamp */
+/* Wells */
+.console-collection {
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  z-index: 100;
+  background-color: #5F97FB; }
+
+.console-collection .form-control {
+  background-color: #5F97FB;
+  color: white;
+  border-radius: 0;
+  border-width: 0;
+  box-shadow: none;
+  border: 0px;
+  padding: 8px 0;
+  font-size: 22px; }
+
+.console-collection .form-control::-webkit-input-placeholder {
+  color: white; }
+.console-collection .form-control:-moz-placeholder {
+  color: white; }
+.console-collection .form-control::-moz-placeholder {
+  color: white; }
+.console-collection .form-control:-ms-input-placeholder {
+  color: white; }
+
+.console-collection .input-group {
+  margin-bottom: 0px; }
+
+.console-collection .input-group-btn .btn {
+  margin-left: 0px;
+  font-size: 20px; }
+
+.console-collection .input-group-btn .btn:hover {
+  border: 0; }
 
 .container-fluid {
   padding-left: 0;
@@ -383,6 +442,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -433,6 +493,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -512,6 +573,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -546,6 +608,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -568,6 +631,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -601,6 +665,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -622,6 +687,7 @@ pre.hljs .hljs-string {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -654,6 +720,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -730,6 +797,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -763,6 +831,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -809,6 +878,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -858,6 +928,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -982,6 +1053,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -1014,6 +1086,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -1051,6 +1124,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -1170,6 +1244,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -1244,6 +1319,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
@@ -1294,6 +1370,7 @@ li.timestamp .relative-timestamp {
 /* Breadcrumb */
 /* Buttons */
 /* Code */
+/* Console */
 /* Dashboard */
 /* Dropdown */
 /* Login */
