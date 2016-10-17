@@ -1,0 +1,40 @@
+@import "variables";
+
+.console-collection {
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  z-index: 100;
+  background-color: $quinary-color;
+}
+
+.console-collection .form-control {
+  background-color: $quinary-color;
+  color: $search-text-color;
+  border-radius: 0;
+  border-width: 0;
+  box-shadow: none;
+  border: 0px;
+  padding: 8px 0;
+  font-size: 22px;
+}
+
+.console-collection .form-control {
+  @include placeholder {
+    color: $search-text-color;
+  }
+}
+
+.console-collection .input-group {
+  margin-bottom: 0px;
+}
+
+.console-collection .input-group-btn .btn {
+  margin-left: 0px;
+  font-size: 20px;
+}
+
+.console-collection .input-group-btn .btn:hover {
+  border: 0;
+}
