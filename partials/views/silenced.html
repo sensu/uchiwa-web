@@ -36,6 +36,7 @@
                   <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
                 <th ng-click="predicate = 'id'; reverse=!reverse">ID <i class="fa fa-sort"></i></th>
+                <th ng-click="predicate = 'reason'; reverse=!reverse"><i class="fa fa-commenting-o" tooltip-placement="top" tooltip-trigger tooltip="Reason"></i> <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'creator'; reverse=!reverse"><i class="fa fa-user" tooltip-placement="top" tooltip-trigger tooltip="Creator"></i> <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'expire_on_resolve'; reverse=!reverse"><i class='fa fa-calendar-check-o' tooltip-placement="top" tooltip-trigger tooltip="Expire on Resolve"></i> <i class="fa fa-sort"></i></th>
@@ -50,6 +51,7 @@
                 <td class="main">
                   <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteSilenced($event, entry._id);"></i></span>{{ entry.id }}
                 </td>
+                <td>{{ entry.reason }}</td>
                 <td class="dc">{{ entry.dc }}</td>
                 <td>
                   {{ entry.creator }}
