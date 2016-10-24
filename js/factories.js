@@ -46,7 +46,7 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, 
 */
 factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $rootScope) {
   var sensu = {
-    aggregate: {},
+    aggregate: null,
     aggregateChecks: [],
     aggregateClients: [],
     aggregateResults: [],
@@ -121,6 +121,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           })
           .error(function(error) {
             if (error !== null) {
+              sensu.aggregate = null;
               console.error(JSON.stringify(error));
             }
           });

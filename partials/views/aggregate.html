@@ -42,9 +42,17 @@
         <div class="panel-body">
 
           <div class="row mb15">
-            <div class="col-xs-12">
+            <div class="col-xs-6">
               <div class="panel-title">{{name}}</div>
               <p><small><i class="fa fa-cloud"></i> {{dc}}</small></p>
+            </div>
+
+            <div class="col-xs-6">
+              <div class="panel-icon">
+                <span class="pull-right" ng-if="!user.isReadOnly()">
+                  <i class="fa fa-times" tooltip-placement="top" tooltip-trigger tooltip="Delete" ng-click="deleteAggregate(name, dc)"></i>
+                </span>
+              </div>
             </div>
           </div>
 

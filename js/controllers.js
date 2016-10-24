@@ -5,8 +5,8 @@ var controllerModule = angular.module('uchiwa.controllers', []);
 /**
 * Aggregate
 */
-controllerModule.controller('AggregateController', ['$rootScope', '$scope', '$routeParams', 'routingService', 'Sensu', 'titleFactory',
-  function ($rootScope, $scope, $routeParams, routingService, Sensu, titleFactory) {
+controllerModule.controller('AggregateController', ['aggregatesService', '$rootScope', '$scope', '$routeParams', 'routingService', 'Sensu', 'titleFactory',
+  function (aggregatesService, $rootScope, $scope, $routeParams, routingService, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
 
@@ -50,6 +50,7 @@ controllerModule.controller('AggregateController', ['$rootScope', '$scope', '$ro
     }
 
     // Services
+    $scope.deleteAggregate = aggregatesService.delete;
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
   }
