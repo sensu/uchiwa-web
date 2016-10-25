@@ -59,13 +59,14 @@ controllerModule.controller('AggregateController', ['aggregatesService', '$rootS
 /**
 * Aggregates
 */
-controllerModule.controller('AggregatesController', ['$filter', 'filterService', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory',
-  function ($filter, filterService, $routeParams, routingService, $scope, Sensu, titleFactory) {
+controllerModule.controller('AggregatesController', ['aggregatesService', '$filter', 'filterService', 'helperService', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory',
+  function (aggregatesService, $filter, filterService, helperService, $routeParams, routingService, $scope, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
 
     $scope.predicate = 'check';
     $scope.reverse = false;
+    $scope.selected = {all: false, ids: {}};
 
     // Filters
     var updateFilters = function() {
@@ -98,9 +99,22 @@ controllerModule.controller('AggregatesController', ['$filter', 'filterService',
     });
 
     // Services
+    $scope.deleteAggregate = function($event, id) {
+      $event.stopPropagation();
+      aggregatesService.delete(id).then(function() {
+        $scope.filtered = $filter('filter')($scope.filtered, {_id: '!'+ id});
+      });
+    };
     $scope.filterComparator = filterService.comparator;
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
+    $scope.selectAll = helperService.selectAll;
+
+    $scope.deleteMultiple = function() {
+      helperService.deleteItems(aggregatesService.delete, $scope.filtered, $scope.selected).then(function(filtered){
+        $scope.filtered = filtered;
+      });
+    };
   }
 ]);
 

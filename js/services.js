@@ -6,9 +6,11 @@ var serviceModule = angular.module('uchiwa.services', []);
 * Aggregates Service
 */
 serviceModule.service('aggregatesService', ['$rootScope', 'backendService', function ($rootScope, backendService) {
-  this.delete = function(name, dc) {
-    return backendService.deleteAggregate(name, dc)
+  this.delete = function(id) {
+    var resources = backendService.getResources(id);
+    return backendService.deleteAggregate(resources[1], resources[0])
       .success(function () {
+        $rootScope.skipOneRefresh = true;
         $rootScope.$emit('notification', 'success', 'The aggregate has been deleted');
       })
       .error(function (error) {
