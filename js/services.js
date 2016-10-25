@@ -3,7 +3,25 @@
 var serviceModule = angular.module('uchiwa.services', []);
 
 /**
-* Uchiwa
+* Aggregates Service
+*/
+serviceModule.service('aggregatesService', ['$rootScope', 'backendService', function ($rootScope, backendService) {
+  this.delete = function(id) {
+    var resources = backendService.getResources(id);
+    return backendService.deleteAggregate(resources[1], resources[0])
+      .success(function () {
+        $rootScope.skipOneRefresh = true;
+        $rootScope.$emit('notification', 'success', 'The aggregate has been deleted');
+      })
+      .error(function (error) {
+        $rootScope.$emit('notification', 'error', 'Could not delete the aggregate');
+        console.error(error);
+      });
+  };
+}]);
+
+/**
+* Backend Service
 */
 serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', '$location', '$rootScope',
   function(audit, conf, $http, $interval, $location, $rootScope){
@@ -26,6 +44,12 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
 
     this.auth = function() {
       return $http.get('auth');
+    };
+    this.deleteAggregate = function(name, dc) {
+      if ($rootScope.enterprise) {
+        audit.log({action: 'delete_aggregate', level: 'default', output: dc + ':' + name});
+      }
+      return $http.delete('aggregates/'+name+'?dc='+dc);
     };
     this.deleteClient = function(id) {
       var resources = this.getResources(id);
