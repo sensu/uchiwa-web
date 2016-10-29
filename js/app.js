@@ -21,8 +21,8 @@ angular.module('uchiwa', [
 ]);
 
 angular.module('uchiwa')
-.config(['$httpProvider', '$routeProvider', '$tooltipProvider',
-  function ($httpProvider, $routeProvider, $tooltipProvider) {
+.config(['$httpProvider', '$routeProvider', '$uibTooltipProvider',
+  function ($httpProvider, $routeProvider, $uibTooltipProvider) {
     // Token injection
     $httpProvider.interceptors.push('authInterceptor');
 
@@ -47,7 +47,7 @@ angular.module('uchiwa')
       .when('/stashes', {templateUrl: 'bower_components/uchiwa-web/partials/views/stashes.html', reloadOnSearch: false, controller: 'StashesController'})
       .otherwise('/');
 
-    $tooltipProvider.options({animation: false, 'placement': 'bottom'});
+    $uibTooltipProvider.options({animation: false, 'placement': 'bottom'});
   }
 ])
 .run(function (backendService, conf, themes, $cookieStore, $location, notification, $rootScope, titleFactory) {

@@ -727,8 +727,8 @@ controllerModule.controller('SilencedEntryController', [ 'backendService', '$fil
 /**
 * Silenced Modal
 */
-controllerModule.controller('SilencedModalController', ['backendService', 'conf', '$filter', 'items', '$modalInstance', 'notification', '$q', '$rootScope', '$scope', 'Sensu', 'silencedService',
-  function (backendService, conf, $filter, items, $modalInstance, notification, $q, $rootScope, $scope, Sensu, silencedService) {
+controllerModule.controller('SilencedModalController', ['backendService', 'conf', '$filter', 'items', 'notification', '$q', '$rootScope', '$scope', 'Sensu', 'silencedService', '$uibModalInstance',
+  function (backendService, conf, $filter, items, notification, $q, $rootScope, $scope, Sensu, silencedService, $uibModalInstance) {
     $scope.items = items;
     $scope.silencedCount = $filter('filter')(items, {silenced: true}).length;
     if (angular.isDefined(items[0])) {
@@ -836,11 +836,11 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
         promises.push(deffered.promise);
       });
       $q.all(promises).then(function() {
-        $modalInstance.close();
+        $uibModalInstance.close();
       });
     };
     $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
 
     // Services

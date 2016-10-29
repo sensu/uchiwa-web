@@ -343,8 +343,8 @@ serviceModule.service('routingService', ['$location', function ($location) {
 /**
 * Silenced
 */
-serviceModule.service('silencedService', ['backendService', 'conf', '$filter', '$modal', '$rootScope',
-  function (backendService, conf, $filter, $modal, $rootScope) {
+serviceModule.service('silencedService', ['backendService', 'conf', '$filter', '$uibModal', '$rootScope',
+  function (backendService, conf, $filter, $uibModal, $rootScope) {
     this.create = function (e, i) {
       var items = _.isArray(i) ? i : new Array(i);
       var event = e || window.event;
@@ -355,7 +355,7 @@ serviceModule.service('silencedService', ['backendService', 'conf', '$filter', '
       if (items.length === 0) {
         $rootScope.$emit('notification', 'error', 'No items selected');
       } else {
-        var modalInstance = $modal.open({ // jshint ignore:line
+        var modalInstance = $uibModal.open({ // jshint ignore:line
           templateUrl: $rootScope.partialsPath + '/modals/silenced.html',
           controller: 'SilencedModalController',
           resolve: {
@@ -411,8 +411,8 @@ serviceModule.service('silencedService', ['backendService', 'conf', '$filter', '
 /**
 * Stashes
 */
-serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$modal', '$rootScope',
-  function (backendService, conf, $filter, $modal, $rootScope) {
+serviceModule.service('stashesService', ['backendService', 'conf', '$filter', '$rootScope',
+  function (backendService, conf, $filter, $rootScope) {
     this.deleteStash = function (id) {
       return backendService.deleteStash(id)
         .success(function () {
