@@ -179,6 +179,8 @@ pre.hljs .hljs-string {
     background-color: #EA5443; }
   .badge-unknown {
     background-color: #9C9990; }
+  .badge-silenced {
+    background-color: #3F283D; }
   .badge-default, .badge-blue {
     background-color: #22222D; }
 
@@ -270,6 +272,8 @@ pre.hljs .hljs-string {
     background-color: #EA5443; }
   .circle-unknown {
     background-color: #9C9990; }
+  .circle-silenced {
+    background-color: #3F283D; }
   .circle-default, .circle-blue {
     background-color: #22222D; }
 
@@ -952,6 +956,8 @@ li.timestamp .relative-timestamp {
     background-color: #EA5443; }
   .panel-unknown {
     background-color: #9C9990; }
+  .panel-silenced {
+    background-color: #3F283D; }
   .panel-default, .panel-blue {
     background-color: #22222D; }
 

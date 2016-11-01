@@ -537,15 +537,6 @@ function (audit, backendService, $cookieStore, $location, notification, $rootSco
 controllerModule.controller('NavbarController', ['audit', '$location', '$rootScope', '$scope', 'navbarServices', 'routingService', 'userService',
   function (audit, $location, $rootScope, $scope, navbarServices, routingService, userService) {
 
-    // Helpers
-    $scope.getClass = function(path) {
-      if ($location.path().substr(0, path.length) === path) {
-        return 'selected';
-      } else {
-        return '';
-      }
-    };
-
     // Services
     $scope.go = routingService.go;
     $scope.user = userService;
@@ -611,8 +602,8 @@ controllerModule.controller('SidebarController', ['$location', 'navbarServices',
 
     $scope.$watch('metrics', function() {
       if (angular.isObject($scope.metrics) && angular.isDefined($scope.metrics.clients)) {
-        $scope.clientsStyle = $scope.metrics.clients.critical > 0 ? 'critical' : $scope.metrics.clients.warning > 0 ? 'warning' : $scope.metrics.clients.unknown > 0 ? 'unknown' : 'success';
-        $scope.eventsStyle = $scope.metrics.events.critical > 0 ? 'critical' : $scope.metrics.events.warning > 0 ? 'warning' : $scope.metrics.events.unknown > 0 ? 'unknown' : 'success';
+        $scope.clientsStyle = $scope.metrics.clients.critical > 0 ? 'critical' : $scope.metrics.clients.warning > 0 ? 'warning' : $scope.metrics.clients.unknown > 0 ? 'unknown' : $scope.metrics.clients.silenced > 0 ? 'silenced' : 'success';
+        $scope.eventsStyle = $scope.metrics.events.critical > 0 ? 'critical' : $scope.metrics.events.warning > 0 ? 'warning' : $scope.metrics.events.unknown > 0 ? 'unknown' : $scope.metrics.events.silenced > 0 ? 'silenced' : 'success';
       }
       else {
         $scope.clientsStyle = 'unknown';
