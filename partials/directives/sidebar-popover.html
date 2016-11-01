@@ -1,0 +1,52 @@
+<div>
+  <div class="box critical" ng-if="metrics.critical !== 0">
+    <span class="count">{{metrics.critical}}</span>
+    <span class="criticity">
+      critical
+      <ng-pluralize count="metrics.critical"
+        when="{'1': '{{name}}',
+        'other': '{{pluralized}}'}">
+      </ng-pluralize>
+    </span>
+  </div>
+  <div class="box warning" ng-if="metrics.warning !== 0">
+    <span class="count">{{metrics.warning}}</span>
+    <span class="criticity">
+      warning
+      <ng-pluralize count="metrics.warning"
+        when="{'1': '{{name}}',
+        'other': '{{pluralized}}'}">
+      </ng-pluralize>
+    </span>
+  </div>
+  <div class="box unknown" ng-if="metrics.unknown !== 0">
+    <span class="count">{{metrics.unknown}}</span>
+    <span class="criticity">
+      unknown
+      <ng-pluralize count="metrics.unknown"
+        when="{'1': '{{name}}',
+        'other': '{{pluralized}}'}">
+      </ng-pluralize>
+    </span>
+  </div>
+  <div class="box silenced" ng-if="metrics.silenced !== 0">
+    <span class="count">{{metrics.silenced}}</span>
+    <span class="criticity">
+      silenced
+      <ng-pluralize count="metrics.silenced"
+        when="{'1': '{{name}}',
+        'other': '{{pluralized}}'}">
+      </ng-pluralize>
+    </span>
+  </div>
+  <div class="box total" ng-if="!hasCriticity || metrics.total === 0">
+    <span class="count">{{metrics.total}}</span>
+    <span class="criticity">
+      <ng-pluralize count="metrics.total"
+        when="{'0': '{{name}}',
+        '1': '{{name}}',
+        'other': '{{pluralized}}'}">
+      </ng-pluralize>
+    </span>
+  </div>
+</div>

@@ -588,8 +588,8 @@ controllerModule.controller('SettingsController', ['$cookies', '$scope', 'Sensu'
 /**
 * Sidebar
 */
-controllerModule.controller('SidebarController', ['$location', 'navbarServices', '$scope', 'userService',
-  function ($location, navbarServices, $scope, userService) {
+controllerModule.controller('SidebarController', ['$location', 'navbarServices', '$rootScope', '$sce', '$scope', 'userService',
+  function ($location, navbarServices, $rootScope, $sce, $scope, userService) {
     // Get CSS class for sidebar elements
     $scope.getClass = function(path) {
       if ($location.path().substr(0, path.length) === path) {
@@ -597,6 +597,16 @@ controllerModule.controller('SidebarController', ['$location', 'navbarServices',
       } else {
         return '';
       }
+    };
+
+    $scope.popoversTemplates = {
+      aggregates: $rootScope.partialsPath + '/popovers/aggregates.html',
+      checks: $rootScope.partialsPath + '/popovers/checks.html',
+      clients: $rootScope.partialsPath + '/popovers/clients.html',
+      datacenters: $rootScope.partialsPath + '/popovers/datacenters.html',
+      events: $rootScope.partialsPath + '/popovers/events.html',
+      silenced: $rootScope.partialsPath + '/popovers/silenced.html',
+      stashes: $rootScope.partialsPath + '/popovers/stashes.html'
     };
 
     $scope.$watch('metrics', function() {

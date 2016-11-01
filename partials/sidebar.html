@@ -10,220 +10,61 @@
             </span>
           </a>
         </li>
-        <li id="events" class="show-on-hover" ng-class="getClass('/events')">
-          <a ng-href="#events" class="dropdown-toggle" data-toggle="dropdown">
+        <li id="events" ng-class="getClass('/events')" uib-popover-template="popoversTemplates.events" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+          <a ng-href="#events">
             <span class="small-nav">
               <i class="fa fa-bullhorn"></i>
               <span class="badge badge-{{ eventsStyle }}">{{ metrics.events.total }}</span>
             </span>
           </a>
-          <div class="dropdown-menu popover-menu" role="menu">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-body panel-popover panel-{{ eventsStyle }}">
-                  <div class="panel-title">events</div>
-
-                  <div class="row counts">
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.events.critical }}</span>
-                      <p class="category">critical</p>
-                    </div>
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.events.warning }}</span>
-                      <p class="category">warning</p>
-                    </div>
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.events.unknown }}</span>
-                      <p class="category">unknown</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
         </li>
-        <li id="clients" class="show-on-hover" ng-class="getClass('/clients')">
-          <a ng-href="#clients" class="dropdown-toggle" data-toggle="dropdown">
+        <li id="clients" ng-class="getClass('/clients')" uib-popover-template="popoversTemplates.clients" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+          <a ng-href="#clients">
             <span class="small-nav">
               <i class="fa fa-hdd-o"></i>
               <span class="badge badge-{{ clientsStyle }}">{{ metrics.clients.total }}</span>
             </span>
           </a>
-          <div class="dropdown-menu popover-menu" role="menu">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-body panel-popover panel-{{ clientsStyle }}">
-                  <div class="panel-title">clients</div>
-
-                  <div class="row counts">
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.clients.critical }}</span>
-                      <p class="category">critical</p>
-                    </div>
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.clients.warning }}</span>
-                      <p class="category">warning</p>
-                    </div>
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.clients.unknown }}</span>
-                      <p class="category">unknown</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
         </li>
-        <li id="checks" class="show-on-hover" ng-class="getClass('/checks')">
-          <a ng-href="#checks" class="dropdown-toggle" data-toggle="dropdown">
+        <li id="checks" ng-class="getClass('/checks')" uib-popover-template="popoversTemplates.checks" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+          <a ng-href="#checks">
             <span class="small-nav">
               <i class="fa fa-check-square"></i>
               <span class="badge badge-ok">{{ metrics.checks.total }}</span>
             </span>
           </a>
-          <div class="dropdown-menu popover-menu" role="menu">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-body panel-popover panel-ok">
-                  <div class="panel-title"><ng-pluralize count="checks | arrayLength" when="{'0': 'checks', '1': 'check', 'other': 'checks'}"></ng-pluralize></div>
-
-                  <div class="row counts">
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.checks.total }}</span>
-                      <p class="category">total</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
         </li>
-        <li id="silenced" class="show-on-hover" ng-class="getClass('/silenced')">
-          <a ng-href="#silenced" class="dropdown-toggle" data-toggle="dropdown">
+        <li id="silenced" ng-class="getClass('/silenced')" uib-popover-template="popoversTemplates.silenced" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+          <a ng-href="#silenced">
             <span class="small-nav">
               <i class="fa fa-bell-slash-o"></i>
               <span class="badge badge-ok">{{ metrics.silenced.total }}</span>
             </span>
           </a>
-          <div class="dropdown-menu popover-menu" role="menu">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-body panel-popover panel-ok">
-                  <div class="panel-title"><ng-pluralize count="silenced | arrayLength" when="{'0': 'silenced', '1': 'silenced', 'other': 'silenced'}"></ng-pluralize></div>
-
-                  <div class="row counts">
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.silenced.total }}</span>
-                      <p class="category">total</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
         </li>
-        <li id="stashes" class="show-on-hover" ng-class="getClass('/stashes')">
-          <a ng-href="#stashes" class="dropdown-toggle" data-toggle="dropdown">
+        <li id="stashes" ng-class="getClass('/stashes')" uib-popover-template="popoversTemplates.stashes" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+          <a ng-href="#stashes">
             <span class="small-nav">
               <i class="fa fa-briefcase"></i>
               <span class="badge badge-ok">{{ metrics.stashes.total }}</span>
             </span>
           </a>
-          <div class="dropdown-menu popover-menu" role="menu">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-body panel-popover panel-ok">
-                  <div class="panel-title"><ng-pluralize count="stashes | arrayLength" when="{'0': 'stashes', '1': 'stash', 'other': 'stashes'}"></ng-pluralize></div>
-
-                  <div class="row counts">
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.stashes.total }}</span>
-                      <p class="category">total</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
         </li>
-        <li id="aggregates" class="show-on-hover" ng-class="getClass('/aggregates')">
-          <a ng-href="#aggregates" class="dropdown-toggle" data-toggle="dropdown">
+        <li id="aggregates" ng-class="getClass('/aggregates')" uib-popover-template="popoversTemplates.aggregates" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+          <a ng-href="#aggregates">
             <span class="small-nav">
               <i class="fa fa-folder"></i>
               <span class="badge badge-ok">{{ metrics.aggregates.total }}</span>
             </span>
           </a>
-          <div class="dropdown-menu popover-menu" role="menu">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-body panel-popover panel-ok">
-                  <div class="panel-title"><ng-pluralize count="aggregates | arrayLength" when="{'0': 'aggregates', '1': 'aggregate', 'other': 'aggregates'}"></ng-pluralize></div>
-
-                  <div class="row counts">
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.aggregates.total }}</span>
-                      <p class="category">total</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
         </li>
-        <li id="datacenters" class="show-on-hover" ng-class="getClass('/datacenter')">
-          <a ng-href="#datacenters" class="dropdown-toggle" data-toggle="dropdown">
+        <li id="datacenters" ng-class="getClass('/datacenter')" uib-popover-template="popoversTemplates.datacenters" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+          <a ng-href="#datacenters">
             <span class="small-nav">
               <i class="fa fa-cloud"></i>
               <span class="badge badge-ok">{{ metrics.datacenters.total }}</span>
             </span>
           </a>
-          <div class="dropdown-menu popover-menu" role="menu">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-body panel-popover panel-ok">
-                  <div class="panel-title"><ng-pluralize count="dc | arrayLength" when="{'0': 'datacenter', '1': 'datacenter', 'other': 'datacenters'}"></ng-pluralize></div>
-
-                  <div class="row counts">
-                    <div class="col-sm-4">
-                      <span class="total">{{ metrics.datacenters.total }}</span>
-                      <p class="category">total</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li id="alerts" class="show-on-hover" ng-if="alerts | arrayLength">
-          <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">
-            <span class="small-nav">
-              <i class="fa fa-exclamation-triangle"></i>
-              <span class="badge badge-critical">{{ alerts | arrayLength }}</span>
-            </span>
-          </a>
-          <div class="dropdown-menu popover-menu" role="menu">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="panel panel-body panel-popover panel-critical">
-                  <div class="panel-title"><ng-pluralize count="alerts | arrayLength" when="{'0': 'alert', '1': 'alert', 'other': 'alerts'}"></ng-pluralize></div>
-
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <p class="" ng-repeat="alert in alerts"><span ng-bind-html="alert"></span</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
         </li>
         <li ng-if="enterprise && config.Uchiwa.Auth === 'sql' && user.isAdmin()" ng-class="getClass('/users')" >
           <a ng-href="#users">

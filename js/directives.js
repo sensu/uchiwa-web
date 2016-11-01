@@ -91,6 +91,19 @@ directiveModule.directive('relativeTime', ['$filter', '$rootScope', function ($f
   };
 }]);
 
+directiveModule.directive('sidebarPopover', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'E',
+    scope: {
+      hasCriticity: '=',
+      metrics: '=',
+      name: '@',
+      pluralized: '@'
+    },
+    templateUrl: $rootScope.partialsPath + '/directives/sidebar-popover.html'
+  };
+}]);
+
 directiveModule.directive('silenceIcon', function () {
   return {
     restrict: 'E',
