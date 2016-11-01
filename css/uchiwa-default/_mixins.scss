@@ -3,6 +3,7 @@
   &-warning { #{$property}: $warning-color; }
   &-critical { #{$property}: $critical-color; }
   &-unknown { #{$property}: $unknown-color; }
+  &-silenced { #{$property}: $silenced-color; }
   &-default, &-blue { #{$property}: $secondary-color; }
 }
 

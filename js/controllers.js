@@ -537,15 +537,6 @@ function (audit, backendService, $cookieStore, $location, notification, $rootSco
 controllerModule.controller('NavbarController', ['audit', '$location', '$rootScope', '$scope', 'navbarServices', 'routingService', 'userService',
   function (audit, $location, $rootScope, $scope, navbarServices, routingService, userService) {
 
-    // Helpers
-    $scope.getClass = function(path) {
-      if ($location.path().substr(0, path.length) === path) {
-        return 'selected';
-      } else {
-        return '';
-      }
-    };
-
     // Services
     $scope.go = routingService.go;
     $scope.user = userService;
@@ -588,8 +579,8 @@ controllerModule.controller('SettingsController', ['$cookies', '$scope', 'Sensu'
 /**
 * Sidebar
 */
-controllerModule.controller('SidebarController', ['$location', 'navbarServices', '$scope', 'userService',
-  function ($location, navbarServices, $scope, userService) {
+controllerModule.controller('SidebarController', ['$location', 'navbarServices', '$rootScope', '$sce', '$scope', 'userService',
+  function ($location, navbarServices, $rootScope, $sce, $scope, userService) {
     // Get CSS class for sidebar elements
     $scope.getClass = function(path) {
       if ($location.path().substr(0, path.length) === path) {
@@ -599,10 +590,20 @@ controllerModule.controller('SidebarController', ['$location', 'navbarServices',
       }
     };
 
+    $scope.popoversTemplates = {
+      aggregates: $rootScope.partialsPath + '/popovers/aggregates.html',
+      checks: $rootScope.partialsPath + '/popovers/checks.html',
+      clients: $rootScope.partialsPath + '/popovers/clients.html',
+      datacenters: $rootScope.partialsPath + '/popovers/datacenters.html',
+      events: $rootScope.partialsPath + '/popovers/events.html',
+      silenced: $rootScope.partialsPath + '/popovers/silenced.html',
+      stashes: $rootScope.partialsPath + '/popovers/stashes.html'
+    };
+
     $scope.$watch('metrics', function() {
       if (angular.isObject($scope.metrics) && angular.isDefined($scope.metrics.clients)) {
-        $scope.clientsStyle = $scope.metrics.clients.critical > 0 ? 'critical' : $scope.metrics.clients.warning > 0 ? 'warning' : $scope.metrics.clients.unknown > 0 ? 'unknown' : 'success';
-        $scope.eventsStyle = $scope.metrics.events.critical > 0 ? 'critical' : $scope.metrics.events.warning > 0 ? 'warning' : $scope.metrics.events.unknown > 0 ? 'unknown' : 'success';
+        $scope.clientsStyle = $scope.metrics.clients.critical > 0 ? 'critical' : $scope.metrics.clients.warning > 0 ? 'warning' : $scope.metrics.clients.unknown > 0 ? 'unknown' : $scope.metrics.clients.silenced > 0 ? 'silenced' : 'success';
+        $scope.eventsStyle = $scope.metrics.events.critical > 0 ? 'critical' : $scope.metrics.events.warning > 0 ? 'warning' : $scope.metrics.events.unknown > 0 ? 'unknown' : $scope.metrics.events.silenced > 0 ? 'silenced' : 'success';
       }
       else {
         $scope.clientsStyle = 'unknown';
@@ -727,8 +728,8 @@ controllerModule.controller('SilencedEntryController', [ 'backendService', '$fil
 /**
 * Silenced Modal
 */
-controllerModule.controller('SilencedModalController', ['backendService', 'conf', '$filter', 'items', '$modalInstance', 'notification', '$q', '$rootScope', '$scope', 'Sensu', 'silencedService',
-  function (backendService, conf, $filter, items, $modalInstance, notification, $q, $rootScope, $scope, Sensu, silencedService) {
+controllerModule.controller('SilencedModalController', ['backendService', 'conf', '$filter', 'items', 'notification', '$q', '$rootScope', '$scope', 'Sensu', 'silencedService', '$uibModalInstance',
+  function (backendService, conf, $filter, items, notification, $q, $rootScope, $scope, Sensu, silencedService, $uibModalInstance) {
     $scope.items = items;
     $scope.silencedCount = $filter('filter')(items, {silenced: true}).length;
     if (angular.isDefined(items[0])) {
@@ -836,11 +837,11 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
         promises.push(deffered.promise);
       });
       $q.all(promises).then(function() {
-        $modalInstance.close();
+        $uibModalInstance.close();
       });
     };
     $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     };
 
     // Services

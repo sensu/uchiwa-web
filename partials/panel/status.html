@@ -1,8 +1,8 @@
-<div class="dropdown" dropdown>
-  <span dropdown-toggle class="action" ng-if="filters.status === ''">
+<div class="dropdown" uib-dropdown>
+  <span uib-dropdown-toggle class="action" ng-if="filters.status === ''">
     All Status <i class="fa fa-caret-down"></i>
   </span>
-  <span dropdown-toggle class="action" ng-repeat="(key, value) in {0: 'Success', 1: 'Warning', 2: 'Critical', 3: 'Unknown'}" ng-if="filters.status !== '' && filters.status === key">
+  <span uib-dropdown-toggle class="action" ng-repeat="(key, value) in {0: 'Success', 1: 'Warning', 2: 'Critical', 3: 'Unknown'}" ng-if="filters.status !== '' && filters.status === key">
     {{value}} <i class="fa fa-caret-down"></i>
   </span>
   <ul class="dropdown-menu">
