@@ -5,32 +5,14 @@ describe('Controller', function () {
   var $scope;
   var routeParams;
   var createController;
-  var mockNotification;
-  var mockSilencedService;
   var mockRoutingService;
-  var mockSensuData;
-  var mockVersion;
 
   beforeEach(module('uchiwa'));
 
   beforeEach(function () {
-    mockNotification = jasmine.createSpy('mockNotification');
-    mockSilencedService = jasmine.createSpyObj('mockSilencedService', ['create', 'delete']);
     mockRoutingService = jasmine.createSpyObj('mockRoutingService', ['search', 'go', 'initFilters', 'permalink', 'updateFilters']);
 
-    mockSensuData = {
-      Dc: 'abcd',
-      Clients: 'efgh',
-      Subscriptions: 'hijk',
-      Events: 'lmno'
-    };
-
-    mockVersion = {
-      uchiwa: 'x.y.z'
-    };
     module(function ($provide) {
-      $provide.value('notification', mockNotification);
-      $provide.value('silencedService', mockSilencedService);
       $provide.value('routingService', mockRoutingService);
     });
   });
@@ -90,7 +72,7 @@ describe('Controller', function () {
 
     it('should have a deleteClient method', function () {
       createController(controllerName);
-      expect($scope.deleteClient).toBeDefined();
+      expect($scope.delete).toBeDefined();
     });
     it('should have a resolveEvent method', function () {
       createController(controllerName);
