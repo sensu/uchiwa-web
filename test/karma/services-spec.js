@@ -4,8 +4,17 @@ describe('services', function () {
   var $rootScope;
   var $scope;
   var $httpBackend;
+  var mockNotification;
 
   beforeEach(module('uchiwa'));
+
+  beforeEach(function() {
+    mockNotification = jasmine.createSpyObj('mockNotification', ['error', 'success']);
+    module(function($provide) {
+      $provide.value('Notification', mockNotification);
+    });
+  });
+
   beforeEach(inject(function (_$rootScope_, _$httpBackend_) {
     $httpBackend = _$httpBackend_;
     $rootScope = _$rootScope_;
@@ -13,150 +22,366 @@ describe('services', function () {
     $httpBackend.expect('GET', 'config').respond(200, {Uchiwa:{Refresh: 10}});
   }));
 
+  describe('Aggregates', function() {
+    describe('deleteMultiple', function() {
+      it('removes multiple aggregates', inject(function(Aggregates) {
+        $httpBackend.expectDELETE('/aggregates/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('/aggregates/bar?dc=us-east-1').respond(200, '');
+
+        var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
+        var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': true}};
+
+        Aggregates.deleteMultiple(filtered, selected)
+        .then(function(result) {
+          // It should remove the deleted items
+          expect(result).toEqual([]);
+        });
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('removes a single aggregates', inject(function(Aggregates) {
+        $httpBackend.expectDELETE('/aggregates/foo?dc=us-east-1').respond(200, '');
+
+        var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
+        var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': false}};
+
+        Aggregates.deleteMultiple(filtered, selected)
+        .then(function(result) {
+          // It should remove the deleted item
+          expect(result).toEqual([filtered[1]]);
+        });
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error with one of the aggregate', inject(function(Aggregates) {
+        $httpBackend.expectDELETE('/aggregates/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('/aggregates/bar?dc=us-east-1').respond(500, '');
+
+        var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
+        var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': true}};
+
+        Aggregates.deleteMultiple(filtered, selected);
+
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
+      }));
+    });
+
+    describe('deleteSingle', function() {
+      it('removes an aggregate', inject(function(Aggregates) {
+        $httpBackend.expectDELETE('/aggregates/foo?dc=us-east-1').respond(200, '');
+        Aggregates.deleteSingle('us-east-1:foo')
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error', inject(function(Aggregates) {
+        $httpBackend.expectDELETE('/aggregates/bar?dc=us-east-1').respond(500, '');
+        Aggregates.deleteSingle('us-east-1:bar')
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
+      }));
+    });
+  });
+
   describe('backendService', function () {
     describe('getHealth', function() {
       it('emit a signal when health endpoint is down', inject(function(backendService) {
-	  spyOn($rootScope, "$emit");
-	  $httpBackend.expect('GET', 'health').respond(500, 'Error 500');
-          backendService.getHealth();
-	  $httpBackend.flush();
-	  expect($rootScope.$emit).toHaveBeenCalledWith('notification', 'error', 'Uchiwa is having trouble updating its data. Try to refresh the page if this issue persists.');
-          $httpBackend.verifyNoOutstandingExpectation();
-          $httpBackend.verifyNoOutstandingRequest();
-	}));
+        spyOn($rootScope, "$emit");
+        $httpBackend.expect('GET', 'health').respond(500, 'Error 500');
+        backendService.getHealth();
+        $httpBackend.flush();
+        expect($rootScope.$emit).toHaveBeenCalledWith('notification', 'error', 'Uchiwa is having trouble updating its data. Try to refresh the page if this issue persists.');
+
+      }));
 
       it('emit a signal when metrics endpoint is down', inject(function(backendService) {
-	  spyOn($rootScope, "$emit");
-	  $httpBackend.expect('GET', 'metrics').respond(500, 'Error 500');
-          backendService.getMetrics();
-	  $httpBackend.flush();
-    expect($rootScope.$emit).toHaveBeenCalledWith('notification', 'error', 'Uchiwa is having trouble updating its data. Try to refresh the page if this issue persists.');
-          $httpBackend.verifyNoOutstandingExpectation();
-          $httpBackend.verifyNoOutstandingRequest();
-	}));
+        spyOn($rootScope, "$emit");
+        $httpBackend.expect('GET', 'metrics').respond(500, 'Error 500');
+        backendService.getMetrics();
+        $httpBackend.flush();
+        expect($rootScope.$emit).toHaveBeenCalledWith('notification', 'error', 'Uchiwa is having trouble updating its data. Try to refresh the page if this issue persists.');
+
+      }));
+      afterEach(function() {
+        $httpBackend.verifyNoOutstandingExpectation()
+        $httpBackend.verifyNoOutstandingRequest()
+      })
     });
   });
-  describe('clientsService', function () {
-    describe('searchCheckHistory()', function() {
-      it('returns the right check from the client history', inject(function (clientsService) {
+
+  describe('Checks', function () {
+    describe('issueCheckRequest', function() {
+      it('sends a POST check request', inject(function (Checks) {
+        $httpBackend.expectPOST('/request',
+        '{"check":"foo","dc":"us-east-1","subscribers":"linux"}')
+        .respond(200, '');
+
+        Checks.issueCheckRequest('us-east-1', 'foo', 'linux')
+        $httpBackend.flush();
+      }));
+    });
+
+    describe('issueMulipleCheckRequest', function() {
+      it('sends a single check requests', inject(function (Checks) {
+        $httpBackend.expectPOST('/request',
+        '{"check":"foo","dc":"us-east-1","subscribers":"linux"}')
+        .respond(200, '');
+
+        var filtered = [
+          {_id: 'us-east-1:foo', dc: 'us-east-1', name: 'foo', subscribers: 'linux'}
+        ];
+        var selected = {ids: {'us-east-1:foo': true}};
+
+        Checks.issueMulipleCheckRequest(filtered, selected);
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('sends multiple check requests', inject(function (Checks) {
+        $httpBackend.expectPOST('/request',
+        '{"check":"foo","dc":"us-east-1","subscribers":"linux"}')
+        .respond(200, '');
+
+        $httpBackend.expectPOST('/request',
+        '{"check":"bar","dc":"us-west-1","subscribers":"windows"}')
+        .respond(200, '');
+
+        var filtered = [
+          {_id: 'us-east-1:foo', dc: 'us-east-1', name: 'foo', subscribers: 'linux'},
+          {_id: 'us-west-1:bar', dc: 'us-west-1', name: 'bar', subscribers: 'windows'}
+        ];
+        var selected = {ids: {'us-east-1:foo': true, 'us-west-1:bar': true}};
+
+        Checks.issueMulipleCheckRequest(filtered, selected);
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error', inject(function (Checks) {
+        $httpBackend.expectPOST('/request',
+        '{"check":"foo","dc":"us-east-1","subscribers":"linux"}')
+        .respond(500, '');
+
+        var filtered = [
+          {_id: 'us-east-1:foo', dc: 'us-east-1', name: 'foo', subscribers: 'linux'}
+        ];
+        var selected = {ids: {'us-east-1:foo': true}};
+
+        Checks.issueMulipleCheckRequest(filtered, selected);
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
+      }));
+    });
+
+    describe('silence', function() {
+      it('calls the Silenced service', inject(function (Checks, Silenced) {
+        spyOn(Silenced, 'create').and.callThrough();
+
+        var filtered = [{_id: 'foo'}, {_id: 'bar'}, {_id: 'qux'}];
+        var selected = {ids: {foo: true, qux: true}};
+
+        Checks.silence(filtered, selected);
+        expect(Silenced.create).toHaveBeenCalledWith(null, [{_id: 'foo'}, {_id: 'qux'}]);
+        expect(selected.all).toEqual(false);
+      }));
+    });
+  });
+
+  describe('Clients', function () {
+    describe('deleteCheckResult', function () {
+      it('calls the Results.delete function', inject(function (Clients, Results) {
+        spyOn(Results, 'delete').and.callThrough();
+        Clients.deleteCheckResult('foo/bar/qux');
+        expect(Results.delete).toHaveBeenCalledWith('foo/bar/qux');
+      }));
+    });
+
+    describe('deleteMultiple', function() {
+      it('removes multiple clients', inject(function(Clients) {
+        $httpBackend.expectDELETE('/clients/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('/clients/bar?dc=us-east-1').respond(200, '');
+
+        var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
+        var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': true}};
+
+        Clients.deleteMultiple(filtered, selected)
+        .then(function(result) {
+          // It should remove the deleted items
+          expect(result).toEqual([]);
+        });
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('removes a single client', inject(function(Clients) {
+        $httpBackend.expectDELETE('/clients/foo?dc=us-east-1').respond(200, '');
+
+        var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
+        var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': false}};
+
+         Clients.deleteMultiple(filtered, selected)
+        .then(function(result) {
+          // It should remove the deleted item
+          expect(result).toEqual([filtered[1]]);
+        });
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error with one of the aggregate', inject(function(Clients) {
+        $httpBackend.expectDELETE('/clients/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('/clients/bar?dc=us-east-1').respond(500, '');
+
+        var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
+        var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': true}};
+
+        Clients.deleteMultiple(filtered, selected);
+
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
+      }));
+    });
+
+    describe('deleteSingle', function() {
+      it('removes a client', inject(function(Clients) {
+        $httpBackend.expectDELETE('/clients/foo?dc=us-east-1').respond(200, '');
+        Clients.deleteSingle('us-east-1/foo')
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error', inject(function(Clients) {
+        $httpBackend.expectDELETE('/clients/bar?dc=us-east-1').respond(500, '');
+        Clients.deleteSingle('us-east-1:bar')
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
+      }));
+    });
+
+    describe('resolveEvent', function () {
+      it('calls the Events.resolve function', inject(function (Clients, Events) {
+        spyOn(Events, 'resolve').and.callThrough();
+        Clients.resolveEvent('foo/bar/qux');
+        expect(Events.resolve).toHaveBeenCalledWith('foo/bar/qux');
+      }));
+    });
+
+    describe('searchCheckHistory', function() {
+      it('returns the right check from the client history', inject(function (Clients) {
         var history = [{check: 'foo', last_status: 0}, {check: 'bar', last_status: 1}];
         var expectedCheck = {check: 'bar', last_status: 1};
-        expect(clientsService.searchCheckHistory('bar', history)).toEqual(expectedCheck);
+        expect(Clients.searchCheckHistory('bar', history)).toEqual(expectedCheck);
       }));
     });
 
-    describe('resolveEvent()', function () {
-      it('should emit HTTP DELETE to /events', inject(function (clientsService, backendService) {
-        spyOn(backendService, 'deleteEvent').and.callThrough();
-        clientsService.resolveEvent('foo/bar/qux');
-        expect(backendService.deleteEvent).toHaveBeenCalledWith('foo/bar/qux');
-      }));
-    });
-  });
-
-  describe('filterService', function () {
-    describe('comparator', function () {
-      it('returns true when the expected variable is an empty string', inject(function (filterService) {
-        expect(filterService.comparator('foo', '')).toEqual(true);
-      }));
-
-      it('returns true when the actual & expected variable are strictly similar', inject(function (filterService) {
-        expect(filterService.comparator('foo', 'foo')).toEqual(true);
-      }));
-
-      it('returns false when the actual & expected variable are not strictly similar', inject(function (filterService) {
-        expect(filterService.comparator('foo', 'foobar')).toEqual(false);
-      }));
-    });
-  });
-
-  describe('helperService', function () {
-    describe('deleteItems()', function () {
-      it('calls the provided function for every selected item', inject(function (helperService, clientsService) {
-        spyOn(clientsService, 'deleteClient').and.callThrough();
+    describe('silence', function() {
+      it('calls the Silenced service', inject(function (Clients, Silenced) {
+        spyOn(Silenced, 'create').and.callThrough();
 
         var filtered = [{_id: 'foo'}, {_id: 'bar'}, {_id: 'qux'}];
         var selected = {ids: {foo: true, qux: true}};
 
-        helperService.deleteItems(clientsService.deleteClient, filtered, selected);
-        expect(clientsService.deleteClient).toHaveBeenCalledWith('foo');
-        expect(clientsService.deleteClient).not.toHaveBeenCalledWith('bar');
-        expect(clientsService.deleteClient).toHaveBeenCalledWith('qux');
+        Clients.silence(filtered, selected);
+        expect(Silenced.create).toHaveBeenCalledWith(null, [{_id: 'foo'}, {_id: 'qux'}]);
         expect(selected.all).toEqual(false);
-      }));
-    });
-
-    describe('selectAll()', function () {
-      it('marks all filtered items as selected', inject(function (helperService) {
-        var filtered = [{_id: 'foo'}, {_id: 'bar'}];
-        var selected = {all: true, ids: {foo: true}};
-        var expectedSelected = {foo: true, bar: true};
-        helperService.selectAll(filtered, selected);
-        expect(selected.ids).toEqual(expectedSelected);
-      }));
-      it('marks all filtered items as unselected', inject(function (helperService) {
-        var filtered = [{_id: 'foo'}, {_id: 'bar'}];
-        var selected = {all: false, ids: {foo: true}};
-        var expectedSelected = {foo: false, bar: false};
-        helperService.selectAll(filtered, selected);
-        expect(selected.ids).toEqual(expectedSelected);
-      }));
-    });
-
-    describe('silenceItems()', function () {
-      it('calls the provided function for every selected item', inject(function (helperService, silencedService) {
-        spyOn(silencedService, 'create').and.callThrough();
-
-        var filtered = [{_id: 'foo'}, {_id: 'bar'}, {_id: 'qux'}];
-        var selected = {ids: {foo: true, qux: true}};
-
-        helperService.silenceItems(silencedService.create, filtered, selected);
-        expect(silencedService.create).toHaveBeenCalledWith(null, [{_id: 'foo'}, {_id: 'qux'}]);
-        expect(selected.all).toEqual(false);
-      }));
-    });
-
-    describe('updateSelected()', function () {
-      it('does not remove any items when a filter is removed', inject(function (helperService) {
-        var newValues = ['', false, ''];
-        var oldValues = ['', false, 'baz'];
-        var filtered = [{_id: 'foo'}];
-        var selected = {ids: {foo: true, bar: true}}
-        var expectedSelected = {ids: {foo: true, bar: false}}
-        helperService.updateSelected(newValues, oldValues, filtered, selected);
-        expect(selected).not.toEqual(expectedSelected);
-      }));
-      it('removes any selected items that are filtered', inject(function (helperService) {
-        var newValues = ['', false, 'baz'];
-        var oldValues = ['', false, ''];
-        var filtered = [{_id: 'foo'}];
-        var selected = {ids: {foo: true, bar: true}}
-        var expectedSelected = {ids: {foo: true, bar: false}}
-        helperService.updateSelected(newValues, oldValues, filtered, selected);
-        expect(selected).toEqual(expectedSelected);
       }));
     });
   });
 
+  describe('Events', function () {
+    describe('resolveMultiple', function() {
+      it('removes multiple events', inject(function(Events) {
+        $httpBackend.expectDELETE('/events/foo/bar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('/events/baz/qux?dc=us-east-1').respond(200, '');
 
-  describe('navbarServices', function () {
-    describe('health method', function (navbarServices) {
-      it('returns no alert when all datacenters are ok', inject(function (navbarServices) {
-        $rootScope.health = { foo: { output: "ok" }, bar: { output: "ok" } };
-        navbarServices.health();
-        expect($rootScope.alerts).toEqual([]);
+        var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-east-1/baz/qux'}];
+        var selected = {ids: {'us-east-1/foo/bar': true, 'us-east-1/baz/qux': true}};
+
+        Events.resolveMultiple(filtered, selected)
+        .then(function(result) {
+          // It should remove the deleted items
+          expect(result).toEqual([]);
+        });
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
       }));
 
-      it('returns a single alert when one datacenters is not ok', inject(function (navbarServices) {
-        $rootScope.health = {sensu: { foo: { output: "ok" }, bar: { output: "critical" }}};
-        navbarServices.health();
-        expect($rootScope.alerts).toEqual([ 'Datacenter <strong>bar</strong> returned: <em>critical</em>' ]);
+      it('removes a single aggregates', inject(function(Events) {
+        $httpBackend.expectDELETE('/events/foo/bar?dc=us-east-1').respond(200, '');
+
+        var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-east-1/baz/qux'}];
+        var selected = {ids: {'us-east-1/foo/bar': true, 'us-east-1/baz/qux': false}};
+
+        Events.resolveMultiple(filtered, selected)
+        .then(function(result) {
+          // It should remove the deleted item
+          expect(result).toEqual([filtered[1]]);
+        });
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
       }));
 
-      it('does not return an alert when the /health API enpoint does not respond', inject(function (navbarServices) {
-        $rootScope.health = "foobar";
-        navbarServices.health();
-        expect($rootScope.alerts).toEqual([]);
+      it('handles an error with one of the aggregate', inject(function(Events) {
+        $httpBackend.expectDELETE('/events/foo/bar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('/events/baz/qux?dc=us-east-1').respond(500, '');
+
+        var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-east-1/baz/qux'}];
+        var selected = {ids: {'us-east-1/foo/bar': true, 'us-east-1/baz/qux': true}};
+
+        Events.resolveMultiple(filtered, selected);
+
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
+      }));
+    });
+
+    describe('resolveSingle', function() {
+      it('resolves an event', inject(function(Events) {
+        $httpBackend.expectDELETE('/events/foo/bar?dc=us-east-1').respond(200, '');
+        Events.resolveSingle('us-east-1/foo/bar')
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error', inject(function(Events) {
+        $httpBackend.expectDELETE('/events/foo/bar?dc=us-east-1').respond(500, '');
+        Events.resolveSingle('us-east-1/foo/bar')
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
+      }));
+    });
+
+    describe('silence', function() {
+      it('calls the Silenced service', inject(function (Events, Silenced) {
+        spyOn(Silenced, 'create').and.callThrough();
+
+        var filtered = [{_id: 'foo'}, {_id: 'bar'}, {_id: 'qux'}];
+        var selected = {ids: {foo: true, qux: true}};
+
+        Events.silence(filtered, selected);
+        expect(Silenced.create).toHaveBeenCalledWith(null, [{_id: 'foo'}, {_id: 'qux'}]);
+        expect(selected.all).toEqual(false);
+      }));
+    });
+  });
+
+  describe('Results', function () {
+    describe('delete', function() {
+      it('delete a check result', inject(function(Results) {
+        $httpBackend.expectDELETE('/results/foo/bar?dc=us-east-1').respond(200, '');
+        Results.delete('us-east-1/foo/bar')
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error', inject(function(Results) {
+        $httpBackend.expectDELETE('/results/foo/bar?dc=us-east-1').respond(500, '');
+        Results.delete('us-east-1/foo/bar')
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
       }));
     });
   });
@@ -199,113 +424,345 @@ describe('services', function () {
     });
   });
 
-  describe('silencedService', function () {
-    describe('secondsBetweenDates function', function() {
-      it('returns "unknown" if at least one of the date is undefined', inject(function(silencedService){
-        expect(silencedService.secondsBetweenDates()).toEqual('unknown');
+  describe('Silenced', function () {
+    describe('clearEntries', function() {
+      it('delete multiple silence entries', inject(function (Silenced) {
+        spyOn(Silenced, 'delete').and.callThrough();
+
+        var entries = [
+          {_id: 'foo:bar', selected: true},
+          {_id: 'baz:qux', selected: true},
+          {_id: 'foo:baz', selected: false},
+        ];
+        Silenced.clearEntries(entries);
+
+        expect(Silenced.delete).toHaveBeenCalledWith('foo:bar');
+        expect(Silenced.delete).toHaveBeenCalledWith('baz:qux');
+      }));
+    });
+
+    describe('createEntries', function() {
+      it('creates multiple silence entries for clients', inject(function (Silenced) {
+        spyOn(Silenced, 'post').and.callThrough();
+
+        var items = [
+          {dc: 'us-east-1', name: 'foo'},
+          {dc: 'us-west-1', name: 'bar'}
+        ];
+        var itemType = 'client';
+        var options = {expire: 3600, expire_on_resolve: false, reason: 'Lorem Ipsum'}
+        var expectedPayloads = [
+          {
+            dc: 'us-east-1',
+            expire: 3600,
+            expire_on_resolve: false,
+            reason: 'Lorem Ipsum',
+            subscription: 'client:foo'
+          },
+          {
+            dc: 'us-west-1',
+            expire: 3600,
+            expire_on_resolve: false,
+            reason: 'Lorem Ipsum',
+            subscription: 'client:bar'
+          }
+        ];
+
+        Silenced.createEntries(items, itemType, options);
+
+        expect(Silenced.post).toHaveBeenCalledWith(expectedPayloads[0]);
+        expect(Silenced.post).toHaveBeenCalledWith(expectedPayloads[1]);
       }));
 
-      it('returns the seconds between two unix timestamps (milliseconds)', inject(function(silencedService){
-        expect(silencedService.secondsBetweenDates(1474149594000, 1474153194000)).toEqual(3600);
+      it('creates silence entry for a check', inject(function (Silenced) {
+        spyOn(Silenced, 'post').and.callThrough();
+
+        var items = [{dc: 'us-east-1', name: 'foo'}];
+        var itemType = 'check';
+        var options = {};
+        var expectedPayload = {dc: 'us-east-1', check: 'foo'};
+
+        Silenced.createEntries(items, itemType, options);
+
+        expect(Silenced.post).toHaveBeenCalledWith(expectedPayload);
       }));
 
-      it('returns the seconds between two human dates', inject(function(silencedService){
-        expect(silencedService.secondsBetweenDates('2016-09-17 18:45:20', '2016-09-17 19:00:20')).toEqual(900);
+      it('creates silence entry for an event', inject(function (Silenced) {
+        spyOn(Silenced, 'post').and.callThrough();
+
+        var items = [{dc: 'us-east-1', check: {name: 'cpu'}, client: {name: 'foo'}}];
+        var itemType = 'check';
+        var options = {};
+        var expectedPayload = {dc: 'us-east-1', check: 'cpu', subscription: 'client:foo'};
+
+        Silenced.createEntries(items, itemType, options);
+
+        expect(Silenced.post).toHaveBeenCalledWith(expectedPayload);
+      }));
+
+      it('creates silence entry for a subscription', inject(function (Silenced) {
+        spyOn(Silenced, 'post').and.callThrough();
+
+        var items = [];
+        var itemType = 'subscription';
+        var options = {ac: {dc: 'us-east-1', subscription: 'foo'}}
+        var expectedPayload = {dc: 'us-east-1', subscription: 'foo'};
+
+        Silenced.createEntries(items, itemType, options);
+
+        expect(Silenced.post).toHaveBeenCalledWith(expectedPayload);
+      }));
+
+      it('supports custom expiration', inject(function (Silenced) {
+        spyOn(Silenced, 'post').and.callThrough();
+
+        var items = [{dc: 'us-east-1', name: 'foo'}];
+        var itemType = 'check';
+        var options = {expire: 'custom', to: null};
+        var expectedPayload = {dc: 'us-east-1', check: 'foo', expire: ''};
+
+        Silenced.createEntries(items, itemType, options);
+
+        expect(Silenced.post).toHaveBeenCalledWith(expectedPayload);
+      }));
+    });
+
+    describe('delete', function() {
+      it('sends a POST request to the /silenced/clear endpoint', inject(function (Silenced) {
+        $httpBackend.expectPOST('/silenced/clear',
+        '{"dc":"foo","id":"bar"}')
+        .respond(200, '');
+
+        Silenced.delete('foo:bar');
+        $httpBackend.flush();
+      }));
+    });
+
+    describe('deleteMultiple', function() {
+      it('removes multiple silenced entries', inject(function(Silenced) {
+        $httpBackend.expectPOST('/silenced/clear', '{"dc":"foo","id":"bar"}')
+        .respond(200, '');
+        $httpBackend.expectPOST('/silenced/clear', '{"dc":"baz","id":"qux"}')
+        .respond(200, '');
+
+        var filtered = [{_id: 'foo:bar'}, {_id: 'baz:qux'}];
+        var selected = {ids: {'foo:bar': true, 'baz:qux': true}};
+
+        Silenced.deleteMultiple(filtered, selected)
+        .then(function(result) {
+          // It should remove the deleted items
+          expect(result).toEqual([]);
+        });
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('removes a single aggregates', inject(function(Silenced) {
+        $httpBackend.expectPOST('/silenced/clear', '{"dc":"foo","id":"bar"}')
+        .respond(200, '');
+
+        var filtered = [{_id: 'foo:bar'}, {_id: 'baz:qux'}];
+        var selected = {ids: {'foo:bar': true, 'baz:qux': false}};
+
+        Silenced.deleteMultiple(filtered, selected)
+        .then(function(result) {
+          // It should remove the deleted item
+          expect(result).toEqual([filtered[1]]);
+        });
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error with one of the aggregate', inject(function(Silenced) {
+        $httpBackend.expectPOST('/silenced/clear', '{"dc":"foo","id":"bar"}')
+        .respond(200, '');
+        $httpBackend.expectPOST('/silenced/clear', '{"dc":"baz","id":"qux"}')
+        .respond(500, '');
+
+        var filtered = [{_id: 'foo:bar'}, {_id: 'baz:qux'}];
+        var selected = {ids: {'foo:bar': true, 'baz:qux': true}};
+
+        Silenced.deleteMultiple(filtered, selected);
+
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
+      }));
+    });
+
+    describe('deleteSingle', function() {
+      it('sends a POST request to the /silenced/clear endpoint', inject(function (Silenced) {
+        $httpBackend.expectPOST('/silenced/clear', '{"dc":"foo","id":"bar"}')
+        .respond(200, '');
+
+        Silenced.deleteSingle('foo:bar');
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error', inject(function (Silenced) {
+        $httpBackend.expectPOST('/silenced/clear', '{"dc":"foo","id":"bar"}')
+        .respond(500, '');
+
+        Silenced.deleteSingle('foo:bar');
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
+      }));
+    });
+
+    describe('findEntriesFromItems', function() {
+      it('handles errors', inject(function (Silenced) {
+        var items = [undefined]
+        Silenced.findEntriesFromItems([], [undefined]);
+      }));
+
+      it('sets the silenced attribute to false if missing', inject(function (Silenced) {
+        var items = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
+        Silenced.findEntriesFromItems([], items);
+        expect(items[0].silenced).toEqual(false);
+        expect(items[1].silenced).toEqual(false);
+      }));
+
+      it('sets the silenced_by attribute for clients', inject(function (Silenced) {
+        var items = [{_id: 'us-east-1:foo', name: 'foo', silenced: true}];
+        Silenced.findEntriesFromItems([], items);
+        expect(items[0].silenced_by).toEqual(['client:foo:*']);
+      }));
+
+      it('returns silenced entries from the provided items', inject(function (Silenced) {
+        var entries = [
+          {_id: 'us-east-1:client:foo:*'},
+          {_id: 'us-east-1:client:bar:*'},
+          {_id: 'us-west-1:client:foo:*'}
+        ];
+        var items = [
+          {_id: 'us-east-1:foo', dc: 'us-east-1', name: 'foo', silenced: true, silenced_by: ['client:foo:*']},
+          {_id: 'us-east-1:bar', dc: 'us-east-1', name: 'bar', silenced: true, silenced_by: ['client:foo:*']}
+        ];
+        var foundEntries = Silenced.findEntriesFromItems(entries, items);
+        expect(foundEntries).toEqual([entries[0]]);
+      }));
+    });
+
+    describe('post', function() {
+      it('sends a POST request to the /silenced endpoint', inject(function (Silenced) {
+        $httpBackend.expectPOST('/silenced',
+        '{"foo":"bar"}')
+        .respond(200, '');
+
+        Silenced.post({foo: 'bar'});
+        $httpBackend.flush();
+      }));
+    });
+
+    describe('query', function() {
+      it('sends a GET request to the /silenced endpoint', inject(function (Silenced) {
+        $httpBackend.expectGET('/silenced').respond(200, '["foo","bar"]');
+
+        Silenced.query({foo: 'bar'}).$promise.then(
+          function(results){
+            expect(results.length).toEqual(2);
+          }
+        );
+        $httpBackend.flush();
       }));
     });
   });
 
-  describe('stashesService', function () {
-    it('should have a deleteStash method', inject(function (stashesService) {
-      expect(stashesService.deleteStash).toBeDefined();
-    }));
+  describe('Stashes', function () {
+    describe('deleteMultiple', function() {
+      it('removes multiple stashes', inject(function(Stashes) {
+        $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('/stashes/baz%2Fqux?dc=us-west-1').respond(200, '');
 
-    describe('find', function () {
-      it('returns the proper stash from an unknown object', inject(function (stashesService){
-        var stashes = [
-          { dc: 'east', path: 'silence/foo/bar' },
-          { dc: 'west', path: 'silence/qux' }
-        ];
-        var object = {
-          check: 'bar',
-          client: 'foo',
-          dc: 'east'
-        }
-        var stash = stashesService.find(stashes, object);
-        expect(stash).toEqual({dc: 'east', path: 'silence/foo/bar' });
+        var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-west-1/baz/qux'}];
+        var selected = {ids: {'us-east-1/foo/bar': true, 'us-west-1/baz/qux': true}};
 
-        object = {
-          name: 'qux',
-          dc: 'west'
-        }
-        stash = stashesService.find(stashes, object);
-        expect(stash).toEqual({dc: 'west', path: 'silence/qux' });
+        Stashes.deleteMultiple(filtered, selected)
+        .then(function(result) {
+          // It should remove the deleted items
+          expect(result).toEqual([]);
+        });
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('removes a single stash', inject(function(Stashes) {
+        $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
+
+        var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-west-1/baz/qux'}];
+        var selected = {ids: {'us-east-1/foo/bar': true, 'us-west-1/baz/qux': false}};
+
+        Stashes.deleteMultiple(filtered, selected)
+        .then(function(result) {
+          // It should remove the deleted item
+          expect(result).toEqual([filtered[1]]);
+        });
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error with one of the stash', inject(function(Stashes) {
+        $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('/stashes/baz%2Fqux?dc=us-west-1').respond(500, '');
+
+        var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-west-1/baz/qux'}];
+        var selected = {ids: {'us-east-1/foo/bar': true, 'us-west-1/baz/qux': true}};
+
+        Stashes.deleteMultiple(filtered, selected)
+
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
+      }));
+    });
+
+    describe('deleteSingle', function() {
+      it('sends a POST request to the /silenced/clear endpoint', inject(function (Stashes) {
+        $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
+
+        Stashes.deleteSingle('us-east-1/foo/bar');
+        $httpBackend.flush();
+        expect(mockNotification.success).toHaveBeenCalled();
+      }));
+
+      it('handles an error', inject(function (Stashes) {
+        $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(500, '');
+
+        Stashes.deleteSingle('us-east-1/foo/bar');
+        $httpBackend.flush();
+        expect(mockNotification.error).toHaveBeenCalled();
       }));
     });
 
     describe('get', function () {
-      it('returns null if the stashes are empty', inject(function (stashesService){
-        expect(stashesService.get([], 'foo')).toEqual(null);
+      it('returns null if the stashes are empty', inject(function (Stashes){
+        expect(Stashes.get([], 'foo')).toEqual(null);
       }));
 
-      it('returns null if the stash is missing', inject(function (stashesService){
-        expect(stashesService.get([{_id: 'foo/bar'}, {_id: 'foo/foo'}], 'foo')).toEqual(null);
+      it('returns null if the stash is missing', inject(function (Stashes){
+        expect(Stashes.get([{_id: 'foo/bar'}, {_id: 'foo/foo'}], 'foo')).toEqual(null);
       }));
 
-      it('returns the stash found', inject(function (stashesService){
-        expect(stashesService.get([{name: 'foo/foo'}, {_id: 'foo/bar'}, {_id: 'foo/foo'}], 'foo/foo')).toEqual({_id: 'foo/foo'});
-      }));
-    });
-
-    describe('getPath', function () {
-      it('returns a stash path from a check object', inject(function (stashesService){
-        var check = {
-          check: {
-            name: 'bar'
-          },
-          client: {
-            name: 'foo'
-          }
-        }
-        var path = stashesService.getPath(check);
-        expect(path).toEqual('silence/foo/bar');
-      }));
-
-      it('returns a stash path from a check output object', inject(function (stashesService){
-        var check = {
-          check: 'bar',
-          client: 'foo'
-        }
-        var path = stashesService.getPath(check);
-        expect(path).toEqual('silence/foo/bar');
-      }));
-
-      it('returns a stash path from a client object', inject(function (stashesService){
-        var client = {
-          name: 'foo'
-        }
-        var path = stashesService.getPath(client);
-        expect(path).toEqual('silence/foo');
-      }));
-          });
-
-    describe('submit', function () {
-      it('calls backendService.postStash with the proper payload', inject(function (stashesService, backendService) {
-        spyOn(backendService, 'postStash').and.callThrough();
-        var timestamp = Math.floor(new Date()/1000);
-
-        // silence/client
-        var expectedPayload = {content: {reason: '', source: 'uchiwa', timestamp: timestamp}, dc: 'foo', path: 'silence/bar'};
-        stashesService.submit({name: 'bar', acknowledged: false, dc: 'foo'}, {path: ['bar', '']});
-        expect(backendService.postStash).toHaveBeenCalledWith(expectedPayload);
-
-        // silence/client/check
-        expectedPayload = {content: {reason: '', source: 'uchiwa', timestamp: timestamp}, dc: 'foo', path: 'silence/bar/qux'};
-        stashesService.submit({client: {name: 'bar'}, check: {name: 'qux'}, acknowledged: false, dc: 'foo'}, {path: ['bar', 'qux']});
-        expect(backendService.postStash).toHaveBeenCalledWith(expectedPayload);
+      it('returns the stash found', inject(function (Stashes){
+        expect(Stashes.get([{name: 'foo/foo'}, {_id: 'foo/bar'}, {_id: 'foo/foo'}], 'foo/foo')).toEqual({_id: 'foo/foo'});
       }));
     });
   });
+
+  describe('Subscriptions', function () {
+    describe('query', function() {
+      it('sends a GET request to the /subscriptions endpoint', inject(function (Subscriptions) {
+        $httpBackend.expectGET('/subscriptions').respond(200, '["foo","bar"]');
+
+        Subscriptions.query({foo: 'bar'}).$promise.then(
+          function(results){
+            expect(results.length).toEqual(2);
+          }
+        );
+        $httpBackend.flush();
+      }));
+    });
+  });
+
 
   describe('underscore', function () {
     it('should define _', inject(function (underscore) {

@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('uchiwa', [
+  'uchiwa.common',
   'uchiwa.controllers',
   'uchiwa.constants',
   'uchiwa.directives',
   'uchiwa.factories',
   'uchiwa.filters',
-  'uchiwa.providers',
   'uchiwa.services',
   // Angular dependencies
   'ngCookies',
+  'ngResource',
   'ngRoute',
   'ngSanitize',
   // 3rd party dependencies
@@ -21,8 +22,15 @@ angular.module('uchiwa', [
 ]);
 
 angular.module('uchiwa')
-.config(['$httpProvider', '$routeProvider', '$uibTooltipProvider',
-  function ($httpProvider, $routeProvider, $uibTooltipProvider) {
+.config(['$httpProvider', '$routeProvider', 'toastrConfig', '$uibTooltipProvider',
+  function ($httpProvider, $routeProvider, toastrConfig, $uibTooltipProvider) {
+    // Toastr configuration
+    angular.extend(toastrConfig, {
+      positionClass: 'toast-bottom-right',
+      preventOpenDuplicates: true,
+      timeOut: 7500
+    });
+
     // Token injection
     $httpProvider.interceptors.push('authInterceptor');
 
@@ -43,15 +51,14 @@ angular.module('uchiwa')
       .when('/settings', {templateUrl: 'bower_components/uchiwa-web/partials/views/settings.html', controller: 'SettingsController'})
       .when('/silenced', {templateUrl: 'bower_components/uchiwa-web/partials/views/silenced.html', reloadOnSearch: false, controller: 'SilencedController'})
       .when('/silenced/:id*', {templateUrl: 'bower_components/uchiwa-web/partials/views/silenced-entry.html', reloadOnSearch: false, controller: 'SilencedEntryController'})
-      .when('/stash/:id*', {templateUrl: 'bower_components/uchiwa-web/partials/views/stash.html', reloadOnSearch: false, controller: 'StashController'})
       .when('/stashes', {templateUrl: 'bower_components/uchiwa-web/partials/views/stashes.html', reloadOnSearch: false, controller: 'StashesController'})
+      .when('/stashes/:id*', {templateUrl: 'bower_components/uchiwa-web/partials/views/stash.html', reloadOnSearch: false, controller: 'StashController'})
       .otherwise('/');
 
     $uibTooltipProvider.options({animation: false, 'placement': 'bottom'});
   }
 ])
-.run(function (backendService, conf, themes, $cookieStore, $location, notification, $rootScope, titleFactory) {
-  $rootScope.alerts = [];
+.run(function (backendService, conf, themes, $cookieStore, $location, Notification, $rootScope, titleFactory) {
   $rootScope.events = [];
   $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
   $rootScope.skipOneRefresh = false;
@@ -73,7 +80,7 @@ angular.module('uchiwa')
 
   $rootScope.$on('notification', function (event, type, message) {
     if ($location.path() !== '/login') {
-      notification(type, message);
+      Notification[type](message);
     }
   });
 });

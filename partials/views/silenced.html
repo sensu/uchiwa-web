@@ -16,7 +16,7 @@
               <!--dc-->
               <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
               <!--actions-->
-              <panel-actions data="silenced" resolve-fn="deleteMultipleSilenced" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
+              <panel-actions data="silenced" resolve-fn="deleteMultiple" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
               <!--limit-->
               <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
               <!--add-->
@@ -48,7 +48,7 @@
                   <input type="checkbox" ng-model="selected.ids[entry._id]"></input>
                 </td>
                 <td class="main">
-                  <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteSilenced($event, entry._id);"></i></span>{{ entry.id }}
+                  <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="delete($event, entry._id);"></i></span>{{ entry.id }}
                 </td>
                 <td class="dc">{{ entry.dc }}</td>
                 <td>

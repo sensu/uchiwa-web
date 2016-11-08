@@ -15,7 +15,7 @@
               <!--dc-->
               <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
               <!--actions-->
-              <panel-actions data="filtered" resolve-fn="deleteClients" resolve-legend="Delete" silence-fn="silenceClients" ng-if="!user.isReadOnly()"></panel-actions>
+              <panel-actions data="filtered" resolve-fn="delete" resolve-legend="Delete" silence-fn="silenceClients" ng-if="!user.isReadOnly()"></panel-actions>
               <!--subscriptions-->
               <ng-include src="partialsPath + '/panel/subscriptions.html'"></ng-include>
               <!--status-->

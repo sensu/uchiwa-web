@@ -16,7 +16,7 @@
               <!--dc-->
               <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
               <!--actions-->
-              <panel-actions data="stashes" resolve-fn="deleteStashes" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
+              <panel-actions data="stashes" resolve-fn="deleteMultiple" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
               <!--limit-->
               <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
               <!--search-->
@@ -40,12 +40,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="stash in filtered | buildStashes | orderBy:predicate:reverse | limitTo:filters.limit track by stash._id" ng-click="go('/stash/'+stash._id)">
+              <tr ng-repeat="stash in filtered | buildStashes | orderBy:predicate:reverse | limitTo:filters.limit track by stash._id" ng-click="go('/stashes/'+stash._id)">
                 <td ng-if="!user.isReadOnly()" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="selected.ids[stash._id]"></input>
                 </td>
                 <td class="main">
-                  <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="deleteStash($event, stash._id);"></i></span>{{ stash.path }}
+                  <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="delete($event, stash._id);"></i></span>{{ stash.path }}
                 </td>
                 <td class="dc">{{ stash.dc }}</td>
                 <td>

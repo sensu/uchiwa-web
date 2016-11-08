@@ -5,8 +5,8 @@ var controllerModule = angular.module('uchiwa.controllers', []);
 /**
 * Aggregate
 */
-controllerModule.controller('AggregateController', ['aggregatesService', '$rootScope', '$scope', '$routeParams', 'routingService', 'Sensu', 'titleFactory',
-  function (aggregatesService, $rootScope, $scope, $routeParams, routingService, Sensu, titleFactory) {
+controllerModule.controller('AggregateController', ['Aggregates', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory',
+  function (Aggregates, $rootScope, $routeParams, routingService, $scope, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
 
@@ -50,7 +50,12 @@ controllerModule.controller('AggregateController', ['aggregatesService', '$rootS
     }
 
     // Services
-    $scope.deleteAggregate = aggregatesService.delete;
+    $scope.delete = function(id) {
+      Aggregates.delete(id)
+        .then(function() {
+          routingService.go('aggregates');
+        }, function() {});
+    };
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
   }
@@ -59,8 +64,8 @@ controllerModule.controller('AggregateController', ['aggregatesService', '$rootS
 /**
 * Aggregates
 */
-controllerModule.controller('AggregatesController', ['aggregatesService', '$filter', 'filterService', 'helperService', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory',
-  function (aggregatesService, $filter, filterService, helperService, $routeParams, routingService, $scope, Sensu, titleFactory) {
+controllerModule.controller('AggregatesController', ['Aggregates', '$filter', 'Helpers', 'Notification', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory',
+  function (Aggregates, $filter, Helpers, Notification, $routeParams, routingService, $scope, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Aggregates';
     titleFactory.set($scope.pageHeaderText);
 
@@ -70,7 +75,7 @@ controllerModule.controller('AggregatesController', ['aggregatesService', '$filt
 
     // Filters
     var updateFilters = function() {
-      var filtered = $filter('filter')($scope.aggregates, {dc: $scope.filters.dc}, $scope.filterComparator);
+      var filtered = $filter('filter')($scope.aggregates, {dc: $scope.filters.dc}, Helpers.equals);
       filtered = $filter('filter')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'aggregates');
       $scope.filtered = filtered;
@@ -99,30 +104,32 @@ controllerModule.controller('AggregatesController', ['aggregatesService', '$filt
     });
 
     // Services
-    $scope.deleteAggregate = function($event, id) {
+    $scope.delete = function($event, id) {
       $event.stopPropagation();
-      aggregatesService.delete(id).then(function() {
-        $scope.filtered = $filter('filter')($scope.filtered, {_id: '!'+ id});
-      });
+      Aggregates.deleteSingle(id)
+        .then(function() {
+          $scope.filtered = Helpers.removeItemById(id, $scope.filtered);
+        }, function() {});
     };
-    $scope.filterComparator = filterService.comparator;
-    $scope.go = routingService.go;
-    $scope.permalink = routingService.permalink;
-    $scope.selectAll = helperService.selectAll;
 
     $scope.deleteMultiple = function() {
-      helperService.deleteItems(aggregatesService.delete, $scope.filtered, $scope.selected).then(function(filtered){
-        $scope.filtered = filtered;
-      });
+      Aggregates.deleteMultiple($scope.filtered, $scope.selected)
+        .then(function(results) {
+          $scope.filtered = results;
+        }, function() {});
     };
+
+    $scope.go = routingService.go;
+    $scope.permalink = routingService.permalink;
+    $scope.selectAll = Helpers.selectAll;
   }
 ]);
 
 /**
 * Checks
 */
-controllerModule.controller('ChecksController', ['checksService', '$filter', 'filterService', 'helperService', '$routeParams', 'routingService', '$scope', 'Sensu', 'silencedService', 'titleFactory',
-  function (checksService, $filter, filterService, helperService, $routeParams, routingService, $scope, Sensu, silencedService, titleFactory) {
+controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory',
+  function (Checks, $filter, Helpers, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory) {
     $scope.pageHeaderText = 'Checks';
     titleFactory.set($scope.pageHeaderText);
 
@@ -131,7 +138,7 @@ controllerModule.controller('ChecksController', ['checksService', '$filter', 'fi
     $scope.selected = {all: false, ids: {}};
 
     var updateFilters = function() {
-      var filtered = $filter('filter')($scope.checks, {dc: $scope.filters.dc}, $scope.filterComparator);
+      var filtered = $filter('filter')($scope.checks, {dc: $scope.filters.dc}, Helpers.equals);
       filtered = $filter('filter')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'checks');
       $scope.filtered = filtered;
@@ -157,7 +164,7 @@ controllerModule.controller('ChecksController', ['checksService', '$filter', 'fi
     // Filters
     $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc'], function(newValues, oldValues) {
       updateFilters();
-      helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
+      Helpers.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
 
     // Routing
@@ -168,19 +175,13 @@ controllerModule.controller('ChecksController', ['checksService', '$filter', 'fi
     });
 
     // Services
-    $scope.filterComparator = filterService.comparator;
     $scope.permalink = routingService.permalink;
-    $scope.selectAll = helperService.selectAll;
-
+    $scope.selectAll = Helpers.selectAll;
     $scope.issueCheckRequest = function() {
-      var items = helperService.getSelected($scope.filtered, $scope.selected);
-      angular.forEach(items, function(item) {
-        checksService.issueCheckRequest(item.name, item.dc, item.subscribers);
-      });
+      Checks.issueMulipleCheckRequest($scope.filtered, $scope.selected);
     };
-
     $scope.silenceChecks = function() {
-      helperService.silenceItems(silencedService.create, $scope.filtered, $scope.selected);
+      Checks.silence($scope.filtered, $scope.selected);
     };
   }
 ]);
@@ -188,8 +189,8 @@ controllerModule.controller('ChecksController', ['checksService', '$filter', 'fi
 /**
 * Client
 */
-controllerModule.controller('ClientController', ['backendService', 'clientsService', 'conf', '$filter', 'notification', 'titleFactory', '$routeParams', 'routingService', '$scope', 'Sensu', 'silencedService', 'userService',
-  function (backendService, clientsService, conf, $filter, notification, titleFactory, $routeParams, routingService, $scope, Sensu, silencedService, userService) {
+controllerModule.controller('ClientController', ['Clients', '$filter', '$location', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory', 'userService',
+  function (Clients, $filter, $location, $routeParams, routingService, $scope, Sensu, titleFactory, userService) {
     $scope.predicate = '-last_status';
     $scope.reverse = false;
 
@@ -197,7 +198,7 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
     $scope.clientName = decodeURI($routeParams.client);
     $scope.dc = decodeURI($routeParams.dc);
 
-    var searchCheckHistory = clientsService.searchCheckHistory;
+    var searchCheckHistory = Clients.searchCheckHistory;
 
     // Get check
     $scope.check = null;
@@ -281,11 +282,24 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
     });
 
     // Services
-    $scope.deleteCheckResult = clientsService.deleteCheckResult;
-    $scope.deleteClient = clientsService.deleteClient;
-    $scope.resolveEvent = clientsService.resolveEvent;
+    $scope.deleteCheckResult = Clients.deleteCheckResult;
+    $scope.delete = function(id) {
+      Clients.delete(id)
+        .then(function() {
+          routingService.go('clients');
+        }, function() {});
+    };
+    $scope.resolveEvent = function(id) {
+      Clients.resolveEvent(id)
+        .then(function() {
+          delete $location.$$search.check;
+          $location.$$compose();
+        }, function() {});
+    };
     $scope.permalink = routingService.permalink;
-    $scope.silence = silencedService.create;
+    $scope.silence = function() {
+      Clients.silence($scope.filtered, $scope.selected);
+    };
     $scope.user = userService;
   }
 ]);
@@ -293,8 +307,8 @@ controllerModule.controller('ClientController', ['backendService', 'clientsServi
 /**
 * Clients
 */
-controllerModule.controller('ClientsController', ['clientsService', '$filter', 'filterService', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'silencedService', 'titleFactory', 'userService',
-  function (clientsService, $filter, filterService, helperService, $rootScope, $routeParams, routingService, $scope, Sensu, silencedService, titleFactory, userService) {
+controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'userService',
+  function (Clients, $filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, userService) {
     $scope.pageHeaderText = 'Clients';
     titleFactory.set($scope.pageHeaderText);
 
@@ -304,7 +318,7 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     $scope.statuses = {0: 'Healthy', 1: 'Warning', 2: 'Critical', 3: 'Unknown'};
 
     var updateFilters = function() {
-      var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, $scope.filterComparator);
+      var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, Helpers.equals);
       filtered = $filter('filter')(filtered, {status: $scope.filters.status});
       filtered = $filter('filterSubscriptions')(filtered, $scope.filters.subscription);
       filtered = $filter('filter')(filtered, $scope.filters.q);
@@ -335,7 +349,7 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     // Filters
     $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc', 'filters.subscription', 'filters.status'], function(newValues, oldValues) {
       updateFilters();
-      helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
+      Helpers.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
 
     // Routing
@@ -346,21 +360,21 @@ controllerModule.controller('ClientsController', ['clientsService', '$filter', '
     });
 
     // Services
-    $scope.filterComparator = filterService.comparator;
+    $scope.delete = function() {
+      Clients.deleteMultiple($scope.filtered, $scope.selected)
+        .then(function(results) {
+          $scope.filtered = results;
+        }, function() {});
+    };
     $scope.go = routingService.go;
-    $scope.openLink = helperService.openLink;
+    $scope.openLink = Helpers.openLink;
     $scope.permalink = routingService.permalink;
-    $scope.selectAll = helperService.selectAll;
-    $scope.silence = silencedService.create;
-    $scope.user = userService;
-    $scope.deleteClients = function() {
-      helperService.deleteItems(clientsService.deleteClient, $scope.filtered, $scope.selected).then(function(filtered){
-        $scope.filtered = filtered;
-      });
-    };
+    $scope.selectAll = Helpers.selectAll;
+    $scope.silence = Silenced.create;
     $scope.silenceClients = function() {
-      helperService.silenceItems(silencedService.create, $scope.filtered, $scope.selected);
+      Clients.silence($scope.filtered, $scope.selected);
     };
+    $scope.user = userService;
   }
 ]);
 
@@ -383,8 +397,8 @@ controllerModule.controller('DatacentersController', ['$scope', 'Sensu', 'titleF
 /**
 * Events
 */
-controllerModule.controller('EventsController', ['clientsService', 'conf', '$cookieStore', '$filter', 'filterService', 'helperService', '$rootScope', '$routeParams','routingService', '$scope', 'Sensu', 'silencedService', 'titleFactory', 'userService',
-  function (clientsService, conf, $cookieStore, $filter, filterService, helperService, $rootScope, $routeParams, routingService, $scope, Sensu, silencedService, titleFactory, userService) {
+controllerModule.controller('EventsController', ['Clients', 'conf', '$cookieStore', 'Events', '$filter', 'Helpers', '$rootScope', '$routeParams','routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'userService',
+  function (Clients, conf, $cookieStore, Events, $filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, userService) {
     $scope.pageHeaderText = 'Events';
     titleFactory.set($scope.pageHeaderText);
 
@@ -395,7 +409,7 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     $scope.statuses = {1: 'Warning', 2: 'Critical', 3: 'Unknown'};
 
     var updateFilters = function() {
-      var filtered = $filter('filter')($scope.events, {dc: $scope.filters.dc}, $scope.filterComparator);
+      var filtered = $filter('filter')($scope.events, {dc: $scope.filters.dc}, Helpers.equals);
       filtered = $filter('filter')(filtered, {check: {status: $scope.filters.status}});
       filtered = $filter('hideSilenced')(filtered, $scope.filters.silenced);
       filtered = $filter('hideClientsSilenced')(filtered, $scope.filters.clientsSilenced);
@@ -423,7 +437,7 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     // Filters
     $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc', 'filters.check' , 'filters.status' , 'filters.silenced' , 'filters.clientsSilenced' , 'filters.occurrences'], function(newValues, oldValues) {
       updateFilters();
-      helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
+      Helpers.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
 
     // Routing
@@ -433,20 +447,20 @@ controllerModule.controller('EventsController', ['clientsService', 'conf', '$coo
     });
 
     // Services
-    $scope.filterComparator = filterService.comparator;
     $scope.go = routingService.go;
-    $scope.openLink = helperService.openLink;
+    $scope.openLink = Helpers.openLink;
     $scope.permalink = routingService.permalink;
-    $scope.selectAll = helperService.selectAll;
-    $scope.silence = silencedService.create;
+    $scope.selectAll = Helpers.selectAll;
+    $scope.silence = Silenced.create;
     $scope.user = userService;
     $scope.resolveEvents = function() {
-      helperService.deleteItems(clientsService.resolveEvent, $scope.filtered, $scope.selected).then(function(filtered){
-        $scope.filtered = filtered;
-      });
+      Events.resolveMultiple($scope.filtered, $scope.selected)
+        .then(function(results) {
+          $scope.filtered = results;
+        }, function() {});
     };
     $scope.silenceEvents = function() {
-      helperService.silenceItems(silencedService.create, $scope.filtered, $scope.selected);
+      Events.silence($scope.filtered, $scope.selected);
     };
 
     // Hide silenced
@@ -490,8 +504,8 @@ controllerModule.controller('InfoController', ['backendService', '$scope', 'Sens
 /**
 * Login
 */
-controllerModule.controller('LoginController', ['audit', 'backendService', '$cookieStore', '$location', 'notification', '$rootScope', '$scope',
-function (audit, backendService, $cookieStore, $location, notification, $rootScope, $scope) {
+controllerModule.controller('LoginController', ['audit', 'backendService', '$cookieStore', '$location', '$rootScope', '$scope',
+function (audit, backendService, $cookieStore, $location, $rootScope, $scope) {
 
   $scope.login = {user: '', pass: ''};
 
@@ -521,7 +535,7 @@ function (audit, backendService, $cookieStore, $location, notification, $rootSco
       }
     })
     .error(function () {
-      notification('error', 'There was an error with your username/password combination. Please try again.');
+      //notification('error', 'There was an error with your username/password combination. Please try again.');
     });
   };
 
@@ -534,8 +548,8 @@ function (audit, backendService, $cookieStore, $location, notification, $rootSco
 /**
 * Navbar
 */
-controllerModule.controller('NavbarController', ['audit', '$location', '$rootScope', '$scope', 'navbarServices', 'routingService', 'userService',
-  function (audit, $location, $rootScope, $scope, navbarServices, routingService, userService) {
+controllerModule.controller('NavbarController', ['audit', '$location', '$rootScope', '$scope', 'routingService', 'userService',
+  function (audit, $location, $rootScope, $scope, routingService, userService) {
 
     // Services
     $scope.go = routingService.go;
@@ -579,8 +593,8 @@ controllerModule.controller('SettingsController', ['$cookies', '$scope', 'Sensu'
 /**
 * Sidebar
 */
-controllerModule.controller('SidebarController', ['$location', 'navbarServices', '$rootScope', '$sce', '$scope', 'userService',
-  function ($location, navbarServices, $rootScope, $sce, $scope, userService) {
+controllerModule.controller('SidebarController', ['$location', '$rootScope', '$sce', '$scope', 'userService',
+  function ($location, $rootScope, $sce, $scope, userService) {
     // Get CSS class for sidebar elements
     $scope.getClass = function(path) {
       if ($location.path().substr(0, path.length) === path) {
@@ -613,17 +627,14 @@ controllerModule.controller('SidebarController', ['$location', 'navbarServices',
 
     // Services
     $scope.user = userService;
-    $scope.$watch('health', function (){
-      navbarServices.health();
-    });
   }
 ]);
 
 /**
 * Silenced
 */
-controllerModule.controller('SilencedController', ['$filter', 'filterService', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'silencedService', 'titleFactory', 'userService',
-  function ($filter, filterService, helperService, $rootScope, $routeParams, routingService, $scope, Sensu, silencedService, titleFactory, userService) {
+controllerModule.controller('SilencedController', ['$filter', 'Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'userService',
+  function ($filter, Helpers, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, userService) {
     $scope.pageHeaderText = 'Silenced';
     titleFactory.set($scope.pageHeaderText);
 
@@ -633,7 +644,7 @@ controllerModule.controller('SilencedController', ['$filter', 'filterService', '
     $scope.selected = {all: false, ids: {}};
 
     var updateFilters = function() {
-      var filtered = $filter('filter')($scope.silenced, {dc: $scope.filters.dc}, $scope.filterComparator);
+      var filtered = $filter('filter')($scope.silenced, {dc: $scope.filters.dc}, Helpers.equals);
       filtered = $filter('filter')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'silenced');
       $scope.filtered = filtered;
@@ -654,7 +665,7 @@ controllerModule.controller('SilencedController', ['$filter', 'filterService', '
     // Filters
     $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc'], function(newValues, oldValues) {
       updateFilters();
-      helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
+      Helpers.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
 
     // Routing
@@ -665,23 +676,23 @@ controllerModule.controller('SilencedController', ['$filter', 'filterService', '
     });
 
     // Services
-    $scope.filterComparator = filterService.comparator;
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
-    $scope.selectAll = helperService.selectAll;
-    $scope.silence = silencedService.create;
+    $scope.selectAll = Helpers.selectAll;
+    $scope.silence = Silenced.create;
     $scope.user = userService;
-    $scope.deleteSilenced = function($event, id) {
+    $scope.delete = function($event, id) {
       $event.stopPropagation();
-      silencedService.delete(id).then(function() {
-        $scope.filtered = $filter('filter')($scope.filtered, {_id: '!'+ id});
-        $rootScope.skipOneRefresh = true;
-      });
+      Silenced.deleteSingle(id)
+        .then(function() {
+          $scope.filtered = Helpers.removeItemById(id, $scope.filtered);
+        }, function() {});
     };
-    $scope.deleteMultipleSilenced = function() {
-      helperService.deleteItems(silencedService.delete, $scope.filtered, $scope.selected).then(function(filtered){
-        $scope.filtered = filtered;
-      });
+    $scope.deleteMultiple = function() {
+      Silenced.deleteMultiple($scope.filtered, $scope.selected)
+        .then(function(results) {
+          $scope.filtered = results;
+        }, function() {});
     };
   }
 ]);
@@ -689,26 +700,21 @@ controllerModule.controller('SilencedController', ['$filter', 'filterService', '
 /**
 * Silenced Entry
 */
-controllerModule.controller('SilencedEntryController', [ 'backendService', '$filter', '$routeParams', 'routingService', '$scope', 'Sensu', 'silencedService', 'titleFactory',
-  function (backendService, $filter, $routeParams, routingService, $scope, Sensu, silencedService, titleFactory) {
+controllerModule.controller('SilencedEntryController', ['Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory',
+  function (Helpers, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory) {
     // Routing
     $scope.id = decodeURI($routeParams.id);
     titleFactory.set($scope.id);
 
     // Get the stash
     $scope.entry = null;
-    var silenced = [];
-    backendService.getSilenced()
-      .success(function (data) {
-        silenced = data;
 
-        $scope.entry = silencedService.find(silenced, $scope.id);
-      })
-      .error(function(error) {
-        if (error !== null) {
-          console.error(JSON.stringify(error));
-        }
-      });
+    // Get silenced entries
+    Silenced.query().$promise.then(
+      function(results) {
+        $scope.entry = Helpers.findIdInItems($scope.id, results);
+      }
+    );
 
     // Get health and metrics
     var timer = Sensu.updateMetrics();
@@ -716,11 +722,12 @@ controllerModule.controller('SilencedEntryController', [ 'backendService', '$fil
       Sensu.stop(timer);
     });
 
-    $scope.deleteSilenced = function($event, id) {
+    $scope.delete = function($event, id) {
       $event.stopPropagation();
-      silencedService.delete(id).then(function() {
-        routingService.go('/silenced');
-      });
+      Silenced.deleteSingle(id)
+        .then(function() {
+          routingService.go('/silenced');
+        }, function() {});
     };
   }
 ]);
@@ -728,8 +735,8 @@ controllerModule.controller('SilencedEntryController', [ 'backendService', '$fil
 /**
 * Silenced Modal
 */
-controllerModule.controller('SilencedModalController', ['backendService', 'conf', '$filter', 'items', 'notification', '$q', '$rootScope', '$scope', 'Sensu', 'silencedService', '$uibModalInstance',
-  function (backendService, conf, $filter, items, notification, $q, $rootScope, $scope, Sensu, silencedService, $uibModalInstance) {
+controllerModule.controller('SilencedModalController', ['backendService', 'conf', '$filter', 'Helpers', 'items', 'Notification', '$q', '$rootScope', '$scope', 'Sensu', 'Silenced', 'Subscriptions', '$uibModalInstance',
+  function (backendService, conf, $filter, Helpers, items, Notification, $q, $rootScope, $scope, Sensu, Silenced, Subscriptions, $uibModalInstance) {
     $scope.items = items;
     $scope.silencedCount = $filter('filter')(items, {silenced: true}).length;
     if (angular.isDefined(items[0])) {
@@ -738,114 +745,75 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
       $scope.itemType = 'subscription';
     }
 
+    $scope.entries = [];
     $scope.options = {ac: {}, expire: 900, reason: '', to: moment().add(1, 'h').format(conf.date)};
 
-    $scope.silenced = [];
-    var getSilencedIDs = function(data) {
-      $scope.selected = {};
-      angular.forEach(items, function(item) {
-        if (angular.isDefined(item) && item.silenced) {
-          // Do we have a client?
-          if (angular.isUndefined(item.silenced_by)) { // jshint ignore:line
-            item.silenced_by = ['client:' + item.name + ':*']; // jshint ignore:line
-          }
-          angular.forEach(item.silenced_by, function(id){ // jshint ignore:line
-            var _id = item.dc + ':' + id;
-            if (angular.isUndefined($scope.selected[_id])) {
-              $scope.silenced.push($scope.findSilenced(data, _id));
-              $scope.selected[_id] = true;
-            }
-          });
-        }
-      });
-    };
-
     // Get silenced entries
-    backendService.getSilenced().then(function(result) {
-      getSilencedIDs(result.data);
-    });
+    Silenced.query().$promise.then(
+      function(results) {
+        $scope.entries = Silenced.findEntriesFromItems(results, items);
+      }
+    );
 
     // Get subscriptions
-    backendService.getSubscriptions().then(function(result) {
-      $scope.subscriptions = result.data;
-    });
+    Subscriptions.query().$promise.then(
+      function(results) {
+        $scope.subscriptions = results;
+      }
+    );
 
     $scope.ok = function() {
       if ($scope.options.expire === 'custom') {
         if (angular.isUndefined($scope.options.to)) {
-          notification('error', 'Please enter a date for the custom expiration.');
+          Notification.error('Please enter a date for the custom expiration.');
           return false;
         }
       }
 
-      var promises = [];
-      var deffered = $q.defer();
-
-      // Silenced entries to Clear
-      angular.forEach($scope.silenced, function(entry) {
-        if ($scope.selected[entry._id]) {
-          silencedService.delete(entry._id).then(function() {
-            deffered.resolve(entry);
-          }, function() {
-            deffered.reject();
-          });
-        }
-      });
-
-      if ($scope.itemType === 'subscription') {
-        items.push({dc: $scope.options.ac.dc, silenced: false, subscription: $scope.options.ac.subscription});
+      // Silenced entries to clear
+      if ($scope.entries.length !== 0) {
+        Silenced.clearEntries($scope.entries).then(
+          function(results) {
+            $uibModalInstance.close();
+            if (results.length === 1) {
+              Notification.success('The silenced entry '+ results[0].id +' has been cleared');
+              return;
+            }
+            Notification.success(results.length + ' silenced entries have been cleared');
+          },
+          function(results) {
+            if (results.length === 1) {
+              Notification.error('Could not clear the silenced entry ' + results[0].id );
+              return;
+            }
+            Notification.error('Could not clear all of the silenced entries');
+          }
+        );
       }
 
       // Silenced entries to create
-      angular.forEach(items, function(item) {
-        if (angular.isObject(item) && !item.silenced) {
-          var payload = {dc: item.dc, expire_on_resolve: $scope.options.expire_on_resolve, reason: $scope.options.reason}; // jshint ignore:line
-
-          if ($scope.options.expire === 'custom') {
-            var now = new Date().getTime();
-            payload.expire = silencedService.secondsBetweenDates(now, $scope.options.to);
+      Silenced.createEntries(items, $scope.itemType, $scope.options).then(
+        function(results) {
+          $uibModalInstance.close();
+          if (results.length === 1) {
+            Notification.success('The silenced entry has been created');
+          } else if (results.length > 1) {
+            Notification.success(results.length + ' silenced entries have been created');
           }
-
-          if ($scope.options.expire > 0) {
-            payload.expire = $scope.options.expire;
+        },
+        function(results) {
+          if (results.length === 1) {
+            Notification.error('Could not create the silenced entry ' + results[0].id );
+            return;
+          } else if (results.length > 1) {
+            Notification.error('Could not create all of the silenced entries');
           }
-
-          // Determine the subscription
-          if ($scope.itemType === 'client') {
-            payload.subscription = 'client:' + item.name;
-          } else if ($scope.itemType === 'subscription') {
-            payload.subscription = item.subscription;
-          } else {
-            if (angular.isDefined(item.client)) {
-              payload.subscription = 'client:';
-              payload.subscription += item.client.name || item.client;
-            }
-            if (angular.isDefined(item.check)) {
-              payload.check = item.check.name || item.check;
-            } else {
-              payload.check = item.name;
-            }
-          }
-
-          silencedService.post(payload).then(function() {
-            deffered.resolve(item);
-          }, function() {
-            deffered.reject();
-          });
         }
-
-        promises.push(deffered.promise);
-      });
-      $q.all(promises).then(function() {
-        $uibModalInstance.close();
-      });
+      );
     };
     $scope.cancel = function () {
       $uibModalInstance.dismiss('cancel');
     };
-
-    // Services
-    $scope.findSilenced = silencedService.find;
 
     // Autocompletion
     function suggestSubscription(term) {
@@ -870,8 +838,8 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
 /**
 * Stash
 */
-controllerModule.controller('StashController', [ 'backendService', '$filter', '$routeParams', '$scope', 'Sensu', 'stashesService', 'titleFactory',
-  function (backendService, $filter, $routeParams, $scope, Sensu, stashesService, titleFactory) {
+controllerModule.controller('StashController', [ 'backendService', '$filter', '$routeParams', '$scope', 'Sensu', 'Stashes', 'titleFactory',
+  function (backendService, $filter, $routeParams, $scope, Sensu, Stashes, titleFactory) {
     // Routing
     $scope.id = decodeURI($routeParams.id);
     titleFactory.set($scope.id);
@@ -883,7 +851,7 @@ controllerModule.controller('StashController', [ 'backendService', '$filter', '$
       .success(function (data) {
         stashes = data;
 
-        var stash = stashesService.get(stashes, $scope.id);
+        var stash = Stashes.get(stashes, $scope.id);
         // Prepare rich output
         angular.forEach(stash.content, function(value, key) { // jshint ignore:line
           value = $filter('getTimestamp')(value);
@@ -910,8 +878,8 @@ controllerModule.controller('StashController', [ 'backendService', '$filter', '$
 /**
 * Stashes
 */
-controllerModule.controller('StashesController', ['$filter', 'filterService', 'helperService', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'stashesService', 'titleFactory', 'userService',
-  function ($filter, filterService, helperService, $rootScope, $routeParams, routingService, $scope, Sensu, stashesService, titleFactory, userService) {
+controllerModule.controller('StashesController', ['$filter', 'Helpers', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Stashes', 'titleFactory', 'userService',
+  function ($filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Stashes, titleFactory, userService) {
     $scope.pageHeaderText = 'Stashes';
     titleFactory.set($scope.pageHeaderText);
 
@@ -921,7 +889,7 @@ controllerModule.controller('StashesController', ['$filter', 'filterService', 'h
     $scope.selected = {all: false, ids: {}};
 
     var updateFilters = function() {
-      var filtered = $filter('filter')($scope.stashes, {dc: $scope.filters.dc}, $scope.filterComparator);
+      var filtered = $filter('filter')($scope.stashes, {dc: $scope.filters.dc}, Helpers.equals);
       filtered = $filter('filter')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'stashes');
       $scope.filtered = filtered;
@@ -942,7 +910,7 @@ controllerModule.controller('StashesController', ['$filter', 'filterService', 'h
     // Filters
     $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc'], function(newValues, oldValues) {
       updateFilters();
-      helperService.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
+      Helpers.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
 
     // Routing
@@ -953,22 +921,23 @@ controllerModule.controller('StashesController', ['$filter', 'filterService', 'h
     });
 
     // Services
-    $scope.filterComparator = filterService.comparator;
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
-    $scope.selectAll = helperService.selectAll;
+    $scope.selectAll = Helpers.selectAll;
     $scope.user = userService;
-    $scope.deleteStash = function($event, id) {
+    $scope.delete = function($event, id) {
       $event.stopPropagation();
-      stashesService.deleteStash(id).then(function() {
-        $scope.filtered = $filter('filter')($scope.filtered, {_id: '!'+id});
-        $rootScope.skipOneRefresh = true;
-      });
+      Stashes.deleteSingle(id)
+        .then(function() {
+          $scope.filtered = Helpers.removeItemById(id, $scope.filtered);
+        }, function() {});
     };
-    $scope.deleteStashes = function() {
-      helperService.deleteItems(stashesService.deleteStash, $scope.filtered, $scope.selected).then(function(filtered){
-        $scope.filtered = filtered;
-      });
+
+    $scope.deleteMultiple = function() {
+      Stashes.deleteMultiple($scope.filtered, $scope.selected)
+        .then(function(results) {
+          $scope.filtered = results;
+        }, function() {});
     };
   }
 ]);
