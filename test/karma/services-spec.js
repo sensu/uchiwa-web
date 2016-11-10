@@ -5,13 +5,16 @@ describe('services', function () {
   var $scope;
   var $httpBackend;
   var mockNotification;
+  var mockRichOutputFilter;
 
   beforeEach(module('uchiwa'));
 
   beforeEach(function() {
     mockNotification = jasmine.createSpyObj('mockNotification', ['error', 'success']);
+    mockRichOutputFilter = jasmine.createSpy('richOutputFilter');
     module(function($provide) {
       $provide.value('Notification', mockNotification);
+      $provide.value('richOutputFilter', mockRichOutputFilter);
     });
   });
 
@@ -261,6 +264,100 @@ describe('services', function () {
       }));
     });
 
+    describe('findCheckHistory', function() {
+      it('returns the right check from the client history', inject(function (Clients) {
+        var history = [{check: 'foo', last_status: 0}, {check: 'bar', last_status: 1}];
+        var expectedCheck = {check: 'bar', last_status: 1};
+        Clients.findCheckHistory(history, 'bar')
+        .then(
+          function(check) {
+            expect(check).toEqual(expectedCheck);
+          }
+        );
+      }));
+
+      it('handles undefined arguments', inject(function (Clients) {
+        var err = jasmine.createSpy('err');
+        Clients.findCheckHistory(undefined, undefined).then(
+          function(){},
+          function() {
+            err();
+          }
+        );
+        $scope.$digest();
+        expect(err).toHaveBeenCalled();
+      }));
+    });
+
+    describe('findPanels', function() {
+      it('extracts iframes', inject(function (Clients) {
+        var lastResult = {
+          content: '<span class="iframe"><iframe width="100%" src="http://127.0.0.1"></iframe></span>',
+          foo: 'bar'
+        };
+        var expectedLastResult = {
+          foo: 'bar'
+        };
+        var expectedPanels = {content: lastResult.content};
+        Clients.findPanels(lastResult).then(
+          function(panels) {
+            expect(lastResult).toEqual(expectedLastResult);
+            expect(panels).toEqual(expectedPanels)
+          }
+        );
+        $scope.$digest();
+      }));
+
+
+      it('extracts images', inject(function (Clients) {
+        var lastResult = {
+          cat: '<img src="http://127.0.0.1/cat.gif">',
+          foo: 'bar'
+        };
+        var expectedLastResult = {
+          foo: 'bar'
+        };
+        var expectedPanels = {cat: lastResult.cat};
+        Clients.findPanels(lastResult).then(
+          function(panels) {
+            expect(lastResult).toEqual(expectedLastResult);
+            expect(panels).toEqual(expectedPanels)
+          }
+        );
+        $scope.$digest();
+      }));
+
+      it('does not extract from command', inject(function (Clients) {
+        var lastResult = {
+          command: '<img src="http://127.0.0.1/cat.gif">',
+          foo: 'bar'
+        };
+        var expectedLastResult = {
+          command: '<img src="http://127.0.0.1/cat.gif">',
+          foo: 'bar'
+        };
+        var expectedImages = {cat: '<img src="http://127.0.0.1/cat.gif">'};
+        Clients.findPanels(lastResult).then(
+          function(images) {
+            expect(lastResult).toEqual(expectedLastResult);
+          }
+        );
+        $scope.$digest();
+      }));
+
+      it('handles undefined arguments', inject(function (Clients) {
+        var err = jasmine.createSpy('err');
+        Clients.findPanels(null).then(
+          function(){},
+          function() {
+            err();
+          }
+        );
+        $scope.$digest();
+        expect(err).toHaveBeenCalled();
+      }));
+    });
+
     describe('resolveEvent', function () {
       it('calls the Events.resolve function', inject(function (Clients, Events) {
         spyOn(Events, 'resolve').and.callThrough();
@@ -269,11 +366,25 @@ describe('services', function () {
       }));
     });
 
-    describe('searchCheckHistory', function() {
-      it('returns the right check from the client history', inject(function (Clients) {
-        var history = [{check: 'foo', last_status: 0}, {check: 'bar', last_status: 1}];
-        var expectedCheck = {check: 'bar', last_status: 1};
-        expect(Clients.searchCheckHistory('bar', history)).toEqual(expectedCheck);
+    describe('richOutput', function() {
+      it('calls the richOutput filter', inject(function (Clients) {
+        var lastResult = {foo: 123456789, bar: 'qux'};
+        Clients.richOutput(lastResult);
+        $scope.$digest();
+        expect(mockRichOutputFilter).toHaveBeenCalledWith(123456789);
+        expect(mockRichOutputFilter).toHaveBeenCalledWith('qux');
+      }));
+
+      it('handles undefined arguments', inject(function (Clients) {
+        var err = jasmine.createSpy('err');
+        Clients.richOutput(null).then(
+          function(){},
+          function() {
+            err();
+          }
+        );
+        $scope.$digest();
+        expect(err).toHaveBeenCalled();
       }));
     });
 

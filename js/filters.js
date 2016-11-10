@@ -292,7 +292,8 @@ filterModule.filter('richOutput', ['$filter', '$sce', '$sanitize', '$interpolate
         output = text;
       }
     } else if (typeof text === 'number' || typeof text === 'boolean') {
-      output = text.toString();
+      output = $filter('getTimestamp')(text);
+      output = output.toString();
     } else if (/^iframe:/.test(text)) {
       var iframeSrc = $sanitize(text.replace(/^iframe:/, ''));
       var exp = $interpolate('<span class="iframe"><iframe width="100%" src="{{iframeSrc}}"></iframe></span>')({ 'iframeSrc': iframeSrc });

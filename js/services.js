@@ -208,8 +208,8 @@ function (Helpers, Notification, $q, $resource, Silenced) {
 /**
 * Clients Services
 */
-serviceModule.service('Clients', ['Events', 'Helpers', '$location', 'Notification', '$q', '$resource', 'Results', '$rootScope', 'Silenced',
-function (Events, Helpers, $location, Notification, $q, $resource, Results, $rootScope, Silenced) {
+serviceModule.service('Clients', ['Events', '$filter', 'Helpers', '$location', 'Notification', '$q', '$resource', 'Results', '$rootScope', 'Silenced',
+function (Events, $filter, Helpers, $location, Notification, $q, $resource, Results, $rootScope, Silenced) {
   var Clients = $resource('/clients/:name/:history',
     {name: '@name', history: '@history'}
   );
@@ -247,13 +247,50 @@ function (Events, Helpers, $location, Notification, $q, $resource, Results, $roo
       }
     );
   };
+  // findCheckHistory returns a specific check from the client's history
+  this.findCheckHistory = function(history, name) {
+    var deferred = $q.defer();
+    if (angular.isUndefined(history) || angular.isUndefined(name)) {
+      deferred.reject();
+    }
+    else {
+      deferred.resolve(history.filter(function(item) {
+        return item.check === name;
+      })[0]);
+    }
+    return deferred.promise;
+  };
+  // findPanels extracts iframes & images from the lastResult hash to their own hash
+  this.findPanels = function(lastResult) {
+    if (angular.isUndefined(lastResult) || lastResult === null) {
+      return $q.reject();
+    }
+    var promises = {};
+    angular.forEach(lastResult, function(value, key) {
+      // Issue 558: do not move an image from the command attribute to its own box
+      if (key === 'command') {
+        return true;
+      }
+      if (/<img src=/.test(value) || /<span class="iframe">/.test(value)) {
+        promises[key] = value;
+        delete lastResult[key];
+      }
+    });
+    return $q.all(promises);
+  };
   this.resolveEvent = function(id) {
     return Events.resolveSingle(id);
   };
-  this.searchCheckHistory = function(name, history) {
-    return history.filter(function (item) {
-      return item.check === name;
-    })[0];
+  // richOutput applies rich HTML to the lastResult attributes
+  this.richOutput = function(lastResult) {
+    if (angular.isUndefined(lastResult) || lastResult === null) {
+      return $q.reject();
+    }
+    var promises = {};
+    angular.forEach(lastResult, function(value, key) {
+      promises[key] = $filter('richOutput')(value);
+    });
+    return $q.all(promises);
   };
   this.silence = function(filtered, selected) {
     var itemsToSilence = Helpers.getSelected(filtered, selected);

@@ -193,64 +193,39 @@ controllerModule.controller('ClientController', ['Clients', '$filter', '$locatio
   function (Clients, $filter, $location, $routeParams, routingService, $scope, Sensu, titleFactory, userService) {
     $scope.predicate = '-last_status';
     $scope.reverse = false;
+    $scope.check = null;
+    $scope.images = null;
 
     // Routing
     $scope.clientName = decodeURI($routeParams.client);
     $scope.dc = decodeURI($routeParams.dc);
 
-    var searchCheckHistory = Clients.searchCheckHistory;
-
     // Get check
-    $scope.check = null;
-    var checkName = null;
-    // return the events or the client's history
     var getCheck = function() {
-      if (!$scope.client || !$scope.client.name) {
-        return;
-      }
-
-      if (angular.isDefined($routeParams.check)) {
-        checkName = $routeParams.check;
-        var check = searchCheckHistory(checkName, $scope.client.history);
-        if (!check) {
-          return;
-        }
-
-        if (angular.isDefined(check.last_result)) { // jshint ignore:line
-          check.last_result.history = check.history; // jshint ignore:line
-        }
-
-        // apply filters
-        var images = [];
-        angular.forEach(check.last_result, function(value, key) { // jshint ignore:line
-          value = $filter('getTimestamp')(value);
-
-          // Issue 558: do not move an image from the command attribute to its own box
-          if (key !== 'command') {
-            value = $filter('richOutput')(value);
-          }
-
-          if (/<img src=/.test(value)) {
-            var obj = {};
-            obj.key = key;
-            obj.value = value;
-            images.push(obj);
-            delete check.last_result[key]; // jshint ignore:line
-          } else {
-            check.last_result[key] = value; // jshint ignore:line
-          }
-        });
-        $scope.images = images;
-
+      Clients.findCheckHistory($scope.client.history, $routeParams.check)
+      .then(function(check) {
+        // Add the history to the last_result hash
+        check.last_result.history = check.history; // jshint ignore:line
         $scope.check = check;
-        titleFactory.set(check.check + ' - ' + $scope.client.name);
-      }
-      else {
-        $scope.check = null;
-        $scope.images = null;
-        checkName = null;
+        titleFactory.set(check.check + ': ' + $scope.client.name);
+        return Clients.richOutput(check.last_result); // jshint ignore:line
+      }, function() {
+        // If we have an error with findCheckHistory
         titleFactory.set($scope.client.name);
-      }
+        $scope.check = null;
+      }).then(function(lastResult) {
+        $scope.lastResult = lastResult;
+        return Clients.findPanels($scope.lastResult);
+      }, function() {
+        // If we have an error with richOutput
+        $scope.check = null;
+        $scope.lastResult = null;
+      }).then(function(images) {
+        $scope.images = images;
+      }, function() {
+        // If we have an error with findPanels
+        $scope.images = null;
+      });
     };
 
     // Get client
@@ -274,9 +249,6 @@ controllerModule.controller('ClientController', ['Clients', '$filter', '$locatio
       Sensu.cleanClient();
     });
 
-    $scope.$on('$routeChangeSuccess', function(){
-      getCheck();
-    });
     $scope.$on('$routeUpdate', function(){
       getCheck();
     });
