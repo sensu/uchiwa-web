@@ -65,7 +65,7 @@
                 <silence-icon silenced="check.silenced" ng-click="silence($event, check)" ng-if="!user.isReadOnly()"></silence-icon>
               </td>
               <td class="main" >{{ check.check }}</td>
-              <td class="check-output">{{ check.last_result.output }}</td>
+              <td class="check-output">{{ lastResult.output }}</td>
               <td><relative-time timestamp="check.last_execution"></relative-time></td>
             </tr>
           </tbody>
@@ -96,7 +96,7 @@
 
           <!--list of key - value-->
           <div>
-            <div ng-repeat="(key, value) in check.last_result">
+            <div ng-repeat="(key, value) in lastResult">
               <div class="row">
                 <div class="col-xs-3">
                   <span class="key pull-right">{{key}}</span>
@@ -112,14 +112,14 @@
       </div>
 
       <!--Check images-->
-      <div class="panel panel-default check-info" ng-if="check" ng-repeat="image in images">
+      <div class="panel panel-default check-info" ng-if="check" ng-repeat="(key, value) in images">
         <div class="panel-body">
           <div class="row">
             <div class="col-xs-12">
               <div class="panel-title">
-                {{image.key}}
+                {{key}}
               </div>
-              <span class="value" ng-bind-html="image.value"></span>
+              <span class="value" ng-bind-html="value"></span>
             </div>
           </div>
         </div>

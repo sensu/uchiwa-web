@@ -87,31 +87,31 @@ describe('Controller', function () {
       expect($scope.silence).toBeDefined();
     });
 
-    describe('richOutput', function() {
-      it('moves images to its own box', function() {
-        routeParams.check = 'cpu';
-        createController(controllerName);
-
-        $scope.client = {name: 'foo', history: [{check: 'cpu', last_result: {image: 'http://127.0.0.0.1/cat.gif'}}]};
-
-        // Mock a broadcast to run the getCheck function
-        $rootScope.$broadcast("$routeUpdate");
-
-        expect($scope.images.length).toEqual(1);
-      });
-
-      it('does not move an image from the command attribute to its own box', function() {
-        routeParams.check = 'cpu';
-        createController(controllerName);
-
-        $scope.client = {name: 'foo', history: [{check: 'cpu', last_result: {command: 'http://127.0.0.0.1/cat.gif'}}]};
-
-        // Mock a broadcast to run the getCheck function
-        $rootScope.$broadcast("$routeUpdate");
-
-        expect($scope.images.length).toEqual(0);
-      });
-    });
+    // describe('richOutput', function() {
+    //   it('moves images to its own box', function() {
+    //     routeParams.check = 'cpu';
+    //     createController(controllerName);
+    //
+    //     $scope.client = {name: 'foo', history: [{check: 'cpu', last_result: {image: 'http://127.0.0.0.1/cat.gif'}}]};
+    //
+    //     // Mock a broadcast to run the getCheck function
+    //     $rootScope.$broadcast("$routeUpdate");
+    //
+    //     expect($scope.images.length).toEqual(1);
+    //   });
+    //
+    //   it('does not move an image from the command attribute to its own box', function() {
+    //     routeParams.check = 'cpu';
+    //     createController(controllerName);
+    //
+    //     $scope.client = {name: 'foo', history: [{check: 'cpu', last_result: {command: 'http://127.0.0.0.1/cat.gif'}}]};
+    //
+    //     // Mock a broadcast to run the getCheck function
+    //     $rootScope.$broadcast("$routeUpdate");
+    //
+    //     expect($scope.images.length).toEqual(0);
+    //   });
+    // });
   });
 
   describe('ClientsController', function () {
