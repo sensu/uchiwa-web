@@ -289,10 +289,46 @@ describe('services', function () {
       }));
     });
 
-    describe('findImages', function() {
-      it('extracts images from the last_result hash to a new hash', inject(function (Clients) {
+    describe('findPanels', function() {
+      it('extracts iframes', inject(function (Clients) {
+        var lastResult = {
+          content: '<span class="iframe"><iframe width="100%" src="http://127.0.0.1"></iframe></span>',
+          foo: 'bar'
+        };
+        var expectedLastResult = {
+          foo: 'bar'
+        };
+        var expectedPanels = {content: lastResult.content};
+        Clients.findPanels(lastResult).then(
+          function(panels) {
+            expect(lastResult).toEqual(expectedLastResult);
+            expect(panels).toEqual(expectedPanels)
+          }
+        );
+        $scope.$digest();
+      }));
+
+
+      it('extracts images', inject(function (Clients) {
         var lastResult = {
           cat: '<img src="http://127.0.0.1/cat.gif">',
+          foo: 'bar'
+        };
+        var expectedLastResult = {
+          foo: 'bar'
+        };
+        var expectedPanels = {cat: lastResult.cat};
+        Clients.findPanels(lastResult).then(
+          function(panels) {
+            expect(lastResult).toEqual(expectedLastResult);
+            expect(panels).toEqual(expectedPanels)
+          }
+        );
+        $scope.$digest();
+      }));
+
+      it('does not extract from command', inject(function (Clients) {
+        var lastResult = {
           command: '<img src="http://127.0.0.1/cat.gif">',
           foo: 'bar'
         };
@@ -301,10 +337,9 @@ describe('services', function () {
           foo: 'bar'
         };
         var expectedImages = {cat: '<img src="http://127.0.0.1/cat.gif">'};
-        Clients.findImages(lastResult).then(
+        Clients.findPanels(lastResult).then(
           function(images) {
             expect(lastResult).toEqual(expectedLastResult);
-            expect(images).toEqual(expectedImages)
           }
         );
         $scope.$digest();
@@ -312,7 +347,7 @@ describe('services', function () {
 
       it('handles undefined arguments', inject(function (Clients) {
         var err = jasmine.createSpy('err');
-        Clients.findImages(null).then(
+        Clients.findPanels(null).then(
           function(){},
           function() {
             err();

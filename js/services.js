@@ -260,8 +260,8 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
     }
     return deferred.promise;
   };
-  // findImages extracts images from the lastResult hash to their own hash
-  this.findImages = function(lastResult) {
+  // findPanels extracts iframes & images from the lastResult hash to their own hash
+  this.findPanels = function(lastResult) {
     if (angular.isUndefined(lastResult) || lastResult === null) {
       return $q.reject();
     }
@@ -271,7 +271,7 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
       if (key === 'command') {
         return true;
       }
-      if (/<img src=/.test(value)) {
+      if (/<img src=/.test(value) || /<span class="iframe">/.test(value)) {
         promises[key] = value;
         delete lastResult[key];
       }

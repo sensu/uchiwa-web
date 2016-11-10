@@ -215,7 +215,7 @@ controllerModule.controller('ClientController', ['Clients', '$filter', '$locatio
         $scope.check = null;
       }).then(function(lastResult) {
         $scope.lastResult = lastResult;
-        return Clients.findImages($scope.lastResult);
+        return Clients.findPanels($scope.lastResult);
       }, function() {
         // If we have an error with richOutput
         $scope.check = null;
@@ -223,7 +223,7 @@ controllerModule.controller('ClientController', ['Clients', '$filter', '$locatio
       }).then(function(images) {
         $scope.images = images;
       }, function() {
-        // If we have an error with findImages
+        // If we have an error with findPanels
         $scope.images = null;
       });
     };
