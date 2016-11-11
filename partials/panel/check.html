@@ -12,7 +12,7 @@
         All Checks
       </a>
     </li>
-    <li ng-repeat="(check, count) in events | buildEventCount" ng-class="{selected: filters.check == check}">
+    <li ng-repeat="(check, count) in events | filter:{dc:filters.dc} | buildEventCount" ng-class="{selected: filters.check == check}">
       <a href="" ng-click="permalink($event, 'check', check)">
         <i class="fa fa-slack"></i>
           {{check}} ({{count}})
