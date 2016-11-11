@@ -29,14 +29,15 @@
 
         <!--panel-body-->
         <div class="panel-body">
-          <table class="table table-hover table-condensed">
+          <table class="table table-hover table-condensed" style="table-layout: fixed;">
             <thead>
               <tr>
-                <th ng-if="!user.isReadOnly()">
+                <th ng-class="user.isReadOnly() ? 'col-min-ro' : 'col-min'">
                   <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
-                <th ng-click="predicate = 'id'; reverse=!reverse">ID <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
+                <th class="col-sm-3" ng-click="predicate = 'id'; reverse=!reverse">ID <i class="fa fa-sort"></i></th>
+                <th class="col-dc" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
+                <th class="col-sm-5" ng-click="predicate = 'reason'; reverse=!reverse"><i class="fa fa-commenting-o" tooltip-placement="top" tooltip-trigger uib-tooltip="Reason"></i> <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'creator'; reverse=!reverse"><i class="fa fa-user" tooltip-placement="top" tooltip-trigger uib-tooltip="Creator"></i> <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'expire_on_resolve'; reverse=!reverse"><i class='fa fa-calendar-check-o' tooltip-placement="top" tooltip-trigger uib-tooltip="Expire on Resolve"></i> <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'expire'; reverse=!reverse"><i class='fa fa-hourglass-end' tooltip-placement="top" tooltip-trigger uib-tooltip="Expiration"></i> <i class="fa fa-sort"></i></th>
@@ -50,8 +51,8 @@
                 <td class="main">
                   <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="delete($event, entry._id);"></i></span>{{ entry.id }}
                 </td>
-                <td>{{ entry.reason }}</td>
                 <td class="dc">{{ entry.dc }}</td>
+                <td class="output" ng-bind-html="entry.reason"></td>
                 <td>
                   {{ entry.creator }}
                   <span ng-if="entry.creator === null">N/A</span>
