@@ -357,12 +357,6 @@ controllerModule.controller('DatacentersController', ['$scope', 'Sensu', 'titleF
   function ($scope, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Datacenters';
     titleFactory.set($scope.pageHeaderText);
-
-    // Get health and metrics
-    var timer = Sensu.updateMetrics();
-    $scope.$on('$destroy', function() {
-      Sensu.stop(timer);
-    });
   }
 ]);
 
@@ -464,12 +458,6 @@ controllerModule.controller('InfoController', ['backendService', '$scope', 'Sens
     titleFactory.set($scope.pageHeaderText);
 
     $scope.uchiwa = { version: version.uchiwa };
-
-    // Get health and metrics
-    var timer = Sensu.updateMetrics();
-    $scope.$on('$destroy', function() {
-      Sensu.stop(timer);
-    });
   }
 ]);
 
@@ -553,20 +541,14 @@ controllerModule.controller('SettingsController', ['$cookies', '$scope', 'Sensu'
     $scope.$watch('currentTheme', function (theme) {
       $scope.$emit('theme:changed', theme);
     });
-
-    // Get health and metrics
-    var timer = Sensu.updateMetrics();
-    $scope.$on('$destroy', function() {
-      Sensu.stop(timer);
-    });
   }
 ]);
 
 /**
 * Sidebar
 */
-controllerModule.controller('SidebarController', ['$location', '$rootScope', '$sce', '$scope', 'userService',
-  function ($location, $rootScope, $sce, $scope, userService) {
+controllerModule.controller('SidebarController', ['$location', '$rootScope', '$scope', 'Sensu', 'Sidebar', 'userService',
+  function ($location, $rootScope, $scope, Sensu, Sidebar, userService) {
     // Get CSS class for sidebar elements
     $scope.getClass = function(path) {
       if ($location.path().substr(0, path.length) === path) {
@@ -576,7 +558,31 @@ controllerModule.controller('SidebarController', ['$location', '$rootScope', '$s
       }
     };
 
+    // Get health
+    var health = Sensu.updateHealth();
+    $scope.$watch(function () { return Sensu.getHealth(); }, function (result) {
+      if (angular.isObject(result)) {
+        $scope.health = result;
+        $scope.alerts = Sidebar.getAlerts(result);
+      }
+    });
+    $scope.$on('$destroy', function() {
+      Sensu.stop(health);
+    });
+
+    // Get metrics
+    var metrics = Sensu.updateMetrics();
+    $scope.$watch(function () { return Sensu.getMetrics(); }, function (result) {
+      if (angular.isObject(result)) {
+        $scope.metrics = result;
+      }
+    });
+    $scope.$on('$destroy', function() {
+      Sensu.stop(metrics);
+    });
+
     $scope.popoversTemplates = {
+      alerts: $rootScope.partialsPath + '/popovers/alerts.html',
       aggregates: $rootScope.partialsPath + '/popovers/aggregates.html',
       checks: $rootScope.partialsPath + '/popovers/checks.html',
       clients: $rootScope.partialsPath + '/popovers/clients.html',
@@ -687,12 +693,6 @@ controllerModule.controller('SilencedEntryController', ['Helpers', '$routeParams
         $scope.entry = Helpers.findIdInItems($scope.id, results);
       }
     );
-
-    // Get health and metrics
-    var timer = Sensu.updateMetrics();
-    $scope.$on('$destroy', function() {
-      Sensu.stop(timer);
-    });
 
     $scope.delete = function($event, id) {
       $event.stopPropagation();
@@ -838,12 +838,6 @@ controllerModule.controller('StashController', [ 'backendService', '$filter', '$
           console.error(JSON.stringify(error));
         }
       });
-
-    // Get health and metrics
-    var timer = Sensu.updateMetrics();
-    $scope.$on('$destroy', function() {
-      Sensu.stop(timer);
-    });
   }
 ]);
 

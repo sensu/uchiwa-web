@@ -118,31 +118,10 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
       return $http.get('events');
     };
     this.getHealth = function() {
-      $http.get('health')
-        .success(function(data) {
-          $rootScope.health = data;
-        })
-        .error(function(error) {
-          $rootScope.$emit('notification', 'error', errorRefresh);
-          if (error !== null) {
-            console.error(JSON.stringify(error));
-          }
-        });
+      return $http.get('health');
     };
     this.getMetrics = function() {
-      $http.get('metrics')
-        .success(function(data) {
-          $rootScope.metrics = data;
-        })
-        .error(function(error) {
-          $rootScope.$emit('notification', 'error', errorRefresh);
-          if (error !== null) {
-            console.error(JSON.stringify(error));
-          }
-          if (angular.isUndefined($rootScope.metrics)) {
-            $rootScope.metrics = {aggregates: {total: 0}, checks: {total: 0}, clients: {critical: 0, total: 0, unknown: 0, warning: 0}, datacenters: {total: 0}, events: {critical: 0, total: 0, unknown: 0, warning: 0}, silenced: {total: 0}, stashes: {total: 0}};
-          }
-        });
+      return $http.get('metrics');
     };
     this.getSEMetrics = function(endpoint) {
       return $http.get('metrics/'+endpoint);
@@ -423,6 +402,30 @@ serviceModule.service('routingService', ['$location', function ($location) {
     }
   };
 }]);
+
+/**
+* Sidebar
+*/
+serviceModule.service('Sidebar', function () {
+  this.getAlerts = function(health) {
+    var alerts = [];
+    if (angular.isDefined(health) && angular.isObject(health)) {
+      if (angular.isObject(health.sensu)) {
+        angular.forEach(health.sensu, function(value, key) {
+          if (value.status !== 0) {
+            alerts.push('Datacenter <strong>' + key + '</strong> returned: <em>' + value.output + '</em>');
+          }
+        });
+      } else {
+        alerts.push(health.uchiwa);
+      }
+
+    } else {
+      console.error('Unexpected health object: ' + JSON.stringify(health));
+    }
+    return alerts;
+  };
+});
 
 /**
 * Silenced
