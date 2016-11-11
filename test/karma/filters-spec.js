@@ -306,6 +306,68 @@ describe('filters', function () {
     }));
   });
 
+  describe('regex', function () {
+    it('returns all items if the query is empty', inject(function (regexFilter) {
+      var items = [{foo: 'bar'}];
+      expect(regexFilter(items, '')).toEqual(items);
+    }));
+
+    it('performs a simple search with a value', inject(function (regexFilter) {
+      var items = [
+        {foo: 'bar'},
+        {qux: 'bar'},
+        {baz: 'foo'}
+      ];
+      expect(regexFilter(items, 'bar')).toEqual([items[0], items[1]]);
+    }));
+
+    it('performs a simple search with a key-value', inject(function (regexFilter) {
+      var items = [
+        {foo: 'bar'},
+        {qux: 'bar'},
+        {baz: 'foo'}
+      ];
+      expect(regexFilter(items, 'foo:bar')).toEqual([items[0]]);
+    }));
+
+    it('performs a regex search with a value', inject(function (regexFilter) {
+      var items = [
+        {foo: 'canada'},
+        {bar: 'vatican'},
+        {qux: 'cameroon'}
+      ];
+      expect(regexFilter(items, 'can+')).toEqual([items[0], items[1]]);
+    }));
+
+    it('performs a regex search with a value within an object of an object', inject(function (regexFilter) {
+      var items = [
+        {foo: 'canada'},
+        {foo: {baz: 'vatican'}},
+        {qux: {baz: 'cameroon'}}
+      ];
+      expect(regexFilter(items, 'can+')).toEqual([items[0], items[1]]);
+    }));
+
+    it('performs a regex search with a key-value', inject(function (regexFilter) {
+      var items = [
+        {foo: 'canada'},
+        {foo: 'vatican'},
+        {foo: 'cameroon'}
+      ];
+      expect(regexFilter(items, 'foo:can*')).toEqual(items);
+      expect(regexFilter(items, 'foo:can+')).toEqual([items[0], items[1]]);
+      expect(regexFilter(items, 'foo:^can')).toEqual([items[0]]);
+    }));
+
+    it('performs a search within an array', inject(function (regexFilter) {
+      var items = [
+        {foo: ['foo', 'bar']},
+        {foo: ['foo', 'baz']}
+      ];
+      expect(regexFilter(items, 'foo:bar')).toEqual([items[0]]);
+    }));
+  });
+
   describe('richOutput', function () {
     it('handles bogus values', inject(function (richOutputFilter) {
       expect(richOutputFilter(null)).toBe('');
