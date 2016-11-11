@@ -50,6 +50,7 @@
                 <td class="main">
                   <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="delete($event, entry._id);"></i></span>{{ entry.id }}
                 </td>
+                <td>{{ entry.reason }}</td>
                 <td class="dc">{{ entry.dc }}</td>
                 <td>
                   {{ entry.creator }}
