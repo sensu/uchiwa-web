@@ -5,7 +5,7 @@
         <li class="logo"></li>
         <li ng-if="enterprise " ng-class="getClass('/hud')" >
           <a ng-href="#hud">
-            <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="HUD">
+            <span class="small-nav" tooltip-placement="right" tooltip-trigger uib-tooltip="HUD">
               <i class="fa fa-tachometer"></i>
             </span>
           </a>
@@ -100,7 +100,7 @@
        </li> -->
         <li ng-if="enterprise && config.Uchiwa.Auth === 'sql' && user.isAdmin()" ng-class="getClass('/users')" >
           <a ng-href="#users">
-            <span class="small-nav" tooltip-placement="right" tooltip-trigger tooltip="Users">
+            <span class="small-nav" tooltip-placement="right" tooltip-trigger uib-tooltip="Users">
               <i class="fa fa-users"></i>
             </span>
           </a>

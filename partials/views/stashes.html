@@ -34,9 +34,9 @@
                   <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
                 <th ng-click="predicate = 'path'; reverse=!reverse">Path <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'content.timestamp'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger tooltip="Created"></i> <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'expire'; reverse=!reverse"><i class='fa fa-hourglass-end' tooltip-placement="top" tooltip-trigger tooltip="Expiration"></i> <i class="fa fa-sort"></i></th>
+                <th ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
+                <th ng-click="predicate = 'content.timestamp'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger uib-tooltip="Created"></i> <i class="fa fa-sort"></i></th>
+                <th ng-click="predicate = 'expire'; reverse=!reverse"><i class='fa fa-hourglass-end' tooltip-placement="top" tooltip-trigger uib-tooltip="Expiration"></i> <i class="fa fa-sort"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -49,7 +49,7 @@
                 </td>
                 <td class="dc">{{ stash.dc }}</td>
                 <td>
-                  <relative-time timestamp="stash.content.timestamp" tooltip-placement="top" tooltip-trigger tooltip="{{stash.content.timestamp | getTimestamp}}"></relative-time>
+                  <relative-time timestamp="stash.content.timestamp" tooltip-placement="top" tooltip-trigger uib-tooltip="{{stash.content.timestamp | getTimestamp}}"></relative-time>
                 </td>
                 <td>{{ stash.expire | getExpirationTimestamp }}</td>
               </tr>
