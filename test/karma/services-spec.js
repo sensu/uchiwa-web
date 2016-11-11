@@ -89,32 +89,6 @@ describe('services', function () {
     });
   });
 
-  describe('backendService', function () {
-    describe('getHealth', function() {
-      it('emit a signal when health endpoint is down', inject(function(backendService) {
-        spyOn($rootScope, "$emit");
-        $httpBackend.expect('GET', 'health').respond(500, 'Error 500');
-        backendService.getHealth();
-        $httpBackend.flush();
-        expect($rootScope.$emit).toHaveBeenCalledWith('notification', 'error', 'Uchiwa is having trouble updating its data. Try to refresh the page if this issue persists.');
-
-      }));
-
-      it('emit a signal when metrics endpoint is down', inject(function(backendService) {
-        spyOn($rootScope, "$emit");
-        $httpBackend.expect('GET', 'metrics').respond(500, 'Error 500');
-        backendService.getMetrics();
-        $httpBackend.flush();
-        expect($rootScope.$emit).toHaveBeenCalledWith('notification', 'error', 'Uchiwa is having trouble updating its data. Try to refresh the page if this issue persists.');
-
-      }));
-      afterEach(function() {
-        $httpBackend.verifyNoOutstandingExpectation()
-        $httpBackend.verifyNoOutstandingRequest()
-      })
-    });
-  });
-
   describe('Checks', function () {
     describe('issueCheckRequest', function() {
       it('sends a POST check request', inject(function (Checks) {
@@ -535,6 +509,40 @@ describe('services', function () {
     });
   });
 
+  describe('Sidebar', function () {
+    describe('getAlerts', function() {
+      it('finds unhealty datacenters', inject(function (Sidebar) {
+        var health = {
+          sensu: {
+            foo: {status: 0},
+            bar: {output: 'foobar', status: 2}
+          },
+          uchiwa: 'ok'
+        };
+
+        expect(Sidebar.getAlerts(health).length).not.toEqual(0);
+      }));
+
+      it('returns an empty array if no error', inject(function (Sidebar) {
+        var health = {sensu: { foo: {status: 0}}, uchiwa: 'ok'};
+        expect(Sidebar.getAlerts(health).length).toEqual(0);
+      }));
+
+      it('returns an error with Uchiwa API', inject(function (Sidebar) {
+        var health = {sensu: null, uchiwa: 'foobar'};
+        expect(Sidebar.getAlerts(health)).toEqual([health.uchiwa]);
+      }));
+
+      it('handles bad argument', inject(function (Sidebar) {
+        var health = undefined;
+        expect(Sidebar.getAlerts(health).length).toEqual(0);
+
+        health = 'foo';
+        expect(Sidebar.getAlerts(health).length).toEqual(0);
+      }));
+    });
+  });
+
   describe('Silenced', function () {
     describe('clearEntries', function() {
       it('delete multiple silence entries', inject(function (Silenced) {
@@ -873,7 +881,6 @@ describe('services', function () {
       }));
     });
   });
-
 
   describe('underscore', function () {
     it('should define _', inject(function (underscore) {
