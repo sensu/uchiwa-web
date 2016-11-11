@@ -76,7 +76,7 @@ controllerModule.controller('AggregatesController', ['Aggregates', '$filter', 'H
     // Filters
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.aggregates, {dc: $scope.filters.dc}, Helpers.equals);
-      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'aggregates');
       $scope.filtered = filtered;
     };
@@ -139,7 +139,7 @@ controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers',
 
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.checks, {dc: $scope.filters.dc}, Helpers.equals);
-      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'checks');
       $scope.filtered = filtered;
     };
@@ -293,7 +293,7 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
       var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, Helpers.equals);
       filtered = $filter('filter')(filtered, {status: $scope.filters.status});
       filtered = $filter('filterSubscriptions')(filtered, $scope.filters.subscription);
-      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'clients');
       $scope.filtered = filtered;
     };
@@ -387,7 +387,7 @@ controllerModule.controller('EventsController', ['Clients', 'conf', '$cookieStor
       filtered = $filter('hideClientsSilenced')(filtered, $scope.filters.clientsSilenced);
       filtered = $filter('hideOccurrences')(filtered, $scope.filters.occurrences);
       filtered = $filter('filter')(filtered, {check: {name: $scope.filters.check}});
-      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'events');
       $scope.filtered = filtered;
     };
@@ -617,7 +617,7 @@ controllerModule.controller('SilencedController', ['$filter', 'Helpers', '$route
 
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.silenced, {dc: $scope.filters.dc}, Helpers.equals);
-      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'silenced');
       $scope.filtered = filtered;
     };
@@ -862,7 +862,7 @@ controllerModule.controller('StashesController', ['$filter', 'Helpers', '$rootSc
 
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.stashes, {dc: $scope.filters.dc}, Helpers.equals);
-      filtered = $filter('filter')(filtered, $scope.filters.q);
+      filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'stashes');
       $scope.filtered = filtered;
     };

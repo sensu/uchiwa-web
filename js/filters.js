@@ -266,6 +266,50 @@ filterModule.filter('imagey', function() {
   };
 });
 
+filterModule.filter('regex', function() {
+  return function(items, query) {
+    var results = [];
+    var queries = query.split(':');
+    var pattern = '';
+
+    // If we only have a value, without a key
+    if (queries.length <= 1) {
+      pattern = new RegExp(query);
+      var testObject = function(obj) {
+        for (var k in obj) {
+          if (typeof obj[k] === 'object') {
+            if (testObject(obj[k])) {
+              return true;
+            }
+          }
+          if (pattern.test(obj[k])) {
+            return true;
+          }
+        }
+        return false;
+      };
+      // Retrieve all keys from an object
+      angular.forEach(items, function(item) {
+        if (testObject(item)) {
+          results.push(item);
+        }
+      });
+      return results;
+    }
+
+    // We have a key:value
+    var key = queries[0];
+    pattern = new RegExp(queries.slice(1).join());
+
+    for (var i = 0; i < items.length; i++) {
+      if (pattern.test(items[i][key])) {
+        results.push(items[i]);
+      }
+    }
+    return results;
+  };
+});
+
 filterModule.filter('relativeTimestamp', function() {
   return function(timestamp) {
     if (isNaN(timestamp) || timestamp.toString().length !== 10) {
