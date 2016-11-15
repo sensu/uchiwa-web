@@ -283,7 +283,6 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
   function (Clients, $filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, userService) {
     $scope.pageHeaderText = 'Clients';
     titleFactory.set($scope.pageHeaderText);
-
     $scope.predicate = ['-status', 'name'];
     $scope.reverse = false;
     $scope.selected = {all: false, ids: {}};
@@ -363,8 +362,8 @@ controllerModule.controller('DatacentersController', ['$scope', 'Sensu', 'titleF
 /**
 * Events
 */
-controllerModule.controller('EventsController', ['Clients', 'conf', '$cookieStore', 'Events', '$filter', 'Helpers', '$rootScope', '$routeParams','routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'userService',
-  function (Clients, conf, $cookieStore, Events, $filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, userService) {
+controllerModule.controller('EventsController', ['Clients', 'Events', '$filter', 'Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'UserConfig', 'userService',
+  function (Clients, Events, $filter, Helpers, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, UserConfig, userService) {
     $scope.pageHeaderText = 'Events';
     titleFactory.set($scope.pageHeaderText);
 
@@ -430,21 +429,21 @@ controllerModule.controller('EventsController', ['Clients', 'conf', '$cookieStor
     };
 
     // Hide silenced
-    $scope.filters.silenced = $cookieStore.get('hideSilenced') || conf.hideSilenced;
+    $scope.filters.silenced = UserConfig.get('hideSilencedChecks');
     $scope.$watch('filters.silenced', function () {
-      $cookieStore.put('hideSilenced', $scope.filters.silenced);
+      UserConfig.set('hideSilencedChecks', $scope.filters.silenced);
     });
 
     // Hide events from silenced clients
-    $scope.filters.clientsSilenced = $cookieStore.get('hideClientsSilenced') || conf.hideClientsSilenced;
+    $scope.filters.clientsSilenced = UserConfig.get('hideSilencedClients');
     $scope.$watch('filters.clientsSilenced', function () {
-      $cookieStore.put('hideClientsSilenced', $scope.filters.clientsSilenced);
+      UserConfig.set('hideSilencedClients', $scope.filters.clientsSilenced);
     });
 
     // Hide occurrences
-    $scope.filters.occurrences = $cookieStore.get('hideOccurrences') || conf.hideOccurrences;
+    $scope.filters.occurrences = UserConfig.get('hideBelowOccurrences');
     $scope.$watch('filters.occurrences', function () {
-      $cookieStore.put('hideOccurrences', $scope.filters.occurrences);
+      UserConfig.set('hideBelowOccurrences', $scope.filters.occurrences);
     });
   }
 ]);
@@ -452,20 +451,21 @@ controllerModule.controller('EventsController', ['Clients', 'conf', '$cookieStor
 /**
 * Info
 */
-controllerModule.controller('InfoController', ['backendService', '$scope', 'Sensu', 'titleFactory', 'version',
-  function (backendService, $scope, Sensu, titleFactory, version) {
+controllerModule.controller('InfoController', ['Config', '$scope', 'titleFactory', 'VERSION',
+  function (Config, $scope, titleFactory, VERSION) {
     $scope.pageHeaderText = 'Info';
     titleFactory.set($scope.pageHeaderText);
 
-    $scope.uchiwa = { version: version.uchiwa };
+    $scope.config = Config.get();
+    $scope.uchiwa = { version: VERSION.uchiwa };
   }
 ]);
 
 /**
 * Login
 */
-controllerModule.controller('LoginController', ['audit', 'backendService', '$cookieStore', '$location', '$rootScope', '$scope',
-function (audit, backendService, $cookieStore, $location, $rootScope, $scope) {
+controllerModule.controller('LoginController', ['audit', 'backendService', '$cookieStore', '$location', 'Notification', '$rootScope', '$scope',
+function (audit, backendService, $cookieStore, $location, Notification, $rootScope, $scope) {
 
   $scope.login = {user: '', pass: ''};
 
@@ -484,7 +484,6 @@ function (audit, backendService, $cookieStore, $location, $rootScope, $scope) {
       $cookieStore.put('uchiwa_auth', data);
       $rootScope.auth = {};
       $location.path('/events');
-      backendService.getConfig();
 
       if ($rootScope.enterprise) {
         var username = data.username;
@@ -495,11 +494,11 @@ function (audit, backendService, $cookieStore, $location, $rootScope, $scope) {
       }
     })
     .error(function () {
-      //notification('error', 'There was an error with your username/password combination. Please try again.');
+      Notification.error('There was an error with your username/password combination. Please try again');
     });
   };
 
-  if (angular.isObject($rootScope.auth) || angular.isObject($rootScope.config)) {
+  if (angular.isObject($rootScope.auth)) {
     $location.path('/events');
   }
 }
@@ -707,8 +706,8 @@ controllerModule.controller('SilencedEntryController', ['Helpers', '$routeParams
 /**
 * Silenced Modal
 */
-controllerModule.controller('SilencedModalController', ['backendService', 'conf', '$filter', 'Helpers', 'items', 'Notification', '$q', '$rootScope', '$scope', 'Sensu', 'Silenced', 'Subscriptions', '$uibModalInstance',
-  function (backendService, conf, $filter, Helpers, items, Notification, $q, $rootScope, $scope, Sensu, Silenced, Subscriptions, $uibModalInstance) {
+controllerModule.controller('SilencedModalController', ['backendService', 'Config', '$filter', 'Helpers', 'items', 'Notification', '$q', '$rootScope', '$scope', 'Sensu', 'Silenced', 'Subscriptions', '$uibModalInstance',
+  function (backendService, Config, $filter, Helpers, items, Notification, $q, $rootScope, $scope, Sensu, Silenced, Subscriptions, $uibModalInstance) {
     $scope.items = items;
     $scope.silencedCount = $filter('filter')(items, {silenced: true}).length;
     if (angular.isDefined(items[0])) {
@@ -718,7 +717,7 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
     }
 
     $scope.entries = [];
-    $scope.options = {ac: {}, expire: 900, reason: '', to: moment().add(1, 'h').format(conf.date)};
+    $scope.options = {ac: {}, expire: 900, reason: '', to: moment().add(1, 'h').format(Config.dateFormat())};
 
     // Get silenced entries
     Silenced.query().$promise.then(
@@ -736,7 +735,7 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
 
     $scope.ok = function() {
       if ($scope.options.expire === 'custom') {
-        if (angular.isUndefined($scope.options.to)) {
+        if (angular.isUndefined($scope.options.to) || $scope.options.to === '') {
           Notification.error('Please enter a date for the custom expiration.');
           return false;
         }
@@ -746,6 +745,10 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
       if ($scope.entries.length !== 0) {
         Silenced.clearEntries($scope.entries).then(
           function(results) {
+            if (results.length === 0) {
+              Notification.error('Please select at least one entry to clear');
+              return;
+            }
             $uibModalInstance.close();
             if (results.length === 1) {
               Notification.success('The silenced entry '+ results[0].id +' has been cleared');
@@ -766,20 +769,16 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
       // Silenced entries to create
       Silenced.createEntries(items, $scope.itemType, $scope.options).then(
         function(results) {
-          $uibModalInstance.close();
           if (results.length === 1) {
             Notification.success('The silenced entry has been created');
+            $uibModalInstance.close();
           } else if (results.length > 1) {
             Notification.success(results.length + ' silenced entries have been created');
+            $uibModalInstance.close();
           }
         },
         function(results) {
-          if (results.length === 1) {
-            Notification.error('Could not create the silenced entry ' + results[0].id );
-            return;
-          } else if (results.length > 1) {
-            Notification.error('Could not create all of the silenced entries');
-          }
+          Notification.error('Could not create the silenced entry. ' + results.data);
         }
       );
     };
@@ -804,6 +803,9 @@ controllerModule.controller('SilencedModalController', ['backendService', 'conf'
     $scope.autocompleteSubscription = {
       suggest: suggestSubscription
     };
+
+    // Services
+    $scope.Config = Config;
   }
 ]);
 

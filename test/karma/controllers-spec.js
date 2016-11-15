@@ -5,14 +5,17 @@ describe('Controller', function () {
   var $scope;
   var routeParams;
   var createController;
+  var mockConfig;
   var mockRoutingService;
 
   beforeEach(module('uchiwa'));
 
   beforeEach(function () {
+    mockConfig = jasmine.createSpyObj('Config', ['appName', 'refresh']);
     mockRoutingService = jasmine.createSpyObj('mockRoutingService', ['search', 'go', 'initFilters', 'permalink', 'updateFilters']);
 
     module(function ($provide) {
+      $provide.value('Config', mockConfig);
       $provide.value('routingService', mockRoutingService);
     });
   });
@@ -23,12 +26,11 @@ describe('Controller', function () {
     routeParams = {};
 
     createController = function (controllerName, properties) {
-      return $controller(controllerName, _.extend({
+      return $controller(controllerName, angular.extend({
         '$scope': $scope,
         $routeParams : routeParams
       }, properties));
     };
-    $httpBackend.whenGET('config').respond([]);
     $httpBackend.whenGET('health').respond([]);
     $httpBackend.whenGET('metrics').respond([]);
   }));

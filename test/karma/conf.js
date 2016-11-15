@@ -4,7 +4,6 @@ module.exports = function(config) {
     basePath : '../../',
     frameworks: ['jasmine'],
     files : [
-      'bower_components/underscore/underscore.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'bower_components/angular-cookies/angular-cookies.js',
@@ -12,7 +11,7 @@ module.exports = function(config) {
       'bower_components/angular-resource/angular-resource.js',
       'bower_components/angular-route/angular-route.js',
       'bower_components/angular-sanitize/angular-sanitize.js',
-      'bower_components/angular-toastr/dist/angular-toastr.min.js',
+      'bower_components/angular-toastr/dist/angular-toastr.tpls.min.js',
       'bower_components/moment/min/moment.min.js',
       'bower_components/angular-moment/angular-moment.js',
       'bower_components/highlightjs/highlight.pack.js',

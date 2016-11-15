@@ -5,9 +5,21 @@ describe('directives', function () {
   var $rootScope;
   var element;
   var scope;
+  var mockConfig;
 
   beforeEach(module('uchiwa'));
   beforeEach(module('partials'));
+
+  beforeEach(function() {
+    mockConfig = jasmine.createSpyObj('mockConfig', ['dateFormat', 'defaultTheme', 'logoURL']);
+    mockConfig.dateFormat.and.callFake(function() {return 'YYYY-MM-DD HH:mm:ss'});
+    mockConfig.defaultTheme.and.callFake(function() {return 'uchiwa-default'});
+    mockConfig.logoURL.and.callFake(function() {return 'http://127.0.0.1/foo.png'});
+    module(function($provide) {
+      $provide.value('Config', mockConfig);
+    });
+  });
+
   beforeEach(inject(function (_$compile_, _$rootScope_, $httpBackend) {
     $compile = _$compile_;
     $httpBackend.whenGET('config').respond([]);
@@ -26,7 +38,17 @@ describe('directives', function () {
 
       expect(scope.clientSummary).toEqual({version: '0.20.4'});
       expect(scope.clientImages[0].value).toBe('<a target="_blank" href="https://uchiwa.io/dashboard.jpg"><img src="https://uchiwa.io/dashboard.jpg"></a>');
-      expect(element.find('img').eq(0).attr('src')).toBe('https://uchiwa.io/dashboard.jpg')
+      expect(element.find('img').eq(0).attr('src')).toBe('https://uchiwa.io/dashboard.jpg');
+    });
+  });
+
+  describe('logoUrl', function() {
+    it('returns the default logo', function(){
+      scope = $rootScope.$new();
+      element = $compile('<logo-url></logo-url>')(scope);
+      scope.$digest();
+
+      expect(element.find('img').eq(0).attr('src')).toBe('http://127.0.0.1/foo.png');
     });
   });
 
@@ -42,7 +64,6 @@ describe('directives', function () {
     it('should define themes', inject(function (siteThemeDirective) {
       siteThemeDirective[0].link(scope, element);
       expect(scope.currentTheme).toBeDefined();
-      expect($rootScope.themes.length).toBeGreaterThan(0);
     }));
 
     it('should listen for theme:changed event', inject(function (siteThemeDirective) {
