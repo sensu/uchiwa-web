@@ -44,7 +44,7 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, 
 /**
 * Sensu Data
 */
-factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $rootScope) {
+factoryModule.factory('Sensu', function(backendService, Config, $interval, Notification, $q, $rootScope) {
   var sensu = {
     aggregate: null,
     aggregateChecks: [],
@@ -61,6 +61,8 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
     stashes: [],
     subscriptions: []
   };
+
+  var errorMessage = 'Unable to connect to '+ Config.appName() +'. Check your connectivity and refresh this page.';
 
   return {
     cleanAggregate: function() {
@@ -133,7 +135,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateAggregateChecks: function(name, dc) {
       var update = function() {
@@ -148,7 +150,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateAggregateClients: function(name, dc) {
       var update = function() {
@@ -163,7 +165,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateAggregateResults: function(name, severity, dc) {
       var update = function() {
@@ -178,7 +180,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateAggregates: function() {
       var update = function() {
@@ -193,7 +195,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateChecks: function() {
       var update = function() {
@@ -208,7 +210,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateClient: function(client, dc) {
       var update = function() {
@@ -230,7 +232,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
         });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateClients: function() {
       var update = function() {
@@ -249,7 +251,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateEvents: function() {
       var update = function() {
@@ -268,7 +270,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateHealth: function() {
       var update = function() {
@@ -282,12 +284,12 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
               sensu.health = result.data;
               return;
             }
-            sensu.health = {uchiwa: 'Unable to connect to Uchiwa API. Check your connectivity or the Uchiwa service'};
+            sensu.health = {uchiwa: errorMessage};
           }
         );
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateMetrics: function() {
       var update = function() {
@@ -295,11 +297,14 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
         .then(
           function(result) {
             sensu.metrics = result.data;
+          },
+          function() {
+            Notification.error(errorMessage);
           }
         );
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateSilenced: function() {
       var update = function() {
@@ -318,7 +323,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateStashes: function() {
       var update = function() {
@@ -337,7 +342,7 @@ factoryModule.factory('Sensu', function(backendService, conf, $interval, $q, $ro
           });
       };
       update();
-      return $interval(update, conf.refresh);
+      return $interval(update, Config.refresh());
     },
     updateSubscriptions: function() {
       backendService.getSubscriptions()

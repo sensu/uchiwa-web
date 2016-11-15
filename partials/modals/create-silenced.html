@@ -31,7 +31,7 @@
     <label class="btn btn-xs btn-default" ng-model="options.expire" uib-btn-radio="3600">1 hour</label>
     <label class="btn btn-xs btn-default" ng-model="options.expire" uib-btn-radio="86400">24 hours</label>
     <label class="btn btn-xs btn-default" ng-model="options.expire" uib-btn-radio="'custom'">Custom</label>
-    <label class="btn btn-xs btn-default" ng-model="options.expire" uib-btn-radio="-1" ng-hide="config.Uchiwa.UserOptions.DisableNoExpiration">No expiration</label>
+    <label class="btn btn-xs btn-default" ng-model="options.expire" uib-btn-radio="-1" ng-hide="Config.disableNoExpiration()">No expiration</label>
   </div>
 
   <div ng-show="options.expire === 'custom'">
@@ -43,7 +43,7 @@
   <div style="clear:both">
     <div class="checkbox">
       <label>
-        <input type="checkbox" ng-model="options.expire_on_resolve" ng-init="options.expire_on_resolve=config.Uchiwa.UserOptions.ExpireOnResolveDefault"> Expire on Resolve
+        <input type="checkbox" ng-model="options.expire_on_resolve" ng-init="options.expire_on_resolve=Config.defaultExpireOnResolve()"> Expire on Resolve
       </label>
     </div>
   </div>

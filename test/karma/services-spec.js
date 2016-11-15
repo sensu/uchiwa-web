@@ -4,17 +4,31 @@ describe('services', function () {
   var $rootScope;
   var $scope;
   var $httpBackend;
+  var mockCookieStore;
   var mockNotification;
   var mockRichOutputFilter;
 
   beforeEach(module('uchiwa'));
 
   beforeEach(function() {
+    mockCookieStore = jasmine.createSpyObj('mockCookieStore', ['get', 'put']);
+    mockCookieStore.get.and.callFake(function(key) {return (key === '') ? false : 'foo' });
     mockNotification = jasmine.createSpyObj('mockNotification', ['error', 'success']);
     mockRichOutputFilter = jasmine.createSpy('richOutputFilter');
     module(function($provide) {
+      $provide.value('$cookieStore', mockCookieStore);
       $provide.value('Notification', mockNotification);
       $provide.value('richOutputFilter', mockRichOutputFilter);
+      $provide.constant('DefaultConfig', {
+        AppName: 'Uchiwa',
+        DateFormat: 'YYYY-MM-DD HH:mm:ss',
+        DefaultExpireOnResolve: true,
+        DefaultTheme: 'uchiwa-default',
+        DisableNoExpiration: true,
+        LogoURL: 'foo.png',
+        Refresh: 10000,
+        RequireSilencingReason: true
+      });
     });
   });
 
@@ -22,7 +36,6 @@ describe('services', function () {
     $httpBackend = _$httpBackend_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
-    $httpBackend.expect('GET', 'config').respond(200, {Uchiwa:{Refresh: 10}});
   }));
 
   describe('Aggregates', function() {
@@ -199,7 +212,7 @@ describe('services', function () {
         var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
         var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': false}};
 
-         Clients.deleteMultiple(filtered, selected)
+        Clients.deleteMultiple(filtered, selected)
         .then(function(result) {
           // It should remove the deleted item
           expect(result).toEqual([filtered[1]]);
@@ -372,6 +385,50 @@ describe('services', function () {
         Clients.silence(filtered, selected);
         expect(Silenced.create).toHaveBeenCalledWith(null, [{_id: 'foo'}, {_id: 'qux'}]);
         expect(selected.all).toEqual(false);
+      }));
+    });
+  });
+
+  describe('Config', function () {
+    describe('appName', function () {
+      it('returns the proper value', inject(function (Config) {
+        expect(Config.appName()).toEqual('Uchiwa');
+      }));
+    });
+
+    describe('dateFormat', function () {
+      it('returns the proper value', inject(function (Config) {
+        expect(Config.dateFormat()).toEqual('YYYY-MM-DD HH:mm:ss');
+      }));
+    });
+
+    describe('defaultExpireOnResolve', function () {
+      it('returns the proper value', inject(function (Config) {
+        expect(Config.defaultExpireOnResolve()).toEqual(true);
+      }));
+    });
+
+    describe('defaultTheme', function () {
+      it('returns the proper value', inject(function (Config) {
+        expect(Config.defaultTheme()).toEqual('uchiwa-default');
+      }));
+    });
+
+    describe('disableNoExpiration', function () {
+      it('returns the proper value', inject(function (Config) {
+        expect(Config.disableNoExpiration()).toEqual(true);
+      }));
+    });
+
+    describe('logoURL', function () {
+      it('returns the proper value', inject(function (Config) {
+        expect(Config.logoURL()).toEqual('foo.png');
+      }));
+    });
+
+    describe('refresh', function () {
+      it('returns the proper value', inject(function (Config) {
+        expect(Config.refresh()).toEqual(10000);
       }));
     });
   });
@@ -882,9 +939,15 @@ describe('services', function () {
     });
   });
 
-  describe('underscore', function () {
-    it('should define _', inject(function (underscore) {
-      expect(underscore).toBe(window._);
-    }));
+  describe('UserConfig', function () {
+    describe('get', function() {
+      it('returns the cookie value', inject(function (UserConfig) {
+        expect(UserConfig.get('foobar')).toEqual('foo');
+      }));
+
+      it('returns a default value', inject(function (UserConfig) {
+        expect(UserConfig.get('')).toEqual(false);
+      }));
+    });
   });
 });

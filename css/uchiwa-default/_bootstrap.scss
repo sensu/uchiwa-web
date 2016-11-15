@@ -1,0 +1,23 @@
+@import "variables";
+
+#error {
+  display: none;
+}
+
+.bootstrap-error #error {
+  display: block !important;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.bootstrap-error .error-code {
+  bottom: 60%;
+  color: #2d353c;
+  font-size: 96px;
+  line-height: 100px;
+}
+
+.bootstrap-error .error-desc {
+  font-size: 14px;
+  color: #647788;
+}

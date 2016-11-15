@@ -153,7 +153,7 @@ filterModule.filter('getAckClass', function() {
   };
 });
 
-filterModule.filter('getExpirationTimestamp', ['conf', function (conf) {
+filterModule.filter('getExpirationTimestamp', ['Config', function (Config) {
   return function(expire) {
     if (angular.isUndefined(expire) || isNaN(expire)) {
       return 'Unknown';
@@ -162,7 +162,7 @@ filterModule.filter('getExpirationTimestamp', ['conf', function (conf) {
       return 'Never';
     }
     var expiration = (moment().unix() + expire) * 1000;
-    return moment(expiration).format(conf.date);
+    return moment(expiration).format(Config.dateFormat());
   };
 }]);
 
@@ -181,7 +181,7 @@ filterModule.filter('getStatusClass', function() {
   };
 });
 
-filterModule.filter('getTimestamp', ['conf', function (conf) {
+filterModule.filter('getTimestamp', ['Config', function (Config) {
   return function(timestamp) {
     if (angular.isUndefined(timestamp) || timestamp === null) {
       return '';
@@ -190,7 +190,7 @@ filterModule.filter('getTimestamp', ['conf', function (conf) {
       return timestamp;
     }
     timestamp = timestamp * 1000;
-    return moment(timestamp).format(conf.date);
+    return moment(timestamp).format(Config.dateFormat());
   };
 }]);
 

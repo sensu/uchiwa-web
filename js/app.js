@@ -58,29 +58,19 @@ angular.module('uchiwa')
     $uibTooltipProvider.options({animation: false, 'placement': 'bottom'});
   }
 ])
-.run(function (backendService, conf, themes, $cookieStore, $location, Notification, $rootScope, titleFactory) {
-  $rootScope.events = [];
+.run(function (backendService, $cookieStore, $location, $rootScope, titleFactory) {
   $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
   $rootScope.skipOneRefresh = false;
   $rootScope.showCollectionBar = true;
-  $rootScope.enterprise = conf.enterprise;
-  $rootScope.themes = themes;
+  $rootScope.enterprise = false;
 
   $rootScope.titleFactory = titleFactory;
-
-  backendService.getConfig();
 
   // fetch the sensu data on every page change
   $rootScope.$on('$routeChangeSuccess', function () {
     $rootScope.auth = $cookieStore.get('uchiwa_auth') || false;
     if ($location.path().substring(0, 6) !== '/login') {
       backendService.getDatacenters();
-    }
-  });
-
-  $rootScope.$on('notification', function (event, type, message) {
-    if ($location.path() !== '/login') {
-      Notification[type](message);
     }
   });
 });

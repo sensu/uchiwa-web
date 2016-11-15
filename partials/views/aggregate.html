@@ -1,6 +1,6 @@
 <ng-include src="partialsPath + '/navbar.html'"></ng-include>
 <ng-include src="partialsPath + '/sidebar.html'"></ng-include>
-<div class="container-fluid element-view">
+<div class="container-fluid element-view" ng-cloak>
 
   <div class="row-fluid">
     <div class="col-xs-12">
@@ -83,7 +83,7 @@
             </div>
           </div>
 
-          <div class="row mg-t-md mb15">
+          <div class="row mt25 mb15">
             <div class="col-xs-12">
               <div class="panel-title">Results ({{aggregate.results.total}})</div>
             </div>

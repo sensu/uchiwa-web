@@ -47,10 +47,8 @@ serviceModule.service('Aggregates', ['Helpers', 'Notification', '$q', '$resource
 /**
 * Backend Service
 */
-serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', '$location', '$rootScope',
-  function(audit, conf, $http, $interval, $location, $rootScope){
-    var errorRefresh = conf.appName+' is having trouble updating its data. Try to refresh the page if this issue persists.';
-
+serviceModule.service('backendService', ['audit', '$http', '$interval', '$location', '$rootScope',
+  function(audit, $http, $interval, $location, $rootScope){
     this.auth = function() {
       return $http.get('auth');
     };
@@ -78,22 +76,6 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     this.getClients = function() {
       return $http.get('clients');
     };
-    this.getConfig = function() {
-      if ($location.path().substring(0, 6) === '/login') {
-        return;
-      }
-      $http.get('config')
-        .success(function (data) {
-          $rootScope.config = data;
-          conf.refresh = data.Uchiwa.Refresh * 1000;
-        })
-        .error(function(error) {
-          $rootScope.$emit('notification', 'error', errorRefresh);
-          if (error !== null) {
-            console.error(JSON.stringify(error));
-          }
-        });
-    };
     this.getConfigAuth = function () {
       return $http.get('config/auth');
     };
@@ -108,7 +90,6 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
           }
         })
         .error(function(error) {
-          $rootScope.$emit('notification', 'error', errorRefresh);
           if (error !== null) {
             console.error(JSON.stringify(error));
           }
@@ -140,7 +121,6 @@ serviceModule.service('backendService', ['audit', 'conf', '$http', '$interval', 
     };
   }
 ]);
-
 /**
 * Checks Services
 */
@@ -274,6 +254,38 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
   this.silence = function(filtered, selected) {
     var itemsToSilence = Helpers.getSelected(filtered, selected);
     Silenced.create(null, itemsToSilence);
+  };
+}]);
+
+/**
+* Config Services
+*/
+serviceModule.service('Config', ['DefaultConfig', '$resource',
+function(DefaultConfig, $resource) {
+  var Config = $resource('/config', null, null);
+  this.appName = function() {
+    return 'Uchiwa';
+  };
+  this.dateFormat = function() {
+    return DefaultConfig.DateFormat;
+  };
+  this.defaultExpireOnResolve = function() {
+    return DefaultConfig.DefaultExpireOnResolve;
+  };
+  this.defaultTheme = function() {
+    return DefaultConfig.DefaultTheme;
+  };
+  this.disableNoExpiration = function() {
+    return DefaultConfig.DisableNoExpiration;
+  };
+  this.get = function() {
+    return Config.get();
+  };
+  this.logoURL = function() {
+    return DefaultConfig.LogoURL;
+  };
+  this.refresh = function() {
+    return DefaultConfig.Refresh;
   };
 }]);
 
@@ -448,13 +460,13 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
       return $q.all(promises);
     };
     this.create = function (e, i) {
-      var items = _.isArray(i) ? i : new Array(i);
+      var items = angular.isArray(i) ? i : new Array(i);
       var event = e || window.event;
       if (angular.isDefined(event)) {
         event.stopPropagation();
       }
       if (items.length === 0) {
-        $rootScope.$emit('notification', 'error', 'No items selected');
+        Notification.error('No items selected');
       } else {
         var modalInstance = $uibModal.open({ // jshint ignore:line
           templateUrl: $rootScope.partialsPath + '/modals/silenced.html',
@@ -640,6 +652,19 @@ serviceModule.service('Subscriptions', ['$resource',
 }]);
 
 /**
+* User Config
+*/
+serviceModule.service('UserConfig', ['$cookieStore',
+function ($cookieStore) {
+  this.get = function(name) {
+    return $cookieStore.get(name) || false;
+  };
+  this.set = function(name, value) {
+    $cookieStore.put(name, value);
+  };
+}]);
+
+/**
 * User service
 */
 serviceModule.service('userService', ['$cookieStore', '$location', '$rootScope',
@@ -662,7 +687,6 @@ function ($cookieStore, $location, $rootScope) {
   this.logout = function () {
     $cookieStore.remove('uchiwa_auth');
     $rootScope.auth = false;
-    $rootScope.config = false;
     $location.path('login');
   };
 }]);

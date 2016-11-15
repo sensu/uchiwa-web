@@ -3,12 +3,20 @@
 describe('filters', function () {
 
   var $filter;
-  var conf;
+  var mockConfig;
 
   beforeEach(module('uchiwa'));
-  beforeEach(inject(function (_$filter_, _conf_) {
+
+  beforeEach(function() {
+    mockConfig = jasmine.createSpyObj('mockConfig', ['dateFormat']);
+    mockConfig.dateFormat.and.callFake(function() {return 'YYYY-MM-DD HH:mm:ss'});
+    module(function($provide) {
+      $provide.value('Config', mockConfig);
+    });
+  });
+
+  beforeEach(inject(function (_$filter_) {
     $filter = _$filter_;
-    conf = _conf_;
   }));
 
   describe('arrayLength', function () {
@@ -191,8 +199,7 @@ describe('filters', function () {
   });
 
   describe('filterSubscriptions', function () {
-
-    it('should filter subscriptions', inject(function (filterSubscriptionsFilter, $filter, conf) {
+    it('should filter subscriptions', inject(function (filterSubscriptionsFilter, $filter) {
       expect(filterSubscriptionsFilter([{name: 'test1', subscriptions: []}, {name: 'test2', subscriptions: ['linux']}], 'linux')).toEqual([{name: 'test2', subscriptions: ['linux']}]);
       expect(filterSubscriptionsFilter([{name: 'test1', subscriptions: []}, {name: 'test2', subscriptions: ['linux']}], '')).toEqual([{name: 'test1', subscriptions: []}, {name: 'test2', subscriptions: ['linux']}]);
     }));

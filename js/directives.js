@@ -49,6 +49,21 @@ directiveModule.directive('clientSummary', ['$filter', '$rootScope', function ($
   };
 }]);
 
+directiveModule.directive('logoUrl', ['Config', function (Config) {
+  return {
+    restrict: 'E',
+    link: function(scope) {
+      scope.src = '';
+      if (Config.logoURL() === '') {
+        scope.src = 'bower_components/uchiwa-web/img/uchiwa.png';
+      } else {
+        scope.src = Config.logoURL();
+      }
+    },
+    template: '<img src="{{src}}">'
+  };
+}]);
+
 directiveModule.directive('panelActions', ['$rootScope', function ($rootScope) {
   return {
     restrict: 'E',
@@ -117,21 +132,22 @@ directiveModule.directive('silenceIcon', function () {
   };
 });
 
-directiveModule.directive('siteTheme', ['conf', '$cookies', '$rootScope', function (conf, $cookies, $rootScope) {
+directiveModule.directive('siteTheme', ['Config', '$cookies', 'THEMES',
+function (Config, $cookies, THEMES) {
   return {
     restrict: 'EA',
     link: function (scope, element) {
       var lookupTheme = function (themeName) {
-        return $rootScope.themes[$rootScope.themes.map(function (t) {
+        return THEMES[THEMES.map(function (t) {
           return t.name;
         }).indexOf(themeName)];
       };
       var setTheme = function (theme) {
-        var themeName = angular.isDefined(theme) ? theme : conf.theme;
+        var themeName = angular.isDefined(theme) ? theme : Config.defaultTheme();
         scope.currentTheme = lookupTheme(themeName);
 
         if (angular.isUndefined(scope.currentTheme)) {
-          scope.currentTheme = $rootScope.themes[0];
+          scope.currentTheme = THEMES[0];
         }
 
         var name = scope.currentTheme.name;
@@ -139,7 +155,7 @@ directiveModule.directive('siteTheme', ['conf', '$cookies', '$rootScope', functi
 
         var oneYearExpiration = new Date();
         oneYearExpiration.setYear(oneYearExpiration.getFullYear()+1);
-        $cookies.put('uchiwa_theme', name, { 'expires': oneYearExpiration });
+        $cookies.put('theme', name, { 'expires': oneYearExpiration });
 
         var path = enterprise ? 'css/' : 'bower_components/uchiwa-web/css/';
         element.attr('href', path + name + '/' + name + '.css');
@@ -147,7 +163,7 @@ directiveModule.directive('siteTheme', ['conf', '$cookies', '$rootScope', functi
       scope.$on('theme:changed', function (event, theme) {
         setTheme(theme.name);
       });
-      var currentTheme = $cookies.get('uchiwa_theme');
+      var currentTheme = $cookies.get('theme');
       setTheme(currentTheme);
     }
   };
