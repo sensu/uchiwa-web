@@ -7,5 +7,5 @@ constantModule.value('THEMES', [
 
 // Version
 constantModule.constant('VERSION', {
-  uchiwa: '0.19.0'
+  uchiwa: '0.20.0'
 });
