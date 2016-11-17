@@ -362,6 +362,13 @@ describe('services', function () {
         expect(mockRichOutputFilter).toHaveBeenCalledWith('qux');
       }));
 
+      it('does not apply the richOutput filter to status', inject(function (Clients) {
+        var lastResult = {status: 123456789};
+        Clients.richOutput(lastResult);
+        $scope.$digest();
+        expect(mockRichOutputFilter).not.toHaveBeenCalledWith(123456789);
+      }));
+
       it('handles undefined arguments', inject(function (Clients) {
         var err = jasmine.createSpy('err');
         Clients.richOutput(null).then(

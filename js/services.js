@@ -247,6 +247,11 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
     }
     var promises = {};
     angular.forEach(lastResult, function(value, key) {
+      // Do not run the richOutput filter on the status
+      if (key === 'status') {
+        promises[key] = value;
+        return true;
+      }
       promises[key] = $filter('richOutput')(value);
     });
     return $q.all(promises);
