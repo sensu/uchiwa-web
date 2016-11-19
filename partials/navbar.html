@@ -9,8 +9,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown" dropdown ng-if="auth">
-          <a href class="dropdown-toggle" dropdown-toggle>
+        <li class="dropdown" uib-dropdown ng-if="auth">
+          <a href class="dropdown-toggle" uib-dropdown-toggle>
             <span class="fullname">{{auth.FullName || auth.Username}}</span>
             <img class="gravatar" gravatar-src-once="auth.Email" gravatar-size="30">
           </a>
