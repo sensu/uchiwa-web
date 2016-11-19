@@ -532,14 +532,16 @@ controllerModule.controller('NavbarController', ['audit', '$location', '$rootSco
 /**
 * Settings
 */
-controllerModule.controller('SettingsController', ['$cookies', '$scope', 'Sensu', 'titleFactory',
-  function ($cookies, $scope, Sensu, titleFactory) {
+controllerModule.controller('SettingsController', ['$cookies', '$scope', 'Sensu', 'THEMES', 'titleFactory',
+  function ($cookies, $scope, Sensu, THEMES, titleFactory) {
     $scope.pageHeaderText = 'Settings';
     titleFactory.set($scope.pageHeaderText);
 
     $scope.$watch('currentTheme', function (theme) {
       $scope.$emit('theme:changed', theme);
     });
+
+    $scope.themes = THEMES;
   }
 ]);
 
