@@ -616,6 +616,10 @@ serviceModule.service('Stashes', ['Helpers', 'Notification', '$q', '$resource', 
   function (Helpers, Notification, $q, $resource, $rootScope) {
     var Stashes = $resource('/stashes/:path', {path: '@action'});
     var self = this;
+    this.create = function(payload) {
+      var stash = new Stashes(payload);
+      return stash.$save();
+    };
     this.delete = function(id) {
       var attributes = Helpers.splitId(id);
       return Stashes.delete({path: attributes[1], dc: attributes[0]}).$promise;
