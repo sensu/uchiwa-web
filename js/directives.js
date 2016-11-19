@@ -60,7 +60,7 @@ directiveModule.directive('logoUrl', ['Config', function (Config) {
         scope.src = Config.logoURL();
       }
     },
-    template: '<img src="{{src}}">'
+    template: '<img ng-src="{{src}}">'
   };
 }]);
 
