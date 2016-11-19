@@ -265,10 +265,14 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
 /**
 * Config Services
 */
-serviceModule.service('Config', ['DefaultConfig', '$resource',
-function(DefaultConfig, $resource) {
+serviceModule.service('Config', ['DefaultConfig', '$resource', '$rootScope',
+function(DefaultConfig, $resource, $rootScope) {
   var Config = $resource('/config', null, null);
+  var self = this;
   this.appName = function() {
+    if (self.enterprise()) {
+      return 'Sensu Enterprise Console';
+    }
     return 'Uchiwa';
   };
   this.dateFormat = function() {
@@ -278,15 +282,24 @@ function(DefaultConfig, $resource) {
     return DefaultConfig.DefaultExpireOnResolve;
   };
   this.defaultTheme = function() {
+    if (self.enterprise()) {
+      return 'sensu-enterprise';
+    }
     return DefaultConfig.DefaultTheme;
   };
   this.disableNoExpiration = function() {
     return DefaultConfig.DisableNoExpiration;
   };
+  this.enterprise = function() {
+    return $rootScope.enterprise;
+  };
   this.get = function() {
     return Config.get();
   };
   this.logoURL = function() {
+    if (self.enterprise()) {
+      return 'img/logo.png';
+    }
     return DefaultConfig.LogoURL;
   };
   this.refresh = function() {
@@ -603,6 +616,10 @@ serviceModule.service('Stashes', ['Helpers', 'Notification', '$q', '$resource', 
   function (Helpers, Notification, $q, $resource, $rootScope) {
     var Stashes = $resource('/stashes/:path', {path: '@action'});
     var self = this;
+    this.create = function(payload) {
+      var stash = new Stashes(payload);
+      return stash.$save();
+    };
     this.delete = function(id) {
       var attributes = Helpers.splitId(id);
       return Stashes.delete({path: attributes[1], dc: attributes[0]}).$promise;

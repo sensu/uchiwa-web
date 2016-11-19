@@ -852,6 +852,16 @@ describe('services', function () {
   });
 
   describe('Stashes', function () {
+    describe('create', function() {
+      it('sends a POST request to the /stashes endpoint', inject(function(Stashes) {
+        $httpBackend.expectPOST('/stashes',
+        '{"foo":"bar"}')
+        .respond(200, '');
+
+        Stashes.create({foo: 'bar'});
+        $httpBackend.flush();
+      }));
+    });
     describe('deleteMultiple', function() {
       it('removes multiple stashes', inject(function(Stashes) {
         $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(200, '');

@@ -29,19 +29,19 @@
 
           <div class="row" ng-show="enterprise">
             <div class="col-md-6">
-              <div class="title center">Dashboard Version</div>
-              <div class="number center">{{enterpriseConstants.version}}</div>
+              <div class="title center">Console Version</div>
+              <div class="number center">{{version.console}}</div>
             </div>
             <div class="col-md-6">
               <div class="title center">Uchiwa Version</div>
-              <div class="number center">{{uchiwa.version}}</div>
+              <div class="number center">{{version.uchiwa}}</div>
             </div>
           </div>
 
           <div class="row" ng-hide="enterprise">
             <div class="col-md-12">
               <div class="title center">Version</div>
-              <div class="number center">{{uchiwa.version}}</div>
+              <div class="number center">{{version.uchiwa}}</div>
             </div>
           </div>
 
