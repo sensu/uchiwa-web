@@ -457,7 +457,8 @@ controllerModule.controller('InfoController', ['Config', '$scope', 'titleFactory
     titleFactory.set($scope.pageHeaderText);
 
     $scope.config = Config.get();
-    $scope.uchiwa = { version: VERSION.uchiwa };
+    //$scope.uchiwa = { version: VERSION.uchiwa };
+    $scope.version = VERSION;
   }
 ]);
 
