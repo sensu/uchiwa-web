@@ -41,8 +41,8 @@ describe('services', function () {
   describe('Aggregates', function() {
     describe('deleteMultiple', function() {
       it('removes multiple aggregates', inject(function(Aggregates) {
-        $httpBackend.expectDELETE('/aggregates/foo?dc=us-east-1').respond(200, '');
-        $httpBackend.expectDELETE('/aggregates/bar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('aggregates/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('aggregates/bar?dc=us-east-1').respond(200, '');
 
         var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
         var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': true}};
@@ -57,7 +57,7 @@ describe('services', function () {
       }));
 
       it('removes a single aggregates', inject(function(Aggregates) {
-        $httpBackend.expectDELETE('/aggregates/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('aggregates/foo?dc=us-east-1').respond(200, '');
 
         var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
         var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': false}};
@@ -72,8 +72,8 @@ describe('services', function () {
       }));
 
       it('handles an error with one of the aggregate', inject(function(Aggregates) {
-        $httpBackend.expectDELETE('/aggregates/foo?dc=us-east-1').respond(200, '');
-        $httpBackend.expectDELETE('/aggregates/bar?dc=us-east-1').respond(500, '');
+        $httpBackend.expectDELETE('aggregates/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('aggregates/bar?dc=us-east-1').respond(500, '');
 
         var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
         var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': true}};
@@ -87,14 +87,14 @@ describe('services', function () {
 
     describe('deleteSingle', function() {
       it('removes an aggregate', inject(function(Aggregates) {
-        $httpBackend.expectDELETE('/aggregates/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('aggregates/foo?dc=us-east-1').respond(200, '');
         Aggregates.deleteSingle('us-east-1:foo')
         $httpBackend.flush();
         expect(mockNotification.success).toHaveBeenCalled();
       }));
 
       it('handles an error', inject(function(Aggregates) {
-        $httpBackend.expectDELETE('/aggregates/bar?dc=us-east-1').respond(500, '');
+        $httpBackend.expectDELETE('aggregates/bar?dc=us-east-1').respond(500, '');
         Aggregates.deleteSingle('us-east-1:bar')
         $httpBackend.flush();
         expect(mockNotification.error).toHaveBeenCalled();
@@ -105,7 +105,7 @@ describe('services', function () {
   describe('Checks', function () {
     describe('issueCheckRequest', function() {
       it('sends a POST check request', inject(function (Checks) {
-        $httpBackend.expectPOST('/request',
+        $httpBackend.expectPOST('request',
         '{"check":"foo","dc":"us-east-1","subscribers":"linux"}')
         .respond(200, '');
 
@@ -116,7 +116,7 @@ describe('services', function () {
 
     describe('issueMulipleCheckRequest', function() {
       it('sends a single check requests', inject(function (Checks) {
-        $httpBackend.expectPOST('/request',
+        $httpBackend.expectPOST('request',
         '{"check":"foo","dc":"us-east-1","subscribers":"linux"}')
         .respond(200, '');
 
@@ -131,11 +131,11 @@ describe('services', function () {
       }));
 
       it('sends multiple check requests', inject(function (Checks) {
-        $httpBackend.expectPOST('/request',
+        $httpBackend.expectPOST('request',
         '{"check":"foo","dc":"us-east-1","subscribers":"linux"}')
         .respond(200, '');
 
-        $httpBackend.expectPOST('/request',
+        $httpBackend.expectPOST('request',
         '{"check":"bar","dc":"us-west-1","subscribers":"windows"}')
         .respond(200, '');
 
@@ -151,7 +151,7 @@ describe('services', function () {
       }));
 
       it('handles an error', inject(function (Checks) {
-        $httpBackend.expectPOST('/request',
+        $httpBackend.expectPOST('request',
         '{"check":"foo","dc":"us-east-1","subscribers":"linux"}')
         .respond(500, '');
 
@@ -191,8 +191,8 @@ describe('services', function () {
 
     describe('deleteMultiple', function() {
       it('removes multiple clients', inject(function(Clients) {
-        $httpBackend.expectDELETE('/clients/foo?dc=us-east-1').respond(200, '');
-        $httpBackend.expectDELETE('/clients/bar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('clients/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('clients/bar?dc=us-east-1').respond(200, '');
 
         var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
         var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': true}};
@@ -207,7 +207,7 @@ describe('services', function () {
       }));
 
       it('removes a single client', inject(function(Clients) {
-        $httpBackend.expectDELETE('/clients/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('clients/foo?dc=us-east-1').respond(200, '');
 
         var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
         var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': false}};
@@ -222,8 +222,8 @@ describe('services', function () {
       }));
 
       it('handles an error with one of the aggregate', inject(function(Clients) {
-        $httpBackend.expectDELETE('/clients/foo?dc=us-east-1').respond(200, '');
-        $httpBackend.expectDELETE('/clients/bar?dc=us-east-1').respond(500, '');
+        $httpBackend.expectDELETE('clients/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('clients/bar?dc=us-east-1').respond(500, '');
 
         var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
         var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': true}};
@@ -237,14 +237,14 @@ describe('services', function () {
 
     describe('deleteSingle', function() {
       it('removes a client', inject(function(Clients) {
-        $httpBackend.expectDELETE('/clients/foo?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('clients/foo?dc=us-east-1').respond(200, '');
         Clients.deleteSingle('us-east-1/foo')
         $httpBackend.flush();
         expect(mockNotification.success).toHaveBeenCalled();
       }));
 
       it('handles an error', inject(function(Clients) {
-        $httpBackend.expectDELETE('/clients/bar?dc=us-east-1').respond(500, '');
+        $httpBackend.expectDELETE('clients/bar?dc=us-east-1').respond(500, '');
         Clients.deleteSingle('us-east-1:bar')
         $httpBackend.flush();
         expect(mockNotification.error).toHaveBeenCalled();
@@ -443,8 +443,8 @@ describe('services', function () {
   describe('Events', function () {
     describe('resolveMultiple', function() {
       it('removes multiple events', inject(function(Events) {
-        $httpBackend.expectDELETE('/events/foo/bar?dc=us-east-1').respond(200, '');
-        $httpBackend.expectDELETE('/events/baz/qux?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('events/foo/bar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('events/baz/qux?dc=us-east-1').respond(200, '');
 
         var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-east-1/baz/qux'}];
         var selected = {ids: {'us-east-1/foo/bar': true, 'us-east-1/baz/qux': true}};
@@ -459,7 +459,7 @@ describe('services', function () {
       }));
 
       it('removes a single aggregates', inject(function(Events) {
-        $httpBackend.expectDELETE('/events/foo/bar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('events/foo/bar?dc=us-east-1').respond(200, '');
 
         var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-east-1/baz/qux'}];
         var selected = {ids: {'us-east-1/foo/bar': true, 'us-east-1/baz/qux': false}};
@@ -474,8 +474,8 @@ describe('services', function () {
       }));
 
       it('handles an error with one of the aggregate', inject(function(Events) {
-        $httpBackend.expectDELETE('/events/foo/bar?dc=us-east-1').respond(200, '');
-        $httpBackend.expectDELETE('/events/baz/qux?dc=us-east-1').respond(500, '');
+        $httpBackend.expectDELETE('events/foo/bar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('events/baz/qux?dc=us-east-1').respond(500, '');
 
         var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-east-1/baz/qux'}];
         var selected = {ids: {'us-east-1/foo/bar': true, 'us-east-1/baz/qux': true}};
@@ -489,14 +489,14 @@ describe('services', function () {
 
     describe('resolveSingle', function() {
       it('resolves an event', inject(function(Events) {
-        $httpBackend.expectDELETE('/events/foo/bar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('events/foo/bar?dc=us-east-1').respond(200, '');
         Events.resolveSingle('us-east-1/foo/bar')
         $httpBackend.flush();
         expect(mockNotification.success).toHaveBeenCalled();
       }));
 
       it('handles an error', inject(function(Events) {
-        $httpBackend.expectDELETE('/events/foo/bar?dc=us-east-1').respond(500, '');
+        $httpBackend.expectDELETE('events/foo/bar?dc=us-east-1').respond(500, '');
         Events.resolveSingle('us-east-1/foo/bar')
         $httpBackend.flush();
         expect(mockNotification.error).toHaveBeenCalled();
@@ -520,14 +520,14 @@ describe('services', function () {
   describe('Results', function () {
     describe('delete', function() {
       it('delete a check result', inject(function(Results) {
-        $httpBackend.expectDELETE('/results/foo/bar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('results/foo/bar?dc=us-east-1').respond(200, '');
         Results.delete('us-east-1/foo/bar')
         $httpBackend.flush();
         expect(mockNotification.success).toHaveBeenCalled();
       }));
 
       it('handles an error', inject(function(Results) {
-        $httpBackend.expectDELETE('/results/foo/bar?dc=us-east-1').respond(500, '');
+        $httpBackend.expectDELETE('results/foo/bar?dc=us-east-1').respond(500, '');
         Results.delete('us-east-1/foo/bar')
         $httpBackend.flush();
         expect(mockNotification.error).toHaveBeenCalled();
@@ -711,8 +711,8 @@ describe('services', function () {
     });
 
     describe('delete', function() {
-      it('sends a POST request to the /silenced/clear endpoint', inject(function (Silenced) {
-        $httpBackend.expectPOST('/silenced/clear',
+      it('sends a POST request to the silenced/clear endpoint', inject(function (Silenced) {
+        $httpBackend.expectPOST('silenced/clear',
         '{"dc":"foo","id":"bar"}')
         .respond(200, '');
 
@@ -723,9 +723,9 @@ describe('services', function () {
 
     describe('deleteMultiple', function() {
       it('removes multiple silenced entries', inject(function(Silenced) {
-        $httpBackend.expectPOST('/silenced/clear', '{"dc":"foo","id":"bar"}')
+        $httpBackend.expectPOST('silenced/clear', '{"dc":"foo","id":"bar"}')
         .respond(200, '');
-        $httpBackend.expectPOST('/silenced/clear', '{"dc":"baz","id":"qux"}')
+        $httpBackend.expectPOST('silenced/clear', '{"dc":"baz","id":"qux"}')
         .respond(200, '');
 
         var filtered = [{_id: 'foo:bar'}, {_id: 'baz:qux'}];
@@ -741,7 +741,7 @@ describe('services', function () {
       }));
 
       it('removes a single aggregates', inject(function(Silenced) {
-        $httpBackend.expectPOST('/silenced/clear', '{"dc":"foo","id":"bar"}')
+        $httpBackend.expectPOST('silenced/clear', '{"dc":"foo","id":"bar"}')
         .respond(200, '');
 
         var filtered = [{_id: 'foo:bar'}, {_id: 'baz:qux'}];
@@ -757,9 +757,9 @@ describe('services', function () {
       }));
 
       it('handles an error with one of the aggregate', inject(function(Silenced) {
-        $httpBackend.expectPOST('/silenced/clear', '{"dc":"foo","id":"bar"}')
+        $httpBackend.expectPOST('silenced/clear', '{"dc":"foo","id":"bar"}')
         .respond(200, '');
-        $httpBackend.expectPOST('/silenced/clear', '{"dc":"baz","id":"qux"}')
+        $httpBackend.expectPOST('silenced/clear', '{"dc":"baz","id":"qux"}')
         .respond(500, '');
 
         var filtered = [{_id: 'foo:bar'}, {_id: 'baz:qux'}];
@@ -773,8 +773,8 @@ describe('services', function () {
     });
 
     describe('deleteSingle', function() {
-      it('sends a POST request to the /silenced/clear endpoint', inject(function (Silenced) {
-        $httpBackend.expectPOST('/silenced/clear', '{"dc":"foo","id":"bar"}')
+      it('sends a POST request to the silenced/clear endpoint', inject(function (Silenced) {
+        $httpBackend.expectPOST('silenced/clear', '{"dc":"foo","id":"bar"}')
         .respond(200, '');
 
         Silenced.deleteSingle('foo:bar');
@@ -783,7 +783,7 @@ describe('services', function () {
       }));
 
       it('handles an error', inject(function (Silenced) {
-        $httpBackend.expectPOST('/silenced/clear', '{"dc":"foo","id":"bar"}')
+        $httpBackend.expectPOST('silenced/clear', '{"dc":"foo","id":"bar"}')
         .respond(500, '');
 
         Silenced.deleteSingle('foo:bar');
@@ -827,8 +827,8 @@ describe('services', function () {
     });
 
     describe('post', function() {
-      it('sends a POST request to the /silenced endpoint', inject(function (Silenced) {
-        $httpBackend.expectPOST('/silenced',
+      it('sends a POST request to the silenced endpoint', inject(function (Silenced) {
+        $httpBackend.expectPOST('silenced',
         '{"foo":"bar"}')
         .respond(200, '');
 
@@ -838,8 +838,8 @@ describe('services', function () {
     });
 
     describe('query', function() {
-      it('sends a GET request to the /silenced endpoint', inject(function (Silenced) {
-        $httpBackend.expectGET('/silenced').respond(200, '["foo","bar"]');
+      it('sends a GET request to the silenced endpoint', inject(function (Silenced) {
+        $httpBackend.expectGET('silenced').respond(200, '["foo","bar"]');
 
         Silenced.query({foo: 'bar'}).$promise.then(
           function(results){
@@ -853,8 +853,8 @@ describe('services', function () {
 
   describe('Stashes', function () {
     describe('create', function() {
-      it('sends a POST request to the /stashes endpoint', inject(function(Stashes) {
-        $httpBackend.expectPOST('/stashes',
+      it('sends a POST request to the stashes endpoint', inject(function(Stashes) {
+        $httpBackend.expectPOST('stashes',
         '{"foo":"bar"}')
         .respond(200, '');
 
@@ -864,8 +864,8 @@ describe('services', function () {
     });
     describe('deleteMultiple', function() {
       it('removes multiple stashes', inject(function(Stashes) {
-        $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
-        $httpBackend.expectDELETE('/stashes/baz%2Fqux?dc=us-west-1').respond(200, '');
+        $httpBackend.expectDELETE('stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('stashes/baz%2Fqux?dc=us-west-1').respond(200, '');
 
         var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-west-1/baz/qux'}];
         var selected = {ids: {'us-east-1/foo/bar': true, 'us-west-1/baz/qux': true}};
@@ -880,7 +880,7 @@ describe('services', function () {
       }));
 
       it('removes a single stash', inject(function(Stashes) {
-        $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
 
         var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-west-1/baz/qux'}];
         var selected = {ids: {'us-east-1/foo/bar': true, 'us-west-1/baz/qux': false}};
@@ -895,8 +895,8 @@ describe('services', function () {
       }));
 
       it('handles an error with one of the stash', inject(function(Stashes) {
-        $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
-        $httpBackend.expectDELETE('/stashes/baz%2Fqux?dc=us-west-1').respond(500, '');
+        $httpBackend.expectDELETE('stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
+        $httpBackend.expectDELETE('stashes/baz%2Fqux?dc=us-west-1').respond(500, '');
 
         var filtered = [{_id: 'us-east-1/foo/bar'}, {_id: 'us-west-1/baz/qux'}];
         var selected = {ids: {'us-east-1/foo/bar': true, 'us-west-1/baz/qux': true}};
@@ -909,8 +909,8 @@ describe('services', function () {
     });
 
     describe('deleteSingle', function() {
-      it('sends a POST request to the /silenced/clear endpoint', inject(function (Stashes) {
-        $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
+      it('sends a POST request to the silenced/clear endpoint', inject(function (Stashes) {
+        $httpBackend.expectDELETE('stashes/foo%2Fbar?dc=us-east-1').respond(200, '');
 
         Stashes.deleteSingle('us-east-1/foo/bar');
         $httpBackend.flush();
@@ -918,7 +918,7 @@ describe('services', function () {
       }));
 
       it('handles an error', inject(function (Stashes) {
-        $httpBackend.expectDELETE('/stashes/foo%2Fbar?dc=us-east-1').respond(500, '');
+        $httpBackend.expectDELETE('stashes/foo%2Fbar?dc=us-east-1').respond(500, '');
 
         Stashes.deleteSingle('us-east-1/foo/bar');
         $httpBackend.flush();
@@ -943,8 +943,8 @@ describe('services', function () {
 
   describe('Subscriptions', function () {
     describe('query', function() {
-      it('sends a GET request to the /subscriptions endpoint', inject(function (Subscriptions) {
-        $httpBackend.expectGET('/subscriptions').respond(200, '["foo","bar"]');
+      it('sends a GET request to the subscriptions endpoint', inject(function (Subscriptions) {
+        $httpBackend.expectGET('subscriptions').respond(200, '["foo","bar"]');
 
         Subscriptions.query({foo: 'bar'}).$promise.then(
           function(results){
