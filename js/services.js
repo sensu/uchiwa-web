@@ -7,7 +7,7 @@ var serviceModule = angular.module('uchiwa.services', []);
 */
 serviceModule.service('Aggregates', ['Helpers', 'Notification', '$q', '$resource', '$rootScope',
   function (Helpers, Notification, $q, $resource, $rootScope) {
-    var Aggregates = $resource('/aggregates/:name/:members/:severity',
+    var Aggregates = $resource('aggregates/:name/:members/:severity',
       {name: '@name', members: '@members', severity: '@severity'}
     );
     var self = this;
@@ -126,7 +126,7 @@ serviceModule.service('backendService', ['audit', '$http', '$interval', '$locati
 */
 serviceModule.service('Checks', ['Helpers', 'Notification', '$q', '$resource', 'Silenced',
 function (Helpers, Notification, $q, $resource, Silenced) {
-  var Request = $resource('/request', null,
+  var Request = $resource('request', null,
     {'publish': {method: 'POST'}}
   );
   this.issueCheckRequest = function(dc, name, subscribers) {
@@ -169,7 +169,7 @@ function (Helpers, Notification, $q, $resource, Silenced) {
 */
 serviceModule.service('Clients', ['Events', '$filter', 'Helpers', '$location', 'Notification', '$q', '$resource', 'Results', '$rootScope', 'Silenced',
 function (Events, $filter, Helpers, $location, Notification, $q, $resource, Results, $rootScope, Silenced) {
-  var Clients = $resource('/clients/:name/:history',
+  var Clients = $resource('clients/:name/:history',
     {name: '@name', history: '@history'}
   );
   var self = this;
@@ -267,7 +267,7 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
 */
 serviceModule.service('Config', ['DefaultConfig', '$resource', '$rootScope',
 function(DefaultConfig, $resource, $rootScope) {
-  var Config = $resource('/config', null, null);
+  var Config = $resource('config', null, null);
   var self = this;
   this.appName = function() {
     if (self.enterprise()) {
@@ -312,7 +312,7 @@ function(DefaultConfig, $resource, $rootScope) {
 */
 serviceModule.service('Events', ['Helpers', 'Notification', '$q', '$resource', '$rootScope', 'Silenced',
 function(Helpers, Notification, $q, $resource, $rootScope, Silenced) {
-  var Events = $resource('/events/:client/:check',
+  var Events = $resource('events/:client/:check',
     {check: '@check', client: '@client'}
   );
   var self = this;
@@ -358,7 +358,7 @@ function(Helpers, Notification, $q, $resource, $rootScope, Silenced) {
 */
 serviceModule.service('Results', ['Helpers', 'Notification', '$q', '$resource', '$rootScope',
 function(Helpers, Notification, $q, $resource, $rootScope) {
-  var Results = $resource('/results/:client/:check',
+  var Results = $resource('results/:client/:check',
     {check: '@check', client: '@client'}
   );
   this.delete = function(id) {
@@ -462,7 +462,7 @@ serviceModule.service('Sidebar', function () {
 */
 serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource', '$rootScope', '$uibModal',
   function (Helpers, Notification, $q, $resource, $rootScope, $uibModal) {
-    var Silenced = $resource('/silenced/:action/:name',
+    var Silenced = $resource('silenced/:action/:name',
       {action: '@action', name: '@name'},
       {'clear': {method: 'POST'}, 'create': {method: 'POST'}}
     );
@@ -614,7 +614,7 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
 */
 serviceModule.service('Stashes', ['Helpers', 'Notification', '$q', '$resource', '$rootScope',
   function (Helpers, Notification, $q, $resource, $rootScope) {
-    var Stashes = $resource('/stashes/:path', {path: '@action'});
+    var Stashes = $resource('stashes/:path', {path: '@action'});
     var self = this;
     this.create = function(payload) {
       var stash = new Stashes(payload);
@@ -667,7 +667,7 @@ serviceModule.service('Stashes', ['Helpers', 'Notification', '$q', '$resource', 
 */
 serviceModule.service('Subscriptions', ['$resource',
   function ($resource) {
-    var Subscriptions = $resource('/subscriptions');
+    var Subscriptions = $resource('subscriptions');
     this.query = function() {
       return Subscriptions.query();
     };
