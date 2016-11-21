@@ -189,8 +189,8 @@ controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers',
 /**
 * Client
 */
-controllerModule.controller('ClientController', ['Clients', '$filter', '$location', '$routeParams', 'routingService', '$scope', 'Sensu', 'titleFactory', 'userService',
-  function (Clients, $filter, $location, $routeParams, routingService, $scope, Sensu, titleFactory, userService) {
+controllerModule.controller('ClientController', ['Clients', '$filter', '$location', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'userService',
+  function (Clients, $filter, $location, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, userService) {
     $scope.predicate = '-last_status';
     $scope.reverse = false;
     $scope.check = null;
@@ -269,9 +269,7 @@ controllerModule.controller('ClientController', ['Clients', '$filter', '$locatio
         }, function() {});
     };
     $scope.permalink = routingService.permalink;
-    $scope.silence = function() {
-      Clients.silence($scope.filtered, $scope.selected);
-    };
+    $scope.silence = Silenced.create;
     $scope.user = userService;
   }
 ]);
