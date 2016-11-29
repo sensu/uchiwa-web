@@ -33,6 +33,10 @@
   background-color: $critical-color;
 }
 
+.uchiwa-popover .box.healthy {
+  background-color: $success-color;
+}
+
 .uchiwa-popover .box.silenced {
   background-color: $silenced-color;
 }

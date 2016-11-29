@@ -39,6 +39,16 @@
       </ng-pluralize>
     </span>
   </div>
+  <div class="box healthy" ng-if="metrics.healthy !== 0">
+    <span class="count">{{metrics.healthy}}</span>
+    <span class="criticity">
+      healthy
+      <ng-pluralize count="metrics.healthy"
+        when="{'1': '{{name}}',
+        'other': '{{pluralized}}'}">
+      </ng-pluralize>
+    </span>
+  </div>
   <div class="box total" ng-if="!hasCriticity || metrics.total === 0">
     <span class="count">{{metrics.total}}</span>
     <span class="criticity">
