@@ -1081,6 +1081,9 @@ li.timestamp .relative-timestamp {
 .uchiwa-popover .box.critical {
   background-color: #EA5443; }
 
+.uchiwa-popover .box.healthy {
+  background-color: #43ac6a; }
+
 .uchiwa-popover .box.silenced {
   background-color: #3F283D; }
 
