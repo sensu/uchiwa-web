@@ -36,6 +36,7 @@
                 <th ng-click="predicate = 'name'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'command'; reverse=!reverse">Command <i class="fa fa-sort"></i></th>
                 <th>Subscribers</th>
+                <th ng-click="predicate = 'ttl'; reverse=!reverse"><i class="fa fa-hourglass-start" tooltip-placement="top" tooltip-trigger uib-tooltip="TTL"></i></th>
                 <th ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
                 <th ng-click="predicate = 'interval'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger uib-tooltip="Interval"></i> <i class="fa fa-sort"></i></th>
               </tr>
@@ -47,6 +48,10 @@
                 <td class="main">{{ check.name }}</td>
                 <td>{{ check.command }}</td>
                 <td>{{ check.subscribers | arrayToString }}</td>
+                <td>
+                  {{ check.ttl }}
+                  <span ng-if="check.ttl === undefined">N/A</span>
+                </td>
                 <td class="dc">{{ check.dc }}</td>
                 <td>{{ check.interval }}</td>
               </tr>
