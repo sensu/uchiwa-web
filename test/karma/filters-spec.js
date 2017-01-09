@@ -346,7 +346,7 @@ describe('filters', function () {
       expect(regexFilter(items, 'can+')).toEqual([items[0], items[1]]);
     }));
 
-    it('performs a regex search with a value within an object of an object', inject(function (regexFilter) {
+    it('performs a recursive regex search with a value', inject(function (regexFilter) {
       var items = [
         {foo: 'canada'},
         {foo: {baz: 'vatican'}},
@@ -364,6 +364,15 @@ describe('filters', function () {
       expect(regexFilter(items, 'foo:can*')).toEqual(items);
       expect(regexFilter(items, 'foo:can+')).toEqual([items[0], items[1]]);
       expect(regexFilter(items, 'foo:^can')).toEqual([items[0]]);
+    }));
+
+    it('performs a recursive regex search with a key-value', inject(function (regexFilter) {
+      var items = [
+        {foo: 'canada'},
+        {baz: {foo: 'vatican'}},
+        {qux: {bar: 'canada'}}
+      ];
+      expect(regexFilter(items, 'foo:can+')).toEqual([items[0], items[1]]);
     }));
 
     it('performs a search within an array', inject(function (regexFilter) {

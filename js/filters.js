@@ -271,11 +271,12 @@ filterModule.filter('regex', function() {
     var results = [];
     var queries = query.split(':');
     var pattern = '';
+    var testObject = function() {};
 
     // If we only have a value, without a key
     if (queries.length <= 1) {
       pattern = new RegExp(query);
-      var testObject = function(obj) {
+      testObject = function(obj) {
         for (var k in obj) {
           if (typeof obj[k] === 'object') {
             if (testObject(obj[k])) {
@@ -301,8 +302,21 @@ filterModule.filter('regex', function() {
     var key = queries[0];
     pattern = new RegExp(queries.slice(1).join());
 
+    testObject = function(obj, key) {
+      for (var k in obj) {
+        if (typeof obj[k] === 'object') {
+          if (testObject(obj[k], key)) {
+            return true;
+          }
+        }
+        if (k === key && pattern.test(obj[k])) {
+          return true;
+        }
+      }
+    };
+
     for (var i = 0; i < items.length; i++) {
-      if (pattern.test(items[i][key])) {
+      if (testObject(items[i], key)) {
         results.push(items[i]);
       }
     }
