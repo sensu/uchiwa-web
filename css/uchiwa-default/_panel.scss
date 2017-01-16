@@ -75,8 +75,8 @@
 .panel .panel-title {
   margin-top: 20px;
   font-size: 13px;
-  text-transform: uppercase;
   font-weight: 700;
+  text-transform: uppercase;
 }
 
 .panel .subtitle {
@@ -87,4 +87,27 @@
 .panel-ok {
   color: $primary-color;
   background-color: $info-color;
+}
+
+@media only screen and (max-width: 768px) {
+  .panel div.search-desktop {
+    display: none;
+  }
+  .panel .search-icon {
+    display: inline !important;
+  }
+  .panel .filters {
+    display: none;
+  }
+  .panel .key.pull-right {
+    float: left !important;
+  }
+  .panel .panel-icon i {
+    padding-left: 5px;
+    padding-right: 0;
+  }
+}
+
+.panel .key-value div.col-xs-4 {
+  overflow: hidden;
 }

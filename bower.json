@@ -17,11 +17,13 @@
     "angular-route": "~1.4",
     "angular-sanitize": "~1.4",
     "angular-toastr": "1.6.0",
+    "angular-ua-parser": "0.0.2",
     "bootstrap": "3.1.1",
     "bootstrap-sass-official": "3.1.1",
     "fontawesome": "~4.4.0",
     "highlightjs": "~9.1.0",
-    "moment": "~2.8.3"
+    "moment": "~2.8.3",
+    "ua-parser-js": "~0.7.12"
   },
   "devDependencies": {
     "jasmine": "~2.0.0",
