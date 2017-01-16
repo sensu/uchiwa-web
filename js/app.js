@@ -56,6 +56,15 @@ angular.module('uchiwa')
       .otherwise('/');
 
     $uibTooltipProvider.options({animation: false, 'placement': 'bottom'});
+
+    var parser = new UAParser(); // jshint ignore:line
+    var result = parser.getResult();
+    var touch = result.device && (result.device.type === 'tablet' || result.device.type === 'mobile');
+    if (touch) {
+      $uibTooltipProvider.options({trigger: 'dontTrigger'});
+    } else {
+      $uibTooltipProvider.options({trigger: 'mouseenter'});
+    }
   }
 ])
 .run(function (backendService, $cookieStore, $location, $rootScope, titleFactory) {

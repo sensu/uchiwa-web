@@ -17,6 +17,7 @@ module.exports = function(config) {
       'bower_components/highlightjs/highlight.pack.js',
       'bower_components/angular-gravatar/build/angular-gravatar.js',
       'bower_components/angular-mass-autocomplete-uchiwa/massautocomplete.min.js',
+      'bower_components/ua-parser-js/dist/ua-parser.min.js',
       'partials/**/*.html',
       'js/**/*.js',
       'test/karma/**/*.js'

@@ -1,76 +1,84 @@
 <ng-include src="partialsPath + '/navbar.html'"></ng-include>
 <ng-include src="partialsPath + '/sidebar.html'"></ng-include>
-<div class="container-fluid clients" ng-cloak>
+<div class="container-fluid events" ng-cloak>
   <div class="row-fluid">
     <div class="col-lg-12">
       <div class="panel panel-default">
         <!--panel-heading-->
         <div class="panel-heading">
           <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-10">
               <!--title-->
               <ng-include src="partialsPath + '/panel/breadcrumb.html'"></ng-include>
             </div>
+            <div class="col-xs-2 search-icon" style="display:none;">
+              <i class="fa fa-search fa-lg" ng-click="showMobileSearch = ! showMobileSearch"></i>
+            </div>
             <div class="col-xs-12 nopadding">
-              <!--dc-->
-              <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
-              <!--actions-->
-              <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents" ng-if="!user.isReadOnly()"></panel-actions>
-              <!--hide-->
-              <ng-include src="partialsPath + '/panel/hide.html'"></ng-include>
-              <!--checks-->
-              <ng-include src="partialsPath + '/panel/check.html'"></ng-include>
-              <!--status-->
-              <ng-include src="partialsPath + '/panel/status.html'"></ng-include>
-              <!--limit-->
-              <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
+              <span class="filters">
+                <!--actions-->
+                <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents" ng-if="!user.isReadOnly() && hasElementSelected(selected)"></panel-actions>
+                <!--dc-->
+                <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
+                <!--hide-->
+                <ng-include src="partialsPath + '/panel/hide.html'"></ng-include>
+                <!--checks-->
+                <ng-include src="partialsPath + '/panel/check.html'"></ng-include>
+                <!--status-->
+                <ng-include src="partialsPath + '/panel/status.html'"></ng-include>
+                <!--limit-->
+                <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
+              </span>
               <!--search-->
-              <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
+              <span class="search nopadding">
+                <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
+              </span>
             </div>
           </div>
         </div>
+
         <!--panel-body-->
-        <div class="panel-body">
+        <div id="responsive-table" class="panel-body">
           <table class="table table-hover table-condensed" style="table-layout: fixed;">
             <thead>
               <tr>
-                <th ng-class="user.isReadOnly() ? 'col-min-ro' : 'col-min'">
+                <th ng-class="user.isReadOnly() ? 'column-xs' : 'column-sm'">
                   <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
-                <th class="col-sm-3" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
-                <th class="col-sm-3" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
-                <th class="col-sm-4" ng-click="predicate = 'check.output'; reverse=!reverse">Output <i class="fa fa-sort"></i></th>
-                <th class="col-sm-1" ng-click="predicate = 'occurrences'; reverse=!reverse"><i class="fa fa-slack" tooltip-placement="top" tooltip-trigger uib-tooltip="Occurrences"></i> <i class="fa fa-sort"></i></th>
-                <th class="col-dc" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
-                <th class="col-date" ng-click="predicate = 'check.issued'; reverse=!reverse"><i class='fa fa-hourglass-start' tooltip-placement="top" tooltip-trigger uib-tooltip="Issued"></i> <i class="fa fa-sort"></i></th>
-                <th class="col-sm-1" ng-click="predicate = 'last_ok'; reverse=!reverse"><i class="fa fa-history" tooltip-placement="top" tooltip-trigger uib-tooltip="Last Ok"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-xxl" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
+                <th class="column-xxl" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
+                <th class="column-xxl" ng-click="predicate = 'check.output'; reverse=!reverse">Output <i class="fa fa-sort"></i></th>
+                <th class="column-md trivial" ng-click="predicate = 'occurrences'; reverse=!reverse"><i class="fa fa-slack" tooltip-placement="top" tooltip-trigger uib-tooltip="Occurrences"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-lg" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-lg" ng-click="predicate = 'check.issued'; reverse=!reverse"><i class='fa fa-hourglass-start' tooltip-placement="top" tooltip-trigger uib-tooltip="Issued"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-lg" ng-click="predicate = 'last_ok'; reverse=!reverse"><i class="fa fa-history" tooltip-placement="top" tooltip-trigger uib-tooltip="Last Ok"></i> <i class="fa fa-sort"></i></th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="event in filtered | buildEvents | orderBy:predicate:reverse | limitTo:filters.limit track by event._id" ng-click="go('/client/'+event.dc+'/'+event.client.name+'?check='+event.check.name)">
-                <td class="well-{{ event.check.status | getStatusClass }}" ng-click="$event.stopPropagation()">
+              <tr class="well-{{ event.check.status | getStatusClass }}" ng-repeat="event in filtered | buildEvents | orderBy:predicate:reverse | limitTo:filters.limit track by event._id" ng-click="go('/client/'+event.dc+'/'+event.client.name+'?check='+event.check.name)">
+                <td class="hide-mobile" ng-click="$event.stopPropagation()">
                   <!-- adding ng-click to get event info -->
                   <input type="checkbox" ng-model="selected.ids[event._id]" ng-if="!user.isReadOnly()"></input>
                 </td>
-                <td class="source">
+                <td data-title="Source" class="normal">
                   <span ng-click="event.client['dc'] = event.dc; silence($event, event.client)" ng-if="!user.isReadOnly()">
                     <silence-icon silenced="event.client.silenced"></silence-icon>
                   </span>
                   <span class="dropdown-toggle" >{{ event.sourceName }}</span>
                 </td>
-                <td class="main">
+                <td data-title="Check" class="main normal">
                   <span ng-click="silence($event, event)" ng-if="!user.isReadOnly()">
                     <silence-icon silenced="event.silenced"></silence-icon>
                   </span>
                   <span class="main check-name" tooltip-placement="top" tooltip-trigger tooltip-html="'Subscriptions<br /><small>{{event.check.subscribers|arrayToString}}</small>'">{{ event.check.name }}</span>
                 </td>
-                <td class="output" ng-bind-html="event.check.output | linky" ng-click="openLink($event)"></td>
-                <td>{{ event.occurrences }}</td>
-                <td class="dc">{{ event.dc }}</td>
-                <td>
+                <td data-title="Output" class="normal" ng-bind-html="event.check.output | linky" ng-click="openLink($event)"></td>
+                <td data-title="#" class="normal trivial">{{ event.occurrences }}</td>
+                <td data-title="DC" class="normal">{{ event.dc }}</td>
+                <td data-title="Time" class="normal">
                   <relative-time timestamp="event.check.issued"></relative-time>
                 </td>
-                <td>
+                <td data-title="Time" class="normal">
                   <relative-time timestamp="event.last_ok"></relative-time>
                 </td>
               </tr>

@@ -366,7 +366,7 @@ controllerModule.controller('EventsController', ['Clients', 'Events', '$filter',
     titleFactory.set($scope.pageHeaderText);
 
     $scope.filters = {};
-    $scope.predicate = ['-check.status', '-check.issued'];
+    $scope.predicate = ['-check.status', 'occurrences'];
     $scope.reverse = false;
     $scope.selected = {all: false, ids: {}};
     $scope.statuses = {1: 'Warning', 2: 'Critical', 3: 'Unknown'};
@@ -412,6 +412,7 @@ controllerModule.controller('EventsController', ['Clients', 'Events', '$filter',
     // Services
     $scope.go = routingService.go;
     $scope.openLink = Helpers.openLink;
+    //$scope.hasElementSelected = helperService.hasElementSelected;
     $scope.permalink = routingService.permalink;
     $scope.selectAll = Helpers.selectAll;
     $scope.silence = Silenced.create;

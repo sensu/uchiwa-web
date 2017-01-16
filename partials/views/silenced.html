@@ -4,61 +4,67 @@
   <div class="row-fluid">
     <div class="col-lg-12">
       <div class="panel panel-default">
-
         <!--panel-heading-->
         <div class="panel-heading">
           <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-10">
               <!--title-->
               <ng-include src="partialsPath + '/panel/breadcrumb.html'"></ng-include>
             </div>
+            <div class="col-xs-2 search-icon" style="display:none;">
+              <i class="fa fa-search fa-lg" ng-click="showMobileSearch = ! showMobileSearch"></i>
+            </div>
             <div class="col-xs-12 nopadding">
-              <!--dc-->
-              <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
-              <!--actions-->
-              <panel-actions data="silenced" resolve-fn="deleteMultiple" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
-              <!--limit-->
-              <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
-              <!--add-->
-              <ng-include src="partialsPath + '/panel/add-silenced.html'"></ng-include>
+              <span class="filters">
+                <!--dc-->
+                <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
+                <!--actions-->
+                <panel-actions data="silenced" resolve-fn="deleteMultiple" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
+                <!--limit-->
+                <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
+                <!--add-->
+                <ng-include src="partialsPath + '/panel/add-silenced.html'"></ng-include>
+              </span>
               <!--search-->
-              <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
+              <span class="search nopadding">
+                <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
+              </span>
             </div>
           </div>
         </div>
 
         <!--panel-body-->
-        <div class="panel-body">
+        <div id="responsive-table" class="panel-body">
           <table class="table table-hover table-condensed" style="table-layout: fixed;">
             <thead>
               <tr>
-                <th ng-class="user.isReadOnly() ? 'col-min-ro' : 'col-min'">
+                <th ng-class="user.isReadOnly() ? 'column-xs' : 'column-sm'">
                   <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
-                <th class="col-sm-3" ng-click="predicate = 'id'; reverse=!reverse">ID <i class="fa fa-sort"></i></th>
-                <th class="col-dc" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
-                <th class="col-sm-5" ng-click="predicate = 'reason'; reverse=!reverse"><i class="fa fa-commenting-o" tooltip-placement="top" tooltip-trigger uib-tooltip="Reason"></i> <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'creator'; reverse=!reverse"><i class="fa fa-user" tooltip-placement="top" tooltip-trigger uib-tooltip="Creator"></i> <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'expire_on_resolve'; reverse=!reverse"><i class='fa fa-calendar-check-o' tooltip-placement="top" tooltip-trigger uib-tooltip="Expire on Resolve"></i> <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'expire'; reverse=!reverse"><i class='fa fa-hourglass-end' tooltip-placement="top" tooltip-trigger uib-tooltip="Expiration"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-xxl" ng-click="predicate = 'id'; reverse=!reverse">ID <i class="fa fa-sort"></i></th>
+                <th class="column-md" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-xxl" ng-click="predicate = 'reason'; reverse=!reverse"><i class="fa fa-commenting-o" tooltip-placement="top" tooltip-trigger uib-tooltip="Reason"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-md" ng-click="predicate = 'creator'; reverse=!reverse"><i class="fa fa-user" tooltip-placement="top" tooltip-trigger uib-tooltip="Creator"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-md trivial" ng-click="predicate = 'expire_on_resolve'; reverse=!reverse"><i class='fa fa-calendar-check-o' tooltip-placement="top" tooltip-trigger uib-tooltip="Expire on Resolve"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-lg" ng-click="predicate = 'expire'; reverse=!reverse"><i class='fa fa-hourglass-end' tooltip-placement="top" tooltip-trigger uib-tooltip="Expiration"></i> <i class="fa fa-sort"></i></th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="entry in filtered | orderBy:predicate:reverse | limitTo:filters.limit track by entry._id" ng-click="go('/silenced/'+entry._id)">
-                <td ng-if="!user.isReadOnly()" ng-click="$event.stopPropagation()">
-                  <input type="checkbox" ng-model="selected.ids[entry._id]"></input>
+                <td class="hide-mobile" ng-click="$event.stopPropagation()">
+                  <input type="checkbox" ng-model="selected.ids[entry._id]" ng-if="!user.isReadOnly()"></input>
                 </td>
-                <td class="main">
+                <td data-title="ID" class="main normal">
                   <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="delete($event, entry._id);"></i></span>{{ entry.id }}
                 </td>
-                <td class="dc">{{ entry.dc }}</td>
-                <td class="output" ng-bind-html="entry.reason"></td>
-                <td>
+                <td data-title="DC" class="normal">{{ entry.dc }}</td>
+                <td data-title="Reason" class="normal" ng-bind-html="entry.reason"></td>
+                <td data-title="Creator" class="normal">
                   {{ entry.creator }}
                   <span ng-if="entry.creator === null">N/A</span>
                 </td>
-                <td>{{ entry.expire_on_resolve }}</td>
-                <td>{{ entry.expire | getExpirationTimestamp }}</td>
+                <td class="normal trivial">{{ entry.expire_on_resolve }}</td>
+                <td data-title="Expire" class="normal">{{ entry.expire | getExpirationTimestamp }}</td>
               </tr>
             </tbody>
           </table>

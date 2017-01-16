@@ -603,6 +603,9 @@ pre.hljs .hljs-string {
   display: block;
   font-size: 18px; }
 
+.fa-search {
+  line-height: 1.5em; }
+
 .fa-stack {
   height: 1.4em;
   line-height: 1.4em;
@@ -611,6 +614,9 @@ pre.hljs .hljs-string {
 .fa-times {
   padding-right: 5px; }
 
+@media only screen and (max-width: 768px) {
+  .fa-stack {
+    width: 1.4em; } }
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */
@@ -869,6 +875,9 @@ li.timestamp .relative-timestamp {
 .modal-header {
   border-bottom: 1px solid #21212b; }
 
+@media only screen and (max-width: 768px) {
+  .modal-dialog {
+    width: 95%; } }
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */
@@ -1056,8 +1065,8 @@ li.timestamp .relative-timestamp {
 .panel .panel-title {
   margin-top: 20px;
   font-size: 13px;
-  text-transform: uppercase;
-  font-weight: 700; }
+  font-weight: 700;
+  text-transform: uppercase; }
 
 .panel .subtitle {
   display: block;
@@ -1066,6 +1075,25 @@ li.timestamp .relative-timestamp {
 .panel-ok {
   color: #2C2C39;
   background-color: #6A5E98; }
+
+@media only screen and (max-width: 768px) {
+  .panel div.search-desktop {
+    display: none; }
+
+  .panel .search-icon {
+    display: inline !important; }
+
+  .panel .filters {
+    display: none; }
+
+  .panel .key.pull-right {
+    float: left !important; }
+
+  .panel .panel-icon i {
+    padding-left: 5px;
+    padding-right: 0; } }
+.panel .key-value div.col-xs-4 {
+  overflow: hidden; }
 
 .uchiwa-popover {
   background-color: #2C2C39;
@@ -1202,6 +1230,9 @@ li.timestamp .relative-timestamp {
 /* Tables */
 /* Timestamp */
 /* Wells */
+@media only screen and (max-width: 768px) {
+  .nav li.logo {
+    display: none; } }
 .sidebar {
   background-color: #22222D; }
 
@@ -1322,6 +1353,69 @@ li.timestamp .relative-timestamp {
 /* Tables */
 /* Timestamp */
 /* Wells */
+@media only screen and (max-width: 900px) {
+  /* Hide trivial columns */
+  .panel-body table td.trivial,
+  .panel-body table th.trivial {
+    display: none; } }
+@media only screen and (max-width: 768px) {
+  .navbar {
+    display: none; }
+
+  /* Hide non-mobile & trivial columns */
+  #responsive-table table td.hide-mobile,
+  #responsive-table table th.hide-mobile,
+  #responsive-table table td.trivial,
+  #responsive-table table th.trivial {
+    display: none; }
+
+  #responsive-table.panel-body {
+    padding: 0; }
+
+  /* Force table to not be like tables anymore */
+  #responsive-table table,
+  #responsive-table thead,
+  #responsive-table tbody,
+  #responsive-table th,
+  #responsive-table td,
+  #responsive-table tr {
+    display: block; }
+
+  #responsive-table table {
+    margin-bottom: 0; }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  #responsive-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px; }
+
+  #responsive-table tr {
+    border-bottom: 1px solid #ccc;
+    padding: 5px 0 5px 0; }
+
+  #responsive-table td {
+    /* Behave  like a "row" */
+    position: relative;
+    padding: 0 0 0 25%;
+    text-align: left; }
+
+  #responsive-table td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold; }
+
+  /*
+  Label the data
+  */
+  #responsive-table td:before {
+    content: attr(data-title); } }
 .table {
   margin-bottom: 10px; }
 
@@ -1330,43 +1424,33 @@ li.timestamp .relative-timestamp {
   padding-left: 3px; }
 
 .table td.main {
-  font-weight: 700;
+  font-weight: 700; }
+
+.table td.normal {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap; }
 
-.table td.source {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap; }
-
-.table td.output {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap; }
-
-.table td.check-name {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap; }
-
-.table td.dc {
-  word-break: break-all; }
-
-.table th.col-min {
-  width: 4%; }
-
-.table th.col-min-ro {
+.table th.column-xs {
   width: 1%; }
 
-.table th.col-gravatar {
-  width: 5%; }
+.table th.column-sm {
+  width: 3%; }
 
-.table th.col-dc {
-  width: 8%; }
+.table th.column-md {
+  width: 6%; }
 
-.table th.col-date {
-  width: 13.5%; }
+.table th.column-lg {
+  width: 10%; }
+
+.table th.column-xl {
+  width: 12%; }
+
+.table th.column-xxl {
+  width: 20%; }
+
+.table th.column-xxxl {
+  width: 30%; }
 
 .table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
   border-top: 0px; }

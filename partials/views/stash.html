@@ -3,12 +3,12 @@
 <div class="container-fluid element-view" ng-cloak>
 
   <div class="row-fluid">
-    <div class="col-xs-12">
+    <div class="col-sm-12">
       <div class="panel panel-default panel-breadcrump">
         <!--panel-heading-->
         <div class="panel-heading">
           <div class="row">
-            <div class="col-xs-12">
+            <div class="col-sm-12">
               <!--Breadcrum-->
               <ul class="breadcrumb" ng-if="!check">
                 <li><a href="#/stashes">Stashes</a></li>
@@ -23,7 +23,7 @@
 
   <!--missing client-->
   <div class="row-fluid" ng-if='!stash'>
-    <div class="col-xs-12">
+    <div class="col-sm-12">
       <div class="panel panel-default">
         <div class="panel-body">
           <p class="lead text-center">Could not retrieve the stash <strong>{{ id }}</strong>.</p>
@@ -37,7 +37,7 @@
   <div class="row-fluid" ng-if='stash'>
 
     <!--Stash Summary-->
-    <div class="col-xs-4">
+    <div class="col-sm-4">
       <div class="panel panel-default client-info">
         <div class="panel-body">
           <div class="row mb15">
@@ -79,7 +79,7 @@
 
     </div>
 
-    <div class="col-xs-8">
+    <div class="col-sm-8">
       <!--Content-->
       <div class="panel panel-default check-info" ng-if="stash">
         <div class="panel-body">
