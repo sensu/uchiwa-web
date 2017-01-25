@@ -3,12 +3,12 @@
 <div class="container-fluid element-view" ng-cloak>
 
   <div class="row-fluid">
-    <div class="col-xs-12">
+    <div class="col-sm-12">
       <div class="panel panel-default panel-breadcrump">
         <!--panel-heading-->
         <div class="panel-heading">
           <div class="row">
-            <div class="col-xs-12">
+            <div class="col-sm-12">
               <!--title-->
               <ul class="breadcrumb">
                 <li><a href="#/aggregates">Aggregates</a></li>
@@ -26,7 +26,7 @@
 
   <!--missing aggregate-->
   <div class="row-fluid" ng-if='!aggregate'>
-    <div class="col-xs-12">
+    <div class="col-sm-12">
       <div class="panel panel-default">
         <div class="panel-body">
           <p class="lead text-center">Could not retrieve the aggregate <strong>{{ name }}</strong> from the datacenter <strong>{{dc}}</strong>.</p>
@@ -37,7 +37,7 @@
   </div>
 
   <div class="row-fluid" ng-if="aggregate">
-    <div class="col-xs-5">
+    <div class="col-sm-5">
       <div class="panel panel-default">
         <div class="panel-body">
 
@@ -100,7 +100,7 @@
       </div>
     </div>
 
-    <div class="col-xs-7" ng-if="members === 'undefined'">
+    <div class="col-sm-7" ng-if="members === 'undefined'">
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="p20">
@@ -112,35 +112,75 @@
       </div>
     </div>
 
-    <div class="col-xs-7" ng-if="members !== 'undefined'">
+    <div class="col-sm-7" ng-if="members !== 'undefined'">
       <div class="panel panel-default">
         <div class="panel-body">
 
         <div ng-if="checks.length !== 0" ng-repeat="check in checks">
           <div class="panel-title"><i class="fa fa-check"></i> {{check.name}}</div>
-          <ul class="dl-horizontal">
-            <dt><ng-pluralize count="check.clients.length" when="{'one': 'client', 'other': 'clients'}"></ng-pluralize></dt>
-            <dd ng-repeat="client in check.clients">{{client}}</dd>
-          </ul>
+          <div class="row">
+            <div class="col-xs-4">
+              <span class="key pull-right">
+                <ng-pluralize count="check.clients.length" when="{'one': 'client', 'other': 'clients'}"></ng-pluralize>
+              </span>
+            </div>
+            <div class="col-xs-8">
+              <span>
+                <div ng-repeat="client in check.clients">
+                  {{client}}
+                </div>
+              </span>
+            </div>
+          </div>
         </div>
 
         <div ng-if="clients.length !== 0" ng-repeat="client in clients">
           <div class="panel-title"><i class="fa fa-hdd-o"></i> {{client.name}}</div>
-          <ul class="dl-horizontal">
-            <dt><ng-pluralize count="client.checks.length" when="{'one': 'check', 'other': 'checks'}"></ng-pluralize></dt>
-            <dd ng-repeat="check in client.checks">{{check}}</dd>
-          </ul>
+          <div class="row">
+            <div class="col-xs-4">
+              <span class="key pull-right">
+                <ng-pluralize count="client.checks.length" when="{'one': 'check', 'other': 'checks'}"></ng-pluralize>
+              </span>
+            </div>
+            <div class="col-xs-8">
+              <span>
+                <div ng-repeat="check in client.checks">
+                  {{check}}
+                </div>
+              </span>
+            </div>
+          </div>
         </div>
 
         <div ng-if="results.length !== 0" ng-repeat="result in results">
           <div class="panel-title"><i class="fa fa-check"></i> {{result.check}}</div>
           <span ng-repeat="summary in result.summary">
-            <ul class="dl-horizontal">
-              <dt>output</dt>
-              <dd>{{summary.output}}</dd>
-              <dt><ng-pluralize count="summary.total" when="{'one': 'client', 'other': 'clients'}"></ng-pluralize></dt>
-              <dd ng-repeat="client in summary.clients">{{client}}</dd>
-            </ul>
+            <div class="row">
+              <div class="col-xs-4">
+                <span class="key pull-right">
+                  output
+                </span>
+              </div>
+              <div class="col-xs-8">
+                <span>
+                  {{summary.output}}
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-4">
+                <span class="key pull-right">
+                  <ng-pluralize count="summary.total" when="{'one': 'client', 'other': 'clients'}"></ng-pluralize>
+                </span>
+              </div>
+              <div class="col-xs-8">
+                <span>
+                  <div ng-repeat="client in summary.clients">
+                    {{client}}
+                  </div>
+                </span>
+              </div>
+            </div>
           </span>
         </div>
 

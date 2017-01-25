@@ -1,5 +1,11 @@
 @import "variables";
 
+@media only screen and (max-width: 768px) {
+  .nav li.logo {
+    display: none;
+  }
+}
+
 .sidebar {
   background-color: $sidebar-background-color;
 }

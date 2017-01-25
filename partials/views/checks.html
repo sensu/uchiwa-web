@@ -4,56 +4,62 @@
   <div class="row-fluid">
     <div class="col-lg-12">
       <div class="panel panel-default">
-
         <!--panel-heading-->
         <div class="panel-heading">
           <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-10">
               <!--title-->
               <ng-include src="partialsPath + '/panel/breadcrumb.html'"></ng-include>
             </div>
+            <div class="col-xs-2 search-icon" style="display:none;">
+              <i class="fa fa-search fa-lg" ng-click="showMobileSearch = ! showMobileSearch"></i>
+            </div>
             <div class="col-xs-12 nopadding">
-              <!--dc-->
-              <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
-              <!--actions-->
-              <panel-actions data="checks" refresh-fn="issueCheckRequest" refresh-legend="Issue Check Request" silence-fn="silenceChecks" ng-if="!user.isReadOnly()"></panel-actions>
-              <!--limit-->
-              <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
+              <span class="filters">
+                <!--dc-->
+                <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
+                <!--actions-->
+                <panel-actions data="checks" refresh-fn="issueCheckRequest" refresh-legend="Issue Check Request" silence-fn="silenceChecks" ng-if="!user.isReadOnly()"></panel-actions>
+                <!--limit-->
+                <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
+              </span>
               <!--search-->
-              <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
+              <span class="search nopadding">
+                <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
+              </span>
             </div>
           </div>
         </div>
 
         <!--panel-body-->
-        <div class="panel-body">
-          <table class="table table-hover table-condensed">
+        <div id="responsive-table" class="panel-body">
+          <table class="table table-hover table-condensed" style="table-layout: fixed;">
             <thead>
               <tr>
-                <th class="col-min" ng-if="!user.isReadOnly()">
-                  <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)"></input>
+                <th ng-class="user.isReadOnly() ? 'column-xs' : 'column-sm'">
+                  <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
-                <th ng-click="predicate = 'name'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'command'; reverse=!reverse">Command <i class="fa fa-sort"></i></th>
-                <th>Subscribers</th>
-                <th ng-click="predicate = 'ttl'; reverse=!reverse"><i class="fa fa-hourglass-start" tooltip-placement="top" tooltip-trigger uib-tooltip="TTL"></i></th>
-                <th ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
-                <th ng-click="predicate = 'interval'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger uib-tooltip="Interval"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-xxl" ng-click="predicate = 'name'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
+                <th class="column-xxl" ng-click="predicate = 'command'; reverse=!reverse">Command <i class="fa fa-sort"></i></th>
+                <th class="column-xl">Subscribers</th>
+                <th class="column-md" ng-click="predicate = 'ttl'; reverse=!reverse"><i class="fa fa-hourglass-start" tooltip-placement="top" tooltip-trigger uib-tooltip="TTL"></i></th>
+                <th class="column-lg" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-md" ng-click="predicate = 'interval'; reverse=!reverse"><i class='fa fa-clock-o' tooltip-placement="top" tooltip-trigger uib-tooltip="Interval"></i> <i class="fa fa-sort"></i></th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="check in filtered | orderBy:predicate:reverse | limitTo:filters.limit track by check._id">
-                <td ng-if="!user.isReadOnly()">
-                  <input type="checkbox" ng-model="selected.ids[check._id]"></input>
-                <td class="main">{{ check.name }}</td>
-                <td>{{ check.command }}</td>
-                <td>{{ check.subscribers | arrayToString }}</td>
-                <td>
+                <td class="hide-mobile">
+                  <input type="checkbox" ng-model="selected.ids[check._id]" ng-if="!user.isReadOnly()"></input>
+                <td data-title="Name" class="main normal">{{ check.name }}</td>
+                <td data-title="Command" class="normal">{{ check.command }}</td>
+                <td data-title="Subscribers" class="Subscribers">{{ check.subscribers | arrayToString }}</td>
+                <td data-title="TTL" class="normal">
                   {{ check.ttl }}
                   <span ng-if="check.ttl === undefined">N/A</span>
                 </td>
-                <td class="dc">{{ check.dc }}</td>
-                <td>{{ check.interval }}</td>
+                <td data-title="DC" class="normal">{{ check.dc }}</td>
+                <td data-title="Interval" class="normal">{{ check.interval }}</td>
               </tr>
             </tbody>
           </table>

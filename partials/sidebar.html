@@ -5,12 +5,12 @@
         <li class="logo"></li>
         <li ng-if="enterprise " ng-class="getClass('/hud')" >
           <a ng-href="#hud">
-            <span class="small-nav" tooltip-placement="right" tooltip-trigger uib-tooltip="HUD">
+            <span class="small-nav" tooltip-placement="right" uib-tooltip="HUD">
               <i class="fa fa-tachometer"></i>
             </span>
           </a>
         </li>
-        <li id="events" ng-class="getClass('/events')" uib-popover-template="popoversTemplates.events" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+        <li id="events" ng-class="getClass('/events')" uib-popover-template="popoversTemplates.events" popover-class="uchiwa-popover" popover-placement="right">
           <a ng-href="#events">
             <span class="small-nav">
               <i class="fa fa-bullhorn"></i>
@@ -18,7 +18,7 @@
             </span>
           </a>
         </li>
-        <li id="clients" ng-class="getClass('/clients')" uib-popover-template="popoversTemplates.clients" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+        <li id="clients" ng-class="getClass('/clients')" uib-popover-template="popoversTemplates.clients" popover-class="uchiwa-popover" popover-placement="right">
           <a ng-href="#clients">
             <span class="small-nav">
               <i class="fa fa-hdd-o"></i>
@@ -26,7 +26,7 @@
             </span>
           </a>
         </li>
-        <li id="checks" ng-class="getClass('/checks')" uib-popover-template="popoversTemplates.checks" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+        <li id="checks" ng-class="getClass('/checks')" uib-popover-template="popoversTemplates.checks" popover-class="uchiwa-popover" popover-placement="right">
           <a ng-href="#checks">
             <span class="small-nav">
               <i class="fa fa-check-square"></i>
@@ -34,7 +34,7 @@
             </span>
           </a>
         </li>
-        <li id="silenced" ng-class="getClass('/silenced')" uib-popover-template="popoversTemplates.silenced" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+        <li id="silenced" ng-class="getClass('/silenced')" uib-popover-template="popoversTemplates.silenced" popover-class="uchiwa-popover" popover-placement="right">
           <a ng-href="#silenced">
             <span class="small-nav">
               <i class="fa fa-bell-slash-o"></i>
@@ -42,7 +42,7 @@
             </span>
           </a>
         </li>
-        <li id="stashes" ng-class="getClass('/stashes')" uib-popover-template="popoversTemplates.stashes" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+        <li id="stashes" ng-class="getClass('/stashes')" uib-popover-template="popoversTemplates.stashes" popover-class="uchiwa-popover" popover-placement="right">
           <a ng-href="#stashes">
             <span class="small-nav">
               <i class="fa fa-briefcase"></i>
@@ -50,7 +50,7 @@
             </span>
           </a>
         </li>
-        <li id="aggregates" ng-class="getClass('/aggregates')" uib-popover-template="popoversTemplates.aggregates" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+        <li id="aggregates" ng-class="getClass('/aggregates')" uib-popover-template="popoversTemplates.aggregates" popover-class="uchiwa-popover" popover-placement="right">
           <a ng-href="#aggregates">
             <span class="small-nav">
               <i class="fa fa-folder"></i>
@@ -58,7 +58,7 @@
             </span>
           </a>
         </li>
-        <li id="datacenters" ng-class="getClass('/datacenter')" uib-popover-template="popoversTemplates.datacenters" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right">
+        <li id="datacenters" ng-class="getClass('/datacenter')" uib-popover-template="popoversTemplates.datacenters" popover-class="uchiwa-popover" popover-placement="right">
           <a ng-href="#datacenters">
             <span class="small-nav">
               <i class="fa fa-cloud"></i>
@@ -66,7 +66,7 @@
             </span>
           </a>
         </li>
-        <li id="alerts" uib-popover-template="popoversTemplates.alerts" popover-trigger="'mouseenter'" popover-class="uchiwa-popover" popover-placement="right" ng-if="alerts | arrayLength">
+        <li id="alerts" uib-popover-template="popoversTemplates.alerts" popover-class="uchiwa-popover" popover-placement="right" ng-if="alerts | arrayLength">
           <a ng-href="">
             <span class="small-nav">
               <i class="fa fa-exclamation-triangle"></i>
@@ -100,7 +100,7 @@
        </li> -->
         <li ng-if="enterprise && config.Uchiwa.Auth === 'sql' && user.isAdmin()" ng-class="getClass('/users')" >
           <a ng-href="#users">
-            <span class="small-nav" tooltip-placement="right" tooltip-trigger uib-tooltip="Users">
+            <span class="small-nav" tooltip-placement="right" uib-tooltip="Users">
               <i class="fa fa-users"></i>
             </span>
           </a>
