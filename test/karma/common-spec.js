@@ -73,6 +73,18 @@ describe('common', function () {
       }));
     });
 
+    describe('hasElementSelected', function () {
+      it('returns false when no elements are selected', inject(function (Helpers) {
+        expect(Helpers.hasElementSelected({})).toEqual(false);
+        expect(Helpers.hasElementSelected({ids: {foo: false}})).toEqual(false);
+      }));
+
+      it('returns true when one element is selected', inject(function (Helpers) {
+        expect(Helpers.hasElementSelected({ids: {foo: true}})).toEqual(true);
+        expect(Helpers.hasElementSelected({ids: {foo: false, bar: true}})).toEqual(true);
+      }));
+    });
+
     describe('secondsBetweenDates', function () {
       it('returns "unknown" if at least one of the date is undefined', inject(function(Helpers){
         expect(Helpers.secondsBetweenDates()).toEqual('unknown');

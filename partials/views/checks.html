@@ -16,10 +16,10 @@
             </div>
             <div class="col-xs-12 nopadding">
               <span class="filters">
+                <!--actions-->
+                <panel-actions data="checks" refresh-fn="issueCheckRequest" refresh-legend="Issue Check Request" silence-fn="silenceChecks" ng-if="!user.isReadOnly() && hasElementSelected(selected)"></panel-actions>
                 <!--dc-->
                 <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
-                <!--actions-->
-                <panel-actions data="checks" refresh-fn="issueCheckRequest" refresh-legend="Issue Check Request" silence-fn="silenceChecks" ng-if="!user.isReadOnly()"></panel-actions>
                 <!--limit-->
                 <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
               </span>
