@@ -118,7 +118,7 @@ controllerModule.controller('AggregatesController', ['Aggregates', '$filter', 'H
           $scope.filtered = results;
         }, function() {});
     };
-
+    $scope.hasElementSelected = Helpers.hasElementSelected;
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
     $scope.selectAll = Helpers.selectAll;
@@ -175,6 +175,7 @@ controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers',
     });
 
     // Services
+    $scope.hasElementSelected = Helpers.hasElementSelected;
     $scope.permalink = routingService.permalink;
     $scope.selectAll = Helpers.selectAll;
     $scope.issueCheckRequest = function() {
@@ -335,6 +336,7 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
           $scope.filtered = results;
         }, function() {});
     };
+    $scope.hasElementSelected = Helpers.hasElementSelected;
     $scope.go = routingService.go;
     $scope.openLink = Helpers.openLink;
     $scope.permalink = routingService.permalink;
@@ -412,7 +414,7 @@ controllerModule.controller('EventsController', ['Clients', 'Events', '$filter',
     // Services
     $scope.go = routingService.go;
     $scope.openLink = Helpers.openLink;
-    //$scope.hasElementSelected = helperService.hasElementSelected;
+    $scope.hasElementSelected = Helpers.hasElementSelected;
     $scope.permalink = routingService.permalink;
     $scope.selectAll = Helpers.selectAll;
     $scope.silence = Silenced.create;
@@ -655,6 +657,7 @@ controllerModule.controller('SilencedController', ['$filter', 'Helpers', '$route
     });
 
     // Services
+    $scope.hasElementSelected = Helpers.hasElementSelected;
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
     $scope.selectAll = Helpers.selectAll;
@@ -891,6 +894,7 @@ controllerModule.controller('StashesController', ['$filter', 'Helpers', '$rootSc
     });
 
     // Services
+    $scope.hasElementSelected = Helpers.hasElementSelected;
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
     $scope.selectAll = Helpers.selectAll;

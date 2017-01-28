@@ -63,6 +63,18 @@ function($filter, $q, $rootScope) {
     selected.all = false;
     return items;
   };
+  // hasElementSelected returns true if at least one element is selected
+  this.hasElementSelected = function(selected) {
+    var isSelected = false;
+    angular.forEach(selected.ids, function(value) {
+      if (!isSelected) {
+        if (value) {
+          isSelected = true;
+        }
+      }
+    });
+    return isSelected;
+  };
   // openLink stops event propagation if an A tag is clicked
   this.openLink = function($event) {
     if($event.srcElement.tagName === 'A'){

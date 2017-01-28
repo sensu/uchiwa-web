@@ -16,11 +16,11 @@
             </div>
             <div class="col-xs-12 nopadding">
               <span class="filters">
+                <!--actions-->
+                <panel-actions data="silenced" resolve-fn="deleteMultiple" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly() && hasElementSelected(selected)"></panel-actions>
+                <!--limit-->
                 <!--dc-->
                 <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
-                <!--actions-->
-                <panel-actions data="silenced" resolve-fn="deleteMultiple" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly()"></panel-actions>
-                <!--limit-->
                 <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
                 <!--add-->
                 <ng-include src="partialsPath + '/panel/add-silenced.html'"></ng-include>
