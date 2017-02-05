@@ -27,6 +27,7 @@
   <h5>Expiration</h5>
   {{expire}}
   <div class="btn-group">
+    <label class="btn btn-xs btn-default" ng-model="options.expire" uib-btn-radio="'resolve'">on resolve</label>
     <label class="btn btn-xs btn-default" ng-model="options.expire" uib-btn-radio="900">15 minutes</label>
     <label class="btn btn-xs btn-default" ng-model="options.expire" uib-btn-radio="3600">1 hour</label>
     <label class="btn btn-xs btn-default" ng-model="options.expire" uib-btn-radio="86400">24 hours</label>
@@ -38,13 +39,6 @@
     <div class="mb15" style="float:left">
       <h5>Expiration date</h5>
       <input type="text" ng-model="options.to" placeholder="yyyy-mm-dd hh:mm:ss">
-    </div>
-  </div>
-  <div style="clear:both">
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" ng-model="options.expire_on_resolve" ng-init="options.expire_on_resolve=Config.defaultExpireOnResolve()"> Expire on Resolve
-      </label>
     </div>
   </div>
   <div style="clear:both">
