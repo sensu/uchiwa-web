@@ -633,19 +633,17 @@ describe('services', function () {
           {dc: 'us-west-1', name: 'bar'}
         ];
         var itemType = 'client';
-        var options = {expire: 3600, expire_on_resolve: false, reason: 'Lorem Ipsum'}
+        var options = {expire: 3600, reason: 'Lorem Ipsum'}
         var expectedPayloads = [
           {
             dc: 'us-east-1',
             expire: 3600,
-            expire_on_resolve: false,
             reason: 'Lorem Ipsum',
             subscription: 'client:foo'
           },
           {
             dc: 'us-west-1',
             expire: 3600,
-            expire_on_resolve: false,
             reason: 'Lorem Ipsum',
             subscription: 'client:bar'
           }
@@ -703,6 +701,19 @@ describe('services', function () {
         var itemType = 'check';
         var options = {expire: 'custom', to: null};
         var expectedPayload = {dc: 'us-east-1', check: 'foo', expire: ''};
+
+        Silenced.createEntries(items, itemType, options);
+
+        expect(Silenced.post).toHaveBeenCalledWith(expectedPayload);
+      }));
+
+      it('supports custom expiry on "resolve"', inject(function (Silenced) {
+        spyOn(Silenced, 'post').and.callThrough();
+
+        var items = [{dc: 'us-east-1', name: 'foo'}];
+        var itemType = 'check';
+        var options = {expire: 'resolve'};
+        var expectedPayload = {dc: 'us-east-1', check: 'foo', expire_on_resolve: true };
 
         Silenced.createEntries(items, itemType, options);
 

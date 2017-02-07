@@ -506,15 +506,15 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
       angular.forEach(items, function(item) {
         if (angular.isObject(item) && !item.silenced) {
           var payload = {dc: item.dc};
-          if (angular.isDefined(options.expire_on_resolve)) { // jshint ignore:line
-            payload.expire_on_resolve = options.expire_on_resolve; // jshint ignore:line
-          }
           if (angular.isDefined(options.reason)) {
             payload.reason = options.reason;
           }
           if (options.expire === 'custom') {
             var now = new Date().getTime();
             payload.expire = Helpers.secondsBetweenDates(now, options.to);
+          } else if (options.expire === 'resolve') {
+            payload.expire_on_resolve = true; // jshint ignore:line
+            delete payload.expire;
           } else if (options.expire > 0) {
             payload.expire = options.expire;
           }
