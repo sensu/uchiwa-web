@@ -5,7 +5,7 @@ var factoryModule = angular.module('uchiwa.factories', []);
 factoryModule.factory('audit', function ($http, $rootScope) {
   return {
     log: function (payload) {
-      if (!$rootScope.auth) {
+      if (!$rootScope.isAuthenticated) {
         return;
       }
       return $http.post('audit', payload);
@@ -13,25 +13,12 @@ factoryModule.factory('audit', function ($http, $rootScope) {
   };
 });
 
-factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location, userService) {
+factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location) {
   return {
-    request: function (config) {
-      config.headers = config.headers || {};
-      var user = $cookieStore.get('uchiwa_auth');
-      var token = null;
-      if (angular.isDefined(user)) {
-        token = user.Token || null;
-      }
-      if (token) {
-        config.headers.Authorization = 'Bearer ' + token;
-      }
-      return config;
-    },
     responseError: function (rejection) {
       if (rejection.status === 401) {
         // handle the case where the user is not authenticated
         if ($location.path() !== '/login') {
-          userService.logout();
           $location.path('/login');
           $location.url($location.path());
         }

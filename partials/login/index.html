@@ -9,11 +9,11 @@
         <input ng-model="login.pass" name="pass" type="password" placeholder="password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <button class="btn btn-default btn-block login" type="submit">Login</button>
       </form>
-      <form action="/login/oauth" ng-if="configAuth === 'github' || configAuth === 'gitlab' || configAuth === 'oidc'">
+      <form action="/login/oauth" ng-if="driver === 'github' || driver === 'gitlab' || driver === 'oidc'">
         <hr>
-        <button class="btn btn-default btn-block login" type="submit" ng-if="configAuth === 'github'"><i class="fa fa-github"></i> Login with GitHub</button>
-        <button class="btn btn-default btn-block login" type="submit" ng-if="configAuth === 'gitlab'">Login with GitLab</button>
-        <button class="btn btn-default btn-block login" type="submit" ng-if="configAuth === 'oidc'">Login with OpenID Connect</button>
+        <button class="btn btn-default btn-block login" type="submit" ng-if="driver === 'github'"><i class="fa fa-github"></i> Login with GitHub</button>
+        <button class="btn btn-default btn-block login" type="submit" ng-if="driver === 'gitlab'">Login with GitLab</button>
+        <button class="btn btn-default btn-block login" type="submit" ng-if="driver === 'oidc'">Login with OpenID Connect</button>
       </form>
     </div>
   </div>

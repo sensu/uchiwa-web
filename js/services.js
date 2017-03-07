@@ -47,11 +47,8 @@ serviceModule.service('Aggregates', ['Helpers', 'Notification', '$q', '$resource
 /**
 * Backend Service
 */
-serviceModule.service('backendService', ['audit', '$http', '$interval', '$location', '$rootScope',
-  function(audit, $http, $interval, $location, $rootScope){
-    this.auth = function() {
-      return $http.get('auth');
-    };
+serviceModule.service('backendService', ['$http', '$interval', '$location', '$rootScope',
+  function($http, $interval, $location, $rootScope){
     this.getAggregate = function(name, dc) {
       return $http.get('aggregates/'+name+'?dc='+dc);
     };
@@ -75,9 +72,6 @@ serviceModule.service('backendService', ['audit', '$http', '$interval', '$locati
     };
     this.getClients = function() {
       return $http.get('clients');
-    };
-    this.getConfigAuth = function () {
-      return $http.get('config/auth');
     };
     this.getDatacenters = function() {
       $http.get('datacenters')
@@ -267,7 +261,7 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
 */
 serviceModule.service('Config', ['DefaultConfig', '$resource', '$rootScope',
 function(DefaultConfig, $resource, $rootScope) {
-  var Config = $resource('config', null, null);
+  var Config = $resource('config/:resource', {resource: '@resource'});
   var self = this;
   this.appName = function() {
     if (self.enterprise()) {
@@ -305,6 +299,7 @@ function(DefaultConfig, $resource, $rootScope) {
   this.refresh = function() {
     return DefaultConfig.Refresh;
   };
+  this.resource = Config;
 }]);
 
 /**
@@ -350,6 +345,33 @@ function(Helpers, Notification, $q, $resource, $rootScope, Silenced) {
   this.silence = function(filtered, selected) {
     var itemsToSilence = Helpers.getSelected(filtered, selected);
     Silenced.create(null, itemsToSilence);
+  };
+}]);
+
+
+/**
+* Login
+*/
+serviceModule.service('Login', ['$resource',
+function($resource) {
+  var Login = $resource('login');
+  this.resource = Login;
+}]);
+
+/**
+* Logout
+*/
+serviceModule.service('Logout', ['$cookieStore', '$resource', '$rootScope',
+function($cookieStore, $resource, $rootScope) {
+  var Login = $resource('logout');
+  var self = this;
+  this.get = function() {
+    return Login.get();
+  };
+  this.do = function() {
+    $cookieStore.remove('user');
+    $rootScope.isAuthenticated = false;
+    self.get();
   };
 }]);
 
@@ -689,26 +711,41 @@ function ($cookieStore) {
 /**
 * User service
 */
-serviceModule.service('userService', ['$cookieStore', '$location', '$rootScope',
-function ($cookieStore, $location, $rootScope) {
-  this.getUsername = function () {
-    if ($rootScope.auth && $rootScope.username) {
-      return $rootScope.auth.username;
+serviceModule.service('User', ['$cookieStore', '$location', '$resource', '$rootScope',
+function ($cookieStore, $location, $resource, $rootScope) {
+  var User = $resource('user');
+  this.email = function() {
+    var user = $cookieStore.get('user', null, {withCredentials: true});
+    return user.email || '';
+  };
+  this.get = function() {
+    return User.get();
+  };
+  this.isReadOnly = function() {
+    var user = $cookieStore.get('user');
+    if (user && user.role && angular.isDefined(user.role.Readonly)) {
+      return user.role.Readonly;
+    }
+    return false;
+  };
+  this.isAdmin = function() {
+    return false;
+  };
+  this.set = function() {
+    User.get()
+      .$promise.then(function(user) {
+        $cookieStore.put('user', user);
+        $rootScope.isAuthenticated = true;
+      },
+      function(error) {
+        console.error(error);
+      });
+  };
+  this.username = function () {
+    if ($rootScope.isAuthenticated) {
+      var user = $cookieStore.get('user');
+      return user.fullname || user.username;
     }
     return '';
-  };
-  this.isReadOnly = function () {
-    if ($rootScope.auth && $rootScope.auth.Role && angular.isDefined($rootScope.auth.Role.Readonly)) {
-      return $rootScope.auth.Role.Readonly;
-    }
-    return false;
-  };
-  this.isAdmin = function () {
-    return false;
-  };
-  this.logout = function () {
-    $cookieStore.remove('uchiwa_auth');
-    $rootScope.auth = false;
-    $location.path('login');
   };
 }]);
