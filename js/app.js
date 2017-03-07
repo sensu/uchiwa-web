@@ -72,12 +72,11 @@ angular.module('uchiwa')
   $rootScope.skipOneRefresh = false;
   $rootScope.showCollectionBar = true;
   $rootScope.enterprise = false;
-
+  $rootScope.isAuthenticated = angular.isDefined($cookieStore.get('user')) || false;
   $rootScope.titleFactory = titleFactory;
 
   // fetch the sensu data on every page change
   $rootScope.$on('$routeChangeSuccess', function () {
-    $rootScope.auth = $cookieStore.get('uchiwa_auth') || false;
     if ($location.path().substring(0, 6) !== '/login') {
       backendService.getDatacenters();
     }

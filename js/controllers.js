@@ -190,8 +190,8 @@ controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers',
 /**
 * Client
 */
-controllerModule.controller('ClientController', ['Clients', '$filter', '$location', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'userService',
-  function (Clients, $filter, $location, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, userService) {
+controllerModule.controller('ClientController', ['Clients', '$filter', '$location', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'User',
+  function (Clients, $filter, $location, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, User) {
     $scope.predicate = '-last_status';
     $scope.reverse = false;
     $scope.check = null;
@@ -271,15 +271,15 @@ controllerModule.controller('ClientController', ['Clients', '$filter', '$locatio
     };
     $scope.permalink = routingService.permalink;
     $scope.silence = Silenced.create;
-    $scope.user = userService;
+    $scope.user = User;
   }
 ]);
 
 /**
 * Clients
 */
-controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'userService',
-  function (Clients, $filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, userService) {
+controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'User',
+  function (Clients, $filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, User) {
     $scope.pageHeaderText = 'Clients';
     titleFactory.set($scope.pageHeaderText);
     $scope.predicate = ['-status', 'name'];
@@ -345,7 +345,7 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
     $scope.silenceClients = function() {
       Clients.silence($scope.filtered, $scope.selected);
     };
-    $scope.user = userService;
+    $scope.user = User;
   }
 ]);
 
@@ -362,8 +362,8 @@ controllerModule.controller('DatacentersController', ['$scope', 'Sensu', 'titleF
 /**
 * Events
 */
-controllerModule.controller('EventsController', ['Clients', 'Events', '$filter', 'Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'UserConfig', 'userService',
-  function (Clients, Events, $filter, Helpers, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, UserConfig, userService) {
+controllerModule.controller('EventsController', ['Clients', 'Events', '$filter', 'Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'UserConfig', 'User',
+  function (Clients, Events, $filter, Helpers, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, UserConfig, User) {
     $scope.pageHeaderText = 'Events';
     titleFactory.set($scope.pageHeaderText);
 
@@ -418,7 +418,7 @@ controllerModule.controller('EventsController', ['Clients', 'Events', '$filter',
     $scope.permalink = routingService.permalink;
     $scope.selectAll = Helpers.selectAll;
     $scope.silence = Silenced.create;
-    $scope.user = userService;
+    $scope.user = User;
     $scope.resolveEvents = function() {
       Events.resolveMultiple($scope.filtered, $scope.selected)
         .then(function(results) {
@@ -458,7 +458,6 @@ controllerModule.controller('InfoController', ['Config', '$scope', 'titleFactory
     titleFactory.set($scope.pageHeaderText);
 
     $scope.config = Config.get();
-    //$scope.uchiwa = { version: VERSION.uchiwa };
     $scope.version = VERSION;
   }
 ]);
@@ -466,67 +465,54 @@ controllerModule.controller('InfoController', ['Config', '$scope', 'titleFactory
 /**
 * Login
 */
-controllerModule.controller('LoginController', ['audit', 'backendService', '$cookieStore', '$location', 'Notification', '$rootScope', '$scope',
-function (audit, backendService, $cookieStore, $location, Notification, $rootScope, $scope) {
+controllerModule.controller('LoginController', ['Config', '$cookieStore', '$location', 'Login', 'Notification', '$rootScope', '$scope', 'User',
+function (Config, $cookieStore, $location, Login, Notification, $rootScope, $scope, User) {
 
   $scope.login = {user: '', pass: ''};
 
-  // get the authentication mode
-  backendService.getConfigAuth()
-    .success(function (data) {
-      $scope.configAuth = data;
-    })
-    .error(function () {
-      $scope.configAuth = 'simple';
+  // Get the authentication driver
+  Config.resource.get({resource: 'auth'})
+    .$promise.then(function(config) {
+      $scope.driver = config.driver;
+    },
+    function(error) {
+      $scope.driver = 'simple';
+      console.error(error);
     });
 
   $scope.submit = function () {
-    backendService.login($scope.login)
-    .success(function (data) {
-      $cookieStore.put('uchiwa_auth', data);
-      $rootScope.auth = {};
-      $location.path('/events');
-
-      if ($rootScope.enterprise) {
-        var username = data.username;
-        if (angular.isUndefined(username)) {
-          username = '';
-        }
-        audit.log({action: 'login', level: 'default'});
-      }
-    })
-    .error(function () {
-      Notification.error('There was an error with your username/password combination. Please try again');
-    });
+    var login = new Login.resource($scope.login);
+    login.$save()
+      .then(function() {
+        User.set();
+        $location.path('/events');
+      },
+      function(error) {
+        console.error(error);
+        Notification.error('There was an error with your username/password combination. Please try again');
+      });
   };
 
-  if (angular.isObject($rootScope.auth)) {
-    $location.path('/events');
-  }
+  // Check if the user is already authenticated
+  User.get()
+    .$promise.then(function() {
+      $location.path('/events');
+    });
 }
 ]);
 
 /**
 * Navbar
 */
-controllerModule.controller('NavbarController', ['audit', '$location', '$rootScope', '$scope', 'routingService', 'userService',
-  function (audit, $location, $rootScope, $scope, routingService, userService) {
+controllerModule.controller('NavbarController', ['audit', '$location', 'Logout', '$rootScope', '$scope', 'routingService', 'User',
+  function (audit, $location, Logout, $rootScope, $scope, routingService, User) {
 
     // Services
     $scope.go = routingService.go;
-    $scope.user = userService;
-
+    $scope.user = User;
     $scope.logout = function() {
-      if ($rootScope.enterprise) {
-        var username = userService.getUsername();
-        audit.log({action: 'logout', level: 'default', user: username}).finally(
-          function() {
-            userService.logout();
-          });
-      }
-      else {
-        userService.logout();
-      }
+      Logout.do();
+      $location.path('login');
     };
   }
 ]);
@@ -550,8 +536,8 @@ controllerModule.controller('SettingsController', ['$cookies', '$scope', 'Sensu'
 /**
 * Sidebar
 */
-controllerModule.controller('SidebarController', ['$location', '$rootScope', '$scope', 'Sensu', 'Sidebar', 'userService',
-  function ($location, $rootScope, $scope, Sensu, Sidebar, userService) {
+controllerModule.controller('SidebarController', ['$location', '$rootScope', '$scope', 'Sensu', 'Sidebar', 'User',
+  function ($location, $rootScope, $scope, Sensu, Sidebar, User) {
     // Get CSS class for sidebar elements
     $scope.getClass = function(path) {
       if ($location.path().substr(0, path.length) === path) {
@@ -607,15 +593,15 @@ controllerModule.controller('SidebarController', ['$location', '$rootScope', '$s
     });
 
     // Services
-    $scope.user = userService;
+    $scope.user = User;
   }
 ]);
 
 /**
 * Silenced
 */
-controllerModule.controller('SilencedController', ['$filter', 'Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'userService',
-  function ($filter, Helpers, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, userService) {
+controllerModule.controller('SilencedController', ['$filter', 'Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'User',
+  function ($filter, Helpers, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, User) {
     $scope.pageHeaderText = 'Silenced';
     titleFactory.set($scope.pageHeaderText);
 
@@ -662,7 +648,7 @@ controllerModule.controller('SilencedController', ['$filter', 'Helpers', '$route
     $scope.permalink = routingService.permalink;
     $scope.selectAll = Helpers.selectAll;
     $scope.silence = Silenced.create;
-    $scope.user = userService;
+    $scope.user = User;
     $scope.delete = function($event, id) {
       $event.stopPropagation();
       Silenced.deleteSingle(id)
@@ -851,8 +837,8 @@ controllerModule.controller('StashController', [ 'backendService', '$filter', '$
 /**
 * Stashes
 */
-controllerModule.controller('StashesController', ['$filter', 'Helpers', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Stashes', 'titleFactory', 'userService',
-  function ($filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Stashes, titleFactory, userService) {
+controllerModule.controller('StashesController', ['$filter', 'Helpers', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Stashes', 'titleFactory', 'User',
+  function ($filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Stashes, titleFactory, User) {
     $scope.pageHeaderText = 'Stashes';
     titleFactory.set($scope.pageHeaderText);
 
@@ -898,7 +884,7 @@ controllerModule.controller('StashesController', ['$filter', 'Helpers', '$rootSc
     $scope.go = routingService.go;
     $scope.permalink = routingService.permalink;
     $scope.selectAll = Helpers.selectAll;
-    $scope.user = userService;
+    $scope.user = User;
     $scope.delete = function($event, id) {
       $event.stopPropagation();
       Stashes.deleteSingle(id)
