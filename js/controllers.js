@@ -504,8 +504,8 @@ function (Config, $cookieStore, $location, Login, Notification, $rootScope, $sco
 /**
 * Navbar
 */
-controllerModule.controller('NavbarController', ['audit', '$location', 'Logout', '$rootScope', '$scope', 'routingService', 'User',
-  function (audit, $location, Logout, $rootScope, $scope, routingService, User) {
+controllerModule.controller('NavbarController', ['$location', 'Logout', '$scope', 'routingService', 'User',
+  function ($location, Logout, $scope, routingService, User) {
 
     // Services
     $scope.go = routingService.go;
