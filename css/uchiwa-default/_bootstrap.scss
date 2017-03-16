@@ -1,9 +1,5 @@
 @import "variables";
 
-#error {
-  display: none;
-}
-
 .bootstrap-error #error {
   display: block !important;
   margin: 0 auto;

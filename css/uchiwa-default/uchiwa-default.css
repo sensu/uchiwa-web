@@ -194,9 +194,6 @@ pre.hljs .hljs-string {
 /* Tables */
 /* Timestamp */
 /* Wells */
-#error {
-  display: none; }
-
 .bootstrap-error #error {
   display: block !important;
   margin: 0 auto;
