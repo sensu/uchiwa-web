@@ -15,16 +15,30 @@ describe('Controller', function () {
   beforeEach(module('uchiwa'));
 
   beforeEach(function () {
-    mockConfig = jasmine.createSpyObj('Config', ['appName', 'dateFormat', 'refresh']);
-    mockNotification = jasmine.createSpyObj('mockNotification', ['error', 'success']);
-    mockRoutingService = jasmine.createSpyObj('mockRoutingService', ['search', 'go', 'initFilters', 'permalink', 'updateFilters']);
-    //mockSilencedService = jasmine.createSpyObj('mockSilencedService', ['addEntry', 'query']);
+    mockConfig = jasmine.createSpyObj('Config', [
+      'appName',
+      'dateFormat',
+      'disableNoExpiration',
+      'refresh',
+      'requireSilencingReason',
+      'silenceDurations'
+    ]);
+    mockNotification = jasmine.createSpyObj('mockNotification', [
+      'error',
+      'success'
+    ]);
+    mockRoutingService = jasmine.createSpyObj('mockRoutingService', [
+      'search',
+      'go',
+      'initFilters',
+      'permalink',
+      'updateFilters'
+    ]);
 
     module(function ($provide) {
       $provide.value('Config', mockConfig);
       $provide.value('Notification', mockNotification);
       $provide.value('routingService', mockRoutingService);
-      //$provide.value('Silenced', mockSilencedService);
     });
   });
 
@@ -370,13 +384,6 @@ describe('Controller', function () {
         $scope.ok();
         expect($scope.options.expire).toBeLessThan(3601);
         expect($scope.options.expire).toBeGreaterThan(3500);
-      });
-
-      it('takes the preset duration if selected', function () {
-        createController(controllerName);
-        $scope.options = {'datacenter': 'foo', 'expire': 'duration', 'duration': '900', 'what': 'foo', 'who': 'foo'};
-        $scope.ok();
-        expect($scope.options.expire).toEqual(900);
       });
 
       it('removes the expire parameter if no expiration was chosen', function () {

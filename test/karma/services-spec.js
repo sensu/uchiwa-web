@@ -762,6 +762,28 @@ describe('services', function () {
       }));
     });
 
+    describe('itemType', function() {
+      it('returns "check" when providing a check object', inject(function (Silenced) {
+        var objects = [{command: 'foo', name: 'bar'}];
+        expect(Silenced.itemType(objects)).toEqual('check');
+      }));
+
+      it('returns "client" when providing a client object', inject(function (Silenced) {
+        var objects = [{name: 'foo', version: '0.0.1'}];
+        expect(Silenced.itemType(objects)).toEqual('client');
+      }));
+
+      it('returns "event" when providing an event object', inject(function (Silenced) {
+        var objects = [{action: 'create', check: {name: 'foo'}, client: {name: 'bar'}}];
+        expect(Silenced.itemType(objects)).toEqual('event');
+      }));
+
+      it('returns "event" when providing a check from the client view', inject(function (Silenced) {
+        var objects = [{check: "foo", client: "bar", history: [0]}];
+        expect(Silenced.itemType(objects)).toEqual('event');
+      }));
+    });
+
     describe('post', function() {
       it('sends a POST request to the silenced endpoint', inject(function (Silenced) {
         $httpBackend.expectPOST('silenced',

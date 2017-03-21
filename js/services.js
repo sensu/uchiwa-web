@@ -642,7 +642,7 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
       if (angular.isDefined(items[0])) {
         if (items[0].hasOwnProperty('version')) {
           return 'client';
-        } else if (items[0].hasOwnProperty('action')) {
+        } else if (items[0].hasOwnProperty('action') || items[0].hasOwnProperty('history')) {
           return 'event';
         } else {
           return 'check';
