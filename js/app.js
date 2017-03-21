@@ -15,7 +15,7 @@ angular.module('uchiwa', [
   'ngSanitize',
   // 3rd party dependencies
   'angularMoment',
-  'MassAutoComplete',
+  'moment-picker',
   'toastr',
   'ui.bootstrap',
   'ui.gravatar'

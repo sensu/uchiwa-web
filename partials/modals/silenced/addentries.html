@@ -1,0 +1,26 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Datacenter</th>
+      <th ng-if="itemType == 'client' || itemType == 'event'">Client</th>
+      <th ng-if="itemType == 'check' || itemType == 'event'">Check</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="item in items | filter:{silenced: false}">
+      <td>{{item.dc}}</td>
+      <td ng-if="itemType == 'client' || itemType == 'event'">
+        {{item.name || item.client.name || item.client}}
+      </td>
+      <td ng-if="itemType == 'check' || itemType == 'event'">
+        {{item.check.name || item.check || item.name}}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-include src="partialsPath + '/modals/silenced/expiration.html'">
+</ng-include>
+
+<ng-include src="partialsPath + '/modals/silenced/reason.html'">
+</ng-include>

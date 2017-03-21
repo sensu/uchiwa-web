@@ -1,11 +1,17 @@
 @import "variables";
 
+.modal-body {
+  color: $modal-color;
+  padding: 0 20px;
+}
+
 .modal-body .ac-container {
   position: inherit;
 }
 
 .modal-content {
   background-color: $modal-content-bg;
+  border: 0;
   color: #6f6f6f;
 }
 
@@ -14,11 +20,15 @@
 }
 
 .modal-footer {
-  border-top: 1px solid $modal-header-border;
+  border-top: 0;
 }
 
 .modal-header {
-  border-bottom: 1px solid $modal-header-border;
+  border-bottom: 0;
+}
+
+.modal-title {
+  font-size: 24px;
 }
 
 @media only screen and (max-width: 768px) {

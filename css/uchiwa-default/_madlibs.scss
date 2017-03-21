@@ -1,0 +1,79 @@
+@import "variables";
+
+.madlibs {
+  font-size: 20px;
+  padding: 10px;
+}
+
+.madlibs input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: inherit;
+  border: 0;
+  border-bottom: .3rem solid $quinary-color;
+  color: $madlibs-input-color;
+  font-size: 20px;
+  outline: none;
+  padding: 0;
+}
+
+.madlibs .moment-picker {
+  border-bottom: 0.3rem solid #5F97FB;
+  color: $madlibs-input-color;
+  display: inline-block;
+}
+
+.madlibs .moment-picker span:focus {
+  outline: none;
+}
+
+.madlibs select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: 0;
+  border: 0;
+  border-bottom: .3rem solid $quinary-color;
+  border-radius:0;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  color: $madlibs-input-color;
+  cursor: pointer;
+  font-size: 20px;
+  outline: none;
+}
+
+.madlibs .moment-picker:after, .madlibs .select:after {
+  content: "\f078";
+  font-family: "FontAwesome";
+  font-size: 11px;
+  color: #aaa;
+  padding-right: 10px;
+  position: relative;;
+  pointer-events: none;
+}
+
+.madlibs textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: inherit;
+  border: 0;
+  border-bottom: .3rem solid $quinary-color;
+  border-radius:0;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  color: $madlibs-input-color;
+  font-size: 80%;
+  outline: none;
+  overflow: auto;
+  resize: none;
+}
+
+.madlibs input:focus, .madlibs textarea:focus {
+  border: 0;
+  border-bottom: .3rem solid $body-text-color;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  outline: none;
+}

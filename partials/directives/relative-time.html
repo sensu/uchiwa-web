@@ -1,4 +1,4 @@
 <span>
-  <span am-time-ago="timestamp" am-preprocess="unix" ng-if="timestamp !== -1"></span>
+  <span am-time-ago="timestamp | amFromUnix" ng-if="timestamp !== -1"></span>
   <span ng-if="timestamp === -1">Never</span>
 </span>

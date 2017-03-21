@@ -6,17 +6,25 @@ describe('Controller', function () {
   var routeParams;
   var createController;
   var mockConfig;
+  var mockNotification;
   var mockRoutingService;
+//  var mockSilencedService;
+  var uibModalInstance = { close: function() {}, dismiss: function() {} };
+  var items = [];
 
   beforeEach(module('uchiwa'));
 
   beforeEach(function () {
-    mockConfig = jasmine.createSpyObj('Config', ['appName', 'refresh']);
+    mockConfig = jasmine.createSpyObj('Config', ['appName', 'dateFormat', 'refresh']);
+    mockNotification = jasmine.createSpyObj('mockNotification', ['error', 'success']);
     mockRoutingService = jasmine.createSpyObj('mockRoutingService', ['search', 'go', 'initFilters', 'permalink', 'updateFilters']);
+    //mockSilencedService = jasmine.createSpyObj('mockSilencedService', ['addEntry', 'query']);
 
     module(function ($provide) {
       $provide.value('Config', mockConfig);
+      $provide.value('Notification', mockNotification);
       $provide.value('routingService', mockRoutingService);
+      //$provide.value('Silenced', mockSilencedService);
     });
   });
 
@@ -27,12 +35,16 @@ describe('Controller', function () {
 
     createController = function (controllerName, properties) {
       return $controller(controllerName, angular.extend({
-        '$scope': $scope,
+        $scope: $scope,
+        $uibModalInstance: uibModalInstance,
+        items: items,
         $routeParams : routeParams
       }, properties));
     };
     $httpBackend.whenGET('health').respond([]);
     $httpBackend.whenGET('metrics').respond([]);
+    $httpBackend.whenGET('silenced').respond([]);
+    $httpBackend.whenGET('subscriptions').respond([]);
   }));
 
   describe('ChecksController', function () {
@@ -214,6 +226,184 @@ describe('Controller', function () {
         });
         expect($scope.getClass('events')).toBe('selected');
         expect($scope.getClass('clients')).toBe('');
+      });
+    });
+  });
+
+  describe('SilencedModalController', function () {
+    var controllerName = 'SilencedModalController';
+
+    describe('madlibs form', function() {
+      describe('datacenter select', function() {
+        it('does not throw any error if we have no datacenters', function () {
+          createController(controllerName);
+          $scope.datacenters = undefined;
+          $scope.$digest();
+          expect($scope.options.datacenter).toEqual('');
+        });
+
+        it('sets a default datacenter if we only have a single datacenter', function () {
+          createController(controllerName);
+          $scope.datacenters = [{'name': 'foo'}];
+          $scope.$digest();
+          expect($scope.options.datacenter).toEqual('foo');
+        });
+
+        it('does not set a default datacenter if we have multiple datacenters', function () {
+          createController(controllerName);
+          $scope.datacenters = [{'name': 'foo'}, {'name': 'bar'}];
+          $scope.$digest();
+          expect($scope.options.datacenter).toEqual('');
+        });
+
+        it('sets a default datacenter if we have a single element to silence', function () {
+          createController(controllerName, {'items': [{'check': 'bar', 'dc': 'foo', 'silenced': false}]});
+          expect($scope.options.datacenter).toEqual('foo');
+        });
+
+        it('sets a default check if an event was provided', function () {
+          createController(controllerName, {'items': [{'action': 'foo', 'check': 'bar', 'dc': 'foo', 'silenced': false}]});
+          expect($scope.options.what).toEqual('check');
+          expect($scope.options.check).toEqual('bar');
+        });
+
+        it('sets a default client if an event was provided', function () {
+          createController(controllerName, {'items': [{'action': 'foo', 'check': 'bar', 'client': {'name': 'foobar'}, 'dc': 'foo', 'silenced': false}]});
+          expect($scope.options.who).toEqual('client');
+          expect($scope.options.client).toEqual('foobar');
+        });
+
+        it('sets the "who" to all checks if a client was provided', function () {
+          createController(controllerName, {'items': [{'name': 'foobar', 'dc': 'foo', 'silenced': false, 'version': 1}]});
+          expect($scope.options.what).toEqual('checks');
+        });
+
+        it('sets the "who" to all checks if a check was provided', function () {
+          createController(controllerName, {'items': [{'name': 'foobar', 'dc': 'foo', 'silenced': false}]});
+          expect($scope.options.who).toEqual('clients');
+        });
+      });
+    });
+
+    describe('form validation', function() {
+      it('fails if no datacenter is selected', function () {
+        createController(controllerName);
+        $scope.ok();
+        expect(mockNotification.error).toHaveBeenCalledWith('Please select a datacenter');
+      });
+
+      it('fails if no "what" is selected', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo'};
+        $scope.ok();
+        expect(mockNotification.error).toHaveBeenCalledWith('Please select which element you wish to silence');
+      });
+
+      it('fails if a check is selected without any name', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'what': 'check'};
+        $scope.ok();
+        expect(mockNotification.error).toHaveBeenCalledWith('Please enter which check should be silenced');
+      });
+
+      it('fails if no who" is selected', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'what': 'foo'};
+        $scope.ok();
+        expect(mockNotification.error).toHaveBeenCalledWith('Please select on which element you wish to silence');
+      });
+
+      it('fails if a client is selected without any name', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'what': 'foo', 'who': 'client'};
+        $scope.ok();
+        expect(mockNotification.error).toHaveBeenCalledWith('Please enter which client should be silenced');
+      });
+
+      it('fails if a subscription is selected without any name', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'what': 'foo', 'who': 'subscription'};
+        $scope.ok();
+        expect(mockNotification.error).toHaveBeenCalledWith('Please enter which subscription should be silenced');
+      });
+
+      it('fails if a custom duration is selected without any date', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'what': 'foo', 'who': 'bar', 'expire': 'custom'};
+        $scope.ok();
+        expect(mockNotification.error).toHaveBeenCalledWith('Please enter a date for the custom expiration');
+      });
+
+      it('fails if the duration expiration is selected without any preset', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'what': 'foo', 'who': 'bar', 'expire': 'duration'};
+        $scope.ok();
+        expect(mockNotification.error).toHaveBeenCalledWith('Please enter a proper duration for the expiration');
+      });
+    });
+
+    describe('data validation', function() {
+      it('deletes the check attribute if all checks must be silenced', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'check': 'foo', 'what': 'checks', 'who': 'bar'};
+        $scope.ok();
+        expect($scope.options.check).toEqual(undefined);
+      });
+
+      it('deletes the subscription attribute if all clients must be silenced', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'subscription': 'foo', 'what': 'foo', 'who': 'clients'};
+        $scope.ok();
+        expect($scope.options.subscription).toEqual(undefined);
+      });
+
+      it('adds the client subscription attribute if a single client must be silenced', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'client': 'foo', 'what': 'foo', 'who': 'client'};
+        $scope.ok();
+        expect($scope.options.subscription).toEqual('client:foo');
+      });
+
+      it('calculates the duration in seconds if a custom expiration was chosen', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'expire': 'custom', 'to': moment().add(1, 'h').format($scope.format), 'what': 'foo', 'who': 'foo'};
+        $scope.ok();
+        expect($scope.options.expire).toBeLessThan(3601);
+        expect($scope.options.expire).toBeGreaterThan(3500);
+      });
+
+      it('takes the preset duration if selected', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'expire': 'duration', 'duration': '900', 'what': 'foo', 'who': 'foo'};
+        $scope.ok();
+        expect($scope.options.expire).toEqual(900);
+      });
+
+      it('removes the expire parameter if no expiration was chosen', function () {
+        createController(controllerName);
+        $scope.options = {'datacenter': 'foo', 'expire': '-1', 'what': 'foo', 'who': 'foo'};
+        $scope.ok();
+        expect($scope.options.expire).toEqual(undefined);
+      });
+    });
+
+    describe('addEntries', function() {
+      var Silenced;
+      beforeEach(inject(function (_Silenced_) {
+        Silenced = _Silenced_;
+      }));
+      it('adds multiple silenced items in bulk', function () {
+        createController(controllerName, {
+          items: [
+            {action: 'create', dc: 'us-east-1', check: {name: 'foo'}, client: {name: 'bar'}},
+            {action: 'create', dc: 'us-east-1', check: {name: 'baz'}, client: {name: 'qux'}}
+          ]
+        });
+        spyOn(Silenced, 'addEntry').and.callThrough();
+
+        $scope.options = {expire: '900', reason: 'foobar'};
+        $scope.ok();
+        expect(Silenced.addEntry).toHaveBeenCalled();
       });
     });
   });

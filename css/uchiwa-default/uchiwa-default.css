@@ -7,6 +7,7 @@
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -144,6 +145,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -185,6 +187,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -218,6 +221,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -257,6 +261,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -276,6 +281,11 @@ pre.hljs .hljs-string {
 .btn-default:hover {
   color: #ffffff;
   background-color: #2C394A; }
+
+.btn-secondary {
+  color: #4D4D4D;
+  background-color: #ffffff;
+  border: 1px solid #9DA0A6; }
 
 .circle {
   width: 10px;
@@ -313,6 +323,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -472,6 +483,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -523,6 +535,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -609,6 +622,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -628,13 +642,6 @@ pre.hljs .hljs-string {
 .form-control.subscriptions {
   width: 140px; }
 
-.mass-autocomplete input {
-  margin-top: 10px;
-  width: 33%; }
-
-.mass-autocomplete .datacenter {
-  padding: 5px; }
-
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */
@@ -644,6 +651,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -667,6 +675,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -701,6 +710,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -723,6 +733,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -756,6 +767,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -833,6 +845,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -842,21 +855,118 @@ li.timestamp .relative-timestamp {
 /* Tables */
 /* Timestamp */
 /* Wells */
+.madlibs {
+  font-size: 20px;
+  padding: 10px; }
+
+.madlibs input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: inherit;
+  border: 0;
+  border-bottom: 0.3rem solid #5F97FB;
+  color: #000000;
+  font-size: 20px;
+  outline: none;
+  padding: 0; }
+
+.madlibs .moment-picker {
+  border-bottom: 0.3rem solid #5F97FB;
+  color: #000000;
+  display: inline-block; }
+
+.madlibs .moment-picker span:focus {
+  outline: none; }
+
+.madlibs select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: 0;
+  border: 0;
+  border-bottom: 0.3rem solid #5F97FB;
+  border-radius: 0;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  color: #000000;
+  cursor: pointer;
+  font-size: 20px;
+  outline: none; }
+
+.madlibs .moment-picker:after, .madlibs .select:after {
+  content: "\f078";
+  font-family: "FontAwesome";
+  font-size: 11px;
+  color: #aaa;
+  padding-right: 10px;
+  position: relative;
+  pointer-events: none; }
+
+.madlibs textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: inherit;
+  border: 0;
+  border-bottom: 0.3rem solid #5F97FB;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  color: #000000;
+  font-size: 80%;
+  outline: none;
+  overflow: auto;
+  resize: none; }
+
+.madlibs input:focus, .madlibs textarea:focus {
+  border: 0;
+  border-bottom: 0.3rem solid #4D4D4D;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  outline: none; }
+
+/* Colors */
+/* Body, Sections and Headers */
+/* Breadcrumb */
+/* Buttons */
+/* Code */
+/* Console */
+/* Dashboard */
+/* Dropdown */
+/* Login */
+/* Madlibs */
+/* Modal */
+/* Nav */
+/* Navbar */
+/* Search */
+/* Sidebar */
+/* Panels */
+/* Tables */
+/* Timestamp */
+/* Wells */
+.modal-body {
+  color: #4D4D4D;
+  padding: 0 20px; }
+
 .modal-body .ac-container {
   position: inherit; }
 
 .modal-content {
   background-color: #FFFFFF;
+  border: 0;
   color: #6f6f6f; }
 
 .modal-dialog {
   width: 70%; }
 
 .modal-footer {
-  border-top: 1px solid #e5e5e5; }
+  border-top: 0; }
 
 .modal-header {
-  border-bottom: 1px solid #e5e5e5; }
+  border-bottom: 0; }
+
+.modal-title {
+  font-size: 24px; }
 
 @media only screen and (max-width: 768px) {
   .modal-dialog {
@@ -870,6 +980,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -917,6 +1028,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -967,6 +1079,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -1133,6 +1246,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -1166,6 +1280,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -1204,6 +1319,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -1327,6 +1443,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -1455,6 +1572,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */
@@ -1506,6 +1624,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Madlibs */
 /* Modal */
 /* Nav */
 /* Navbar */

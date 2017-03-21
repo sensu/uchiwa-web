@@ -11,8 +11,7 @@
     "angular-bootstrap": "~2.2.0",
     "angular-cookies": "~1.4",
     "angular-gravatar": "~0.3.1",
-    "angular-mass-autocomplete-uchiwa": "0.4.1",
-    "angular-moment": "~0.9.0",
+    "angular-moment": "~1.0.1",
     "angular-resource": "~1.4",
     "angular-route": "~1.4",
     "angular-sanitize": "~1.4",
@@ -22,7 +21,8 @@
     "bootstrap-sass-official": "3.1.1",
     "fontawesome": "~4.4.0",
     "highlightjs": "~9.1.0",
-    "moment": "~2.8.3",
+    "moment": "~2.16.0",
+    "moment-picker": "~0.9.7",
     "ua-parser-js": "~0.7.12"
   },
   "devDependencies": {
