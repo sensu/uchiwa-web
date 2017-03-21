@@ -1,0 +1,39 @@
+<div class="madlibs">
+  <ng-pluralize
+    count="items.length"
+    when="{
+      '0': 'It should expire',
+      'one': 'It should expire',
+      'other': 'They should expire'
+    }">
+  </ng-pluralize>
+  <span class="select">
+    <select name="expire" ng-model="options.expire">
+      <option value="resolve">once the check resolves</option>
+      <option value="duration">after</option>
+      <option value="custom">on</option>
+      <option value="-1" ng-show="!disableNoExpiration">only if manually removed</option>
+    </select>
+  </span>
+  <span ng-show="options.expire === 'duration'">
+    <label>
+      <span class="select">
+        <select
+          ng-init="options.duration = durations[0]"
+          ng-model="options.duration"
+          ng-options="duration as (duration | amDurationFormat : options.durationFormat) for duration in durations">
+        </select>
+      </span>
+    </label>
+  </span>
+  <span ng-show="options.expire === 'custom'">
+    <span moment-picker="options.to"
+      format="{{format}}"
+      min-view="month"
+      max-view="hour"
+      autoclose="true"
+      today="true">
+      {{ options.to }}
+    </span>
+  </span>
+</div>

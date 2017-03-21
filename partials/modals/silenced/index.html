@@ -1,0 +1,62 @@
+<div class="modal-header">
+  <h3 class="modal-title" ng-if="silencedItemsCount != 0">
+    <ng-pluralize
+      count="entries.length"
+      when="{
+        'one': 'Clear a silencing entry',
+        'other': 'Clear multiple silencing entries'
+      }"
+      ng-if="silencedItemsCount === items.length">
+    </ng-pluralize>
+  </h3>
+
+  <h3 class="modal-title" ng-if="itemsToSilenceCount != 0">
+    <ng-pluralize
+      count="itemsToSilenceCount"
+      when="{
+        '0': 'Create a silencing entry',
+        'one': 'Create a silencing entry',
+        'other': 'Create the following silencing entries'
+      }">
+    </ng-pluralize>
+  </h3>
+</div>
+
+<div class="modal-body">
+  <div ng-if="silencedItemsCount != items.length">
+    <div ng-if="items.length >= 2">
+    <ng-include src="partialsPath + '/modals/silenced/addentries.html'">
+    </ng-include>
+    </div>
+
+    <div ng-if="items.length < 2">
+      <ng-include src="partialsPath + '/modals/silenced/addentry.html'">
+      </ng-include>
+    </div>
+
+    <h3 class="modal-title mt25" ng-if="silencedItemsCount != 0 && silencedItemsCount != items.length">
+      <ng-pluralize
+        count="silencedItemsCount"
+        when="{
+          'one': 'Additionally, the following silencing entry is going to be removed:',
+          'other': 'Additionally, the following silencing entries are going to be removed:'
+        }">
+      </ng-pluralize>
+    </h3>
+  </div>
+
+  <div ng-if="silencedItemsCount > 0">
+    <ng-include src="partialsPath + '/modals/silenced/clearentry.html'"></ng-include>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button
+    class="btn btn-sm btn-success"
+    ng-click="ok()"
+    ng-show="(options.who.length && items.length < 2) || itemsToSilenceCount >= 2 || silencedItemsCount >= 1">
+    Submit
+  </button>
+  <!-- <button class="btn btn-sm btn-success" ng-show="options.who.length" ng-click="ok()">Create</button> -->
+  <button class="btn btn-sm btn-secondary" ng-click="cancel()">Cancel</button>
+</div>

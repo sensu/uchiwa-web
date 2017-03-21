@@ -1,0 +1,62 @@
+<div class="madlibs">
+  In the datacenter
+  <span class="select">
+    <select ng-style="datacenter" name="datacenter" ng-model="options.datacenter">
+      <option value=""></option> <!-- not selected / blank option -->
+      <option ng-repeat="datacenter in datacenters | orderBy:'name'" value="{{datacenter.name}}">{{datacenter.name}}</option>
+    </select>
+  </span>
+</div>
+
+<div class="madlibs" ng-show="options.datacenter.length">
+  I want to silence
+  <span class="select">
+    <select name="what" ng-model="options.what">
+      <option value=""></option> <!-- not selected / blank option -->
+      <option value="check">a single check</option>
+      <option value="checks">all checks</option>
+    </select>
+  </span>
+  <span ng-show="options.what === 'check'">
+    named
+    <label>
+      <input name="check" ng-model="options.check">
+    </label>
+  </span>
+</div>
+
+<div class="madlibs" ng-show="options.what.length && (options.what !== 'check' || options.check.length)">
+  On
+  <span class="select">
+    <select name="who" ng-model="options.who">
+      <option value=""></option> <!-- not selected / blank option -->
+      <option value="client">a specific client</option>
+      <option value="subscription">clients with a specific subscription</option>
+      <option value="clients" ng-show="options.what !== 'checks'">all clients</option>
+    </select>
+  </span>
+  <span ng-show="options.who === 'client'">
+    named
+    <label>
+      <input name="client" ng-model="options.client">
+    </label>
+  </span>
+
+  <span ng-show="options.who === 'subscription'">
+    named
+    <label>
+      <datalist id="subscription">
+        <option ng-repeat="subscription in subscriptions" value="{{subscription.name}}">
+      </datalist>
+      <input list="subscription" ng-model="options.subscription">
+    </label>
+  </span>
+</div>
+
+<div ng-show="options.who.length && ((options.who !== 'client' || options.client.length) && (options.who !== 'subscription' || options.subscription.length) )">
+  <ng-include src="partialsPath + '/modals/silenced/expiration.html'">
+  </ng-include>
+
+  <ng-include src="partialsPath + '/modals/silenced/reason.html'">
+  </ng-include>
+</div>

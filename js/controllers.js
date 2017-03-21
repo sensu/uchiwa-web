@@ -697,18 +697,52 @@ controllerModule.controller('SilencedEntryController', ['Helpers', '$routeParams
 /**
 * Silenced Modal
 */
-controllerModule.controller('SilencedModalController', ['backendService', 'Config', '$filter', 'Helpers', 'items', 'Notification', '$q', '$rootScope', '$scope', 'Sensu', 'Silenced', 'Subscriptions', '$uibModalInstance',
-  function (backendService, Config, $filter, Helpers, items, Notification, $q, $rootScope, $scope, Sensu, Silenced, Subscriptions, $uibModalInstance) {
+controllerModule.controller('SilencedModalController', ['Config', '$filter', 'items', 'Notification', '$q', '$rootScope', '$scope', 'Sensu', 'Silenced', 'Subscriptions', '$uibModalInstance',
+  function (Config, $filter, items, Notification, $q, $rootScope, $scope, Sensu, Silenced, Subscriptions, $uibModalInstance) {
+    // Determine if we are creating silenced entries from scratch or we were
+    // provided with some items already
     $scope.items = items;
-    $scope.silencedCount = $filter('filter')(items, {silenced: true}).length;
-    if (angular.isDefined(items[0])) {
-      $scope.itemType = items[0].hasOwnProperty('version') ? 'client' : 'check';
-    } else {
-      $scope.itemType = 'subscription';
+    $scope.silencedItemsCount = $filter('filter')(items, {silenced: true}).length;
+    $scope.itemsToSilenceCount = items.length - $scope.silencedItemsCount;
+    $scope.itemType = Silenced.itemType(items);
+
+    // If we are creating a silenced entry from nothing, we should have no items
+    if ($scope.itemType === 'new') {
+      items = [];
     }
 
+    $scope.disableNoExpiration = Config.disableNoExpiration();
+    $scope.durations = Config.silenceDurations();
     $scope.entries = [];
-    $scope.options = {ac: {}, expire: 'resolve', reason: '', to: moment().add(1, 'h').format(Config.dateFormat())};
+    $scope.format = Config.dateFormat();
+    $scope.options = {
+      ac: {},
+      check: '',
+      client: '',
+      datacenter: '',
+      durationFormat: 'hours',
+      expire: 'resolve',
+      reason: '',
+      subscription: '',
+      to: moment().add(1, 'h').format($scope.format),
+      what: '',
+      who: ''
+    };
+
+    // Prepare the mad libs form
+    if (items.length === 0) {
+      // If we only have one datacenter, it should set to it by default
+      $scope.$watch('datacenters', function(dc) {
+        if(angular.isArray(dc) && dc.length === 1) {
+          $scope.options.datacenter = dc[0].name;
+        }
+      });
+    } else if (items.length === 1 && $scope.itemsToSilenceCount === 1) {
+      var item = items[0];
+      // We have a single element to silence, let's use its datacenter
+      var options = Silenced.itemOptions(item, $scope.itemType);
+      Object.assign($scope.options, options);
+    }
 
     // Get silenced entries
     Silenced.query().$promise.then(
@@ -724,14 +758,97 @@ controllerModule.controller('SilencedModalController', ['backendService', 'Confi
       }
     );
 
-    $scope.ok = function() {
-      if ($scope.options.expire === 'custom') {
-        if (angular.isUndefined($scope.options.to) || $scope.options.to === '') {
-          Notification.error('Please enter a date for the custom expiration.');
-          return false;
-        }
+    // The modal window has been submitted
+    $scope.addEntry = function() {
+      // Verify the datacenter
+      if (angular.isUndefined($scope.options.datacenter) || $scope.options.datacenter === '') {
+        Notification.error('Please select a datacenter');
+        return false;
       }
 
+      // Verify the "what"
+      if (angular.isUndefined($scope.options.what) || $scope.options.what === '') {
+        Notification.error('Please select which element you wish to silence');
+        return false;
+      } else if ($scope.options.what === 'check' && (angular.isUndefined($scope.options.check) || $scope.options.check === '')) {
+        Notification.error('Please enter which check should be silenced');
+        return false;
+      }
+
+      // Verify the "who"
+      if (angular.isUndefined($scope.options.who) || $scope.options.who === '') {
+        Notification.error('Please select on which element you wish to silence');
+        return false;
+      } else if ($scope.options.who === 'client' && (angular.isUndefined($scope.options.client) || $scope.options.client === '')) {
+        Notification.error('Please enter which client should be silenced');
+        return false;
+      } else if ($scope.options.who === 'subscription' && (angular.isUndefined($scope.options.subscription) || $scope.options.subscription === '')) {
+        Notification.error('Please enter which subscription should be silenced');
+        return false;
+      }
+
+      // Verify the duration
+      if ($scope.options.expire === 'custom') {
+        if (angular.isUndefined($scope.options.to) || $scope.options.to === '') {
+          Notification.error('Please enter a date for the custom expiration');
+          return false;
+        }
+      } else if (angular.isDefined($scope.options.expire) && $scope.options.expire === 'duration' && angular.isUndefined($scope.options.duration)) {
+        Notification.error('Please enter a proper duration for the expiration');
+        return false;
+      }
+
+      // Verify the reason
+      if (Config.requireSilencingReason() && $scope.options.reason === '') {
+        Notification.error('Please provide a reason for silencing');
+        return false;
+      }
+
+      // Set the proper options
+      $scope.options = Silenced.validate($scope.options);
+
+      Silenced.addEntry($scope.options)
+      .then(
+        function() {
+          Notification.success('The silenced entry has been created');
+          $uibModalInstance.close();
+        },
+        function(error) {
+          Notification.error('Could not create the silenced entry. ' + error.data);
+        }
+      );
+    };
+
+    $scope.addEntries = function() {
+      var promises = [];
+      angular.forEach(items, function(item) {
+        // Get the options based on the item
+        var options = Silenced.itemOptions(item, $scope.itemType);
+
+        // Set common options
+        options.duration = $scope.options.duration;
+        options.expire = $scope.options.expire;
+        options.to = $scope.options.to;
+
+        // Validate the options
+        options = Silenced.validate(options);
+
+        promises.push(Silenced.addEntry(options));
+      });
+
+      $q.all(promises)
+        .then(
+          function(results) {
+            Notification.success(results.length + ' silenced entries have been created');
+            $uibModalInstance.close();
+          },
+          function(error) {
+            Notification.error('Could not create the silenced entry. ' + error.data);
+          }
+        );
+    };
+
+    $scope.clearEntries = function() {
       // Silenced entries to clear
       if ($scope.entries.length !== 0) {
         Silenced.clearEntries($scope.entries).then(
@@ -756,43 +873,22 @@ controllerModule.controller('SilencedModalController', ['backendService', 'Confi
           }
         );
       }
-
-      // Silenced entries to create
-      Silenced.createEntries(items, $scope.itemType, $scope.options).then(
-        function(results) {
-          if (results.length === 1) {
-            Notification.success('The silenced entry has been created');
-            $uibModalInstance.close();
-          } else if (results.length > 1) {
-            Notification.success(results.length + ' silenced entries have been created');
-            $uibModalInstance.close();
-          }
-        },
-        function(results) {
-          Notification.error('Could not create the silenced entry. ' + results.data);
-        }
-      );
     };
+
+    $scope.ok = function() {
+      if ($scope.itemsToSilenceCount <= 1 && $scope.silencedItemsCount === 0) {
+        $scope.addEntry();
+      }
+      if ($scope.itemsToSilenceCount >= 2) {
+        $scope.addEntries();
+      }
+      if ($scope.silencedItemsCount >= 1) {
+        $scope.clearEntries();
+      }
+    };
+
     $scope.cancel = function () {
       $uibModalInstance.dismiss('cancel');
-    };
-
-    // Autocompletion
-    function suggestSubscription(term) {
-      var q = term.toLowerCase().trim();
-      var results = [];
-      // Find first 10 entries that start with `term`.
-      for (var i = 0; i < $scope.subscriptions.length && $scope.subscriptions.length < 10; i++) {
-        var subscription = $scope.subscriptions[i];
-        if (subscription.name.toLowerCase().indexOf(q) === 0 && subscription.dc === $scope.options.ac.dc) {
-          results.push({ label: subscription.name, value: subscription.name });
-        }
-      }
-      return results;
-    }
-
-    $scope.autocompleteSubscription = {
-      suggest: suggestSubscription
     };
 
     // Services
@@ -803,8 +899,8 @@ controllerModule.controller('SilencedModalController', ['backendService', 'Confi
 /**
 * Stash
 */
-controllerModule.controller('StashController', [ 'backendService', '$filter', '$routeParams', '$scope', 'Sensu', 'Stashes', 'titleFactory',
-  function (backendService, $filter, $routeParams, $scope, Sensu, Stashes, titleFactory) {
+controllerModule.controller('StashController', [ 'backendService', '$filter', '$routeParams', '$scope', 'Stashes', 'titleFactory',
+  function (backendService, $filter, $routeParams, $scope, Stashes, titleFactory) {
     // Routing
     $scope.id = decodeURI($routeParams.id);
     titleFactory.set($scope.id);

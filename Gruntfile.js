@@ -5,6 +5,17 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
 
   grunt.initConfig({
+    concurrent: {
+      options: {
+        logConcurrentOutput: true
+      },
+      dev: {
+        tasks: [
+          'watch:karma',
+          'watch:scss'
+        ]
+      }
+    },
     jshint: {
       options: {
         jshintrc: '.jshintrc',
@@ -17,6 +28,8 @@ module.exports = function (grunt) {
     },
     karma: {
       unit: {
+        background: true,
+        singleRun: false,
         configFile: 'test/karma/conf.js'
       }
     },
@@ -46,6 +59,10 @@ module.exports = function (grunt) {
       }
     },
     watch: {
+      karma: {
+        files: ['js/**/*.js', 'test/karma/**/*.js'],
+        tasks: ['karma:unit:run']
+      },
       scss: {
         files: ['css/**/*.scss'],
         tasks: ['sass:dist'],
@@ -57,7 +74,8 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('dev', [
-    'watch:scss'
+    'karma:unit:start',
+    'concurrent:dev'
   ]);
 
   grunt.registerTask('lint', [

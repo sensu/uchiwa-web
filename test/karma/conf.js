@@ -14,10 +14,12 @@ module.exports = function(config) {
       'bower_components/angular-toastr/dist/angular-toastr.tpls.min.js',
       'bower_components/moment/min/moment.min.js',
       'bower_components/angular-moment/angular-moment.js',
+      'bower_components/moment-picker/dist/angular-moment-picker.min.js',
       'bower_components/highlightjs/highlight.pack.js',
       'bower_components/angular-gravatar/build/angular-gravatar.js',
       'bower_components/angular-mass-autocomplete-uchiwa/massautocomplete.min.js',
       'bower_components/ua-parser-js/dist/ua-parser.min.js',
+      './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js',
       'partials/**/*.html',
       'js/**/*.js',
       'test/karma/**/*.js'

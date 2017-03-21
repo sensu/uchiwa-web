@@ -259,8 +259,8 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
 /**
 * Config Services
 */
-serviceModule.service('Config', ['DefaultConfig', '$resource', '$rootScope',
-function(DefaultConfig, $resource, $rootScope) {
+serviceModule.service('Config', ['DefaultConfig', '$filter', '$resource', '$rootScope',
+function(DefaultConfig, $filter, $resource, $rootScope) {
   var Config = $resource('config/:resource', {resource: '@resource'});
   var self = this;
   this.appName = function() {
@@ -271,9 +271,6 @@ function(DefaultConfig, $resource, $rootScope) {
   };
   this.dateFormat = function() {
     return DefaultConfig.DateFormat;
-  };
-  this.defaultExpireOnResolve = function() {
-    return DefaultConfig.DefaultExpireOnResolve;
   };
   this.defaultTheme = function() {
     if (self.enterprise()) {
@@ -298,6 +295,12 @@ function(DefaultConfig, $resource, $rootScope) {
   };
   this.refresh = function() {
     return DefaultConfig.Refresh;
+  };
+  this.requireSilencingReason = function() {
+    return DefaultConfig.RequireSilencingReason;
+  };
+  this.silenceDurations = function() {
+    return $filter('orderBy')(DefaultConfig.SilenceDurations);
   };
   this.resource = Config;
 }]);
@@ -489,6 +492,27 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
       {'clear': {method: 'POST'}, 'create': {method: 'POST'}}
     );
     var self = this;
+    this.addEntry = function(options) {
+      var payload = {
+        dc: options.datacenter,
+        expire: options.expire,
+        reason: options.reason
+      };
+
+      if (angular.isDefined(options.check) && options.check !== '') {
+        payload.check = options.check;
+      }
+      if (angular.isDefined(options.subscription) && options.subscription !== '') {
+        payload.subscription = options.subscription;
+      }
+
+      if (options.expire === 'resolve') {
+        payload.expire_on_resolve = true; // jshint ignore:line
+        delete payload.expire;
+      }
+
+      return self.post(payload);
+    };
     this.clearEntries = function(entries) {
       var promises = [];
 
@@ -509,7 +533,7 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
         Notification.error('No items selected');
       } else {
         var modalInstance = $uibModal.open({ // jshint ignore:line
-          templateUrl: $rootScope.partialsPath + '/modals/silenced.html',
+          templateUrl: $rootScope.partialsPath + '/modals/silenced/index.html',
           controller: 'SilencedModalController',
           resolve: {
             items: function () {
@@ -518,49 +542,6 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
           }
         });
       }
-    };
-    this.createEntries = function(items, itemType, options) {
-      var promises = [];
-
-      if (itemType === 'subscription') {
-        items.push({dc: options.ac.dc, silenced: false, subscription: options.ac.subscription});
-      }
-      angular.forEach(items, function(item) {
-        if (angular.isObject(item) && !item.silenced) {
-          var payload = {dc: item.dc};
-          if (angular.isDefined(options.reason)) {
-            payload.reason = options.reason;
-          }
-          if (options.expire === 'custom') {
-            var now = new Date().getTime();
-            payload.expire = Helpers.secondsBetweenDates(now, options.to);
-          } else if (options.expire === 'resolve') {
-            payload.expire_on_resolve = true; // jshint ignore:line
-            delete payload.expire;
-          } else if (options.expire > 0) {
-            payload.expire = options.expire;
-          }
-
-          // Determine the subscription
-          if (itemType === 'client') {
-            payload.subscription = 'client:' + item.name;
-          } else if (itemType === 'subscription') {
-            payload.subscription = item.subscription;
-          } else {
-            if (angular.isDefined(item.client)) {
-              payload.subscription = 'client:';
-              payload.subscription += item.client.name || item.client;
-            }
-            if (angular.isDefined(item.check)) {
-              payload.check = item.check.name || item.check;
-            } else {
-              payload.check = item.name;
-            }
-          }
-          promises.push(self.post(payload));
-        }
-      });
-      return $q.all(promises);
     };
     this.delete = function(id) {
       var attributes = Helpers.splitId(id);
@@ -593,6 +574,39 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
         }
       );
     };
+    // itemOptions returns custom options based on the item attributes
+    this.itemOptions = function(item, type) {
+      var options = {};
+      options.datacenter = item.hasOwnProperty('dc') ? item.dc : undefined;
+
+      // Are we silencing from an event?
+      if (type === 'event') {
+        // Define the check
+        options.what = 'check';
+        options.check = item.check.name || item.check;
+      } else if (type === 'check') {
+        // Define the check
+        options.what = 'check';
+        options.check = item.name;
+      } else {
+        // We are silencing a client
+        options.what = 'checks';
+      }
+
+      // Define the client
+      if (type === 'check') {
+        options.who = 'clients';
+      } else {
+        options.who = 'client';
+        if (angular.isDefined(item.client) && angular.isDefined(item.client.name)) {
+          options.client = item.client.name;
+        } else {
+          options.client = item.name || item.client;
+        }
+      }
+
+      return options;
+    };
     this.findEntriesFromItems = function(entries, items) {
       var foundEntries = [];
       angular.forEach(items, function(item) {
@@ -622,12 +636,55 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
       });
       return foundEntries;
     };
+    // itemType returns the type of an element to silence.
+    // Possible return values are check, client or event
+    this.itemType = function(items) {
+      if (angular.isDefined(items[0])) {
+        if (items[0].hasOwnProperty('version')) {
+          return 'client';
+        } else if (items[0].hasOwnProperty('action')) {
+          return 'event';
+        } else {
+          return 'check';
+        }
+      } else {
+        return 'new';
+      }
+    };
     this.post = function(payload) {
       var entry = new Silenced(payload);
       return entry.$create();
     };
     this.query = function() {
       return Silenced.query();
+    };
+    // validate takes the options selected by the user and returns validated
+    // options that can be directly sent to the backend
+    this.validate = function(options) {
+      // Remove the check attribute if we are silencing all checks
+      if (options.what === 'checks') {
+        delete options.check;
+      }
+
+      // Add the proper client subscription or remove the subscription attribute
+      // if we are silencing all clients
+      if (options.who === 'client') {
+        options.subscription = 'client:' + options.client;
+      } else if (options.who === 'clients') {
+        delete options.subscription;
+      }
+
+      // Set the proper value to expire based on the option selected
+      if (options.expire === 'custom') {
+        var now = new Date().getTime();
+        options.expire = Helpers.secondsBetweenDates(now, options.to);
+      } else if (options.expire === 'duration') {
+        options.expire = moment.duration(options.duration, options.durationFormat).asSeconds();
+      } else if (options.expire === '-1') {
+        delete options.expire;
+      }
+
+      return options;
     };
 }]);
 
