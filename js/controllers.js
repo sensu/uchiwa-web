@@ -190,8 +190,8 @@ controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers',
 /**
 * Client
 */
-controllerModule.controller('ClientController', ['Clients', '$filter', '$location', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'User',
-  function (Clients, $filter, $location, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, User) {
+controllerModule.controller('ClientController', ['Clients', '$filter', '$location', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', '$uibModal', 'User',
+  function (Clients, $filter, $location, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, $uibModal, User) {
     $scope.predicate = '-last_status';
     $scope.reverse = false;
     $scope.check = null;
@@ -262,6 +262,17 @@ controllerModule.controller('ClientController', ['Clients', '$filter', '$locatio
           routingService.go('clients');
         }, function() {});
     };
+    $scope.edit = function(client) {
+      var modalInstance = $uibModal.open({ // jshint ignore:line
+        templateUrl: $rootScope.partialsPath + '/modals/clientregistry/index.html',
+        controller: 'ClientRegistryModalController',
+        resolve: {
+          client: function () {
+            return client;
+          }
+        }
+      });
+    };
     $scope.resolveEvent = function(id) {
       Clients.resolveEvent(id)
         .then(function() {
@@ -272,6 +283,56 @@ controllerModule.controller('ClientController', ['Clients', '$filter', '$locatio
     $scope.permalink = routingService.permalink;
     $scope.silence = Silenced.create;
     $scope.user = User;
+  }
+]);
+
+
+/**
+* Client Registry
+*/
+controllerModule.controller('ClientRegistryModalController', ['Client', 'client', 'Notification', '$scope', '$uibModalInstance',
+  function (Client, client, Notification, $scope, $uibModalInstance) {
+    // Create a deep copy of the client
+    var selectedClient = angular.copy(client);
+
+    // Save the datacenter for later
+    var dc = client.dc;
+
+    // Display the client name
+    $scope.name = client.name;
+
+    // Remove internal attributes
+    delete selectedClient._id;
+    delete selectedClient.dc;
+    delete selectedClient.history;
+    delete selectedClient.keepalives;
+    delete selectedClient.silenced;
+    delete selectedClient.timestamp;
+    delete selectedClient.version;
+
+    $scope.obj = {data: selectedClient, options: {mode: 'code'}};
+
+    $scope.ok = function() {
+      // Add back the datacenter
+      var payload = $scope.obj.data;
+      payload.dc = dc;
+
+      Client.update(payload)
+      .then(
+        function() {
+          Notification.success('The client has been updated');
+          $uibModalInstance.close();
+        },
+        function(error) {
+          Notification.error('Could not update the client. ' + error.data);
+        }
+      );
+    };
+
+    $scope.cancel = function () {
+      $uibModalInstance.dismiss('cancel');
+    };
+
   }
 ]);
 
