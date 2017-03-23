@@ -266,6 +266,12 @@ filterModule.filter('imagey', function() {
   };
 });
 
+filterModule.filter('objectIsEmpty', function() {
+  return function(object) {
+    return angular.equals({}, object);
+  };
+});
+
 filterModule.filter('regex', function() {
   return function(items, query) {
     var results = [];

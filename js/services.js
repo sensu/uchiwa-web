@@ -318,6 +318,37 @@ function(DefaultConfig, $filter, $resource, $rootScope) {
 }]);
 
 /**
+* Datacenter
+*/
+serviceModule.service('Datacenter', ['Config', '$interval', '$resource',
+function(Config, $interval, $resource) {
+  this.datacenter = {};
+  var Resource = $resource('datacenters/:name', {name: '@name'});
+  var self = this;
+  var timer;
+
+  this.get = function(name) {
+    Resource.get({name: name})
+    .$promise.then(function(data) {
+      angular.copy(data, self.datacenter);
+    },
+    function() {
+      self.datacenter = null;
+    });
+  };
+  this.realTime = function(name) {
+    self.get(name);
+    timer = $interval(function() {
+      self.get(name);
+    }, Config.refresh());
+  };
+  this.stop = function() {
+    $interval.cancel(timer);
+    self.datacenter = {};
+  };
+}]);
+
+/**
 * Events
 */
 serviceModule.service('Events', ['Helpers', 'Notification', '$q', '$resource', '$rootScope', 'Silenced',

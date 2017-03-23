@@ -32,7 +32,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="datacenter in datacenters | orderBy:'name'">
+              <tr ng-repeat="datacenter in datacenters | orderBy:'name'" ng-click="go('/datacenters/' + datacenter.name)">
                 <td data-title="Name" class="main normal">{{ datacenter.name }}</td>
                 <td data-title="Version" class="normal">{{ datacenter.info.sensu.version }}</td>
                 <td data-title="Redis" class="normal">
@@ -41,11 +41,11 @@
                 <td data-title="Transport" class="normal">
                   <span ng-if="!datacenter.info.transport.connected">Not</span> Connected
                 </td>
-                <td data-title="Events" class="normal">{{ datacenter.stats.events }}</td>
-                <td data-title="Clients" class="normal">{{ datacenter.stats.clients }}</td>
-                <td data-title="Checks" class="normal">{{ datacenter.stats.checks }}</td>
-                <td data-title="Silenced" class="normal">{{ datacenter.stats.silenced }}</td>
-                <td data-title="Stashes" class="normal">{{ datacenter.stats.stashes }}</td>
+                <td data-title="Events" class="normal">{{ datacenter.metrics.events }}</td>
+                <td data-title="Clients" class="normal">{{ datacenter.metrics.clients }}</td>
+                <td data-title="Checks" class="normal">{{ datacenter.metrics.checks }}</td>
+                <td data-title="Silenced" class="normal">{{ datacenter.metrics.silenced }}</td>
+                <td data-title="Stashes" class="normal">{{ datacenter.metrics.stashes }}</td>
               </tr>
             </tbody>
           </table>
