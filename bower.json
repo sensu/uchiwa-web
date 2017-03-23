@@ -16,6 +16,7 @@
     "angular-route": "~1.4",
     "angular-sanitize": "~1.4",
     "angular-toastr": "1.6.0",
+    "angular-tools/ng-jsoneditor": "ea138469f157d8f2b54ec5b8dcf4b08a55b61459",
     "angular-ua-parser": "0.0.2",
     "bootstrap": "3.1.1",
     "bootstrap-sass-official": "3.1.1",

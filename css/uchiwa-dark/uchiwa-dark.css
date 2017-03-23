@@ -735,6 +735,29 @@ pre.hljs .hljs-string {
 /* Tables */
 /* Timestamp */
 /* Wells */
+div.jsoneditor-menu {
+  background-color: #5F97FB;
+  border-bottom: 1px solid #5F97FB; }
+
+/* Colors */
+/* Body, Sections and Headers */
+/* Breadcrumb */
+/* Buttons */
+/* Code */
+/* Console */
+/* Dashboard */
+/* Dropdown */
+/* Login */
+/* Madlibs */
+/* Modal */
+/* Nav */
+/* Navbar */
+/* Search */
+/* Sidebar */
+/* Panels */
+/* Tables */
+/* Timestamp */
+/* Wells */
 .label {
   font-size: 13px;
   font-weight: 600; }
@@ -986,6 +1009,9 @@ li.timestamp .relative-timestamp {
 @media only screen and (max-width: 768px) {
   .modal-dialog {
     width: 95%; } }
+.modal-body.ng-jsoneditor {
+  padding: 0px !important; }
+
 /* Colors */
 /* Body, Sections and Headers */
 /* Breadcrumb */

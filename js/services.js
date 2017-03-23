@@ -159,6 +159,18 @@ function (Helpers, Notification, $q, $resource, Silenced) {
 }]);
 
 /**
+* Client Services
+*/
+serviceModule.service('Client', ['$resource',
+function ($resource) {
+  var Client = $resource('clients');
+  this.update = function(payload) {
+    var client = new Client(payload);
+    return client.$save();
+  };
+}]);
+
+/**
 * Clients Services
 */
 serviceModule.service('Clients', ['Events', '$filter', 'Helpers', '$location', 'Notification', '$q', '$resource', 'Results', '$rootScope', 'Silenced',
