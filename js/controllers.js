@@ -411,12 +411,34 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
 ]);
 
 /**
+* Datacenter
+*/
+controllerModule.controller('DatacenterController', ['Datacenter', '$routeParams', '$scope', 'Sensu', 'titleFactory',
+  function (Datacenter, $routeParams, $scope, Sensu, titleFactory) {
+    // Fetch the datacenter name
+    $scope.name = decodeURI($routeParams.id);
+    $scope.pageHeaderText = $scope.name;
+    titleFactory.set($scope.pageHeaderText);
+
+    // Get the datacenter
+    $scope.datacenter = Datacenter.datacenter;
+    Datacenter.realTime($scope.name);
+    $scope.$on('$destroy', function() {
+      Datacenter.stop();
+    });
+  }
+]);
+
+/**
 * Datacenters
 */
-controllerModule.controller('DatacentersController', ['$scope', 'Sensu', 'titleFactory',
-  function ($scope, Sensu, titleFactory) {
+controllerModule.controller('DatacentersController', ['routingService', '$scope', 'Sensu', 'titleFactory',
+  function (routingService, $scope, Sensu, titleFactory) {
     $scope.pageHeaderText = 'Datacenters';
     titleFactory.set($scope.pageHeaderText);
+
+    // Services
+    $scope.go = routingService.go;
   }
 ]);
 
