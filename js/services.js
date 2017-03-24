@@ -299,6 +299,14 @@ function(DefaultConfig, $filter, $resource, $rootScope) {
   this.get = function() {
     return Config.get();
   };
+  this.favicon = function() {
+    var defaultFavicon = 'bower_components/uchiwa-web/favicon.ico';
+    if (self.enterprise()){
+      defaultFavicon = 'img/favicon.png';
+    }
+
+    return DefaultConfig.Favicon || defaultFavicon;
+  };
   this.logoURL = function() {
     if (self.enterprise()) {
       return 'img/logo.png';
