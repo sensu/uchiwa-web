@@ -69,11 +69,12 @@ angular.module('uchiwa')
     }
   }
 ])
-.run(function (backendService, $cookieStore, $location, $rootScope, titleFactory) {
+.run(function (backendService, Config, $cookieStore, $location, $rootScope, titleFactory) {
   $rootScope.partialsPath = 'bower_components/uchiwa-web/partials';
   $rootScope.skipOneRefresh = false;
   $rootScope.showCollectionBar = true;
   $rootScope.enterprise = false;
+  $rootScope.favicon = Config.favicon;
   $rootScope.isAuthenticated = angular.isDefined($cookieStore.get('user')) || false;
   $rootScope.titleFactory = titleFactory;
 
