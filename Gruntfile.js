@@ -31,6 +31,10 @@ module.exports = function (grunt) {
         background: true,
         singleRun: false,
         configFile: 'test/karma/conf.js'
+      },
+      continuous: {
+        configFile: 'test/karma/conf.js',
+        singleRun: true
       }
     },
     lintspaces: {
@@ -73,6 +77,10 @@ module.exports = function (grunt) {
     }
   });
 
+  grunt.registerTask('default', [
+    'test'
+  ]);
+
   grunt.registerTask('dev', [
     'karma:unit:start',
     'concurrent:dev'
@@ -82,9 +90,9 @@ module.exports = function (grunt) {
     'newer:jshint'
   ]);
 
-  grunt.registerTask('default', [
+  grunt.registerTask('test', [
     'jshint',
     'lintspaces',
-    'karma:unit'
+    'karma:continuous'
   ]);
 };

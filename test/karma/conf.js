@@ -17,10 +17,12 @@ module.exports = function(config) {
       'bower_components/moment-picker/dist/angular-moment-picker.min.js',
       'bower_components/highlightjs/highlight.pack.js',
       'bower_components/angular-gravatar/build/angular-gravatar.js',
-      'bower_components/angular-mass-autocomplete-uchiwa/massautocomplete.min.js',
       'bower_components/ua-parser-js/dist/ua-parser.min.js',
+      'bower_components/jsoneditor/dist/jsoneditor.min.js',
+      'bower_components/ng-jsoneditor/ng-jsoneditor.js',
       './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js',
       'partials/**/*.html',
+      'js/bootstrap.js',
       'js/**/*.js',
       'test/karma/**/*.js'
     ],
