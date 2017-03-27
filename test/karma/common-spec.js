@@ -3,13 +3,16 @@
 describe('common', function () {
   var $rootScope;
   var $scope;
+  var mockConfig;
   var mockToastr;
 
   beforeEach(module('uchiwa'));
 
   beforeEach(function() {
+    mockConfig = jasmine.createSpyObj('mockConfig', ['favicon']);
     mockToastr = jasmine.createSpyObj('mockToastr', ['error', 'success']);
     module(function($provide) {
+      $provide.value('Config', mockConfig);
       $provide.value('toastr', mockToastr);
     });
   });

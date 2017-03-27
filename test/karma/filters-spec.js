@@ -1,7 +1,6 @@
 'use strict';
 
 describe('filters', function () {
-
   var $filter;
   var mockConfig;
 
@@ -381,6 +380,32 @@ describe('filters', function () {
         {foo: ['foo', 'baz']}
       ];
       expect(regexFilter(items, 'foo:bar')).toEqual([items[0]]);
+    }));
+
+    it('performs a negative lookahead', inject(function (regexFilter) {
+      var items = [
+        {foo: 'canada'},
+        {foo: 'usa'}
+      ];
+      expect(regexFilter(items, 'foo:^((?!canada).)*$')).toEqual([items[1]]);
+    }));
+
+    it('performs a negative lookahead on check names in events', inject(function (regexFilter) {
+      var items = [
+        {check: {name: 'check-foo'}, client: {name: 'foo'}},
+        {check: {name: 'check-bar'}, client: {name: 'foo'}},
+        {check: {name: 'check-bar'}, client: {name: 'bar'}},
+      ];
+      expect(regexFilter(items, 'check:^((?!check-bar).)*$')).toEqual([items[0]]);
+    }));
+
+    it('performs a negative lookahead on client names in events', inject(function (regexFilter) {
+      var items = [
+        {check: {name: 'check-foo'}, client: {name: 'foo'}},
+        {check: {name: 'check-bar'}, client: {name: 'foo'}},
+        {check: {name: 'check-bar'}, client: {name: 'bar'}},
+      ];
+      expect(regexFilter(items, 'client:^((?!foo).)*$')).toEqual([items[2]]);
     }));
   });
 

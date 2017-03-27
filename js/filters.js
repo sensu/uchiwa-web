@@ -310,12 +310,16 @@ filterModule.filter('regex', function() {
 
     testObject = function(obj, key) {
       for (var k in obj) {
-        if (typeof obj[k] === 'object') {
+        if (obj[k] && typeof obj[k] === 'object' && obj[k].constructor !== Array) {
+          if ((k === 'check' || k === 'client') && k !== key) {
+            continue;
+          }
           if (testObject(obj[k], key)) {
             return true;
           }
+          continue;
         }
-        if (k === key && pattern.test(obj[k])) {
+        if ((k === key || ((key === 'check' || key === 'client') && k === 'name')) && pattern.test(obj[k])) {
           return true;
         }
       }
