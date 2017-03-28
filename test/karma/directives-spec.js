@@ -23,7 +23,6 @@ describe('directives', function () {
   beforeEach(inject(function (_$compile_, _$rootScope_, $httpBackend) {
     $compile = _$compile_;
     $httpBackend.whenGET('config').respond([]);
-    //$httpBackend.whenGET('partials/directives/client-summary.html?v=0.23.0').respond([]);
     $rootScope = _$rootScope_;
     $rootScope.partialsPath = 'partials';
     $rootScope.versionParam = '';
