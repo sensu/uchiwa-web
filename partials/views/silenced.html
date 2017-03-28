@@ -1,5 +1,5 @@
-<ng-include src="partialsPath + '/navbar.html'"></ng-include>
-<ng-include src="partialsPath + '/sidebar.html'"></ng-include>
+<ng-include src="partialsPath + '/navbar.html' + versionParam"></ng-include>
+<ng-include src="partialsPath + '/sidebar.html' + versionParam"></ng-include>
 <div class="container-fluid silenced" ng-cloak>
   <div class="row-fluid">
     <div class="col-lg-12">
@@ -9,7 +9,7 @@
           <div class="row">
             <div class="col-xs-10">
               <!--title-->
-              <ng-include src="partialsPath + '/panel/breadcrumb.html'"></ng-include>
+              <ng-include src="partialsPath + '/panel/breadcrumb.html' + versionParam"></ng-include>
             </div>
             <div class="col-xs-2 search-icon" style="display:none;">
               <i class="fa fa-search fa-lg" ng-click="showMobileSearch = ! showMobileSearch"></i>
@@ -20,14 +20,14 @@
                 <panel-actions data="silenced" resolve-fn="deleteMultiple" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly() && hasElementSelected(selected)"></panel-actions>
                 <!--limit-->
                 <!--dc-->
-                <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
+                <ng-include src="partialsPath + '/panel/dc.html' + versionParam"></ng-include>
                 <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
                 <!--add-->
-                <ng-include src="partialsPath + '/panel/add-silenced.html'"></ng-include>
+                <ng-include src="partialsPath + '/panel/add-silenced.html' + versionParam"></ng-include>
               </span>
               <!--search-->
               <span class="search nopadding">
-                <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
+                <ng-include src="partialsPath + '/panel/search.html' + versionParam"></ng-include>
               </span>
             </div>
           </div>

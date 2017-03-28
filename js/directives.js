@@ -13,14 +13,14 @@ directiveModule.directive('aggregateResult', ['$rootScope', function ($rootScope
       name: '=',
       severity: '@'
     },
-    templateUrl: $rootScope.partialsPath + '/directives/aggregate-result.html'
+    templateUrl: $rootScope.partialsPath + '/directives/aggregate-result.html' + $rootScope.versionParam
   };
 }]);
 
 // clientSummary generate the client key/value panel on the client view
 directiveModule.directive('clientSummary', ['$filter', '$rootScope', function ($filter, $rootScope) {
   return {
-    templateUrl: $rootScope.partialsPath + '/directives/client-summary.html',
+    templateUrl: $rootScope.partialsPath + '/directives/client-summary.html' + $rootScope.versionParam,
     link: function (scope, element, attrs) {
       scope.clientSummary = {};
 
@@ -64,7 +64,8 @@ directiveModule.directive('logoUrl', ['Config', function (Config) {
   };
 }]);
 
-directiveModule.directive('panelActions', ['$rootScope', function ($rootScope) {
+directiveModule.directive('panelActions', ['$rootScope',
+function ($rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -75,11 +76,12 @@ directiveModule.directive('panelActions', ['$rootScope', function ($rootScope) {
       resolveLegend: '@',
       silenceFn: '='
     },
-    templateUrl: $rootScope.partialsPath + '/panel/actions.html'
+    templateUrl: $rootScope.partialsPath + '/panel/actions.html' + $rootScope.versionParam
   };
 }]);
 
-directiveModule.directive('panelLimit', ['$rootScope', function ($rootScope) {
+directiveModule.directive('panelLimit', ['$rootScope',
+function ($rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -87,11 +89,12 @@ directiveModule.directive('panelLimit', ['$rootScope', function ($rootScope) {
       filters: '=',
       permalink: '='
     },
-    templateUrl: $rootScope.partialsPath + '/panel/limit.html'
+    templateUrl: $rootScope.partialsPath + '/panel/limit.html' + $rootScope.versionParam
   };
 }]);
 
-directiveModule.directive('relativeTime', ['$filter', '$rootScope', function ($filter, $rootScope) {
+directiveModule.directive('relativeTime', ['$filter', '$rootScope',
+function ($filter, $rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -102,11 +105,12 @@ directiveModule.directive('relativeTime', ['$filter', '$rootScope', function ($f
         scope.timestamp = Date.parse(scope.timestamp)/1000;
       }
     },
-    templateUrl: $rootScope.partialsPath + '/directives/relative-time.html'
+    templateUrl: $rootScope.partialsPath + '/directives/relative-time.html' + $rootScope.versionParam
   };
 }]);
 
-directiveModule.directive('sidebarPopover', ['$rootScope', function ($rootScope) {
+directiveModule.directive('sidebarPopover', ['$rootScope',
+function ($rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -115,7 +119,7 @@ directiveModule.directive('sidebarPopover', ['$rootScope', function ($rootScope)
       name: '@',
       pluralized: '@'
     },
-    templateUrl: $rootScope.partialsPath + '/directives/sidebar-popover.html'
+    templateUrl: $rootScope.partialsPath + '/directives/sidebar-popover.html' + $rootScope.versionParam
   };
 }]);
 
