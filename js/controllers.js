@@ -994,8 +994,8 @@ controllerModule.controller('StashController', [ 'backendService', '$filter', '$
     $scope.stash = null;
     var stashes = [];
     backendService.getStashes()
-      .success(function (data) {
-        stashes = data;
+      .then(function (response) {
+        stashes = response.data;
 
         var stash = Stashes.get(stashes, $scope.id);
         // Prepare rich output
@@ -1006,8 +1006,7 @@ controllerModule.controller('StashController', [ 'backendService', '$filter', '$
         });
 
         $scope.stash = stash;
-      })
-      .error(function(error) {
+      }, function(error) {
         if (error !== null) {
           console.error(JSON.stringify(error));
         }

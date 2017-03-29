@@ -7,14 +7,14 @@
     "bower_components"
   ],
   "dependencies": {
-    "angular": "~1.5.11",
+    "angular": "~1.6.3",
     "angular-bootstrap": "~2.2.0",
-    "angular-cookies": "~1.5",
+    "angular-cookies": "~1.6.3",
     "angular-gravatar": "~0.4.2",
     "angular-moment": "~1.0.1",
-    "angular-resource": "~1.5",
-    "angular-route": "~1.5",
-    "angular-sanitize": "~1.5",
+    "angular-resource": "~1.6.3",
+    "angular-route": "~1.6.3",
+    "angular-sanitize": "~1.6.3",
     "angular-toastr": "1.6.0",
     "angular-tools/ng-jsoneditor": "ea138469f157d8f2b54ec5b8dcf4b08a55b61459",
     "angular-ua-parser": "0.0.2",
@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "jasmine": "~2.0.0",
-    "angular-mocks": "~1.5"
+    "angular-mocks": "~1.6.3"
   }
 }

@@ -23,8 +23,16 @@ angular.module('uchiwa', [
 ]);
 
 angular.module('uchiwa')
-.config(['$httpProvider', '$routeProvider', 'toastrConfig', 'VERSION', '$uibTooltipProvider',
-  function ($httpProvider, $routeProvider, toastrConfig, VERSION, $uibTooltipProvider) {
+.config(['$httpProvider', '$locationProvider', '$qProvider', '$routeProvider', 'toastrConfig', 'VERSION', '$uibTooltipProvider',
+  function ($httpProvider, $locationProvider, $qProvider, $routeProvider, toastrConfig, VERSION, $uibTooltipProvider) {
+    // Angular 1.6 backward compatibility.
+    // See https://docs.angularjs.org/guide/migration#migrate1.5to1.6-ng-services-$location
+    $locationProvider.hashPrefix('');
+
+    // Angular 1.6 backward compatibility.
+    // See https://github.com/angular-ui/ui-router/issues/2889#issuecomment-237521045
+    $qProvider.errorOnUnhandledRejections(false);
+
     // Toastr configuration
     angular.extend(toastrConfig, {
       positionClass: 'toast-bottom-right',
