@@ -535,13 +535,13 @@ controllerModule.controller('EventsController', ['Clients', 'Events', '$filter',
 /**
 * Info
 */
-controllerModule.controller('InfoController', ['Config', '$scope', 'titleFactory', 'VERSION',
-  function (Config, $scope, titleFactory, VERSION) {
+controllerModule.controller('InfoController', ['Config', '$scope', 'titleFactory', 'VERSIONS',
+  function (Config, $scope, titleFactory, VERSIONS) {
     $scope.pageHeaderText = 'Info';
     titleFactory.set($scope.pageHeaderText);
 
     $scope.config = Config.get();
-    $scope.version = VERSION;
+    $scope.versions = VERSIONS;
   }
 ]);
 

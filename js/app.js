@@ -23,8 +23,8 @@ angular.module('uchiwa', [
 ]);
 
 angular.module('uchiwa')
-.config(['$httpProvider', '$routeProvider', 'toastrConfig', '$uibTooltipProvider', 'VERSION',
-  function ($httpProvider, $routeProvider, toastrConfig, $uibTooltipProvider, VERSION) {
+.config(['$httpProvider', '$routeProvider', 'toastrConfig', 'VERSION', '$uibTooltipProvider',
+  function ($httpProvider, $routeProvider, toastrConfig, VERSION, $uibTooltipProvider) {
     // Toastr configuration
     angular.extend(toastrConfig, {
       positionClass: 'toast-bottom-right',
@@ -40,21 +40,21 @@ angular.module('uchiwa')
       .when('/', {redirectTo: function () {
         return '/events';
       }})
-      .when('/aggregates/:dc/:name/:members?/:severity?', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregate.html?v=' + VERSION.uchiwa, reloadOnSearch: false, controller: 'AggregateController'})
-      .when('/aggregates', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregates.html?v=' + VERSION.uchiwa, reloadOnSearch: false, controller: 'AggregatesController'})
-      .when('/checks', {templateUrl: 'bower_components/uchiwa-web/partials/views/checks.html?v=' + VERSION.uchiwa, reloadOnSearch: false, controller: 'ChecksController'})
-      .when('/client/:dc/:client', {templateUrl: 'bower_components/uchiwa-web/partials/views/client.html?v=' + VERSION.uchiwa, reloadOnSearch: false, controller: 'ClientController'})
-      .when('/clients', {templateUrl: 'bower_components/uchiwa-web/partials/views/clients.html?v=' + VERSION.uchiwa, reloadOnSearch: false, controller: 'ClientsController'})
-      .when('/datacenters', {templateUrl: 'bower_components/uchiwa-web/partials/views/datacenters.html?v=' + VERSION.uchiwa, controller: 'DatacentersController'})
-      .when('/datacenters/:id', {templateUrl: 'bower_components/uchiwa-web/partials/views/datacenter.html?v=' + VERSION.uchiwa, controller: 'DatacenterController'})
-      .when('/events', {templateUrl: 'bower_components/uchiwa-web/partials/views/events.html?v=' + VERSION.uchiwa, reloadOnSearch: false, controller: 'EventsController'})
-      .when('/info', {templateUrl: 'bower_components/uchiwa-web/partials/views/info.html?v=' + VERSION.uchiwa, controller: 'InfoController'})
-      .when('/login', {templateUrl: 'bower_components/uchiwa-web/partials/login/index.html?v=' + VERSION.uchiwa, controller: 'LoginController'})
-      .when('/settings', {templateUrl: 'bower_components/uchiwa-web/partials/views/settings.html?v=' + VERSION.uchiwa, controller: 'SettingsController'})
-      .when('/silenced', {templateUrl: 'bower_components/uchiwa-web/partials/views/silenced.html?v=' + VERSION.uchiwa, reloadOnSearch: false, controller: 'SilencedController'})
-      .when('/silenced/:id*', {templateUrl: 'bower_components/uchiwa-web/partials/views/silenced-entry.html?v=' + VERSION.uchiwa, reloadOnSearch: false, controller: 'SilencedEntryController'})
-      .when('/stashes', {templateUrl: 'bower_components/uchiwa-web/partials/views/stashes.html?v=' + VERSION.uchiwa, reloadOnSearch: false, controller: 'StashesController'})
-      .when('/stashes/:id*', {templateUrl: 'bower_components/uchiwa-web/partials/views/stash.html?v=' + VERSION.uchiwa, reloadOnSearch: false, controller: 'StashController'})
+      .when('/aggregates/:dc/:name/:members?/:severity?', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregate.html?v=' + VERSION, reloadOnSearch: false, controller: 'AggregateController'})
+      .when('/aggregates', {templateUrl: 'bower_components/uchiwa-web/partials/views/aggregates.html?v=' + VERSION, reloadOnSearch: false, controller: 'AggregatesController'})
+      .when('/checks', {templateUrl: 'bower_components/uchiwa-web/partials/views/checks.html?v=' + VERSION, reloadOnSearch: false, controller: 'ChecksController'})
+      .when('/client/:dc/:client', {templateUrl: 'bower_components/uchiwa-web/partials/views/client.html?v=' + VERSION, reloadOnSearch: false, controller: 'ClientController'})
+      .when('/clients', {templateUrl: 'bower_components/uchiwa-web/partials/views/clients.html?v=' + VERSION, reloadOnSearch: false, controller: 'ClientsController'})
+      .when('/datacenters', {templateUrl: 'bower_components/uchiwa-web/partials/views/datacenters.html?v=' + VERSION, controller: 'DatacentersController'})
+      .when('/datacenters/:id', {templateUrl: 'bower_components/uchiwa-web/partials/views/datacenter.html?v=' + VERSION, controller: 'DatacenterController'})
+      .when('/events', {templateUrl: 'bower_components/uchiwa-web/partials/views/events.html?v=' + VERSION, reloadOnSearch: false, controller: 'EventsController'})
+      .when('/info', {templateUrl: 'bower_components/uchiwa-web/partials/views/info.html?v=' + VERSION, controller: 'InfoController'})
+      .when('/login', {templateUrl: 'bower_components/uchiwa-web/partials/login/index.html?v=' + VERSION, controller: 'LoginController'})
+      .when('/settings', {templateUrl: 'bower_components/uchiwa-web/partials/views/settings.html?v=' + VERSION, controller: 'SettingsController'})
+      .when('/silenced', {templateUrl: 'bower_components/uchiwa-web/partials/views/silenced.html?v=' + VERSION, reloadOnSearch: false, controller: 'SilencedController'})
+      .when('/silenced/:id*', {templateUrl: 'bower_components/uchiwa-web/partials/views/silenced-entry.html?v=' + VERSION, reloadOnSearch: false, controller: 'SilencedEntryController'})
+      .when('/stashes', {templateUrl: 'bower_components/uchiwa-web/partials/views/stashes.html?v=' + VERSION, reloadOnSearch: false, controller: 'StashesController'})
+      .when('/stashes/:id*', {templateUrl: 'bower_components/uchiwa-web/partials/views/stash.html?v=' + VERSION, reloadOnSearch: false, controller: 'StashController'})
       .otherwise('/');
 
     $uibTooltipProvider.options({animation: false, 'placement': 'bottom'});
@@ -77,8 +77,8 @@ angular.module('uchiwa')
   $rootScope.favicon = Config.favicon;
   $rootScope.isAuthenticated = angular.isDefined($cookieStore.get('user')) || false;
   $rootScope.titleFactory = titleFactory;
-  $rootScope.version = VERSION.uchiwa;
-  $rootScope.versionParam = '?v=' + VERSION.uchiwa;
+  $rootScope.version = VERSION;
+  $rootScope.versionParam = '?v=' + $rootScope.version;
 
   // fetch the sensu data on every page change
   $rootScope.$on('$routeChangeSuccess', function () {
