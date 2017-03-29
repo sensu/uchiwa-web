@@ -100,10 +100,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
     updateAggregate: function(name, dc) {
       var update = function() {
         backendService.getAggregate(name, dc)
-          .success(function (data) {
-            sensu.aggregate = data;
-          })
-          .error(function(error) {
+          .then(function (response) {
+            sensu.aggregate = response.data;
+          }, function(error) {
             if (error !== null) {
               sensu.aggregate = null;
               console.error(JSON.stringify(error));
@@ -116,10 +115,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
     updateAggregateChecks: function(name, dc) {
       var update = function() {
         backendService.getAggregateMembers(name, 'checks', dc)
-          .success(function (data) {
-            sensu.aggregateChecks = data;
-          })
-          .error(function(error) {
+          .then(function (response) {
+            sensu.aggregateChecks = response.data;
+          }, function(error) {
             if (error !== null) {
               console.error(JSON.stringify(error));
             }
@@ -131,10 +129,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
     updateAggregateClients: function(name, dc) {
       var update = function() {
         backendService.getAggregateMembers(name, 'clients', dc)
-          .success(function (data) {
-            sensu.aggregateClients = data;
-          })
-          .error(function(error) {
+          .then(function (response) {
+            sensu.aggregateClients = response.data;
+          }, function(error) {
             if (error !== null) {
               console.error(JSON.stringify(error));
             }
@@ -146,10 +143,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
     updateAggregateResults: function(name, severity, dc) {
       var update = function() {
         backendService.getAggregateResults(name, severity, dc)
-          .success(function (data) {
-            sensu.aggregateResults = data;
-          })
-          .error(function(error) {
+          .then(function (response) {
+            sensu.aggregateResults = response.data;
+          }, function(error) {
             if (error !== null) {
               console.error(JSON.stringify(error));
             }
@@ -161,10 +157,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
     updateAggregates: function() {
       var update = function() {
         backendService.getAggregates()
-          .success(function (data) {
-            sensu.aggregates = data;
-          })
-          .error(function(error) {
+          .then(function (response) {
+            sensu.aggregates = response.data;
+          }, function(error) {
             if (error !== null) {
               console.error(JSON.stringify(error));
             }
@@ -176,10 +171,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
     updateChecks: function() {
       var update = function() {
         backendService.getChecks()
-          .success(function (data) {
-            sensu.checks = data;
-          })
-          .error(function(error) {
+          .then(function (response) {
+            sensu.checks = response.data;
+          }, function(error) {
             if (error !== null) {
               console.error(JSON.stringify(error));
             }
@@ -217,10 +211,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
           return;
         }
         backendService.getClients()
-          .success(function (data) {
-            sensu.clients = data;
-          })
-          .error(function(error) {
+          .then(function (response) {
+            sensu.clients = response.data;
+          }, function(error) {
             if (error !== null) {
               console.error(JSON.stringify(error));
             }
@@ -236,10 +229,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
           return;
         }
         backendService.getEvents()
-          .success(function (data) {
-            sensu.events = data;
-          })
-          .error(function(error) {
+          .then(function (response) {
+            sensu.events = response.data;
+          }, function(error) {
             if (error !== null) {
               console.error(JSON.stringify(error));
             }
@@ -289,10 +281,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
           return;
         }
         backendService.getSilenced()
-          .success(function (data) {
-            sensu.silenced = data;
-          })
-          .error(function(error) {
+          .then(function (response) {
+            sensu.silenced = response.data;
+          }, function(error) {
             if (error !== null) {
               console.error(JSON.stringify(error));
             }
@@ -308,10 +299,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
           return;
         }
         backendService.getStashes()
-          .success(function (data) {
-            sensu.stashes = data;
-          })
-          .error(function(error) {
+          .then(function (response) {
+            sensu.stashes = response.data;
+          }, function(error) {
             if (error !== null) {
               console.error(JSON.stringify(error));
             }
@@ -322,10 +312,9 @@ factoryModule.factory('Sensu', function(backendService, Config, $interval, Notif
     },
     updateSubscriptions: function() {
       backendService.getSubscriptions()
-        .success(function (data) {
-          sensu.subscriptions = data;
-        })
-        .error(function(error) {
+        .then(function (response) {
+          sensu.subscriptions = response.data;
+        }, function(error) {
           if (error !== null) {
             console.error(JSON.stringify(error));
           }

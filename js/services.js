@@ -75,15 +75,14 @@ serviceModule.service('backendService', ['$http', '$interval', '$location', '$ro
     };
     this.getDatacenters = function() {
       $http.get('datacenters')
-        .success(function(data) {
-          if (!angular.isObject(data)) {
+        .then(function(response) {
+          if (!angular.isObject(response.data)) {
             $rootScope.datacenters = [];
           }
           else {
-            $rootScope.datacenters = data;
+            $rootScope.datacenters = response.data;
           }
-        })
-        .error(function(error) {
+        }, function(error) {
           if (error !== null) {
             console.error(JSON.stringify(error));
           }
