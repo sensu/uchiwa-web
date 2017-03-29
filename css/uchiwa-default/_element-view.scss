@@ -6,6 +6,10 @@
 
 .element-view .key {
   font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .element-view .value {

@@ -76,7 +76,10 @@
   margin-top: 20px;
   font-size: 13px;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .panel .subtitle {

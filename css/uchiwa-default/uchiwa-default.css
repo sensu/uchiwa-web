@@ -549,7 +549,11 @@ pre.hljs .hljs-string {
   padding-bottom: 15px; }
 
 .element-view .key {
-  font-weight: bold; }
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%; }
 
 .element-view .value {
   overflow-wrap: break-word;
@@ -1188,7 +1192,10 @@ li.timestamp .relative-timestamp {
   margin-top: 20px;
   font-size: 13px;
   font-weight: 700;
-  text-transform: uppercase; }
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap; }
 
 .panel .subtitle {
   display: block;
@@ -1588,6 +1595,9 @@ li.timestamp .relative-timestamp {
 
 .table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
   background-color: #F5F8FF !important; }
+
+.tooltip-inner {
+  max-width: none; }
 
 /* Colors */
 /* Body, Sections and Headers */
