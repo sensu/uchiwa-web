@@ -264,7 +264,7 @@ controllerModule.controller('ClientController', ['Clients', '$filter', '$locatio
     };
     $scope.edit = function(client) {
       var modalInstance = $uibModal.open({ // jshint ignore:line
-        templateUrl: $rootScope.partialsPath + '/modals/clientregistry/index.html',
+        templateUrl: $rootScope.partialsPath + '/modals/clientregistry/index.html' + $rootScope.versionParam,
         controller: 'ClientRegistryModalController',
         resolve: {
           client: function () {
@@ -654,14 +654,14 @@ controllerModule.controller('SidebarController', ['$location', '$rootScope', '$s
     });
 
     $scope.popoversTemplates = {
-      alerts: $rootScope.partialsPath + '/popovers/alerts.html',
-      aggregates: $rootScope.partialsPath + '/popovers/aggregates.html',
-      checks: $rootScope.partialsPath + '/popovers/checks.html',
-      clients: $rootScope.partialsPath + '/popovers/clients.html',
-      datacenters: $rootScope.partialsPath + '/popovers/datacenters.html',
-      events: $rootScope.partialsPath + '/popovers/events.html',
-      silenced: $rootScope.partialsPath + '/popovers/silenced.html',
-      stashes: $rootScope.partialsPath + '/popovers/stashes.html'
+      alerts: $rootScope.partialsPath + '/popovers/alerts.html' + $rootScope.versionParam,
+      aggregates: $rootScope.partialsPath + '/popovers/aggregates.html' + $rootScope.versionParam,
+      checks: $rootScope.partialsPath + '/popovers/checks.html' + $rootScope.versionParam,
+      clients: $rootScope.partialsPath + '/popovers/clients.html' + $rootScope.versionParam,
+      datacenters: $rootScope.partialsPath + '/popovers/datacenters.html' + $rootScope.versionParam,
+      events: $rootScope.partialsPath + '/popovers/events.html' + $rootScope.versionParam,
+      silenced: $rootScope.partialsPath + '/popovers/silenced.html' + $rootScope.versionParam,
+      stashes: $rootScope.partialsPath + '/popovers/stashes.html' + $rootScope.versionParam
     };
 
     $scope.$watch('metrics', function() {

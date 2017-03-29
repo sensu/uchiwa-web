@@ -25,12 +25,12 @@
 <div class="modal-body">
   <div ng-if="silencedItemsCount != items.length">
     <div ng-if="items.length >= 2">
-    <ng-include src="partialsPath + '/modals/silenced/addentries.html'">
+    <ng-include src="partialsPath + '/modals/silenced/addentries.html' + versionParam">
     </ng-include>
     </div>
 
     <div ng-if="items.length < 2">
-      <ng-include src="partialsPath + '/modals/silenced/addentry.html'">
+      <ng-include src="partialsPath + '/modals/silenced/addentry.html' + versionParam">
       </ng-include>
     </div>
 
@@ -46,7 +46,7 @@
   </div>
 
   <div ng-if="silencedItemsCount > 0">
-    <ng-include src="partialsPath + '/modals/silenced/clearentry.html'"></ng-include>
+    <ng-include src="partialsPath + '/modals/silenced/clearentry.html' + versionParam"></ng-include>
   </div>
 
 </div>

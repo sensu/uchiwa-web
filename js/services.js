@@ -584,7 +584,7 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
         Notification.error('No items selected');
       } else {
         var modalInstance = $uibModal.open({ // jshint ignore:line
-          templateUrl: $rootScope.partialsPath + '/modals/silenced/index.html',
+          templateUrl: $rootScope.partialsPath + '/modals/silenced/index.html' + $rootScope.versionParam,
           controller: 'SilencedModalController',
           resolve: {
             items: function () {

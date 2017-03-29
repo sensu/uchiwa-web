@@ -1,5 +1,5 @@
-<ng-include src="partialsPath + '/navbar.html'"></ng-include>
-<ng-include src="partialsPath + '/sidebar.html'"></ng-include>
+<ng-include src="partialsPath + '/navbar.html' + versionParam"></ng-include>
+<ng-include src="partialsPath + '/sidebar.html' + versionParam"></ng-include>
 <div class="container-fluid events" ng-cloak>
   <div class="row-fluid">
     <div class="col-lg-12">
@@ -9,7 +9,7 @@
           <div class="row">
             <div class="col-xs-10">
               <!--title-->
-              <ng-include src="partialsPath + '/panel/breadcrumb.html'"></ng-include>
+              <ng-include src="partialsPath + '/panel/breadcrumb.html' + versionParam"></ng-include>
             </div>
             <div class="col-xs-2 search-icon" style="display:none;">
               <i class="fa fa-search fa-lg" ng-click="showMobileSearch = ! showMobileSearch"></i>
@@ -19,19 +19,19 @@
                 <!--actions-->
                 <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents" ng-if="!user.isReadOnly() && hasElementSelected(selected)"></panel-actions>
                 <!--dc-->
-                <ng-include src="partialsPath + '/panel/dc.html'"></ng-include>
+                <ng-include src="partialsPath + '/panel/dc.html' + versionParam"></ng-include>
                 <!--hide-->
-                <ng-include src="partialsPath + '/panel/hide.html'"></ng-include>
+                <ng-include src="partialsPath + '/panel/hide.html' + versionParam"></ng-include>
                 <!--checks-->
-                <ng-include src="partialsPath + '/panel/check.html'"></ng-include>
+                <ng-include src="partialsPath + '/panel/check.html' + versionParam"></ng-include>
                 <!--status-->
-                <ng-include src="partialsPath + '/panel/status.html'"></ng-include>
+                <ng-include src="partialsPath + '/panel/status.html' + versionParam"></ng-include>
                 <!--limit-->
                 <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
               </span>
               <!--search-->
               <span class="search nopadding">
-                <ng-include src="partialsPath + '/panel/search.html'"></ng-include>
+                <ng-include src="partialsPath + '/panel/search.html' + versionParam"></ng-include>
               </span>
             </div>
           </div>

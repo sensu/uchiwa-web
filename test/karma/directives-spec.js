@@ -25,6 +25,7 @@ describe('directives', function () {
     $httpBackend.whenGET('config').respond([]);
     $rootScope = _$rootScope_;
     $rootScope.partialsPath = 'partials';
+    $rootScope.versionParam = '';
     element = jasmine.createSpyObj('element', ['tooltip', 'attr', 'removeAttr', 'addClass']);
     scope = jasmine.createSpyObj('scope', ['$on', '$watch']);
   }));
