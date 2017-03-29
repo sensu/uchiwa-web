@@ -910,7 +910,9 @@ controllerModule.controller('SilencedModalController', ['Config', '$filter', 'it
 
         // Set common options
         options.duration = $scope.options.duration;
+        options.durationFormat = $scope.options.durationFormat;
         options.expire = $scope.options.expire;
+        options.reason = $scope.options.reason;
         options.to = $scope.options.to;
 
         // Validate the options
