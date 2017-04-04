@@ -126,6 +126,30 @@ controllerModule.controller('AggregatesController', ['Aggregates', '$filter', 'H
 ]);
 
 /**
+* Check
+*/
+controllerModule.controller('CheckController', ['Check', '$rootScope', '$routeParams', 'routingService', '$scope', 'Silenced', 'titleFactory',
+  function (Check, $rootScope, $routeParams, routingService, $scope, Silenced, titleFactory) {
+    // Routing
+    $scope.dc = decodeURI($routeParams.dc);
+    $scope.name = decodeURI($routeParams.name);
+    $scope.pageHeaderText = $scope.name;
+    titleFactory.set($scope.pageHeaderText);
+
+    // Get the check
+    $scope.check = Check.check;
+    Check.realTime($scope.dc, $scope.name);
+    $scope.$on('$destroy', function() {
+      Check.stop();
+    });
+
+    // Services
+    $scope.issueCheckRequest = Check.issueCheckRequest;
+    $scope.silence = Silenced.create;
+  }
+]);
+
+/**
 * Checks
 */
 controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory',
@@ -175,6 +199,7 @@ controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers',
     });
 
     // Services
+    $scope.go = routingService.go;
     $scope.hasElementSelected = Helpers.hasElementSelected;
     $scope.permalink = routingService.permalink;
     $scope.selectAll = Helpers.selectAll;

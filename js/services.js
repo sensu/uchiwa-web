@@ -114,6 +114,48 @@ serviceModule.service('backendService', ['$http', '$interval', '$location', '$ro
     };
   }
 ]);
+
+/**
+* Check
+*/
+serviceModule.service('Check', ['Checks', 'Config', '$interval', 'Notification', '$resource',
+function(Checks, Config, $interval, Notification, $resource) {
+  this.check = {};
+  var Resource = $resource('checks/:name', {name: '@name'});
+  var self = this;
+  var timer;
+
+  this.get = function(dc, name) {
+    Resource.get({name: name, dc: dc})
+    .$promise.then(function(data) {
+      angular.copy(data, self.check);
+    },
+    function() {
+      self.check = null;
+    });
+  };
+  this.realTime = function(dc, name) {
+    self.get(dc, name);
+    timer = $interval(function() {
+      self.get(dc, name);
+    }, Config.refresh());
+  };
+  this.stop = function() {
+    $interval.cancel(timer);
+    self.check = {};
+  };
+  this.issueCheckRequest = function(dc, name, subscribers) {
+    Checks.issueCheckRequest(dc, name, subscribers)
+      .then(function() {
+        Notification.success('The check request for '+ name +' has been issued');
+        return;
+      }, function() {
+        Notification.error('Could not issue the check request '+ name);
+        return;
+      });
+  };
+}]);
+
 /**
 * Checks Services
 */
