@@ -6,10 +6,11 @@ factoryModule.factory('authInterceptor', function ($cookieStore, $q, $location) 
   return {
     responseError: function (rejection) {
       if (rejection.status === 401) {
+
         // handle the case where the user is not authenticated
         if ($location.path() !== '/login') {
-          $location.path('/login');
-          $location.url($location.path());
+          $location.path('/login').search({status: 'unauthorized'});
+          $location.url($location.path()).search({status: 'unauthorized'});
         }
       }
       return $q.reject(rejection);
