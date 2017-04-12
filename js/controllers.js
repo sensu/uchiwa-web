@@ -574,39 +574,46 @@ controllerModule.controller('InfoController', ['Config', '$scope', 'titleFactory
 * Login
 */
 controllerModule.controller('LoginController', ['Config', '$cookieStore', '$location', 'Login', 'Notification', '$rootScope', '$scope', 'User',
-function (Config, $cookieStore, $location, Login, Notification, $rootScope, $scope, User) {
+  function (Config, $cookieStore, $location, Login, Notification, $rootScope, $scope, User) {
+    $scope.login = {user: '', pass: ''};
 
-  $scope.login = {user: '', pass: ''};
+    // Get the authentication driver
+    Config.resource.get({resource: 'auth'})
+      .$promise.then(function(config) {
+        $scope.driver = config.driver;
 
-  // Get the authentication driver
-  Config.resource.get({resource: 'auth'})
-    .$promise.then(function(config) {
-      $scope.driver = config.driver;
-    },
-    function(error) {
-      $scope.driver = 'simple';
-      console.error(error);
-    });
+        // Redirect the user to the main page if the authentication is disabled
+        // unless the 'status' parameter is set to 'unauthorized', to prevent
+        // infinite redirection loop
+        if ($scope.driver === '' && $location.search().status !== 'unauthorized') {
+          $location.path('/events');
+          return;
+        }
 
-  $scope.submit = function () {
-    var login = new Login.resource($scope.login);
-    login.$save()
-      .then(function() {
-        User.set();
-        $location.path('/events');
+        // Check if the user is already authenticated
+        User.get()
+          .$promise.then(function() {
+            $location.path('/events').search({status: null});
+          });
       },
       function(error) {
+        $scope.driver = 'simple';
         console.error(error);
-        Notification.error('There was an error with your username/password combination. Please try again');
       });
-  };
 
-  // Check if the user is already authenticated
-  User.get()
-    .$promise.then(function() {
-      $location.path('/events');
-    });
-}
+    $scope.submit = function () {
+      var login = new Login.resource($scope.login);
+      login.$save()
+        .then(function() {
+          User.set();
+          $location.path('/events');
+        },
+        function(error) {
+          console.error(error);
+          Notification.error('There was an error with your username/password combination. Please try again');
+        });
+    };
+  }
 ]);
 
 /**
