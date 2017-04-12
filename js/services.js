@@ -456,8 +456,8 @@ function($resource) {
 /**
 * Logout
 */
-serviceModule.service('Logout', ['$cookieStore', '$resource', '$rootScope',
-function($cookieStore, $resource, $rootScope) {
+serviceModule.service('Logout', ['$cookieStore', '$location', '$resource', '$rootScope',
+function($cookieStore, $location, $resource, $rootScope) {
   var Login = $resource('logout');
   var self = this;
   this.get = function() {
@@ -467,6 +467,7 @@ function($cookieStore, $resource, $rootScope) {
     $cookieStore.remove('user');
     $rootScope.isAuthenticated = false;
     self.get();
+    $location.path('login');
   };
 }]);
 
