@@ -307,11 +307,12 @@ filterModule.filter('regex', function() {
     // We have a key:value
     var key = queries[0];
     pattern = new RegExp(queries.slice(1).join());
+    var isNegativeLookahead = /\?!/.test(pattern);
 
     testObject = function(obj, key) {
       for (var k in obj) {
         if (obj[k] && typeof obj[k] === 'object' && obj[k].constructor !== Array) {
-          if ((k === 'check' || k === 'client') && k !== key) {
+          if (isNegativeLookahead && (k === 'check' || k === 'client') && k !== key) {
             continue;
           }
           if (testObject(obj[k], key)) {

@@ -367,11 +367,11 @@ describe('filters', function () {
 
     it('performs a recursive regex search with a key-value', inject(function (regexFilter) {
       var items = [
-        {foo: 'canada'},
-        {baz: {foo: 'vatican'}},
-        {qux: {bar: 'canada'}}
+        {country: 'canada'},
+        {check: {country: 'vatican'}},
+        {qux: {region: 'canada'}}
       ];
-      expect(regexFilter(items, 'foo:can+')).toEqual([items[0], items[1]]);
+      expect(regexFilter(items, 'country:can+')).toEqual([items[0], items[1]]);
     }));
 
     it('performs a search within an array', inject(function (regexFilter) {
