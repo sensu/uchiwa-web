@@ -215,8 +215,8 @@ controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers',
 /**
 * Client
 */
-controllerModule.controller('ClientController', ['Clients', '$filter', '$location', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', '$uibModal', 'User',
-  function (Clients, $filter, $location, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, $uibModal, User) {
+controllerModule.controller('ClientController', ['Clients', '$filter', 'Helpers', '$location', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', '$uibModal', 'User',
+  function (Clients, $filter, Helpers, $location, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, $uibModal, User) {
     $scope.predicate = '-last_status';
     $scope.reverse = false;
     $scope.check = null;
@@ -298,6 +298,7 @@ controllerModule.controller('ClientController', ['Clients', '$filter', '$locatio
         }
       });
     };
+    $scope.isUrl = Helpers.isUrl;
     $scope.resolveEvent = function(id) {
       Clients.resolveEvent(id)
         .then(function() {

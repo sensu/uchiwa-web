@@ -101,7 +101,7 @@
                   <span class="key pull-right">{{key}}</span>
                 </div>
                 <div class="col-xs-8">
-                  <span class="value" ng-bind-html="value | highlight"></span>
+                  <span class="value" ng-class="isUrl(value) ? 'ellipsis' : ''" ng-bind-html="value | highlight"></span>
                 </div>
               </div>
             </div>
