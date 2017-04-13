@@ -88,6 +88,17 @@ describe('common', function () {
       }));
     });
 
+    describe('isUrl', function () {
+      it('returns false when the value is not a URL', inject(function (Helpers) {
+        expect(Helpers.isUrl('')).toEqual(false);
+        expect(Helpers.isUrl('foobar')).toEqual(false);
+      }));
+
+      it('returns true when the value is a URL with target="_blank"', inject(function (Helpers) {
+        expect(Helpers.isUrl('<a target="_blank" href="http://example.org">http://example.org</a>')).toEqual(true);
+      }));
+    });
+
     describe('secondsBetweenDates', function () {
       it('returns "unknown" if at least one of the date is undefined', inject(function(Helpers){
         expect(Helpers.secondsBetweenDates()).toEqual('unknown');

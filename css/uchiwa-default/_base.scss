@@ -56,6 +56,12 @@ hr {
   display: none !important;
 }
 
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+}
+
 .section-header {
   font-size: 23px;
   font-weight: 300;

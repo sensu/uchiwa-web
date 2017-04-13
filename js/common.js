@@ -75,6 +75,9 @@ function($filter, $q, $rootScope) {
     });
     return isSelected;
   };
+  this.isUrl = function(value) {
+    return /target="_blank"/.test(value);
+  };
   // openLink stops event propagation if an A tag is clicked
   this.openLink = function($event) {
     if($event.srcElement.tagName === 'A'){
