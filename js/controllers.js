@@ -372,7 +372,7 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
     $scope.predicate = ['-status', 'name'];
     $scope.reverse = false;
     $scope.selected = {all: false, ids: {}};
-    $scope.statuses = {0: 'Healthy', 1: 'Warning', 2: 'Critical', 3: 'Unknown'};
+    $scope.statuses = {0: 'Healthy', '!0': 'Not Healthy', 1: 'Warning', 2: 'Critical', 3: 'Unknown'};
 
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, Helpers.equals);
