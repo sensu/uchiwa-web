@@ -49,6 +49,55 @@ directiveModule.directive('clientKeepalivesBanner', ['$rootScope', function ($ro
   };
 }]);
 
+// clientSubscriptionsBanner displays a warning banner if a user does not
+// have access to that client based on the subscriptions via RBAC
+directiveModule.directive('clientSubscriptionsBanner', ['$q', '$rootScope', 'Subscriptions',
+function ($q, $rootScope, Subscriptions) {
+  return {
+    restrict: 'E',
+    scope: {
+      subscriptions: '='
+    },
+    templateUrl: $rootScope.partialsPath +
+      '/directives/client-subscriptions-banner.html' +
+      $rootScope.versionParam,
+    link: function (scope) {
+      // TODO: Add tests
+      scope.display = false;
+      var verifySubscriptions = function() {
+        if (angular.isDefined(scope.subscriptions) && angular.isArray(scope.subscriptions) && scope.subscriptions.length > 0) {
+          var promises = [];
+          angular.forEach(scope.subscriptions, function(subscription) {
+            var deferred = $q.defer();
+            Subscriptions.get(subscription)
+              .$promise.then(function() {
+                deferred.reject();
+              }, function() {
+                deferred.resolve();
+              });
+            promises.push(deferred.promise);
+
+          });
+          $q.all(promises).then(function() {
+            scope.display = true;
+          }, function() {
+            scope.display = false;
+          });
+        }
+        scope.display = false;
+      };
+
+      // Check the initial value
+      verifySubscriptions();
+
+      // Watch for further changes
+      scope.$watch('subscriptions', function() {
+        verifySubscriptions();
+      });
+    }
+  };
+}]);
+
 // clientSummary generate the client key/value panel on the client view
 directiveModule.directive('clientSummary', ['$filter', '$rootScope', function ($filter, $rootScope) {
   return {

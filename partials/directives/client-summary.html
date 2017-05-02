@@ -32,7 +32,8 @@
               tooltip-placement="top"
               tooltip-trigger
               uib-tooltip="Delete"
-              ng-click="delete(client._id)">
+              ng-click="delete(client._id)"
+              ng-if="!user.isReadOnly()">
             </i>
           </span>
         </div>

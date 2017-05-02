@@ -839,7 +839,12 @@ serviceModule.service('Stashes', ['Helpers', 'Notification', '$q', '$resource', 
 */
 serviceModule.service('Subscriptions', ['$resource',
   function ($resource) {
-    var Subscriptions = $resource('subscriptions');
+    var Subscriptions = $resource('subscriptions/:subscription',
+      {subscription: '@subscription'}
+    );
+    this.get = function(name) {
+      return Subscriptions.get({subscription: name});
+    };
     this.query = function() {
       return Subscriptions.query();
     };

@@ -329,12 +329,21 @@ controllerModule.controller('ClientCreationModalController', ['Client', 'Notific
 
     $scope.datacenter = {selected: ''};
 
+    // If we only have one datacenter, it should set to it by default
+    $scope.$watch('datacenters', function(dc) {
+      if(angular.isArray(dc) && dc.length === 1) {
+        $scope.datacenter.selected = dc[0].name;
+      }
+    });
+
     $scope.ok = function() {
       // Verify that the datacenter was added
       if (angular.isUndefined($scope.datacenter.selected) || $scope.datacenter.selected === '') {
         Notification.error('Please select a datacenter');
         return false;
       }
+
+      // TODO: Verify that the name, address & subscriptions are filled up
 
       // Add back the datacenter
       var payload = $scope.obj.data;
@@ -421,7 +430,7 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
 
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, Helpers.equals);
-      filtered = $filter('filter')(filtered, {status: $scope.filters.status});
+      // filtered = $filter('filter')(filtered, {status: $scope.filters.status});
       filtered = $filter('filterSubscriptions')(filtered, $scope.filters.subscription);
       filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'clients');
