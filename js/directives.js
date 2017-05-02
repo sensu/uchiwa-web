@@ -17,6 +17,38 @@ directiveModule.directive('aggregateResult', ['$rootScope', function ($rootScope
   };
 }]);
 
+// clientKeepalivesBanner displays a warning banner if a client has
+// keepalives !== false, which means it could be overwritten by the client
+directiveModule.directive('clientKeepalivesBanner', ['$rootScope', function ($rootScope) {
+  return {
+    restrict: 'E',
+    scope: {
+      keepalives: '='
+    },
+    templateUrl: $rootScope.partialsPath +
+      '/directives/client-keepalives-banner.html' +
+      $rootScope.versionParam,
+    link: function (scope) {
+      scope.display = false;
+      var verifyKeepalives = function() {
+        if (angular.isUndefined(scope.keepalives) || scope.keepalives !== false) {
+          scope.display = true;
+          return;
+        }
+        scope.display = false;
+      };
+
+      // Check the initial value
+      verifyKeepalives();
+
+      // Watch for further changes
+      scope.$watch('keepalives', function() {
+        verifyKeepalives();
+      });
+    }
+  };
+}]);
+
 // clientSummary generate the client key/value panel on the client view
 directiveModule.directive('clientSummary', ['$filter', '$rootScope', function ($filter, $rootScope) {
   return {

@@ -377,7 +377,6 @@ controllerModule.controller('ClientRegistryModalController', ['Client', 'client'
     delete selectedClient._id;
     delete selectedClient.dc;
     delete selectedClient.history;
-    delete selectedClient.keepalives;
     delete selectedClient.silenced;
     delete selectedClient.timestamp;
     delete selectedClient.version;

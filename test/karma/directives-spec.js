@@ -30,6 +30,28 @@ describe('directives', function () {
     scope = jasmine.createSpyObj('scope', ['$on', '$watch']);
   }));
 
+  describe('clientKeepalivesBanner', function() {
+    it('displays a banner if keepalives is not equal to false', function(){
+      scope = $rootScope.$new();
+      element = $compile('<client-keepalives-banner keepalives="client.keepalives"></client-keepalives-banner>')(scope);
+      scope.client = {keepalives: true};
+      $compile(element)(scope);
+      scope.$digest();
+
+      expect(element.isolateScope().display).toEqual(true);
+    });
+
+    it('displays nothing if keepalives is equal to false', function(){
+      scope = $rootScope.$new();
+      element = $compile('<client-keepalives-banner keepalives="client.keepalives"></client-keepalives-banner>')(scope);
+      scope.client = {keepalives: false};
+      $compile(element)(scope);
+      scope.$digest();
+
+      expect(element.isolateScope().display).toEqual(false);
+    });
+  });
+
   describe('clientSummary', function() {
     it('ignores redundant keys in the client data and handles images', function(){
       scope = $rootScope.$new();
