@@ -62,7 +62,6 @@ function ($q, $rootScope, Subscriptions) {
       '/directives/client-subscriptions-banner.html' +
       $rootScope.versionParam,
     link: function (scope) {
-      // TODO: Add tests
       scope.display = false;
       var verifySubscriptions = function() {
         if (angular.isDefined(scope.subscriptions) && angular.isArray(scope.subscriptions) && scope.subscriptions.length > 0) {
