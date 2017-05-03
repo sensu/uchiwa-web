@@ -2,6 +2,9 @@
   <strong>
     <!-- TODO: Provide the list of included roles -->
     You have access to none of the subscriptions listed below.
-    Please make sure to specify at least one subscription included in your role.
+    Please make sure to specify at least one of these subscriptions:
+    <span ng-repeat="subscription in userSubscriptions">
+      <code>{{subscription}}</code>
+    </span>
   </strong>
 </div>

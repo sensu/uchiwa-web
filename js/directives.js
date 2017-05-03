@@ -19,7 +19,8 @@ directiveModule.directive('aggregateResult', ['$rootScope', function ($rootScope
 
 // clientKeepalivesBanner displays a warning banner if a client has
 // keepalives !== false, which means it could be overwritten by the client
-directiveModule.directive('clientKeepalivesBanner', ['$rootScope', function ($rootScope) {
+directiveModule.directive('clientKeepalivesBanner', ['$rootScope',
+function ($rootScope) {
   return {
     restrict: 'E',
     scope: {
@@ -30,6 +31,7 @@ directiveModule.directive('clientKeepalivesBanner', ['$rootScope', function ($ro
       $rootScope.versionParam,
     link: function (scope) {
       scope.display = false;
+
       var verifyKeepalives = function() {
         if (angular.isUndefined(scope.keepalives) || scope.keepalives !== false) {
           scope.display = true;
@@ -51,8 +53,8 @@ directiveModule.directive('clientKeepalivesBanner', ['$rootScope', function ($ro
 
 // clientSubscriptionsBanner displays a warning banner if a user does not
 // have access to that client based on the subscriptions via RBAC
-directiveModule.directive('clientSubscriptionsBanner', ['$q', '$rootScope', 'Subscriptions',
-function ($q, $rootScope, Subscriptions) {
+directiveModule.directive('clientSubscriptionsBanner', ['$q', '$rootScope', 'Subscriptions', 'User',
+function ($q, $rootScope, Subscriptions, User) {
   return {
     restrict: 'E',
     scope: {
@@ -63,6 +65,8 @@ function ($q, $rootScope, Subscriptions) {
       $rootScope.versionParam,
     link: function (scope) {
       scope.display = false;
+      scope.userSubscriptions = [];
+
       var verifySubscriptions = function() {
         if (angular.isDefined(scope.subscriptions) && angular.isArray(scope.subscriptions) && scope.subscriptions.length > 0) {
           var promises = [];
@@ -93,6 +97,9 @@ function ($q, $rootScope, Subscriptions) {
       scope.$watch('subscriptions', function() {
         verifySubscriptions();
       });
+
+      // Get the user subscriptions
+      scope.userSubscriptions = User.subscriptions();
     }
   };
 }]);

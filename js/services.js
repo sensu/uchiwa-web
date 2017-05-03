@@ -886,6 +886,13 @@ function ($cookieStore, $location, $resource, $rootScope) {
   this.isAdmin = function() {
     return false;
   };
+  this.subscriptions = function() {
+    if ($rootScope.isAuthenticated) {
+      var user = $cookieStore.get('user');
+      return user.role.Subscriptions || [];
+    }
+    return [];
+  };
   this.set = function() {
     User.get()
       .$promise.then(function(user) {
