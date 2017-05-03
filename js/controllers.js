@@ -343,10 +343,27 @@ controllerModule.controller('ClientCreationModalController', ['Client', 'Notific
         return false;
       }
 
-      // TODO: Verify that the name, address & subscriptions are filled up
+      // Verify that a name was provided
+      if (angular.isUndefined($scope.obj.data.name) || $scope.obj.data.name === '') {
+        Notification.error('Please enter a name for the client');
+        return false;
+      }
+
+      // Verify that an address was provided
+      if (angular.isUndefined($scope.obj.data.address) || $scope.obj.data.address === '') {
+        Notification.error('Please enter the address of the client');
+        return false;
+      }
+
+      // Verify that at least one subscription was provided
+      if (angular.isUndefined($scope.obj.data.subscriptions) || !angular.isArray($scope.obj.data.subscriptions) || $scope.obj.data.subscriptions.length <= 0) {
+        Notification.error('Please provide at least one subscription');
+        return false;
+      }
+
+      var payload = angular.copy($scope.obj.data);
 
       // Add back the datacenter
-      var payload = $scope.obj.data;
       payload.dc = $scope.datacenter.selected;
 
       Client.update(payload)
