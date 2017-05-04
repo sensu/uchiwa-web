@@ -7,7 +7,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="item in items | filter:{silenced: false}">
+    <tr ng-repeat="item in items | filter:{silenced: false} track by item._id">
       <td>{{item.dc}}</td>
       <td ng-if="itemType == 'client' || itemType == 'event'">
         {{item.name || item.client.name || item.client}}
