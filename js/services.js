@@ -839,7 +839,12 @@ serviceModule.service('Stashes', ['Helpers', 'Notification', '$q', '$resource', 
 */
 serviceModule.service('Subscriptions', ['$resource',
   function ($resource) {
-    var Subscriptions = $resource('subscriptions');
+    var Subscriptions = $resource('subscriptions/:subscription',
+      {subscription: '@subscription'}
+    );
+    this.get = function(name) {
+      return Subscriptions.get({subscription: name});
+    };
     this.query = function() {
       return Subscriptions.query();
     };
@@ -880,6 +885,13 @@ function ($cookieStore, $location, $resource, $rootScope) {
   };
   this.isAdmin = function() {
     return false;
+  };
+  this.subscriptions = function() {
+    if ($rootScope.isAuthenticated) {
+      var user = $cookieStore.get('user');
+      return user.role.Subscriptions || [];
+    }
+    return [];
   };
   this.set = function() {
     User.get()

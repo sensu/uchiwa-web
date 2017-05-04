@@ -17,6 +17,93 @@ directiveModule.directive('aggregateResult', ['$rootScope', function ($rootScope
   };
 }]);
 
+// clientKeepalivesBanner displays a warning banner if a client has
+// keepalives !== false, which means it could be overwritten by the client
+directiveModule.directive('clientKeepalivesBanner', ['$rootScope',
+function ($rootScope) {
+  return {
+    restrict: 'E',
+    scope: {
+      keepalives: '='
+    },
+    templateUrl: $rootScope.partialsPath +
+      '/directives/client-keepalives-banner.html' +
+      $rootScope.versionParam,
+    link: function (scope) {
+      scope.display = false;
+
+      var verifyKeepalives = function() {
+        if (angular.isUndefined(scope.keepalives) || scope.keepalives !== false) {
+          scope.display = true;
+          return;
+        }
+        scope.display = false;
+      };
+
+      // Check the initial value
+      verifyKeepalives();
+
+      // Watch for further changes
+      scope.$watch('keepalives', function() {
+        verifyKeepalives();
+      });
+    }
+  };
+}]);
+
+// clientSubscriptionsBanner displays a warning banner if a user does not
+// have access to that client based on the subscriptions via RBAC
+directiveModule.directive('clientSubscriptionsBanner', ['$q', '$rootScope', 'Subscriptions', 'User',
+function ($q, $rootScope, Subscriptions, User) {
+  return {
+    restrict: 'E',
+    scope: {
+      subscriptions: '='
+    },
+    templateUrl: $rootScope.partialsPath +
+      '/directives/client-subscriptions-banner.html' +
+      $rootScope.versionParam,
+    link: function (scope) {
+      scope.display = false;
+      scope.userSubscriptions = [];
+
+      var verifySubscriptions = function() {
+        if (angular.isDefined(scope.subscriptions) && angular.isArray(scope.subscriptions) && scope.subscriptions.length > 0) {
+          var promises = [];
+          angular.forEach(scope.subscriptions, function(subscription) {
+            var deferred = $q.defer();
+            Subscriptions.get(subscription)
+              .$promise.then(function() {
+                deferred.reject();
+              }, function() {
+                deferred.resolve();
+              });
+            promises.push(deferred.promise);
+
+          });
+          $q.all(promises).then(function() {
+            scope.display = true;
+          }, function() {
+            scope.display = false;
+          });
+        }
+        scope.display = false;
+      };
+
+      // Check the initial value
+      verifySubscriptions();
+
+      // Watch for further changes
+      scope.$watch('subscriptions', function() {
+        verifySubscriptions();
+      });
+
+      // Get the user subscriptions
+      scope.userSubscriptions = User.subscriptions();
+    }
+  };
+}]);
+
 // clientSummary generate the client key/value panel on the client view
 directiveModule.directive('clientSummary', ['$filter', '$rootScope', function ($filter, $rootScope) {
   return {

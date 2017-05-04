@@ -26,6 +26,10 @@
                 <ng-include src="partialsPath + '/panel/status.html' + versionParam"></ng-include>
                 <!--limit-->
                 <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
+                <!--create-->
+                <span class="action" ng-click="create()" ng-if="!user.isReadOnly()">
+                  Add <i class="fa fa-plus" aria-hidden="true"></i>
+                </span>
               </span>
               <!--search-->
               <span class="search nopadding">

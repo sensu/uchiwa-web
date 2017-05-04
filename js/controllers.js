@@ -312,6 +312,78 @@ controllerModule.controller('ClientController', ['Clients', '$filter', 'Helpers'
   }
 ]);
 
+/**
+* Client Creation
+*/
+controllerModule.controller('ClientCreationModalController', ['Client', 'Notification', '$scope', '$uibModalInstance',
+  function (Client, Notification, $scope, $uibModalInstance) {
+    $scope.obj = {
+      data: {
+        name: '',
+        address: '',
+        keepalives: false,
+        subscriptions: []
+      },
+      options: {mode: 'code'}
+    };
+
+    $scope.datacenter = {selected: ''};
+
+    // If we only have one datacenter, it should set to it by default
+    $scope.$watch('datacenters', function(dc) {
+      if(angular.isArray(dc) && dc.length === 1) {
+        $scope.datacenter.selected = dc[0].name;
+      }
+    });
+
+    $scope.ok = function() {
+      // Verify that the datacenter was added
+      if (angular.isUndefined($scope.datacenter.selected) || $scope.datacenter.selected === '') {
+        Notification.error('Please select a datacenter');
+        return false;
+      }
+
+      // Verify that a name was provided
+      if (angular.isUndefined($scope.obj.data.name) || $scope.obj.data.name === '') {
+        Notification.error('Please enter a name for the client');
+        return false;
+      }
+
+      // Verify that an address was provided
+      if (angular.isUndefined($scope.obj.data.address) || $scope.obj.data.address === '') {
+        Notification.error('Please enter the address of the client');
+        return false;
+      }
+
+      // Verify that at least one subscription was provided
+      if (angular.isUndefined($scope.obj.data.subscriptions) || !angular.isArray($scope.obj.data.subscriptions) || $scope.obj.data.subscriptions.length <= 0) {
+        Notification.error('Please provide at least one subscription');
+        return false;
+      }
+
+      var payload = angular.copy($scope.obj.data);
+
+      // Add back the datacenter
+      payload.dc = $scope.datacenter.selected;
+
+      Client.update(payload)
+      .then(
+        function() {
+          Notification.success('The client has been created');
+          $uibModalInstance.close();
+        },
+        function(error) {
+          console.error(error);
+          Notification.error('Could not create the client. ' + error.data);
+        }
+      );
+    };
+
+    $scope.cancel = function () {
+      $uibModalInstance.dismiss('cancel');
+    };
+  }
+]);
 
 /**
 * Client Registry
@@ -331,7 +403,6 @@ controllerModule.controller('ClientRegistryModalController', ['Client', 'client'
     delete selectedClient._id;
     delete selectedClient.dc;
     delete selectedClient.history;
-    delete selectedClient.keepalives;
     delete selectedClient.silenced;
     delete selectedClient.timestamp;
     delete selectedClient.version;
@@ -365,8 +436,8 @@ controllerModule.controller('ClientRegistryModalController', ['Client', 'client'
 /**
 * Clients
 */
-controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'User',
-  function (Clients, $filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, User) {
+controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', '$uibModal', 'User',
+  function (Clients, $filter, Helpers, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, $uibModal, User) {
     $scope.pageHeaderText = 'Clients';
     titleFactory.set($scope.pageHeaderText);
     $scope.predicate = ['-status', 'name'];
@@ -376,7 +447,7 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
 
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, Helpers.equals);
-      filtered = $filter('filter')(filtered, {status: $scope.filters.status});
+      // filtered = $filter('filter')(filtered, {status: $scope.filters.status});
       filtered = $filter('filterSubscriptions')(filtered, $scope.filters.subscription);
       filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'clients');
@@ -417,6 +488,13 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
     });
 
     // Services
+    $scope.create = function() {
+      var modalInstance = $uibModal.open({ // jshint ignore:line
+        templateUrl: $rootScope.partialsPath + '/modals/clientcreation/index.html' + $rootScope.versionParam,
+        controller: 'ClientCreationModalController'
+      });
+      return modalInstance;
+    };
     $scope.delete = function() {
       Clients.deleteMultiple($scope.filtered, $scope.selected)
         .then(function(results) {

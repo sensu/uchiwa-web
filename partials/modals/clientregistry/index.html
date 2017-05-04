@@ -4,13 +4,19 @@
   </h3>
 </div>
 
+<client-keepalives-banner keepalives="obj.data.keepalives">
+</client-keepalives-banner>
+
+<client-subscriptions-banner subscriptions="obj.data.subscriptions">
+</client-subscriptions-banner>
+
 <div class="modal-body ng-jsoneditor">
   <!-- testing jsoneditor -->
   <div class="panel panel-default" >
     <div class="panel-body">
       <div class="row">
         <div class="col-sm-12">
-          <div ng-jsoneditor ng-model="obj.data" options="obj.options" style="width: 100%; height: 400px;"></div>
+          <div ng-jsoneditor ng-model="obj.data" options="obj.options" ng-model-options="{ debounce: 500 }" style="width: 100%; height: 400px;"></div>
         </div>
       </div>
     </div>
