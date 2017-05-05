@@ -57,9 +57,12 @@ hr {
 }
 
 .ellipsis {
+  display: block;
   overflow: hidden;
+  overflow-wrap: normal !important;
   text-overflow: ellipsis;
-  white-space: nowrap !important;
+  word-wrap: normal;
+  white-space: pre-line;
 }
 
 .section-header {

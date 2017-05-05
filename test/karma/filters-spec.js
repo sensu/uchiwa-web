@@ -431,10 +431,10 @@ describe('filters', function () {
     }));
   });
 
-  // describe('unique', function () {
-  //   it('returns unique objects based on a key', inject(function (uniqueFilter) {
-  //     var objects = [{dc: 'us-east-1', name: 'foo'}, {dc: 'us-east-1', name: 'bar'}, {dc: 'us-west-1', name: 'foo'}];
-  //     expect(uniqueFilter(objects, 'name').length).toBe(2);
-  //   }));
-  // });
+  describe('unique', function () {
+    it('returns unique objects based on a key', inject(function (uniqueFilter) {
+      var objects = [{dc: 'us-east-1', name: 'foo'}, {dc: 'us-east-1', name: 'bar'}, {dc: 'us-west-1', name: 'foo'}];
+      expect(uniqueFilter(objects, 'name').length).toBe(2);
+    }));
+  });
 });
