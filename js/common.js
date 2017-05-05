@@ -53,7 +53,7 @@ function($filter, $q, $rootScope) {
     var items = [];
     angular.forEach(selected.ids, function(value, key) {
       if (value) {
-        var found = $filter('filter')(filtered, {_id: key});
+        var found = $filter('filter')(filtered, {_id: key}, true);
         if (found.length) {
           items.push(found[0]);
           selected.ids[key] = false;

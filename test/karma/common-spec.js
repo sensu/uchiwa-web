@@ -60,6 +60,13 @@ describe('common', function () {
         var items = Helpers.getSelected(filtered, selected);
         expect(items).toEqual([filtered[0]]);
       }));
+
+      it('handles items with similar names', inject(function (Helpers) {
+        var filtered = [{_id: 'us-east-1:foo2'}, {_id: 'us-east-1:foo'}, {_id: 'us-east-1:foo1'},];
+        var selected = {all: false, ids: {'us-east-1:foo': true, 'us-east-1:foo2': true}};
+        var items = Helpers.getSelected(filtered, selected);
+        expect(items).toEqual([filtered[1], filtered[0]]);
+      }));
     });
 
     describe('equals', function () {
