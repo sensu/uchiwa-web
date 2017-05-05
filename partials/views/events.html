@@ -72,16 +72,27 @@
                   </span>
                   <span class="main check-name" tooltip-placement="top" tooltip-trigger tooltip-html="'Subscriptions<br /><small>{{event.check.subscribers|arrayToString}}</small>'">{{ event.check.name }}</span>
                 </td>
-                <td
-                  data-title="Output"
-                  class="normal"
-                  ng-bind-html="event.check.output | linky"
-                  ng-click="openLink($event)"
-                  tooltip-placement="top"
-                  tooltip-trigger
-                  tooltip-append-to-body="true"
-                  uib-tooltip="{{event.check.output}}">
-                  <div><
+                <td>
+                  <span ng-if="event.action === 'flapping'">
+                    <i
+                      class="fa fa-exclamation-triangle"
+                      aria-hidden="true"
+                      tooltip-placement="top"
+                      tooltip-trigger
+                      tooltip-append-to-body="true"
+                      uib-tooltip="This check is flapping">
+                    </i>
+                  </span>
+                  <span
+                    data-title="Output"
+                    class="normal"
+                    ng-bind-html="event.check.output | linky"
+                    ng-click="openLink($event)"
+                    tooltip-placement="top"
+                    tooltip-trigger
+                    tooltip-append-to-body="true"
+                    uib-tooltip="{{event.check.output}}">
+                  </span>
                 </td>
                 <td data-title="#" class="normal trivial">{{ event.occurrences }}</td>
                 <td data-title="DC" class="normal">{{ event.dc }}</td>
