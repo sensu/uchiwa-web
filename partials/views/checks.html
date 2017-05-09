@@ -49,7 +49,7 @@
             </thead>
             <tbody>
               <tr ng-repeat="check in filtered | orderBy:predicate:reverse | limitTo:filters.limit track by check._id" ng-click="go('/checks/'+check.dc+'/'+check.name)">
-                <td class="hide-mobile">
+                <td class="hide-mobile" ng-click="$event.stopPropagation()">
                   <input type="checkbox" ng-model="selected.ids[check._id]" ng-if="!user.isReadOnly()"></input>
                 <td data-title="Name" class="main normal">{{ check.name }}</td>
                 <td data-title="Command" class="normal">{{ check.command }}</td>
