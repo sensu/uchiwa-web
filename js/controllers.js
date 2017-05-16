@@ -685,7 +685,7 @@ controllerModule.controller('LoginController', ['Config', '$cookieStore', '$loca
       login.$save()
         .then(function() {
           User.set();
-          $location.path('/events');
+          $location.path('/events').search({status: null});
         },
         function(error) {
           console.error(error);
