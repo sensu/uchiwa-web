@@ -72,7 +72,7 @@
                   </span>
                   <span class="main check-name" tooltip-placement="top" tooltip-trigger tooltip-html="'Subscriptions<br /><small>{{event.check.subscribers|arrayToString}}</small>'">{{ event.check.name }}</span>
                 </td>
-                <td>
+                <td class="normal">
                   <span ng-if="event.action === 'flapping'">
                     <i
                       class="fa fa-exclamation-triangle"
@@ -85,10 +85,9 @@
                   </span>
                   <span
                     data-title="Output"
-                    class="normal"
                     ng-bind-html="event.check.output | linky"
                     ng-click="openLink($event)"
-                    tooltip-placement="top"
+                    tooltip-placement="top-left"
                     tooltip-trigger
                     tooltip-append-to-body="true"
                     uib-tooltip="{{event.check.output}}">
