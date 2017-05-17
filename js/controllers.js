@@ -447,7 +447,7 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
 
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, Helpers.equals);
-      // filtered = $filter('filter')(filtered, {status: $scope.filters.status});
+      filtered = $filter('filter')(filtered, {status: $scope.filters.status});
       filtered = $filter('filterSubscriptions')(filtered, $scope.filters.subscription);
       filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'clients');
