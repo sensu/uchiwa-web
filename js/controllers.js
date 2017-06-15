@@ -913,6 +913,7 @@ controllerModule.controller('SilencedModalController', ['Config', '$filter', 'it
       ac: {},
       check: '',
       client: '',
+      create_jira_ticket: false,
       datacenter: '',
       durationFormat: 'hours',
       expire: 'resolve',

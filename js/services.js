@@ -595,6 +595,9 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
       if (angular.isDefined(options.check) && options.check !== '') {
         payload.check = options.check;
       }
+      if (angular.isDefined(options.create_jira_ticket)) {
+        payload.create_jira_ticket = options.create_jira_ticket;
+      }
       if (angular.isDefined(options.subscription) && options.subscription !== '') {
         payload.subscription = options.subscription;
       }

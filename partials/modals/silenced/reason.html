@@ -1,3 +1,8 @@
-<div class="madlibs">
+<div class="madlibs" ng-hide="options.create_jira_ticket">
   <textarea class="form-control" rows="1" placeholder="Describe the reason for silencing" ng-model="options.reason"></textarea>
+</div>
+<div class="checkbox">
+  <label>
+    <input type="checkbox" ng-model="options.create_jira_ticket">Create Jira ticket
+  </label>
 </div>
