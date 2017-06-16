@@ -1,6 +1,6 @@
 {
-  "name": "uchiwa-web",
-  "version": "0.25.2",
+  "name": "br0ch0n-uchiwa-web",
+  "version": "0.25.2.201706161231jira",
   "ignore": [
     "**/.*",
     "node_modules",
