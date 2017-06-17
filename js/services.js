@@ -589,7 +589,8 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
       var payload = {
         dc: options.datacenter,
         expire: options.expire,
-        reason: options.reason
+        reason: options.reason,
+        uchiwalink: location.protocol+'//'+location.host+'/#/client/'+options.datacenter+'/'+options.subscription.slice(7)+'?check='+options.check
       };
 
       if (angular.isDefined(options.check) && options.check !== '') {
