@@ -82,7 +82,7 @@ hr {
   overflow-wrap: normal !important;
   text-overflow: ellipsis;
   word-wrap: normal;
-  white-space: pre-line; }
+  white-space: nowrap; }
 
 .section-header {
   font-size: 23px;
@@ -579,8 +579,7 @@ pre.hljs .hljs-string {
   width: 100%; }
 
 .element-view .value {
-  overflow-wrap: break-word;
-  white-space: pre-line; }
+  overflow-wrap: break-word; }
 
 .element-view .value img {
   display: block;
