@@ -46,6 +46,7 @@
                 <th class="column-xxl" ng-click="predicate = 'reason'; reverse=!reverse"><i class="fa fa-commenting-o" tooltip-placement="top" tooltip-trigger uib-tooltip="Reason"></i> <i class="fa fa-sort"></i></th>
                 <th class="column-md" ng-click="predicate = 'creator'; reverse=!reverse"><i class="fa fa-user" tooltip-placement="top" tooltip-trigger uib-tooltip="Creator"></i> <i class="fa fa-sort"></i></th>
                 <th class="column-md trivial" ng-click="predicate = 'expire_on_resolve'; reverse=!reverse"><i class='fa fa-calendar-check-o' tooltip-placement="top" tooltip-trigger uib-tooltip="Expire on Resolve"></i> <i class="fa fa-sort"></i></th>
+                <th class="column-lg" ng-click="predicate = 'timestamp'; reverse=!reverse"><i class='fa fa-hourglass-start' tooltip-placement="top" tooltip-trigger uib-tooltip="Created"></i> <i class="fa fa-sort"></i></th>
                 <th class="column-lg" ng-click="predicate = 'expire'; reverse=!reverse"><i class='fa fa-hourglass-end' tooltip-placement="top" tooltip-trigger uib-tooltip="Expiration"></i> <i class="fa fa-sort"></i></th>
               </tr>
             </thead>
@@ -64,6 +65,9 @@
                   <span ng-if="entry.creator === null">N/A</span>
                 </td>
                 <td class="normal trivial">{{ entry.expire_on_resolve }}</td>
+                <td data-title="Created" class="normal">
+                  <relative-time timestamp="entry.timestamp"></relative-time>
+                </td>
                 <td data-title="Expire" class="normal">{{ entry.expire | getExpirationTimestamp }}</td>
               </tr>
             </tbody>
