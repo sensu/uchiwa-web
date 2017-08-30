@@ -562,7 +562,7 @@ controllerModule.controller('EventsController', ['Clients', 'Events', '$filter',
 
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.events, {dc: $scope.filters.dc}, Helpers.equals);
-      filtered = $filter('filter')(filtered, {check: {status: $scope.filters.status}});
+      filtered = $filter('status')(filtered, $scope.filters.status);
       filtered = $filter('hideSilenced')(filtered, $scope.filters.silenced);
       filtered = $filter('hideClientsSilenced')(filtered, $scope.filters.clientsSilenced);
       filtered = $filter('hideOccurrences')(filtered, $scope.filters.occurrences);

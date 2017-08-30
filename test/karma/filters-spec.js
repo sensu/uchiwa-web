@@ -312,6 +312,64 @@ describe('filters', function () {
     }));
   });
 
+  describe('status', function () {
+    it('returns all items if the status is empty', inject(function (statusFilter) {
+      var events = [
+        {id: 'foo', check: {status: 1}},
+        {id: 'bar', check: {status: 2}},
+        {id: 'baz', check: {status: 3}}
+      ];
+      expect(statusFilter(events, '')).toEqual(events);
+    }));
+    it('returns warnings if the status is 1', inject(function (statusFilter) {
+      var events = [
+        {id: 'foo', check: {status: 1}},
+        {id: 'bar', check: {status: 2}},
+        {id: 'baz', check: {status: 3}}
+      ];
+      var expectedEvents = [
+        {id: 'foo', check: {status: 1}}
+      ];
+      expect(statusFilter(events, '1')).toEqual(expectedEvents);
+    }));
+    it('returns criticals if the status is 2', inject(function (statusFilter) {
+      var events = [
+        {id: 'foo', check: {status: 1}},
+        {id: 'bar', check: {status: 2}},
+        {id: 'baz', check: {status: 3}}
+      ];
+      var expectedEvents = [
+        {id: 'bar', check: {status: 2}}
+      ];
+      expect(statusFilter(events, '2')).toEqual(expectedEvents);
+    }));
+    it('returns unknowns if the status is 3 or greater', inject(function (statusFilter) {
+      var events = [
+        {id: 'foo', check: {status: 1}},
+        {id: 'bar', check: {status: 2}},
+        {id: 'baz', check: {status: 3}},
+        {id: 'bax', check: {status: 4}},
+        {id: 'bax', check: {status: 1234123}}
+      ];
+      var expectedEvents = [
+        {id: 'baz', check: {status: 3}},
+        {id: 'bax', check: {status: 4}},
+        {id: 'bax', check: {status: 1234123}}
+      ];
+      expect(statusFilter(events, '3')).toEqual(expectedEvents);
+    }));
+    it('matches the status exactly rather than a fuzzy match', inject(function (statusFilter) {
+      var events = [
+        {id: 'foo', check: {status: 1111}},
+        {id: 'bar', check: {status: 1}}
+      ];
+      var expectedEvents = [
+        {id: 'bar', check: {status: 1}}
+      ];
+      expect(statusFilter(events, '1')).toEqual(expectedEvents);
+    }));
+  });
+
   describe('regex', function () {
     it('returns all items if the query is empty', inject(function (regexFilter) {
       var items = [{foo: 'bar'}];
