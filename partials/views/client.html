@@ -88,6 +88,13 @@
                   </span>
                   <i class="fa fa-times" tooltip-placement="top" tooltip-trigger uib-tooltip="Delete Result" ng-click="deleteCheckResult(check.dc+'/'+client.name+'/'+check.check)"></i>
                   <i class="fa fa-check" tooltip-placement="top" tooltip-trigger uib-tooltip="Resolve" ng-click="resolveEvent(check.dc+'/'+client.name+'/'+check.check)" ng-if="check.last_status"></i>
+                  <i class="fa fa-refresh fa-fw"
+                    aria-hidden="true"
+                    tooltip-placement="top-right"
+                    tooltip-trigger
+                    uib-tooltip="Issue Request"
+                    ng-click="issueCheckRequest(check.dc, check.check, client.name)">
+                  </i>
                 </span>
               </div>
             </div>
