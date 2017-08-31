@@ -311,7 +311,6 @@ controllerModule.controller('ClientController', ['Clients', 'Check', '$filter', 
     $scope.user = User;
     $scope.issueCheckRequest = function(dc, name, clientname) {
         var subscriber = ['client:'+clientname];
-        console.log('subscriber: '+subscriber);
         Check.issueCheckRequest(dc, name, subscriber);
     };
   }
