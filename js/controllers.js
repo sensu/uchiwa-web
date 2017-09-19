@@ -215,8 +215,8 @@ controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers',
 /**
 * Client
 */
-controllerModule.controller('ClientController', ['Clients', '$filter', 'Helpers', '$location', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', '$uibModal', 'User',
-  function (Clients, $filter, Helpers, $location, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, $uibModal, User) {
+controllerModule.controller('ClientController', ['Clients', 'Check', '$filter', 'Helpers', '$location', '$rootScope', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', '$uibModal', 'User',
+  function (Clients, Check, $filter, Helpers, $location, $rootScope, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, $uibModal, User) {
     $scope.predicate = '-last_status';
     $scope.reverse = false;
     $scope.check = null;
@@ -309,6 +309,10 @@ controllerModule.controller('ClientController', ['Clients', '$filter', 'Helpers'
     $scope.permalink = routingService.permalink;
     $scope.silence = Silenced.create;
     $scope.user = User;
+    $scope.issueCheckRequest = function(dc, name, clientname) {
+        var subscriber = ['client:'+clientname];
+        Check.issueCheckRequest(dc, name, subscriber);
+    };
   }
 ]);
 
