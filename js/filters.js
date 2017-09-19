@@ -208,6 +208,29 @@ filterModule.filter('hideSilenced', function() {
   };
 });
 
+filterModule.filter('status', function() {
+  return function(events, status) {
+    // Return all events if no status filter is set
+    if (status === '') {
+      return events;
+    }
+
+    status = parseInt(status);
+
+    // If the status is unknown return all statuses from 3 and up
+    if (status === 3) {
+      return events.filter(function (item) {
+        return item.check.status >= status;
+      });
+    }
+    else {
+      return events.filter(function (item) {
+        return item.check.status === status;
+      });
+    }
+  };
+});
+
 filterModule.filter('hideClientsSilenced', function() {
   return function(events, hideClientsSilenced) {
     if (Object.prototype.toString.call(events) !== '[object Array]') {
