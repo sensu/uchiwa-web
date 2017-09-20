@@ -160,9 +160,11 @@ controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers',
     $scope.predicate = 'name';
     $scope.reverse = false;
     $scope.selected = {all: false, ids: {}};
+    $scope.types = {metric: 'Metric', standard: 'Standard'};
 
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.checks, {dc: $scope.filters.dc}, Helpers.equals);
+      filtered = $filter('type')(filtered, $scope.filters.type);
       filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'checks');
       $scope.filtered = filtered;
@@ -186,14 +188,14 @@ controllerModule.controller('ChecksController', ['Checks', '$filter', 'Helpers',
     };
 
     // Filters
-    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc'], function(newValues, oldValues) {
+    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc', 'filters.type'], function(newValues, oldValues) {
       updateFilters();
       Helpers.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
 
     // Routing
     $scope.filters = {};
-    routingService.initFilters($routeParams, $scope.filters, ['dc', 'limit', 'q']);
+    routingService.initFilters($routeParams, $scope.filters, ['dc', 'limit', 'q', 'type']);
     $scope.$on('$locationChangeSuccess', function(){
       routingService.updateFilters($routeParams, $scope.filters);
     });
@@ -452,7 +454,7 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, Helpers.equals);
       filtered = $filter('filter')(filtered, {status: $scope.filters.status});
-      filtered = $filter('filterSubscriptions')(filtered, $scope.filters.subscription);
+      filtered = $filter('subscriptions')(filtered, $scope.filters.subscription);
       filtered = $filter('regex')(filtered, $scope.filters.q);
       filtered = $filter('collection')(filtered, 'clients');
       $scope.filtered = filtered;

@@ -9,7 +9,7 @@
           <div class="row">
             <div class="col-xs-10">
               <!--title-->
-              <ng-include src="partialsPath + '/panel/breadcrumb.html' + versionParam"></ng-include>
+              <ng-include src="partialsPath + '/panels/breadcrumb.html' + versionParam"></ng-include>
             </div>
             <div class="col-xs-2 search-icon" style="display:none;">
               <i class="fa fa-search fa-lg" ng-click="showMobileSearch = ! showMobileSearch"></i>
@@ -19,13 +19,13 @@
                 <!--actions-->
                 <panel-actions data="stashes" resolve-fn="deleteMultiple" resolve-legend="Delete" silence-fn="false" ng-if="!user.isReadOnly() && hasElementSelected(selected)"></panel-actions>
                 <!--dc-->
-                <ng-include src="partialsPath + '/panel/dc.html' + versionParam"></ng-include>
+                <ng-include src="partialsPath + '/panels/dc.html' + versionParam"></ng-include>
                 <!--limit-->
                 <panel-limit data="filtered" filters="filters" permalink="permalink"></panel-limit>
               </span>
               <!--search-->
               <span class="search nopadding">
-                <ng-include src="partialsPath + '/panel/search.html' + versionParam"></ng-include>
+                <ng-include src="partialsPath + '/panels/search.html' + versionParam"></ng-include>
               </span>
             </div>
           </div>

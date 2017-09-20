@@ -1,0 +1,20 @@
+<div class="dropdown" uib-dropdown>
+  <span uib-dropdown-toggle class="action" ng-if="filters.type === ''">
+    All Types <i class="fa fa-caret-down"></i>
+  </span>
+  <span uib-dropdown-toggle class="action" ng-repeat="(key, value) in types" ng-if="filters.type !== '' && filters.type === key">
+    {{value}} <i class="fa fa-caret-down"></i>
+  </span>
+  <ul class="dropdown-menu">
+    <li ng-class="{selected: filters.type === ''}">
+      <a href="" ng-click="permalink($event, 'type', '')">
+        All Types
+      </a>
+    </li>
+    <li ng-repeat="(key, value) in types" ng-class="{selected: filters.type === key}">
+      <a href="" ng-click="permalink($event, 'type', key)">
+        {{value}}
+      </a>
+    </li>
+  </ul>
+</div>

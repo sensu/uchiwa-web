@@ -134,19 +134,6 @@ filterModule.filter('encodeURIComponent', function() {
   return window.encodeURIComponent;
 });
 
-filterModule.filter('filterSubscriptions', function() {
-  return function(object, query) {
-    if(query === '' || !object) {
-      return object;
-    }
-    else {
-      return object.filter(function (item) {
-        return item.subscriptions.indexOf(query) > -1;
-      });
-    }
-  };
-});
-
 filterModule.filter('getAckClass', function() {
   return function(isSilenced) {
     return (isSilenced) ? 'fa-volume-off fa-stack-1x' : 'fa-volume-up';
@@ -402,6 +389,36 @@ filterModule.filter('richOutput', ['$filter', '$sce', '$sanitize', '$interpolate
 filterModule.filter('setMissingProperty', function() {
   return function(property) {
     return property || false;
+  };
+});
+
+filterModule.filter('subscriptions', function() {
+  return function(objects, query) {
+    if(query === '' || !objects) {
+      return objects;
+    }
+    else {
+      return objects.filter(function (item) {
+        return item.subscriptions.indexOf(query) > -1;
+      });
+    }
+  };
+});
+
+filterModule.filter('type', function() {
+  return function(objects, type) {
+    if(type === '' || !objects) {
+      return objects;
+    }
+    else {
+      return objects.filter(function (item) {
+        if(type === 'standard') {
+          return item.type === '' || item.type === 'standard' || !item.hasOwnProperty('type');
+        }
+
+        return item.type === type;
+      });
+    }
   };
 });
 

@@ -163,7 +163,7 @@ function ($rootScope) {
       resolveLegend: '@',
       silenceFn: '='
     },
-    templateUrl: $rootScope.partialsPath + '/panel/actions.html' + $rootScope.versionParam
+    templateUrl: $rootScope.partialsPath + '/panels/actions.html' + $rootScope.versionParam
   };
 }]);
 
@@ -176,7 +176,7 @@ function ($rootScope) {
       filters: '=',
       permalink: '='
     },
-    templateUrl: $rootScope.partialsPath + '/panel/limit.html' + $rootScope.versionParam
+    templateUrl: $rootScope.partialsPath + '/panels/limit.html' + $rootScope.versionParam
   };
 }]);
 
