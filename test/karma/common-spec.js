@@ -83,6 +83,20 @@ describe('common', function () {
       }));
     });
 
+    describe('escapeDot', function () {
+      it('returns the same value if empty', inject(function (Helpers) {
+        expect(Helpers.escapeDot('')).toEqual('');
+      }));
+
+      it('leaves untouch a valid value', inject(function (Helpers) {
+        expect(Helpers.escapeDot('foo')).toEqual('foo');
+      }));
+
+      it('escapes a value with a dot notation', inject(function (Helpers) {
+        expect(Helpers.escapeDot('.foo')).toEqual('\\.foo');
+      }));
+    });
+
     describe('hasElementSelected', function () {
       it('returns false when no elements are selected', inject(function (Helpers) {
         expect(Helpers.hasElementSelected({})).toEqual(false);

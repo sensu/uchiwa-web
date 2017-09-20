@@ -34,6 +34,13 @@ function($filter, $q, $rootScope) {
     }
     return angular.equals(actual, expected);
   };
+  // escapeDot escapes a leading dot for compatibility with angular $resource
+  this.escapeDot = function(value) {
+    if (value.substring(0,1) === '.') {
+      return '\\' + value;
+    }
+    return value;
+  };
   // findIdInItems returns an item within the items with a provided id
   this.findIdInItems = function(id, items) {
     if (angular.isUndefined(id) || angular.isUndefined(items) || !angular.isArray(items)) {
