@@ -8,7 +8,7 @@ See [uchiwa](https://github.com/sensu/uchiwa) for Go backend.
 [![Code Climate](https://codeclimate.com/github/sensu/uchiwa-web/badges/gpa.svg)](https://codeclimate.com/github/sensu/uchiwa-web)
 [![Test Coverage](https://codeclimate.com/github/sensu/uchiwa-web/badges/coverage.svg)](https://codeclimate.com/github/sensu/uchiwa-web/coverage)
 
-![Uchiwa UI](docs/uchiwa-ui.png)
+![Uchiwa UI](https://github.com/sensu/uchiwa/raw/master/docs/uchiwa-ui.png)
 
 ## Installation
 See [Uchiwa Docs](https://docs.uchiwa.io/getting-started/installation/).
