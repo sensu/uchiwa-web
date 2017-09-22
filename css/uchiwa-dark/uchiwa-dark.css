@@ -4,6 +4,7 @@
 /* Code */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -22,6 +23,7 @@
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -168,6 +170,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -210,6 +213,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -244,6 +248,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -284,6 +289,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -346,6 +352,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -506,6 +513,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -558,6 +566,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -648,6 +657,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -677,6 +687,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -701,6 +712,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -736,6 +748,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -759,6 +772,7 @@ div.jsoneditor-menu {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -782,6 +796,7 @@ div.jsoneditor-menu {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -816,6 +831,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -832,7 +848,7 @@ li.timestamp .relative-timestamp {
   margin: 80px auto;
   padding: 20px 40px 40px;
   text-align: center;
-  background: #fff;
+  background: #424256;
   border: 1px solid #ccc; }
 
 .login-container::before, .login-container::after {
@@ -842,7 +858,7 @@ li.timestamp .relative-timestamp {
   height: 100%;
   top: 3.5px;
   left: 0;
-  background: #fff;
+  background: #424256;
   z-index: -1;
   -webkit-transform: rotateZ(4deg);
   -moz-transform: rotateZ(4deg);
@@ -894,6 +910,30 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
+/* Madlibs */
+/* Modal */
+/* Nav */
+/* Navbar */
+/* Search */
+/* Sidebar */
+/* Panels */
+/* Tables */
+/* Timestamp */
+/* Wells */
+.theme-logo {
+  content: url("../../img/uchiwa-white.png"); }
+
+/* Colors */
+/* Body, Sections and Headers */
+/* Breadcrumb */
+/* Buttons */
+/* Code */
+/* Console */
+/* Dashboard */
+/* Dropdown */
+/* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -983,6 +1023,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1032,6 +1073,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1080,6 +1122,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1101,7 +1144,7 @@ li.timestamp .relative-timestamp {
   padding-top: 5px; }
 
 .navbar > .container-fluid > .navbar-header > .navbar-brand {
-  padding: 9px 15px;
+  padding: 4px 15px;
   margin-left: 0px; }
 
 .navbar .nav > li > a {
@@ -1131,6 +1174,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1301,6 +1345,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1335,6 +1380,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1374,6 +1420,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1498,6 +1545,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1630,6 +1678,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1682,6 +1731,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */

@@ -138,16 +138,14 @@ directiveModule.directive('clientSummary', ['$filter', '$rootScope', function ($
 
 directiveModule.directive('logoUrl', ['Config', function (Config) {
   return {
-    restrict: 'E',
-    link: function(scope) {
-      scope.src = '';
+    link: function(scope, element) {
       if (Config.logoURL() === '') {
-        scope.src = 'bower_components/uchiwa-web/img/uchiwa.png';
+        element.addClass('theme-logo');
       } else {
-        scope.src = Config.logoURL();
+        var img = '<img src="'+ Config.logoURL() +'">';
+        element.append(img);
       }
-    },
-    template: '<img ng-src="{{src}}">'
+    }
   };
 }]);
 

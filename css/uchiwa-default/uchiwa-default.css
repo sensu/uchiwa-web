@@ -7,6 +7,7 @@
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -153,6 +154,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -195,6 +197,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -229,6 +232,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -269,6 +273,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -331,6 +336,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -491,6 +497,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -543,6 +550,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -633,6 +641,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -662,6 +671,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -686,6 +696,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -721,6 +732,7 @@ pre.hljs .hljs-string {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -744,6 +756,7 @@ div.jsoneditor-menu {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -767,6 +780,7 @@ div.jsoneditor-menu {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -801,6 +815,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -879,6 +894,30 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
+/* Madlibs */
+/* Modal */
+/* Nav */
+/* Navbar */
+/* Search */
+/* Sidebar */
+/* Panels */
+/* Tables */
+/* Timestamp */
+/* Wells */
+.theme-logo {
+  content: url("../../img/uchiwa-black.png"); }
+
+/* Colors */
+/* Body, Sections and Headers */
+/* Breadcrumb */
+/* Buttons */
+/* Code */
+/* Console */
+/* Dashboard */
+/* Dropdown */
+/* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -968,6 +1007,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1017,6 +1057,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1065,6 +1106,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1086,7 +1128,7 @@ li.timestamp .relative-timestamp {
   padding-top: 5px; }
 
 .navbar > .container-fluid > .navbar-header > .navbar-brand {
-  padding: 9px 15px;
+  padding: 4px 15px;
   margin-left: 0px; }
 
 .navbar .nav > li > a {
@@ -1116,6 +1158,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1286,6 +1329,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1320,6 +1364,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1359,6 +1404,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1483,6 +1529,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1615,6 +1662,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */
@@ -1667,6 +1715,7 @@ li.timestamp .relative-timestamp {
 /* Dashboard */
 /* Dropdown */
 /* Login */
+/* Logo */
 /* Madlibs */
 /* Modal */
 /* Nav */

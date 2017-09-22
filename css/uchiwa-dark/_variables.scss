@@ -32,7 +32,11 @@ $dropdown-background-color: $body-background-color !default;
 $dropdown-text-color: $body-text-color !default;
 
 /* Login */
+$login-container-background: #424256 !default;
 $login-input-color: #000000 !default;
+
+/* Logo */
+$logo-url: '../../img/uchiwa-white.png' !default;
 
 /* Madlibs */
 $madlibs-input-color: $body-text-color !default;
