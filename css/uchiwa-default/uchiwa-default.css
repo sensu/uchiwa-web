@@ -1679,13 +1679,16 @@ li.timestamp .relative-timestamp {
   background-color: #FAFAFA; }
 
 .well-success {
-  border-left: 3px solid #43ac6a; }
+  border-left: 3px solid #43ac6a;
+  color: green; }
 
 .well-warning {
-  border-left: 3px solid #F9BA46; }
+  border-left: 3px solid #F9BA46;
+  color: orange; }
 
 .well-critical {
-  border-left: 3px solid #EA5443; }
+  border-left: 3px solid #EA5443;
+  color: red; }
 
 .well-unknown {
   border-left: 3px solid #9C9990; }
