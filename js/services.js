@@ -13,7 +13,9 @@ serviceModule.service('Aggregates', ['Helpers', 'Notification', '$q', '$resource
     var self = this;
     this.delete = function(id) {
       var attributes = Helpers.splitId(id);
-      return Aggregates.delete({name: attributes[1], dc: attributes[0]}).$promise;
+      var name = Helpers.escapeDot(attributes[1]);
+
+      return Aggregates.delete({name: name, dc: attributes[0]}).$promise;
     };
     this.deleteMultiple = function(filtered, selected) {
       return Helpers.deleteMultiple(self.delete, filtered, selected)
@@ -118,14 +120,16 @@ serviceModule.service('backendService', ['$http', '$interval', '$location', '$ro
 /**
 * Check
 */
-serviceModule.service('Check', ['Checks', 'Config', '$interval', 'Notification', '$resource',
-function(Checks, Config, $interval, Notification, $resource) {
+serviceModule.service('Check', ['Checks', 'Config', 'Helpers', '$interval', 'Notification', '$resource',
+function(Checks, Config, Helpers, $interval, Notification, $resource) {
   this.check = {};
   var Resource = $resource('checks/:name', {name: '@name'});
   var self = this;
   var timer;
 
   this.get = function(dc, name) {
+    name = Helpers.escapeDot(name);
+
     Resource.get({name: name, dc: dc})
     .$promise.then(function(data) {
       angular.copy(data, self.check);
@@ -165,6 +169,8 @@ function (Helpers, Notification, $q, $resource, Silenced) {
     {'publish': {method: 'POST'}}
   );
   this.issueCheckRequest = function(dc, name, subscribers) {
+    name = Helpers.escapeDot(name);
+
     var request = new Request({check: name, dc: dc, subscribers: subscribers});
     return request.$publish();
   };
@@ -222,7 +228,9 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
   var self = this;
   this.delete = function(id) {
     var attributes = Helpers.splitId(id);
-    return Clients.delete({name: attributes[1], dc: attributes[0]}).$promise;
+    var name = Helpers.escapeDot(attributes[1]);
+
+    return Clients.delete({name: name, dc: attributes[0]}).$promise;
   };
   this.deleteCheckResult = function(id) {
     return Results.delete(id);
@@ -409,7 +417,10 @@ function(Helpers, Notification, $q, $resource, $rootScope, Silenced) {
   this.resolve = function(id) {
     var attributes = Helpers.splitId(id);
     var variables = Helpers.splitId(attributes[1]);
-    return Events.delete({check: variables[1], client: variables[0], dc: attributes[0]}).$promise;
+    var check = Helpers.escapeDot(variables[1]);
+    var client = Helpers.escapeDot(variables[0]);
+
+    return Events.delete({check: check, client: client, dc: attributes[0]}).$promise;
   };
   this.resolveMultiple = function(filtered, selected) {
     return Helpers.deleteMultiple(self.resolve, filtered, selected)
@@ -482,7 +493,10 @@ function(Helpers, Notification, $q, $resource, $rootScope) {
   this.delete = function(id) {
     var attributes = Helpers.splitId(id);
     var variables = Helpers.splitId(attributes[1]);
-    return Results.delete({check: variables[1], client: variables[0], dc: attributes[0]})
+    var check = Helpers.escapeDot(variables[1]);
+    var client = Helpers.escapeDot(variables[0]);
+
+    return Results.delete({check: check, client: client, dc: attributes[0]})
     .$promise.then(
       function() {
         $rootScope.skipOneRefresh = true;
@@ -841,12 +855,13 @@ serviceModule.service('Stashes', ['Helpers', 'Notification', '$q', '$resource', 
 /**
 * Subscriptions
 */
-serviceModule.service('Subscriptions', ['$resource',
-  function ($resource) {
+serviceModule.service('Subscriptions', ['Helpers', '$resource',
+  function (Helpers, $resource) {
     var Subscriptions = $resource('subscriptions/:subscription',
       {subscription: '@subscription'}
     );
     this.get = function(name) {
+      name = Helpers.escapeDot(name);
       return Subscriptions.get({subscription: name});
     };
     this.query = function() {

@@ -10,7 +10,7 @@
           <div class="row">
             <div class="col-xs-12">
               <!--title-->
-              <ng-include src="partialsPath + '/panel/breadcrumb.html' + versionParam"></ng-include>
+              <ng-include src="partialsPath + '/panels/breadcrumb.html' + versionParam"></ng-include>
             </div>
           </div>
         </div>
@@ -34,7 +34,9 @@
             <tbody>
               <tr ng-repeat="datacenter in datacenters | orderBy:'name'" ng-click="go('/datacenters/' + datacenter.name)">
                 <td data-title="Name" class="main normal">{{ datacenter.name }}</td>
-                <td data-title="Version" class="normal">{{ datacenter.info.sensu.version }}</td>
+                <td data-title="Version" class="normal">
+                  {{ datacenter.info.sensu.enterprise_version || datacenter.info.sensu.version }}
+                </td>
                 <td data-title="Redis" class="normal">
                   <span ng-if="!datacenter.info.redis.connected">Not</span> Connected
                 </td>

@@ -134,19 +134,6 @@ filterModule.filter('encodeURIComponent', function() {
   return window.encodeURIComponent;
 });
 
-filterModule.filter('filterSubscriptions', function() {
-  return function(object, query) {
-    if(query === '' || !object) {
-      return object;
-    }
-    else {
-      return object.filter(function (item) {
-        return item.subscriptions.indexOf(query) > -1;
-      });
-    }
-  };
-});
-
 filterModule.filter('getAckClass', function() {
   return function(isSilenced) {
     return (isSilenced) ? 'fa-volume-off fa-stack-1x' : 'fa-volume-up';
@@ -205,6 +192,29 @@ filterModule.filter('hideSilenced', function() {
       });
     }
     return events;
+  };
+});
+
+filterModule.filter('status', function() {
+  return function(events, status) {
+    // Return all events if no status filter is set
+    if (status === '') {
+      return events;
+    }
+
+    status = parseInt(status);
+
+    // If the status is unknown return all statuses from 3 and up
+    if (status === 3) {
+      return events.filter(function (item) {
+        return item.check.status >= status;
+      });
+    }
+    else {
+      return events.filter(function (item) {
+        return item.check.status === status;
+      });
+    }
   };
 });
 
@@ -379,6 +389,36 @@ filterModule.filter('richOutput', ['$filter', '$sce', '$sanitize', '$interpolate
 filterModule.filter('setMissingProperty', function() {
   return function(property) {
     return property || false;
+  };
+});
+
+filterModule.filter('subscriptions', function() {
+  return function(objects, query) {
+    if(query === '' || !objects) {
+      return objects;
+    }
+    else {
+      return objects.filter(function (item) {
+        return item.subscriptions.indexOf(query) > -1;
+      });
+    }
+  };
+});
+
+filterModule.filter('type', function() {
+  return function(objects, type) {
+    if(type === '' || !objects) {
+      return objects;
+    }
+    else {
+      return objects.filter(function (item) {
+        if(type === 'standard') {
+          return item.type === '' || item.type === 'standard' || !item.hasOwnProperty('type');
+        }
+
+        return item.type === type;
+      });
+    }
   };
 });
 

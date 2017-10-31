@@ -19,7 +19,6 @@ describe('filters', function () {
   }));
 
   describe('arrayLength', function () {
-
     it('should return 0 if null', inject(function (arrayLengthFilter) {
       expect(arrayLengthFilter(null)).toEqual(0);
     }));
@@ -31,11 +30,9 @@ describe('filters', function () {
     it('should return proper array length', inject(function (arrayLengthFilter) {
       expect(arrayLengthFilter([0, 1, 2])).toEqual(3);
     }));
-
   });
 
   describe('arrayToString', function () {
-
     it('should return 0 if null', inject(function (arrayToStringFilter) {
       expect(arrayToStringFilter(null)).toEqual('');
     }));
@@ -47,11 +44,9 @@ describe('filters', function () {
     it('should return proper array length', inject(function (arrayToStringFilter) {
       expect(arrayToStringFilter([0, 1, 2])).toEqual('0 1 2');
     }));
-
   });
 
   describe('buildEvents', function () {
-
     it('should not accept anything else than an array', inject(function (buildEventsFilter) {
       expect(buildEventsFilter('string')).toEqual('string');
       expect(buildEventsFilter({})).toEqual({});
@@ -130,11 +125,9 @@ describe('filters', function () {
       expect(lastOkOf(event_with_interval_and_occurences)).toEqual(1465160000);
       expect(lastOkOf(event_with_null_last_ok)).toEqual(1465160000);
     }));
-
   });
 
   describe('buildStashes', function () {
-
     it('should not accept anything else than an array', inject(function (buildStashesFilter) {
       expect(buildStashesFilter('string')).toEqual('string');
       expect(buildStashesFilter({})).toEqual({});
@@ -153,17 +146,14 @@ describe('filters', function () {
       ];
       expect(buildStashesFilter(stashes)).toEqual(expectedStashes);
     }));
-
   });
 
   describe('displayObject', function () {
-
     it('should display object', inject(function (displayObjectFilter) {
       expect(displayObjectFilter('test')).toBe('test');
       expect(displayObjectFilter(['test', 'test1', 'test2'])).toBe('test, test1, test2');
       expect(displayObjectFilter({key: 'value'})).toEqual({key: 'value'});
     }));
-
   });
 
   describe('getTimestamp', function () {
@@ -180,33 +170,20 @@ describe('filters', function () {
   });
 
   describe('getExpirationTimestamp', function () {
-
     it('should convert epoch to human readable date', inject(function (getExpirationTimestampFilter) {
       expect(getExpirationTimestampFilter('test')).toBe('Unknown');
       expect(getExpirationTimestampFilter(900)).toMatch('\\d\\d\\d\\d-\\d\\d-');
       expect(getExpirationTimestampFilter(-1)).toBe('Never');
     }));
-
   });
 
   describe('encodeURIComponent', function () {
-
     it('should encode URI', inject(function (encodeURIComponentFilter) {
       expect(encodeURIComponentFilter('dc name/client name?check=check name')).toBe('dc%20name%2Fclient%20name%3Fcheck%3Dcheck%20name');
     }));
-
-  });
-
-  describe('filterSubscriptions', function () {
-    it('should filter subscriptions', inject(function (filterSubscriptionsFilter, $filter) {
-      expect(filterSubscriptionsFilter([{name: 'test1', subscriptions: []}, {name: 'test2', subscriptions: ['linux']}], 'linux')).toEqual([{name: 'test2', subscriptions: ['linux']}]);
-      expect(filterSubscriptionsFilter([{name: 'test1', subscriptions: []}, {name: 'test2', subscriptions: ['linux']}], '')).toEqual([{name: 'test1', subscriptions: []}, {name: 'test2', subscriptions: ['linux']}]);
-    }));
-
   });
 
   describe('getStatusClass', function () {
-
     it('should return CSS class based on status', inject(function (getStatusClassFilter) {
       expect(getStatusClassFilter(0)).toBe('success');
       expect(getStatusClassFilter(1)).toBe('warning');
@@ -214,20 +191,16 @@ describe('filters', function () {
       expect(getStatusClassFilter(3)).toBe('unknown');
       expect(getStatusClassFilter('foo')).toBe('unknown');
     }));
-
   });
 
   describe('getAckClass', function () {
-
     it('should return icon based on acknowledgment', inject(function (getAckClassFilter) {
       expect(getAckClassFilter(true)).toBe('fa-volume-off fa-stack-1x');
       expect(getAckClassFilter(null)).toBe('fa-volume-up');
     }));
-
   });
 
   describe('hideSilenced', function () {
-
     it('should only hide silenced events when hideSilenced is true', inject(function (hideSilencedFilter) {
       var events = [
         {id: 'foo', silenced: true},
@@ -239,11 +212,9 @@ describe('filters', function () {
       expect(hideSilencedFilter(events, false)).toEqual(events);
       expect(hideSilencedFilter(events, true)).toEqual(expectedEvents);
     }));
-
   });
 
   describe('hideClientsSilenced', function () {
-
     it('should only hide events from silenced clients when hideClientsSilenced is true', inject(function (hideClientsSilencedFilter) {
       var events = [
         {id: 'foo', client: {silenced: true}},
@@ -255,7 +226,6 @@ describe('filters', function () {
       expect(hideClientsSilencedFilter(events, false)).toEqual(events);
       expect(hideClientsSilencedFilter(events, true)).toEqual(expectedEvents);
     }));
-
   });
 
 
@@ -287,7 +257,6 @@ describe('filters', function () {
       expect(hideOccurrencesFilter(events, false)).toEqual(events);
       expect(hideOccurrencesFilter(events, true)).toEqual(expectedEvents);
     }));
-
   });
 
   describe('highlight', function () {
@@ -309,6 +278,64 @@ describe('filters', function () {
       expect(imageyFilter('http://foo.bar/qux.gif')).toBe('<img src="http://foo.bar/qux.gif">');
       expect(imageyFilter('https://foo.bar/qux.gif')).toBe('<img src="https://foo.bar/qux.gif">');
       expect(imageyFilter('https://foo.bar:443/qux.gif')).toBe('<img src="https://foo.bar:443/qux.gif">');
+    }));
+  });
+
+  describe('status', function () {
+    it('returns all items if the status is empty', inject(function (statusFilter) {
+      var events = [
+        {id: 'foo', check: {status: 1}},
+        {id: 'bar', check: {status: 2}},
+        {id: 'baz', check: {status: 3}}
+      ];
+      expect(statusFilter(events, '')).toEqual(events);
+    }));
+    it('returns warnings if the status is 1', inject(function (statusFilter) {
+      var events = [
+        {id: 'foo', check: {status: 1}},
+        {id: 'bar', check: {status: 2}},
+        {id: 'baz', check: {status: 3}}
+      ];
+      var expectedEvents = [
+        {id: 'foo', check: {status: 1}}
+      ];
+      expect(statusFilter(events, '1')).toEqual(expectedEvents);
+    }));
+    it('returns criticals if the status is 2', inject(function (statusFilter) {
+      var events = [
+        {id: 'foo', check: {status: 1}},
+        {id: 'bar', check: {status: 2}},
+        {id: 'baz', check: {status: 3}}
+      ];
+      var expectedEvents = [
+        {id: 'bar', check: {status: 2}}
+      ];
+      expect(statusFilter(events, '2')).toEqual(expectedEvents);
+    }));
+    it('returns unknowns if the status is 3 or greater', inject(function (statusFilter) {
+      var events = [
+        {id: 'foo', check: {status: 1}},
+        {id: 'bar', check: {status: 2}},
+        {id: 'baz', check: {status: 3}},
+        {id: 'bax', check: {status: 4}},
+        {id: 'bax', check: {status: 1234123}}
+      ];
+      var expectedEvents = [
+        {id: 'baz', check: {status: 3}},
+        {id: 'bax', check: {status: 4}},
+        {id: 'bax', check: {status: 1234123}}
+      ];
+      expect(statusFilter(events, '3')).toEqual(expectedEvents);
+    }));
+    it('matches the status exactly rather than a fuzzy match', inject(function (statusFilter) {
+      var events = [
+        {id: 'foo', check: {status: 1111}},
+        {id: 'bar', check: {status: 1}}
+      ];
+      var expectedEvents = [
+        {id: 'bar', check: {status: 1}}
+      ];
+      expect(statusFilter(events, '1')).toEqual(expectedEvents);
     }));
   });
 
@@ -428,6 +455,27 @@ describe('filters', function () {
     it('should set to false a missing property', inject(function (setMissingPropertyFilter) {
       expect(setMissingPropertyFilter(undefined)).toBe(false);
       expect(setMissingPropertyFilter({foo: 'bar'})).toEqual({foo: 'bar'});
+    }));
+  });
+
+  describe('subscriptions', function () {
+    it('should filter subscriptions', inject(function (subscriptionsFilter, $filter) {
+      expect(subscriptionsFilter([{name: 'test1', subscriptions: []}, {name: 'test2', subscriptions: ['linux']}], 'linux')).toEqual([{name: 'test2', subscriptions: ['linux']}]);
+      expect(subscriptionsFilter([{name: 'test1', subscriptions: []}, {name: 'test2', subscriptions: ['linux']}], '')).toEqual([{name: 'test1', subscriptions: []}, {name: 'test2', subscriptions: ['linux']}]);
+    }));
+  });
+
+  describe('type', function () {
+    it('filters checks type', inject(function (typeFilter, $filter) {
+      var items = [
+        {name: 'foo'},
+        {name: 'bar', type: 'standard'},
+        {name: 'baz', type: 'metrics'}
+      ];
+
+      expect(typeFilter(items, '')).toEqual(items);
+      expect(typeFilter(items, 'standard')).toEqual([items[0], items[1]]);
+      expect(typeFilter(items, 'metrics')).toEqual([items[2]]);
     }));
   });
 

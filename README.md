@@ -8,6 +8,8 @@ See [uchiwa](https://github.com/sensu/uchiwa) for Go backend.
 [![Code Climate](https://codeclimate.com/github/sensu/uchiwa-web/badges/gpa.svg)](https://codeclimate.com/github/sensu/uchiwa-web)
 [![Test Coverage](https://codeclimate.com/github/sensu/uchiwa-web/badges/coverage.svg)](https://codeclimate.com/github/sensu/uchiwa-web/coverage)
 
+![Uchiwa UI](https://github.com/sensu/uchiwa/raw/master/docs/uchiwa-ui.png)
+
 ## Installation
 See [Uchiwa Docs](https://docs.uchiwa.io/getting-started/installation/).
 
@@ -16,12 +18,6 @@ See [Uchiwa Docs](https://docs.uchiwa.io/getting-started/configuration/).
 
 ## Contributing
 See [Uchiwa Docs](https://docs.uchiwa.io/contributing/).
-
-## Screenshots
-
-![Dashboard](http://palourde.github.io/images/uchiwa-dashboard.png)
-
-![Dashboard](http://palourde.github.io/images/uchiwa-client.png)
 
 ## Credits
 * Author & Maintainer: [Simon Plourde][author]

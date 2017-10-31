@@ -84,6 +84,14 @@
                   </div>
                 </div>
               </div>
+              <div class="row" ng-if="datacenter.info.sensu.enterprise_version">
+                <div class="col-xs-4">
+                  <div class="key pull-right">enterprise version</div>
+                </div>
+                <div class="col-xs-8">
+                  <div class="value">{{datacenter.info.sensu.enterprise_version}}</div>
+                </div>
+              </div>
               <div class="row">
                 <div class="col-xs-4">
                   <div class="key pull-right">version</div>
