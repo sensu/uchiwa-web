@@ -83,7 +83,8 @@ function($filter, $q, $rootScope) {
     return isSelected;
   };
   this.isUrl = function(value) {
-    return /target="_blank"/.test(value);
+    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    return regexp.test(value);
   };
   // openLink stops event propagation if an A tag is clicked
   this.openLink = function($event) {
