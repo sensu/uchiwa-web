@@ -355,7 +355,7 @@ filterModule.filter('relativeTimestamp', function() {
   };
 });
 
-filterModule.filter('richOutput', ['$filter', '$sce', '$sanitize', '$interpolate', function($filter, $sce, $sanitize, $interpolate) {
+filterModule.filter('richOutput', ['$filter', 'Helpers', '$sce', '$sanitize', '$interpolate', function($filter, Helpers, $sce, $sanitize, $interpolate) {
   return function(text) {
     var output = '';
 
@@ -377,10 +377,11 @@ filterModule.filter('richOutput', ['$filter', '$sce', '$sanitize', '$interpolate
       var iframeSrc = $sanitize(text.replace(/^iframe:/, ''));
       var exp = $interpolate('<span class="iframe"><iframe width="100%" src="{{iframeSrc}}"></iframe></span>')({ 'iframeSrc': iframeSrc });
       output = $sce.trustAsHtml(exp);
-    }
-    else {
-      var linkified = $filter('linky')(text, '_blank');
+    } else if (Helpers.isUrl(text)) {
+      var linkified = $filter('linky')(text);
       output = $filter('imagey')(linkified);
+    } else {
+      return text;
     }
     return output;
   };

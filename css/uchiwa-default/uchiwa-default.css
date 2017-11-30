@@ -572,7 +572,8 @@ pre.hljs .hljs-string {
   width: 100%; }
 
 .element-view .value {
-  overflow-wrap: break-word; }
+  overflow-wrap: break-word;
+  white-space: pre-wrap; }
 
 .element-view .value img {
   display: block;

@@ -626,7 +626,7 @@ code,
 kbd,
 pre,
 samp {
-  font-family: "Roboto", sans-serif; }
+  font-family: monospace; }
 
 code {
   padding: 2px 4px;
