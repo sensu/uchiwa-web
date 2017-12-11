@@ -59,7 +59,7 @@
                   <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="delete($event, entry._id);"></i></span>{{ entry.id }}
                 </td>
                 <td data-title="DC" class="normal">{{ entry.dc }}</td>
-                <td data-title="Reason" class="normal" ng-bind-html="entry.reason"></td>
+                <td data-title="Reason" class="normal" ng-bind-html="entry.reason |linky:'_blank'" ng-click="openLink($event)"></td>
                 <td data-title="Creator" class="normal">
                   {{ entry.creator }}
                   <span ng-if="entry.creator === null">N/A</span>

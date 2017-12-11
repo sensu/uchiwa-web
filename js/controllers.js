@@ -919,6 +919,7 @@ controllerModule.controller('SilencedModalController', ['Config', '$filter', 'it
       ac: {},
       check: '',
       client: '',
+      create_jira_ticket: false,
       datacenter: '',
       durationFormat: 'hours',
       expire: 'resolve',
@@ -999,7 +1000,7 @@ controllerModule.controller('SilencedModalController', ['Config', '$filter', 'it
       }
 
       // Verify the reason
-      if (Config.requireSilencingReason() && $scope.options.reason === '') {
+      if (Config.requireSilencingReason() && $scope.options.create_jira_ticket === false && $scope.options.reason === '') {
         Notification.error('Please provide a reason for silencing');
         return false;
       }
