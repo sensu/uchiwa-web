@@ -922,7 +922,7 @@ li.timestamp .relative-timestamp {
 /* Tables */
 /* Timestamp */
 /* Wells */
-.theme-logo {
+.theme-logo::before {
   content: url("../../img/uchiwa-white.png"); }
 
 /* Colors */

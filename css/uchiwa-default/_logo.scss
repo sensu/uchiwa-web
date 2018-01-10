@@ -1,5 +1,5 @@
 @import "variables";
 
-.theme-logo {
+.theme-logo::before {
   content:url($logo-url);
 }
