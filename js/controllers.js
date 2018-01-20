@@ -453,6 +453,7 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
 
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.clients, {dc: $scope.filters.dc}, Helpers.equals);
+      filtered = $filter('filter')(filtered, get_client_environment_filter($scope.filters.environment));
       filtered = $filter('filter')(filtered, {status: $scope.filters.status});
       filtered = $filter('subscriptions')(filtered, $scope.filters.subscription);
       filtered = $filter('regex')(filtered, $scope.filters.q);
@@ -463,10 +464,23 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
     // Get clients
     $scope.clients = [];
     $scope.filtered = [];
+    $scope.environments = [];
     var timer = Sensu.updateClients();
     $scope.$watch(function () { return Sensu.getClients(); }, function (data) {
       $scope.clients = data;
       updateFilters();
+
+      // Add any client with an environment
+      angular.forEach(data, function(item) {
+          // Set the environment to none if undefined, for better filtering
+          var client_environment = item.environment || '(none)'
+          // Only add to the array if it doesn't already exist
+          if($scope.environments.indexOf(client_environment) === -1) {
+              $scope.environments.push(client_environment);
+          }
+      });
+        $scope.environments.sort();
+
     });
     $scope.$on('$destroy', function() {
       Sensu.stop(timer);
@@ -481,14 +495,14 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
     });
 
     // Filters
-    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc', 'filters.subscription', 'filters.status'], function(newValues, oldValues) {
+    $scope.$watchGroup(['collection.search', 'filters.environment', 'filters.q', 'filters.dc', 'filters.subscription', 'filters.status'], function(newValues, oldValues) {
       updateFilters();
       Helpers.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
 
     // Routing
     $scope.filters = {};
-    routingService.initFilters($routeParams, $scope.filters, ['dc', 'subscription', 'limit', 'q', 'status']);
+    routingService.initFilters($routeParams, $scope.filters, ['dc', 'environment', 'subscription', 'limit', 'q', 'status']);
     $scope.$on('$locationChangeSuccess', function(){
       routingService.updateFilters($routeParams, $scope.filters);
     });
@@ -517,6 +531,23 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
       Clients.silence($scope.filtered, $scope.selected);
     };
     $scope.user = User;
+    // Environment Support
+    function get_client_environment_filter(filters_env) {
+        // Return different filters queries based on the selected filter
+        switch(filters_env) {
+            // All environments
+            case '':
+                return false
+                break;
+            // The environment is not set in the client
+            case '(none)':
+                return {environment: '!'}
+                break;
+            // An environment filter has been selected by the user
+            default:
+                return {environment: filters_env}
+        }
+    };
   }
 ]);
 
@@ -569,6 +600,7 @@ controllerModule.controller('EventsController', ['Clients', 'Events', '$filter',
     var updateFilters = function() {
       var filtered = $filter('filter')($scope.events, {dc: $scope.filters.dc}, Helpers.equals);
       filtered = $filter('status')(filtered, $scope.filters.status);
+      filtered = $filter('filter')(filtered, get_event_environment_filter($scope.filters.environment));
       filtered = $filter('hideSilenced')(filtered, $scope.filters.silenced);
       filtered = $filter('hideClientsSilenced')(filtered, $scope.filters.clientsSilenced);
       filtered = $filter('hideOccurrences')(filtered, $scope.filters.occurrences);
@@ -581,11 +613,24 @@ controllerModule.controller('EventsController', ['Clients', 'Events', '$filter',
     // Get events
     $scope.events = [];
     $scope.filtered = [];
+    $scope.environments = [];
     var timer = Sensu.updateEvents();
     $scope.$watch(function () { return Sensu.getEvents(); }, function (data) {
       if (angular.isObject(data)) {
         $scope.events = data;
         updateFilters();
+
+        // Add environments if they exist
+        angular.forEach(data, function(item) {
+            // Set the environment to none if undefined, for better filtering
+            var client_environment = item.client.environment || '(none)'
+            // Only add to the array if it doesn't already exist
+            if($scope.environments.indexOf(client_environment) === -1) {
+                $scope.environments.push(client_environment);
+            }
+        });
+          $scope.environments.sort();
+
       }
     });
     $scope.$on('$destroy', function() {
@@ -593,13 +638,13 @@ controllerModule.controller('EventsController', ['Clients', 'Events', '$filter',
     });
 
     // Filters
-    $scope.$watchGroup(['collection.search', 'filters.q', 'filters.dc', 'filters.check' , 'filters.status' , 'filters.silenced' , 'filters.clientsSilenced' , 'filters.occurrences'], function(newValues, oldValues) {
+    $scope.$watchGroup(['collection.search','filters.environment', 'filters.q', 'filters.dc', 'filters.check' , 'filters.status' , 'filters.silenced' , 'filters.clientsSilenced' , 'filters.occurrences'], function(newValues, oldValues) {
       updateFilters();
       Helpers.updateSelected(newValues, oldValues, $scope.filtered, $scope.selected);
     });
 
     // Routing
-    routingService.initFilters($routeParams, $scope.filters, ['dc', 'check', 'limit', 'q', 'status']);
+    routingService.initFilters($routeParams, $scope.filters, ['dc', 'environment', 'check', 'limit', 'q', 'status']);
     $scope.$on('$locationChangeSuccess', function(){
       routingService.updateFilters($routeParams, $scope.filters);
     });
@@ -620,6 +665,24 @@ controllerModule.controller('EventsController', ['Clients', 'Events', '$filter',
     };
     $scope.silenceEvents = function() {
       Events.silence($scope.filtered, $scope.selected);
+    };
+
+    // Environment Support
+    function get_event_environment_filter(filters_env) {
+        // Return different filters queries based on the selected filter
+        switch(filters_env) {
+            // All environments
+            case '':
+                return false
+                break;
+            // The environment is not set in the client
+            case '(none)':
+                return {client: {environment: '!'}}
+                break;
+            // An environment filter has been selected by the user
+            default:
+                return {client: {environment: filters_env}}
+        }
     };
 
     // Hide silenced
@@ -800,8 +863,8 @@ controllerModule.controller('SidebarController', ['$location', '$rootScope', '$s
 /**
 * Silenced
 */
-controllerModule.controller('SilencedController', ['$filter', 'Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'User',
-  function ($filter, Helpers, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, User) {
+controllerModule.controller('SilencedController', ['backendService', '$filter', 'Helpers', '$routeParams', 'routingService', '$scope', 'Sensu', 'Silenced', 'titleFactory', 'User',
+  function (backendService, $filter, Helpers, $routeParams, routingService, $scope, Sensu, Silenced, titleFactory, User) {
     $scope.pageHeaderText = 'Silenced';
     titleFactory.set($scope.pageHeaderText);
 
@@ -820,8 +883,27 @@ controllerModule.controller('SilencedController', ['$filter', 'Helpers', '$route
     // Get silenced
     $scope.silenced = [];
     $scope.filtered = [];
+    // Retrive environments - there must be a better way to do this
+    $scope.sensu_clients = [];
+    backendService.getClients()
+        .then(function(client_response) {
+          $scope.sensu_clients = client_response.data;
+        }, function(client_response) {
+      });
+
     var timer = Sensu.updateSilenced();
     $scope.$watch(function () { return Sensu.getSilenced(); }, function (data) {
+
+    // Assign the client environment to the silenced entry
+    angular.forEach(data, function (sensu_silenced) {
+        angular.forEach($scope.sensu_clients, function (sensu_client) {
+            if (sensu_silenced['subscription'] === 'client:' + sensu_client['name']) {
+                sensu_silenced['environment'] = sensu_client['environment'];
+            }
+        });
+    });
+    // End custom sonian code
+
       $scope.silenced = data;
       updateFilters();
     });

@@ -42,6 +42,7 @@
                   <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
                 <th class="column-xxl" ng-click="predicate = 'id'; reverse=!reverse">ID <i class="fa fa-sort"></i></th>
+                <th class="column-lg" ng-click="predicate = 'environment'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Environment"></i> <i class="fa fa-sort"></i></th>
                 <th class="column-md" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
                 <th class="column-xxl" ng-click="predicate = 'reason'; reverse=!reverse"><i class="fa fa-commenting-o" tooltip-placement="top" tooltip-trigger uib-tooltip="Reason"></i> <i class="fa fa-sort"></i></th>
                 <th class="column-md" ng-click="predicate = 'creator'; reverse=!reverse"><i class="fa fa-user" tooltip-placement="top" tooltip-trigger uib-tooltip="Creator"></i> <i class="fa fa-sort"></i></th>
@@ -58,6 +59,7 @@
                 <td data-title="ID" class="main normal">
                   <span ng-if="!user.isReadOnly()"><i class="fa fa-times" ng-click="delete($event, entry._id);"></i></span>{{ entry.id }}
                 </td>
+                <td data-title="Env" class="normal">{{ entry.environment }}</td>
                 <td data-title="DC" class="normal">{{ entry.dc }}</td>
                 <td data-title="Reason" class="normal" ng-bind-html="entry.reason"></td>
                 <td data-title="Creator" class="normal">

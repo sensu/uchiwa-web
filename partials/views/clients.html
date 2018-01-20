@@ -16,6 +16,8 @@
             </div>
             <div class="col-xs-12 nopadding">
               <span class="filters">
+                <!--environments-->
+                <ng-include src="partialsPath + '/panels/environments.html' + versionParam"></ng-include>
                 <!--actions-->
                 <panel-actions data="filtered" resolve-fn="delete" resolve-legend="Delete" silence-fn="silenceClients" ng-if="!user.isReadOnly() && hasElementSelected(selected)"></panel-actions>
                 <!--dc-->
@@ -49,6 +51,8 @@
                 </th>
                 <th class="column-xxl" ng-click="predicate = 'name'; reverse=!reverse">Name <i class="fa fa-sort"></i></th>
                 <th class="column-md trivial" ng-click="predicate = 'address'; reverse=!reverse">IP <i class="fa fa-sort"></i></th>
+                <th class="column-lg" ng-click="predicate = 'environment'; reverse=!reverse">Env <i class="fa fa-sort"></i></th>
+                
                 <th class="column-xxxl" ng-click="predicate = 'output'; reverse=!reverse">Events <i class="fa fa-sort"></i></th>
                 <th class="column-lg" ng-click="predicate = 'dc'; reverse=!reverse"><i class="fa fa-cloud" tooltip-placement="top" tooltip-trigger uib-tooltip="Datacenter"></i> <i class="fa fa-sort"></i></th>
                 <th class="column-md trivial" ng-click="predicate = 'version'; reverse=!reverse"><i class="fa fa-upload" tooltip-placement="top" tooltip-trigger uib-tooltip="Sensu Version"></i> <i class="fa fa-sort"></i></th>
@@ -69,6 +73,7 @@
                   </span>
                 </td>
                 <td data-title="IP" class="normal trivial">{{ client.address }}</td>
+                <td data-title="Env" class="normal">{{ client.environment }}</td>
                 <td data-title="Event" class="normal"class="output" ng-bind-html="client.output | linky" ng-click="openLink($event)"></td>
                 <td data-title="DC" class="normal">{{ client.dc }}</td>
                 <td data-title="Version" class="normal trivial">{{ client.version }}</td>

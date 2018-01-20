@@ -1,0 +1,22 @@
+<div class="dropdown" uib-dropdown>
+  <span uib-dropdown-toggle class="action" ng-if="filters.environment === ''">
+    All Environments <i class="fa fa-caret-down"></i>
+  </span>
+  <span uib-dropdown-toggle class="action" ng-if="filters.environment !== ''">
+    {{filters.environment}} <i class="fa fa-caret-down"></i>
+  </span>
+    <ul class="dropdown-menu">
+        <li ng-class="{selected: filters.environment === ''}">
+            <a href="" ng-click="permalink($event, 'environment', '')">
+                <i class="fa fa-cloud"></i>
+                All Environments
+            </a>
+        </li>
+        <li ng-repeat="environment_name in environments | orderBy:'name'" ng-class="{selected: filters.environment === environment_name}">
+            <a href="" ng-click="permalink($event, 'environment', environment_name)">
+                <i class="fa fa-cloud"></i>
+                {{environment_name}}
+            </a>
+        </li>
+    </ul>
+</div>

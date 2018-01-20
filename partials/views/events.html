@@ -18,6 +18,8 @@
               <span class="filters">
                 <!--actions-->
                 <panel-actions data="events" resolve-fn="resolveEvents" resolve-legend="Resolve" silence-fn="silenceEvents" ng-if="!user.isReadOnly() && hasElementSelected(selected)"></panel-actions>
+                <!--environments-->
+                <ng-include src="partialsPath + '/panels/environments.html' + versionParam"></ng-include>
                 <!--dc-->
                 <ng-include src="partialsPath + '/panels/dc.html' + versionParam"></ng-include>
                 <!--hide-->
@@ -46,6 +48,8 @@
                   <input type="checkbox" ng-model="selected.all" ng-change="selectAll(filtered, selected)" ng-if="!user.isReadOnly()"></input>
                 </th>
                 <th class="column-xxl" ng-click="predicate = 'sourceName'; reverse=!reverse">Source <i class="fa fa-sort"></i></th>
+                <th class="column-lg" ng-click="predicate = 'environment'; reverse=!reverse">Env <i class="fa fa-sort"></i></th>
+                
                 <th class="column-xxl" ng-click="predicate = 'check.name'; reverse=!reverse">Check <i class="fa fa-sort"></i></th>
                 <th class="column-xxl" ng-click="predicate = 'check.output'; reverse=!reverse">Output <i class="fa fa-sort"></i></th>
                 <th class="column-md trivial" ng-click="predicate = 'occurrences'; reverse=!reverse"><i class="fa fa-slack" tooltip-placement="top" tooltip-trigger uib-tooltip="Occurrences"></i> <i class="fa fa-sort"></i></th>
@@ -66,6 +70,8 @@
                   </span>
                   <span class="dropdown-toggle" >{{ event.sourceName }}</span>
                 </td>
+                 <td data-title="Env" class="normal">{{ event.client.environment }}</td>
+               
                 <td data-title="Check" class="main normal">
                   <span ng-click="silence($event, event)" ng-if="!user.isReadOnly()">
                     <silence-icon silenced="event.silenced"></silence-icon>
