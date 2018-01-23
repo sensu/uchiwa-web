@@ -127,7 +127,7 @@
             <div class="col-xs-8">
               <span>
                 <div ng-repeat="client in check.clients">
-                  {{client}}
+                  <span ng-click="go('/client/'+dc+'/'+client+'?check='+check.name)">{{client}}</span>
                 </div>
               </span>
             </div>
@@ -145,7 +145,7 @@
             <div class="col-xs-8">
               <span>
                 <div ng-repeat="check in client.checks">
-                  {{check}}
+                  <span ng-click="go('/client/'+dc+'/'+client.name+'?check='+check)">{{check}}</span>
                 </div>
               </span>
             </div>
@@ -176,7 +176,7 @@
               <div class="col-xs-8">
                 <span>
                   <div ng-repeat="client in summary.clients">
-                    {{client}}
+                    <span ng-click="go('/client/'+dc+'/'+client+'?check='+result.check)">{{client}}</span>
                   </div>
                 </span>
               </div>
