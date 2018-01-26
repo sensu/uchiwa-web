@@ -31,5 +31,21 @@
     "karma-ng-html2js-preprocessor": "~0.1",
     "karma-phantomjs-launcher": "~1.0.2",
     "phantomjs-polyfill-object-assign": "~0.0.2"
-  }
+  },
+  "description": "Uchiwa is a simple yet effective open-source dashboard for the Sensu monitoring framework.",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sensu/uchiwa-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sensu/uchiwa/issues"
+  },
+  "homepage": "https://github.com/sensu/uchiwa#readme"
 }
