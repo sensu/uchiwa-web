@@ -1,21 +1,16 @@
 language: node_js
-
 node_js:
-  - "0.10"
-
+  - "9"
 notifications:
   email: false
 env:
   - secure: "omewcUyRIWYVTxP8qSmc9SZci1WAcrij9PzjYZb7pBxRD8Aji2vAt+kN+uQN5mET3o+7iNAJky9VBdoh98u/RMCDzQN8P2ox+F/WNDJSkaUi241iPuJ4kvjgc8m5C8h4Y057iQrV6KdQQt+pRwOE0JbDidDxLCHKkFBD7QxZWcA="
-
 before_script:
   - npm install -g grunt-cli
   - echo 'America/Montreal' | sudo tee /etc/timezone
   - sudo dpkg-reconfigure --frontend noninteractive tzdata
-
 script:
   - grunt
-
 after_success:
   - npm install -g codeclimate-test-reporter
   - codeclimate-test-reporter < build/coverage/lcov.info
