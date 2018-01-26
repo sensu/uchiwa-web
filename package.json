@@ -13,7 +13,7 @@
     "grunt-cli": "~0.1.13",
     "grunt-concurrent": "~2.3.1",
     "grunt-contrib-jshint": "~1.0.0",
-    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-watch": "~1.0.0",
     "grunt-lintspaces": "~0.7.1",
     "grunt-newer": "~0.7.0",
     "jshint-stylish": "~0.4.0",
