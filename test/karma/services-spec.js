@@ -35,6 +35,8 @@ describe('services', function () {
     $httpBackend = _$httpBackend_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
+    $httpBackend.whenGET(/events\.html.*/).respond(200, '');
+    $httpBackend.whenGET('datacenters').respond([]);
   }));
 
   describe('Aggregates', function() {

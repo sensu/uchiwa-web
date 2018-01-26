@@ -59,6 +59,7 @@ describe('Controller', function () {
     $httpBackend.whenGET('metrics').respond([]);
     $httpBackend.whenGET('silenced').respond([]);
     $httpBackend.whenGET('subscriptions').respond([]);
+    $httpBackend.whenGET(/events\.html.*/).respond(200, '');
   }));
 
   describe('ChecksController', function () {
@@ -90,9 +91,7 @@ describe('Controller', function () {
         var mockString = 'test a b c';
         expect($scope.subscribersSummary(mockArray)).toBe(mockString);
       });
-
     });
-
   });
 
   describe('ClientController', function () {
@@ -114,32 +113,6 @@ describe('Controller', function () {
       createController(controllerName);
       expect($scope.silence).toBeDefined();
     });
-
-    // describe('richOutput', function() {
-    //   it('moves images to its own box', function() {
-    //     routeParams.check = 'cpu';
-    //     createController(controllerName);
-    //
-    //     $scope.client = {name: 'foo', history: [{check: 'cpu', last_result: {image: 'http://127.0.0.0.1/cat.gif'}}]};
-    //
-    //     // Mock a broadcast to run the getCheck function
-    //     $rootScope.$broadcast("$routeUpdate");
-    //
-    //     expect($scope.images.length).toEqual(1);
-    //   });
-    //
-    //   it('does not move an image from the command attribute to its own box', function() {
-    //     routeParams.check = 'cpu';
-    //     createController(controllerName);
-    //
-    //     $scope.client = {name: 'foo', history: [{check: 'cpu', last_result: {command: 'http://127.0.0.0.1/cat.gif'}}]};
-    //
-    //     // Mock a broadcast to run the getCheck function
-    //     $rootScope.$broadcast("$routeUpdate");
-    //
-    //     expect($scope.images.length).toEqual(0);
-    //   });
-    // });
   });
 
   describe('ClientsController', function () {
@@ -172,7 +145,6 @@ describe('Controller', function () {
     var controllerName = 'EventsController';
 
     describe('methods', function () {
-
       beforeEach(function () {
         createController(controllerName);
       });
@@ -182,7 +154,6 @@ describe('Controller', function () {
       it('should have a silence method', function () {
         expect($scope.silence).toBeDefined();
       });
-
     });
   });
 
