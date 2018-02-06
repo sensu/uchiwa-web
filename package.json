@@ -13,7 +13,7 @@
     "grunt-cli": "~0.1.13",
     "grunt-concurrent": "~2.3.1",
     "grunt-contrib-jshint": "~1.0.0",
-    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-watch": "~1.0.0",
     "grunt-lintspaces": "~0.7.1",
     "grunt-newer": "~0.7.0",
     "jshint-stylish": "~0.4.0",
@@ -22,7 +22,7 @@
     "grunt-contrib-sass": "~0.8.1",
     "time-grunt": "~0.2.1",
     "grunt-karma": "~0.12.2",
-    "istanbul": "~0.2.6",
+    "istanbul": "~0.4.5",
     "karma": "~0.13.22",
     "karma-cli": "~1.0.1",
     "karma-coverage": "~0.2.6",
@@ -31,5 +31,21 @@
     "karma-ng-html2js-preprocessor": "~0.1",
     "karma-phantomjs-launcher": "~1.0.2",
     "phantomjs-polyfill-object-assign": "~0.0.2"
-  }
+  },
+  "description": "Uchiwa is a simple yet effective open-source dashboard for the Sensu monitoring framework.",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sensu/uchiwa-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sensu/uchiwa/issues"
+  },
+  "homepage": "https://github.com/sensu/uchiwa#readme"
 }

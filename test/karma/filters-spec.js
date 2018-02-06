@@ -14,8 +14,9 @@ describe('filters', function () {
     });
   });
 
-  beforeEach(inject(function (_$filter_) {
+  beforeEach(inject(function (_$filter_, $httpBackend) {
     $filter = _$filter_;
+    $httpBackend.whenGET(/events\.html.*/).respond(200, '');
   }));
 
   describe('arrayLength', function () {
@@ -443,11 +444,11 @@ describe('filters', function () {
     }));
 
     it('converts an image URL to a HTML image', inject(function (richOutputFilter) {
-      expect(richOutputFilter('http://foo.bar/baz.gif')).toContain('<a target="_blank" href="http://foo.bar/baz.gif"><img src=');
+      expect(richOutputFilter('http://foo.bar/baz.gif')).toContain('<a href="http://foo.bar/baz.gif"><img src=');
     }));
 
     it('converts an URL to a HTML URL', inject(function (richOutputFilter) {
-      expect(richOutputFilter('http://foo.bar/baz')).toContain('<a target="_blank" href="http://foo.bar/baz">');
+      expect(richOutputFilter('http://foo.bar/baz')).toContain('<a href="http://foo.bar/baz">');
     }));
   });
 
