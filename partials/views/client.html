@@ -93,7 +93,8 @@
                     tooltip-placement="top-right"
                     tooltip-trigger
                     uib-tooltip="Issue Request"
-                    ng-click="issueCheckRequest(check.dc, check.check, client.name)">
+                    ng-click="issueCheckRequest(check.dc, check.check, client.name)"
+                    ng-if="!lastResult.standalone">
                   </i>
                 </span>
               </div>
