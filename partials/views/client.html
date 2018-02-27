@@ -108,7 +108,15 @@
                 <div class="col-xs-4">
                   <span class="key pull-right">{{key}}</span>
                 </div>
-                <div class="col-xs-8">
+                <div ng-if="key == 'aggregate'" class="col-xs-8">
+                  <a class="value" ng-href="#/aggregates/{{check.dc}}/{{value}}" ng-bind-html="value | highlight"></a>
+                </div>
+                <div ng-if="key == 'aggregates'" class="col-xs-8">
+		  <div ng-repeat="aggregate in value.split(', ')">
+                    <a class="value" ng-href="#/aggregates/{{check.dc}}/{{aggregate}}" ng-bind-html="aggregate | highlight"></a>
+		  </div>
+                </div>
+                <div ng-if="key != 'aggregate' && key != 'aggregates'" class="col-xs-8">
                   <span class="value" ng-class="isUrl(value) ? 'ellipsis' : ''" ng-bind-html="value | highlight"></span>
                 </div>
               </div>
