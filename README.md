@@ -1,6 +1,12 @@
 # Uchiwa
 *Uchiwa* is a simple yet effective open-source dashboard for the Sensu monitoring framework.
 
+----
+
+**Please note**: Uchiwa is focused on maintenance and will not be accepting new features unless they are tested by multiple users. [Read more on this announcement](Github Issue).
+
+----
+
 This repository contains the web frontend, written in AngularJS.
 See [uchiwa](https://github.com/sensu/uchiwa) for Go backend.
 
