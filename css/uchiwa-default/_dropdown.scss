@@ -13,6 +13,8 @@
   color: $dropdown-text-color;
   margin-top: 10px;
   min-width: 200px;
+  max-height: 600px;
+  overflow-y: auto;
 }
 
 .dropdown-menu-item {
