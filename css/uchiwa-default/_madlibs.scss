@@ -42,6 +42,11 @@
   outline: none;
 }
 
+.madlibs option {
+  color: $madlibs-input-color;
+  background-color: $madlibs-option-background-color;
+}
+
 .madlibs .moment-picker:after, .madlibs .select:after {
   content: "\f078";
   font-family: "FontAwesome";
