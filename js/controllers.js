@@ -917,12 +917,14 @@ controllerModule.controller('SilencedModalController', ['Config', '$filter', 'it
     $scope.format = Config.dateFormat();
     $scope.options = {
       ac: {},
+      begin: moment().format($scope.format),
       check: '',
       client: '',
       datacenter: '',
       durationFormat: 'hours',
       expire: 'resolve',
       reason: '',
+      start: 'now',
       subscription: '',
       to: moment().add(1, 'h').format($scope.format),
       what: '',
@@ -985,6 +987,17 @@ controllerModule.controller('SilencedModalController', ['Config', '$filter', 'it
       } else if ($scope.options.who === 'subscription' && (angular.isUndefined($scope.options.subscription) || $scope.options.subscription === '')) {
         Notification.error('Please enter which subscription should be silenced');
         return false;
+      }
+
+      // Verify the begin date
+      if ($scope.options.start === 'custom') {
+        if (angular.isUndefined($scope.options.begin) || $scope.options.begin === '') {
+          Notification.error('Please enter a beginning date');
+          return false;
+        } else if (moment($scope.options.begin).isBefore(moment())) {
+          Notification.error('Please enter a beginning date in the future');
+          return false;
+        }
       }
 
       // Verify the duration

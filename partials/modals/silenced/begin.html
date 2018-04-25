@@ -1,0 +1,26 @@
+<div class="madlibs">
+  <ng-pluralize
+    count="items.length"
+    when="{
+      '0': 'It should begin',
+      'one': 'It should begin',
+      'other': 'They should begin'
+    }">
+  </ng-pluralize>
+  <span class="select">
+    <select name="start" ng-model="options.start">
+      <option value="now">now</option>
+      <option value="custom">at</option>
+    </select>
+  </span>
+  <span ng-show="options.start === 'custom'">
+    <span moment-picker="options.begin"
+      format="{{format}}"
+      min-view="month"
+      max-view="hour"
+      autoclose="true"
+      today="true">
+      {{ options.begin }}
+    </span>
+  </span>
+</div>

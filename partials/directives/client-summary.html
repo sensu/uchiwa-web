@@ -55,7 +55,10 @@
               </div>
             </div>
             <div class="col-xs-8">
-              <div class="value" ng-class="isUrl(value) ? 'ellipsis' : ''" ng-bind-html="value | highlight"></div>
+              <div class="value"
+                ng-class="isUrl(value) ? 'ellipsis' : ''"
+                ng-bind-html="value | highlight">
+              </div>
             </div>
           </div>
         </span>
