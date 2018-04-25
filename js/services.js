@@ -619,6 +619,10 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
         delete payload.expire;
       }
 
+      if (options.start === 'custom') {
+        payload.begin = options.begin;
+      }
+
       return self.post(payload);
     };
     this.clearEntries = function(entries) {
@@ -820,6 +824,11 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
         options.expire = moment.duration(options.duration, options.durationFormat).asSeconds();
       } else if (options.expire === '-1') {
         delete options.expire;
+      }
+
+      // Set the beginning timestamp as unix timestamp if provided
+      if (options.start === 'custom') {
+        options.begin = moment(options.begin).unix();
       }
 
       return options;
