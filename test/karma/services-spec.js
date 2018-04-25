@@ -637,24 +637,24 @@ describe('services', function () {
         spyOn(Silenced, 'delete').and.callThrough();
 
         var entries = [
-          {_id: 'foo:bar', selected: true},
-          {_id: 'baz:qux', selected: true},
-          {_id: 'foo:baz', selected: false},
+          {_id: 'us-east-1:client:foo:bar', selected: true},
+          {_id: 'us-east-1:client:baz:qux', selected: true},
+          {_id: 'us-east-1:client:foo:baz', selected: false},
         ];
         Silenced.clearEntries(entries);
 
-        expect(Silenced.delete).toHaveBeenCalledWith('foo:bar');
-        expect(Silenced.delete).toHaveBeenCalledWith('baz:qux');
+        expect(Silenced.delete).toHaveBeenCalledWith('us-east-1:client:foo:bar');
+        expect(Silenced.delete).toHaveBeenCalledWith('us-east-1:client:baz:qux');
       }));
     });
 
     describe('delete', function() {
       it('sends a POST request to the silenced/clear endpoint', inject(function (Silenced) {
         $httpBackend.expectPOST('silenced/clear',
-        '{"dc":"foo","id":"bar"}')
+        '{"dc":"us-east-1","id":"client:foo:bar"}')
         .respond(200, '');
 
-        Silenced.delete('foo:bar');
+        Silenced.delete('us-east-1:client:foo:bar');
         $httpBackend.flush();
       }));
     });
@@ -712,19 +712,19 @@ describe('services', function () {
 
     describe('deleteSingle', function() {
       it('sends a POST request to the silenced/clear endpoint', inject(function (Silenced) {
-        $httpBackend.expectPOST('silenced/clear', '{"dc":"foo","id":"bar"}')
+        $httpBackend.expectPOST('silenced/clear', '{"dc":"us-east-1","id":"client:foo:bar"}')
         .respond(200, '');
 
-        Silenced.deleteSingle('foo:bar');
+        Silenced.deleteSingle('us-east-1:client:foo:bar');
         $httpBackend.flush();
         expect(mockNotification.success).toHaveBeenCalled();
       }));
 
       it('handles an error', inject(function (Silenced) {
-        $httpBackend.expectPOST('silenced/clear', '{"dc":"foo","id":"bar"}')
+        $httpBackend.expectPOST('silenced/clear', '{"dc":"us-east-1","id":"client:bar:*"}')
         .respond(500, '');
 
-        Silenced.deleteSingle('foo:bar');
+        Silenced.deleteSingle('us-east-1:client:bar:*');
         $httpBackend.flush();
         expect(mockNotification.error).toHaveBeenCalled();
       }));
