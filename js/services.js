@@ -335,7 +335,7 @@ function(DefaultConfig, $filter, $resource, $rootScope) {
   };
   this.defaultTheme = function() {
     if (self.enterprise()) {
-      return 'sensu-enterprise';
+      return DefaultConfig.DefaultTheme || 'sensu-enterprise';
     }
     return DefaultConfig.DefaultTheme;
   };
@@ -358,8 +358,9 @@ function(DefaultConfig, $filter, $resource, $rootScope) {
   };
   this.logoURL = function() {
     if (self.enterprise()) {
-      return 'img/logo.png';
+      return DefaultConfig.LogoURL || 'img/logo.png';
     }
+
     return DefaultConfig.LogoURL;
   };
   this.refresh = function() {
