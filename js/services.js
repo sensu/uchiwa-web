@@ -624,6 +624,27 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
     this.clearEntries = function(entries) {
       var promises = [];
 
+      // Verify if removing the entries impact more than a single client
+      var impactsMultipleClients = false;
+      angular.forEach(entries, function(entry) {
+        var idParts = entry._id.split(':');
+        if (idParts[1] !== 'client') {
+          impactsMultipleClients = true;
+        }
+      });
+
+      // If we do impact more than 1 client, display the appropriate message in
+      // the confirmation prompt
+      if (impactsMultipleClients) {
+        var msg = 'Removing this silencing entry will impact multiple clients. Do you really want to remove it?';
+        if (entries.length > 1) {
+          msg = 'Removing these silencing entries will impact multiple clients. Do you really want to remove them?';
+        }
+        if (!window.confirm(msg)) {
+          return $q.reject();
+        }
+      }
+
       angular.forEach(entries, function(entry) {
         if (entry.selected) {
           promises.push(self.delete(entry._id));
@@ -657,6 +678,15 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
       return entry.$clear({action: 'clear'});
     };
     this.deleteSingle = function(id) {
+      // Verify if this silenced entry applies to multiple clients
+      var idParts = id.split(':');
+      // The first part will be the datacenter, then we have the subscription
+      if (idParts[1] !== 'client') {
+        if (!window.confirm('Removing this silencing entry will impact multiple clients. Do you really want to remove it?')) {
+          return $q.reject();
+        }
+      }
+
       return self.delete(id)
       .then(
         function() {
