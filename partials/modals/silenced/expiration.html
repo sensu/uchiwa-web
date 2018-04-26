@@ -12,7 +12,7 @@
       <option value="resolve">once the check resolves</option>
       <option value="duration">after</option>
       <option value="custom">on</option>
-      <option value="-1" ng-show="!disableNoExpiration">only if manually removed</option>
+      <option value="-1" ng-show="!disableNoExpiration">when manually removed</option>
     </select>
   </span>
   <span ng-show="options.expire === 'duration'">
@@ -36,4 +36,9 @@
       {{ options.to }}
     </span>
   </span>
+  <span class="select" ng-show="options.expire !== 'resolve'">
+    <select name="expire" ng-model="options.expireOnResolve">
+      <option value="false">and only then</option>
+      <option value="true">or once the check resolves</option>
+    </select>
 </div>

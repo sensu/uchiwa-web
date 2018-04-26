@@ -923,6 +923,7 @@ controllerModule.controller('SilencedModalController', ['Config', '$filter', 'it
       datacenter: '',
       durationFormat: 'hours',
       expire: 'resolve',
+      expireOnResolve: 'false',
       reason: '',
       start: 'now',
       subscription: '',
