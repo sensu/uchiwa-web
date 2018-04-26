@@ -614,6 +614,10 @@ serviceModule.service('Silenced', ['Helpers', 'Notification', '$q', '$resource',
         payload.subscription = options.subscription;
       }
 
+      if (options.expireOnResolve === 'true') {
+        payload.expire_on_resolve = true; // jshint ignore:line
+      }
+
       if (options.expire === 'resolve') {
         payload.expire_on_resolve = true; // jshint ignore:line
         delete payload.expire;
