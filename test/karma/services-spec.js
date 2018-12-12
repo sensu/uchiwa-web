@@ -198,7 +198,7 @@ describe('services', function () {
         var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
         var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': true}};
 
-        Clients.deleteMultiple(filtered, selected)
+        Clients.deleteMultiple(filtered, selected, {})
         .then(function(result) {
           // It should remove the deleted items
           expect(result).toEqual([]);
@@ -213,7 +213,7 @@ describe('services', function () {
         var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
         var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': false}};
 
-        Clients.deleteMultiple(filtered, selected)
+        Clients.deleteMultiple(filtered, selected, {})
         .then(function(result) {
           // It should remove the deleted item
           expect(result).toEqual([filtered[1]]);
@@ -229,7 +229,7 @@ describe('services', function () {
         var filtered = [{_id: 'us-east-1:foo'}, {_id: 'us-east-1:bar'}];
         var selected = {ids: {'us-east-1:foo': true, 'us-east-1:bar': true}};
 
-        Clients.deleteMultiple(filtered, selected);
+        Clients.deleteMultiple(filtered, selected, {});
 
         $httpBackend.flush();
         expect(mockNotification.error).toHaveBeenCalled();
@@ -239,16 +239,14 @@ describe('services', function () {
     describe('deleteSingle', function() {
       it('removes a client', inject(function(Clients) {
         $httpBackend.expectDELETE('clients/foo?dc=us-east-1').respond(200, '');
-        Clients.deleteSingle('us-east-1/foo')
+        Clients.delete('us-east-1/foo', {})
         $httpBackend.flush();
-        expect(mockNotification.success).toHaveBeenCalled();
       }));
 
       it('handles an error', inject(function(Clients) {
         $httpBackend.expectDELETE('clients/bar?dc=us-east-1').respond(500, '');
-        Clients.deleteSingle('us-east-1:bar')
+        Clients.delete('us-east-1:bar', {})
         $httpBackend.flush();
-        expect(mockNotification.error).toHaveBeenCalled();
       }));
     });
 

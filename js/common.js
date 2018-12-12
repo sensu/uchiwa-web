@@ -5,14 +5,14 @@ var common = angular.module('uchiwa.common', []);
 common.service('Helpers', ['$filter', '$q', '$rootScope',
 function($filter, $q, $rootScope) {
   // deleteMultiple deletes multiple selected items from a filtered list
-  this.deleteMultiple = function(fn, filtered, selected) {
+  this.deleteMultiple = function(fn, filtered, selected, options) {
     var self = this;
     var promises = [];
     angular.forEach(selected.ids, function(value, key) {
       if (value) {
         var deffered = $q.defer();
         selected.ids[key] = false;
-        fn(key).then(function() {
+        fn(key, options).then(function() {
           filtered = self.removeItemById(key, filtered);
           deffered.resolve(key);
         }, function() {
