@@ -226,17 +226,26 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
     {name: '@name', history: '@history'}
   );
   var self = this;
-  this.delete = function(id) {
+  this.delete = function(id, options) {
     var attributes = Helpers.splitId(id);
     var name = Helpers.escapeDot(attributes[1]);
+    var payload = {name: name, dc: attributes[0]};
 
-    return Clients.delete({name: name, dc: attributes[0]}).$promise;
+    if (angular.isDefined(options.invalidate) && options.invalidate === 'true') {
+      payload.invalidate = 'true';
+
+      if (angular.isDefined(options.expiration) && options.expiration === 'duration') {
+        var now = new Date().getTime();
+        payload.invalidate_expire = Helpers.secondsBetweenDates(now, options.to);;
+      }
+    }
+    return Clients.delete(payload).$promise;
   };
   this.deleteCheckResult = function(id) {
     return Results.delete(id);
   };
-  this.deleteMultiple = function(filtered, selected) {
-    return Helpers.deleteMultiple(self.delete, filtered, selected).
+  this.deleteMultiple = function(filtered, selected, options) {
+    return Helpers.deleteMultiple(self.delete, filtered, selected, options).
     then(
       function(result) {
         Notification.success('The clients have been deleted');
@@ -245,19 +254,6 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
       function() {
         Notification.error('Could not delete all of the clients');
         return $q.reject();
-      }
-    );
-  };
-  this.deleteSingle = function(id) {
-    return self.delete(id)
-    .then(
-      function() {
-        $rootScope.skipOneRefresh = true;
-        Notification.success('The client '+ id +' has been deleted');
-      },
-      function(error) {
-        Notification.error('Could not delete the client '+ id);
-        return $q.reject(error);
       }
     );
   };

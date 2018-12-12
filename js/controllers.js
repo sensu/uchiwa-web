@@ -284,10 +284,15 @@ controllerModule.controller('ClientController', ['Clients', 'Check', '$filter', 
     // Services
     $scope.deleteCheckResult = Clients.deleteCheckResult;
     $scope.delete = function(id) {
-      Clients.delete(id)
-        .then(function() {
-          routingService.go('clients');
-        }, function() {});
+      var modalInstance = $uibModal.open({ // jshint ignore:line
+        templateUrl: $rootScope.partialsPath + '/modals/clientdeletion/index.html' + $rootScope.versionParam,
+        controller: 'ClientDeletionModalController',
+        resolve: {
+          id: function () {
+            return id;
+          }
+        }
+      });
     };
     $scope.edit = function(client) {
       var modalInstance = $uibModal.open({ // jshint ignore:line
@@ -383,6 +388,68 @@ controllerModule.controller('ClientCreationModalController', ['Client', 'Notific
           Notification.error('Could not create the client. ' + error.data);
         }
       );
+    };
+
+    $scope.cancel = function () {
+      $uibModalInstance.dismiss('cancel');
+    };
+  }
+]);
+
+/**
+* Client Deletion
+*/
+controllerModule.controller('ClientDeletionModalController', ['Clients', 'Config', 'Notification', 'id', 'routingService', '$scope', '$uibModalInstance',
+  function (Clients, Config, Notification, id, routingService, $scope, $uibModalInstance) {
+    $scope.id = id;
+    $scope.clientCount = 1;
+    $scope.format = Config.dateFormat();
+    $scope.options = {
+      expiration: 'deletion',
+      invalidate: 'false', 
+      to: moment().add(15, 'm').format($scope.format),
+    };
+
+    $scope.ok = function() {
+      Clients.delete(id, $scope.options)
+      .then(function() {
+        $uibModalInstance.close();
+        Notification.success('The client has been deleted');
+        routingService.go('clients');
+      }, function() {
+        $uibModalInstance.close();
+        Notification.error('Could not delete the client. ' + error.data);
+      });
+    };
+
+    $scope.cancel = function () {
+      $uibModalInstance.dismiss('cancel');
+    };
+  }
+]);
+
+/**
+* Clients Deletion
+*/
+controllerModule.controller('ClientsDeletionModalController', ['Clients', 'Config', 'filtered', 'Notification', 'routingService', '$scope', 'selected', '$uibModalInstance',
+  function (Clients, Config, filtered, Notification, routingService, $scope, selected, $uibModalInstance) {
+    $scope.clientCount = Object.keys(selected.ids).length;
+    if ($scope.clientCount === 1) {
+      $scope.id = Object.keys(selected.ids)[0];
+    }
+    $scope.format = Config.dateFormat();
+    $scope.options = {
+      expiration: 'deletion',
+      invalidate: 'false', 
+      to: moment().add(15, 'm').format($scope.format),
+    };
+
+    $scope.ok = function() {
+      Clients.deleteMultiple(filtered, selected, $scope.options)
+      .then(function(results) {
+        $scope.filtered = results;
+        Notification.success('The clients have been deleted');
+      }, function() {});
     };
 
     $scope.cancel = function () {
@@ -501,11 +568,19 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
       });
       return modalInstance;
     };
-    $scope.delete = function() {
-      Clients.deleteMultiple($scope.filtered, $scope.selected)
-        .then(function(results) {
-          $scope.filtered = results;
-        }, function() {});
+    $scope.delete = function(id) {
+      var modalInstance = $uibModal.open({ // jshint ignore:line
+        templateUrl: $rootScope.partialsPath + '/modals/clientdeletion/index.html' + $rootScope.versionParam,
+        controller: 'ClientsDeletionModalController',
+        resolve: {
+          filtered: function () {
+            return $scope.filtered;
+          },
+          selected: function () {
+            return $scope.selected;
+          }
+        }
+      });
     };
     $scope.hasElementSelected = Helpers.hasElementSelected;
     $scope.go = routingService.go;

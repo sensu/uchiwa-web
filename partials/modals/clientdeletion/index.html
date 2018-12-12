@@ -1,0 +1,64 @@
+<div class="modal-header">
+  <h3 class="modal-title">
+    
+    <ng-pluralize count="clientCount"
+      when="{'one': 'Client Deletion',
+        'other': 'Clients Deletion'}">
+    </ng-pluralize>
+  </h3>
+</div>
+
+<div class="modal-body ng-jsoneditor">
+  <div class="panel panel-default" >
+    <div class="panel-body">
+      <div class="madlibs" ng-show='clientCount === 1'>
+        I want to delete the client
+          <select ng-style="datacenter">
+            <option>{{id}}</option>
+          </select>
+      </div>
+      <div class="madlibs" ng-show='clientCount > 1'>
+          I want to delete these {{clientCount}} clients
+      </div>
+
+      <div class="madlibs">
+        <span class="select">
+          <select name="invalidate" ng-model="options.invalidate">
+            <option value="false">until the next keepalive or check result</option>
+            <option value="true">and invalidate further client keepalives and check results</option>
+          </select>
+        </span>  
+      </div>
+
+      <span ng-show="options.invalidate === 'true'">
+        <div class="madlibs">
+          <span class="select">
+            <select name="expiration" ng-model="options.expiration">
+              <option value="deletion">until the client is successfully removed from the client registry</option>
+              <option value="duration">until this date:</option>
+            </select>
+          </span>  
+          <span ng-show="options.expiration === 'duration'">
+            <span moment-picker="options.to"
+              format="{{format}}"
+              min-view="month"
+              max-view="hour"
+              autoclose="true"
+              today="true">
+              {{ options.to }}
+            </span>
+          </span>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button
+    class="btn btn-sm btn-success"
+    ng-click="ok()">
+    Delete
+  </button>
+  <button class="btn btn-sm btn-secondary" ng-click="cancel()">Cancel</button>
+</div>
