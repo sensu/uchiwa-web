@@ -406,7 +406,7 @@ controllerModule.controller('ClientDeletionModalController', ['Clients', 'Config
     $scope.format = Config.dateFormat();
     $scope.options = {
       expiration: 'deletion',
-      invalidate: 'false', 
+      invalidate: 'false',
       to: moment().add(15, 'm').format($scope.format),
     };
 
@@ -440,7 +440,7 @@ controllerModule.controller('ClientsDeletionModalController', ['Clients', 'Confi
     $scope.format = Config.dateFormat();
     $scope.options = {
       expiration: 'deletion',
-      invalidate: 'false', 
+      invalidate: 'false',
       to: moment().add(15, 'm').format($scope.format),
     };
 

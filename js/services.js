@@ -231,7 +231,7 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
     var name = Helpers.escapeDot(attributes[1]);
     var payload = {name: name, dc: attributes[0]};
 
-    if (angular.isDefined(options.invalidate) && options.invalidate === 'true') {
+    if (angular.isDefined(options) && angular.isDefined(options.invalidate) && options.invalidate === 'true') {
       payload.invalidate = 'true';
 
       if (angular.isDefined(options.expiration) && options.expiration === 'duration') {
