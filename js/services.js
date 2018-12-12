@@ -236,7 +236,7 @@ function (Events, $filter, Helpers, $location, Notification, $q, $resource, Resu
 
       if (angular.isDefined(options.expiration) && options.expiration === 'duration') {
         var now = new Date().getTime();
-        payload.invalidate_expire = Helpers.secondsBetweenDates(now, options.to);;
+        payload.invalidate_expire = Helpers.secondsBetweenDates(now, options.to); // jshint ignore:line
       }
     }
     return Clients.delete(payload).$promise;

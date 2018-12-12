@@ -416,7 +416,7 @@ controllerModule.controller('ClientDeletionModalController', ['Clients', 'Config
         $uibModalInstance.close();
         Notification.success('The client has been deleted');
         routingService.go('clients');
-      }, function() {
+      }, function(error) {
         $uibModalInstance.close();
         Notification.error('Could not delete the client. ' + error.data);
       });
@@ -568,7 +568,7 @@ controllerModule.controller('ClientsController', ['Clients', '$filter', 'Helpers
       });
       return modalInstance;
     };
-    $scope.delete = function(id) {
+    $scope.delete = function() {
       var modalInstance = $uibModal.open({ // jshint ignore:line
         templateUrl: $rootScope.partialsPath + '/modals/clientdeletion/index.html' + $rootScope.versionParam,
         controller: 'ClientsDeletionModalController',
