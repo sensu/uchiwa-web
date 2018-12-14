@@ -449,6 +449,7 @@ controllerModule.controller('ClientsDeletionModalController', ['Clients', 'Confi
       .then(function(results) {
         $scope.filtered = results;
         Notification.success('The clients have been deleted');
+        $uibModalInstance.close();
       }, function() {});
     };
 
