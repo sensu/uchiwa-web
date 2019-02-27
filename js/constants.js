@@ -7,7 +7,7 @@ constantModule.value('THEMES', [
 ]);
 
 // Version
-var version = '1.5.0';
+var version = '1.6.0';
 constantModule.constant('VERSION', version);
 constantModule.value('VERSIONS', {
   uchiwa: version
