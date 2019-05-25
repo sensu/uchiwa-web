@@ -1116,6 +1116,8 @@ controllerModule.controller('SilencedModalController', ['Config', '$filter', 'it
         var options = Silenced.itemOptions(item, $scope.itemType);
 
         // Set common options
+        options.start = $scope.options.start;
+        options.begin = $scope.options.begin;
         options.duration = $scope.options.duration;
         options.durationFormat = $scope.options.durationFormat;
         options.expire = $scope.options.expire;
