@@ -374,8 +374,11 @@ filterModule.filter('richOutput', ['$filter', 'Helpers', '$sce', '$sanitize', '$
       output = $filter('getTimestamp')(text);
       output = output.toString();
     } else if (/^iframe:/.test(text)) {
-      var iframeSrc = $sanitize(text.replace(/^iframe:/, ''));
-      var exp = $interpolate('<span class="iframe"><iframe width="100%" src="{{iframeSrc}}"></iframe></span>')({ 'iframeSrc': iframeSrc });
+      var defaultOpts = { width: '100%', height: '150px' };
+      var opts = Object.assign(defaultOpts, /^iframe:{(.*)}/.test(text) ? JSON.parse(text.match(/^iframe:(.*)/)[1].replace(/'/g, '"')) : {
+          src: $sanitize(text.replace(/^iframe:/, ''))
+      });
+      var exp = $interpolate('<span class="iframe"><iframe width="{{width}}" height="{{height}}" src="{{src}}"></iframe></span>')(opts);
       output = $sce.trustAsHtml(exp);
     } else if (Helpers.isUrl(text)) {
       var linkified = $filter('linky')(text);
