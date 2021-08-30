@@ -11,13 +11,13 @@ See [uchiwa](https://github.com/sensu/uchiwa) for Go backend.
 ![Uchiwa UI](https://github.com/sensu/uchiwa/raw/master/docs/uchiwa-ui.png)
 
 ## Installation
-See [Uchiwa Docs](https://docs.uchiwa.io/getting-started/installation/).
+See [Uchiwa Docs](https://docs.sensu.io/uchiwa/latest/getting-started/installation/).
 
 ## Configuration
-See [Uchiwa Docs](https://docs.uchiwa.io/getting-started/configuration/).
+See [Uchiwa Docs](https://docs.sensu.io/uchiwa/latest/getting-started/configuration/).
 
 ## Contributing
-See [Uchiwa Docs](https://docs.uchiwa.io/contributing/).
+See [Uchiwa Docs](https://docs.sensu.io/uchiwa/latest/contributing/).
 
 ## Credits
 * Author & Maintainer: [Simon Plourde][author]
